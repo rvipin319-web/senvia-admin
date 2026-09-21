@@ -200,13 +200,12 @@ const api=async(path,opt={})=>{
  try{return JSON.parse(text)}catch(e){throw new Error('Invalid JSON response: '+text.slice(0,300))}
 };
 async function fetchWithTimeout(url, options={}, ms=15000){
-  const controller = new AbortController();
-  const timer = setTimeout(()=>controller.abort(), ms);
-  try { return await fetch(url, {...options, signal: controller.signal}); }
-  catch(e){
-    if(e && e.name==='AbortError') throw new Error('Server response timeout. Please open this page from HTTPS hosting, not a downloaded content:// file.');
-    throw e;
-  } finally { clearTimeout(timer); }
+  let timer;
+  const timeout = new Promise((_, reject)=>{
+    timer=setTimeout(()=>reject(new Error('TIMEOUT: Supabase server ने 15 seconds में जवाब नहीं दिया. Internet/VPN/Ad-blocker या Supabase connection check करें.')),ms);
+  });
+  try { return await Promise.race([fetch(url, options), timeout]); }
+  finally { clearTimeout(timer); }
 }
 
 window.adminLogin=async function adminLogin(){
@@ -214,16 +213,18 @@ window.adminLogin=async function adminLogin(){
  const msg=document.getElementById('loginMsg');msg.textContent='';
  if(!email||!password){msg.textContent='Email और password भरें।';return}
  try{
-  const btn=document.getElementById('adminLoginBtn'); if(btn){btn.disabled=true;btn.querySelector('span').textContent='Signing in…';} msg.style.color='#174a87';msg.textContent='Signing in…';
+  const btn=document.getElementById('adminLoginBtn'); if(btn){btn.disabled=true;const sp=btn.querySelector('span');if(sp)sp.textContent='Signing in…';} msg.style.color='#174a87';msg.textContent='Connecting to Senvia…';
   const r=await fetchWithTimeout(SUPABASE_URL+'/auth/v1/token?grant_type=password',{method:'POST',headers:{apikey:SUPABASE_KEY,'Content-Type':'application/json'},body:JSON.stringify({email,password})},15000);
-  const d=await r.json();
-  if(!r.ok)throw new Error(d.error_description||d.error||d.msg||('HTTP '+r.status));
+  const raw=await r.text();
+  let d={}; try{d=raw?JSON.parse(raw):{};}catch{}
+  if(!r.ok)throw new Error(d.error_description||d.msg||d.error||raw||('HTTP '+r.status));
   if(!d.access_token)throw new Error('Access token नहीं मिला');
   accessToken=d.access_token;sessionStorage.setItem('senvia_admin_token',accessToken);
+  msg.textContent='Login successful. Checking admin authorization…';
   const ok=await requireAdmin();
-  if(ok){document.getElementById('loginGate').style.display='none';await loadFromSupabase();renderDashboard();}
- }catch(e){console.error(e);msg.textContent='Login failed: '+e.message;msg.style.color='#b42318';}
- finally{const btn=document.getElementById('adminLoginBtn');if(btn){btn.disabled=false;btn.querySelector('span').textContent='Login';}}
+  if(ok){msg.textContent='Admin verified. Loading dashboard…';document.getElementById('loginGate').style.display='none';await loadFromSupabase();renderDashboard();}
+ }catch(e){console.error('Senvia login error:',e);msg.textContent='Login failed: '+(e?.message||String(e));msg.style.color='#b42318';}
+ finally{const btn=document.getElementById('adminLoginBtn');if(btn){btn.disabled=false;const sp=btn.querySelector('span');if(sp)sp.textContent='Login';}}
 }
 
 window.forgotPassword=async function forgotPassword(){
