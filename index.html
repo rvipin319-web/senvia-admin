@@ -255,16 +255,14 @@ async function requireAdmin(){
   if(!r.ok) throw new Error(user.msg||user.error_description||raw||('Auth verification HTTP '+r.status));
   if(!user?.id) throw new Error('Authenticated user ID नहीं मिला');
 
-  // Use the same direct admin_users authorization check that previously worked.
-  const q=encodeURIComponent(user.id);
-  const ar=await fetch(SUPABASE_URL+'/rest/v1/admin_users?select=user_id&user_id=eq.'+q+'&limit=1',{
-    method:'GET',headers:authHeaders(),
-    signal:undefined
-  });
+  // Do NOT read admin_users directly from the browser. RLS intentionally blocks
+  // direct access to that table. Ask the SECURITY DEFINER function instead.
+  const ar=await fetchWithTimeout(SUPABASE_URL+'/rest/v1/rpc/is_senvia_admin',{
+    method:'POST',headers:{...authHeaders(),'Content-Type':'application/json'},body:'{}'
+  },15000);
   const atext=await ar.text();
   if(!ar.ok) throw new Error(atext||('Admin authorization HTTP '+ar.status));
-  let rows=[]; try{rows=atext?JSON.parse(atext):[];}catch{throw new Error('Admin authorization response invalid');}
-  const allowed=Array.isArray(rows)&&rows.some(x=>String(x.user_id)===String(user.id));
+  let allowed=false; try{allowed=JSON.parse(atext)===true;}catch{throw new Error('Admin authorization response invalid');}
   if(!allowed){
    accessToken='';sessionStorage.removeItem('senvia_admin_token');
    document.getElementById('loginGate').style.display='flex';
