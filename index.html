@@ -210,7 +210,7 @@ html,body{width:100%;min-width:0;max-width:100%;margin:0;padding:0;overflow-x:hi
     <div class="login-title">Admin Login</div>
     <div class="login-divider"><span></span><b>•</b><span></span></div>
     <div class="login-subtitle">Secure Access • Manage • Grow Together</div>
-    <label class="field"><span>✉</span><input id="loginEmail" type="email" placeholder="Admin email" autocomplete="username"></label>
+    <label class="field"><span>✉</span><input id="loginEmail" type="email" placeholder="Admin email" autocomplete="email"></label>
     <label class="field password-field"><span>🔒</span><input id="loginPassword" type="password" placeholder="Password" autocomplete="current-password"><button type="button" id="showPasswordBtn" class="show-password" aria-label="Show password" onclick="togglePassword()">👁️</button></label>
     <button type="button" id="adminLoginBtn" class="login-btn" onclick="adminLogin()">↪ <span>Login</span></button>
     <button type="button" id="forgotPasswordBtn" class="forgot-btn">Forgot Password?</button>
@@ -285,10 +285,28 @@ async function fetchWithTimeout(url, options={}, ms=15000){
   finally { clearTimeout(timer); }
 }
 
+// Remember admin email on this device/browser. Password is never stored.
+const SENVIA_SAVED_ADMIN_EMAIL_KEY='senvia_saved_admin_email';
+function restoreSavedAdminEmail(){
+  try{
+    const saved=localStorage.getItem(SENVIA_SAVED_ADMIN_EMAIL_KEY)||'';
+    const el=document.getElementById('loginEmail');
+    if(el && saved && !el.value) el.value=saved;
+  }catch(e){}
+}
+function saveAdminEmail(){
+  try{
+    const el=document.getElementById('loginEmail');
+    const email=(el?.value||'').trim();
+    if(email) localStorage.setItem(SENVIA_SAVED_ADMIN_EMAIL_KEY,email);
+  }catch(e){}
+}
+
 window.adminLogin=async function adminLogin(){
  const email=document.getElementById('loginEmail').value.trim(),password=document.getElementById('loginPassword').value;
  const msg=document.getElementById('loginMsg');msg.textContent='';
  if(!email||!password){msg.textContent='Email और password भरें।';return}
+ saveAdminEmail()
  try{
   const btn=document.getElementById('adminLoginBtn'); if(btn){btn.disabled=true;const sp=btn.querySelector('span');if(sp)sp.textContent='Signing in…';} msg.style.color='#174a87';msg.textContent='Connecting to Senvia…';
   const r=await fetchWithTimeout(SUPABASE_URL+'/auth/v1/token?grant_type=password',{method:'POST',headers:{apikey:SUPABASE_KEY,'Content-Type':'application/json'},body:JSON.stringify({email,password})},15000);
@@ -471,6 +489,8 @@ document.getElementById('statusFilter')?.addEventListener('change',renderTable);
 const db=document.createElement('div');db.id='dbStatus';db.style='margin:12px 0 0;padding:10px 12px;border-radius:9px;font-weight:700;background:#fff4d7;color:#8a6500';db.textContent='Connecting to Supabase…';document.querySelector('.content').prepend(db);
 document.getElementById('loginPassword')?.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();adminLogin()}});
 document.getElementById('loginEmail')?.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();adminLogin()}});
+document.getElementById('loginEmail')?.addEventListener('input',saveAdminEmail);
+restoreSavedAdminEmail();
 requireAdmin().then(ok=>{if(ok){document.getElementById('loginGate').style.display='none';loadFromSupabase()}});
 </script>
 </body></html>
