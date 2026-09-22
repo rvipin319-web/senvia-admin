@@ -72,6 +72,19 @@ table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:11px 8px
 .senvia-busy-text{position:absolute;margin-top:120px;color:#174a87;font-weight:800;font-size:14px}
 @media(max-width:520px){.senvia-v-spinner{width:64px;height:64px}.senvia-v-spinner b{font-size:40px}.senvia-busy-text{margin-top:104px;font-size:12px}}
 </style>
+
+<style id="service-edit-style">
+.service-edit-modal{position:fixed;inset:0;background:rgba(5,24,45,.58);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:18px;z-index:100001}
+.service-edit-modal.show{display:flex}
+.service-edit-card{width:min(460px,100%);background:linear-gradient(180deg,#fff,#f7fbff);border:1px solid #dce8f4;border-radius:22px;box-shadow:0 24px 70px rgba(5,34,65,.28);overflow:hidden}
+.service-edit-head{background:linear-gradient(135deg,#073d70,#087c86);color:#fff;padding:18px 20px;display:flex;align-items:center;gap:12px}
+.service-edit-head h2{margin:0;font-size:21px}.service-edit-close{margin-left:auto;border:0!important;background:rgba(255,255,255,.14)!important;color:#fff!important;width:38px;height:38px;border-radius:11px!important;font-size:21px!important}
+.service-edit-body{padding:20px}.service-edit-body label{display:block;font-size:13px;font-weight:800;color:#5f7186;margin-bottom:7px}.service-edit-body input{width:100%;box-sizing:border-box;padding:13px 14px;border:1px solid #d8e3ee;border-radius:12px;font-size:16px;outline:none}.service-edit-body input:focus{border-color:#1592a4;box-shadow:0 0 0 3px rgba(21,146,164,.12)}
+.service-edit-footer{padding:0 20px 20px;display:flex;justify-content:flex-end;gap:9px}.service-edit-footer button{min-width:100px}
+.service-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 4px;border-bottom:1px solid #edf1f5}.service-row-name{font-weight:800;color:#153b61;flex:1}.service-row-actions{display:flex;gap:7px;flex-shrink:0}.service-edit-btn{background:#eaf5ff!important;color:#0879c9!important;border:1px solid #cfe5f7!important}
+@media(max-width:520px){.service-row{align-items:flex-start}.service-row-actions{flex-direction:column}.service-edit-footer{padding:0 16px 16px}.service-edit-body{padding:16px}}
+</style>
+
 </head>
 <body>
 <div id="senviaBusy" aria-live="polite" aria-label="System busy">
@@ -130,6 +143,25 @@ table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:11px 8px
 <div class="modal" id="modal"><div class="box"><div style="display:flex;justify-content:space-between"><h2>Add Professional</h2><button class="outline" onclick="closePro()">✕</button></div>
 <div class="form"><input id="pn" placeholder="Full Name"><input id="pm" placeholder="Mobile Number"><select id="pb"></select><input id="pp" placeholder="Panchayat"><input id="pv" placeholder="Village / Area"><input id="pe" placeholder="Experience"></div>
 <h3>Services</h3><div class="checks" id="checks"></div><p><button class="green" onclick="savePro()">Save Profile</button> <button class="outline" onclick="closePro()">Cancel</button></p></div></div>
+
+
+<div class="service-edit-modal" id="serviceEditModal" role="dialog" aria-modal="true" aria-labelledby="serviceEditTitle">
+  <div class="service-edit-card">
+    <div class="service-edit-head">
+      <div><h2 id="serviceEditTitle">Edit Service</h2></div>
+      <button class="service-edit-close" type="button" onclick="closeServiceEdit()">×</button>
+    </div>
+    <div class="service-edit-body">
+      <label for="serviceEditInput">Service Name</label>
+      <input id="serviceEditInput" type="text" autocomplete="off" placeholder="Enter service name">
+      <div id="serviceEditMsg" style="margin-top:9px;font-size:13px;color:#b42318"></div>
+    </div>
+    <div class="service-edit-footer">
+      <button class="outline" type="button" onclick="closeServiceEdit()">Cancel</button>
+      <button class="green" type="button" onclick="saveServiceEdit()">Save Changes</button>
+    </div>
+  </div>
+</div>
 
 <script>
 const SUPABASE_URL='https://hxdrvhiowurbwlgmczju.supabase.co';
@@ -240,14 +272,51 @@ function viewPro(i){const p=pros[i];if(!p)return;
 }
 function closeProView(){document.getElementById('proViewModal')?.classList.remove('show')}
 document.getElementById('proViewModal')?.addEventListener('click',e=>{if(e.target.id==='proViewModal')closeProView()});
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closeProView()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeProView();closeServiceEdit()}});
 function restoreProfessionalView(){const sec=document.getElementById('pros');const pref=localStorage.getItem('senvia_prof_view')||'card';const on=pref==='card';sec.classList.toggle('card-view',on);sec.classList.toggle('table-view',!on);const b=document.getElementById('viewToggle');if(b)b.textContent=on?'☷ Table View':'▦ Card View'}
 function setLang(l){lang=l;document.querySelectorAll('[data-hi]').forEach(e=>e.textContent=e.dataset[l]);document.getElementById('hi').className=l==='hi'?'on':'';document.getElementById('en').className=l==='en'?'on':''}
 function show(id,el){document.querySelectorAll('main section').forEach(s=>s.style.display='none');document.getElementById(id).style.display='block';document.querySelectorAll('.nav').forEach(n=>n.classList.remove('active'));if(el)el.classList.add('active');render()}
 function render(){countPro.textContent=pros.length;countPending.textContent=pros.filter(p=>proStatus(p)==='Pending').length;countCust.textContent=customers;countSvc.textContent=services.length;renderTable();renderRecent();renderServices();renderAreas()}
 function renderTable(){let q=(proSearch?.value||'').toLowerCase(),st=statusFilter?.value||'';proTable.innerHTML=pros.filter(p=>(!q||JSON.stringify(p).toLowerCase().includes(q))&&(!st||proStatus(p)===st)).map((p,i)=>`<tr><td><b>${p.name}</b></td><td>${p.mobile}</td><td>${p.block} → ${p.panchayat}<br>${p.village}</td><td>${p.services.join(', ')||'—'}</td><td><span class="badge ${proStatus(p).toLowerCase()}">${proStatus(p)}</span></td><td>${proStatus(p)==='Pending'?`<button class="green" onclick="approve(${i})">Approve</button> `:''}<button class="outline" onclick="viewPro(${i})">View</button> <button class="danger" onclick="removePro(${i})">Delete</button></td></tr>`).join('')||'<tr><td colspan="6" class="empty">No professionals found.</td></tr>'}
 function renderRecent(){recent.innerHTML=pros.slice(-5).reverse().map(p=>`<div style="padding:10px 0;border-bottom:1px solid #edf1f5"><b>${p.name}</b> — ${p.block} — ${p.services.join(', ')||'—'} <span class="badge ${proStatus(p).toLowerCase()}">${proStatus(p)}</span></div>`).join('')}
-function renderServices(){serviceList.innerHTML=services.map((s,i)=>`<div style="display:flex;justify-content:space-between;padding:11px;border-bottom:1px solid #edf1f5"><span>${s}</span><button class="danger" onclick="delService(${i})">Delete</button></div>`).join('')}
+function renderServices(){serviceList.innerHTML=services.map((s,i)=>`<div class="service-row"><span class="service-row-name">${s}</span><div class="service-row-actions"><button class="service-edit-btn" type="button" onclick="openServiceEdit(${i})">✎ Edit</button><button class="danger" type="button" onclick="delService(${i})">Delete</button></div></div>`).join('')}
+let editingServiceIndex=-1;
+function serviceNameKey(row){
+ if(!row||typeof row!=='object')return null;
+ const candidates=['name_en','name','service','service_name','service_name_en','service_name_hi','title','name_hi','label','category','Service Name','Service'];
+ const k=keyCI(row,candidates);
+ if(k)return k;
+ const label=svcLabel(row);
+ if(label){const found=Object.keys(row).find(x=>String(row[x]??'').trim()===String(label).trim() && !['id','created_at','updated_at'].includes(String(x).toLowerCase()));if(found)return found}
+ return null;
+}
+function openServiceEdit(i){
+ const current=services[i]; if(current==null)return; editingServiceIndex=i;
+ const input=document.getElementById('serviceEditInput'); const msg=document.getElementById('serviceEditMsg');
+ input.value=current; msg.textContent=''; document.getElementById('serviceEditModal').classList.add('show');
+ setTimeout(()=>{input.focus();input.select()},50);
+}
+function closeServiceEdit(){editingServiceIndex=-1;document.getElementById('serviceEditModal')?.classList.remove('show')}
+async function saveServiceEdit(){
+ const input=document.getElementById('serviceEditInput'),msg=document.getElementById('serviceEditMsg');
+ const value=input.value.trim(); if(!value){msg.textContent='Service name खाली नहीं हो सकता।';return}
+ if(editingServiceIndex<0)return;
+ const old=services[editingServiceIndex]; if(value===old){closeServiceEdit();return}
+ if(services.some((x,i)=>i!==editingServiceIndex && String(x).trim().toLowerCase()===value.toLowerCase())){msg.textContent='यह service पहले से मौजूद है।';return}
+ try{
+  showBusy();
+  if(!dbMode){services[editingServiceIndex]=value;closeServiceEdit();render();return}
+  const row=serviceRows.find(x=>svcLabel(x)===old);
+  if(!row?.id)throw new Error('Service record नहीं मिला।');
+  const key=serviceNameKey(row);
+  if(!key)throw new Error('Service name column नहीं मिला।');
+  const payload={}; payload[key]=value;
+  await api('services?id=eq.'+encodeURIComponent(row.id),{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify(payload)});
+  closeServiceEdit(); await loadFromSupabase();
+ }catch(e){console.error('Service edit failed:',e);msg.textContent='Service edit failed. '+(e.message||e)}finally{hideBusy()}
+}
+document.getElementById('serviceEditModal')?.addEventListener('click',e=>{if(e.target.id==='serviceEditModal')closeServiceEdit()});
+
 function renderAreas(){availableList.innerHTML=blocks.map(b=>`<span class="badge verified" style="margin:4px">${b}</span>`).join('');comingList.innerHTML=coming.map(b=>`<span class="badge" style="background:#eaf5ff;color:#0879c9;margin:4px">${b}</span>`).join('')}
 function openPro(){modal.classList.add('show');pb.innerHTML='<option value="">Select Block</option>'+blocks.map(b=>`<option>${b}</option>`).join('');checks.innerHTML=services.map(s=>`<label><input type="checkbox" value="${s}"> ${s}</label>`).join('')}
 function closePro(){modal.classList.remove('show')}
