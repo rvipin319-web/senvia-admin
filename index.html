@@ -219,6 +219,8 @@ html,body{width:100%;min-width:0;max-width:100%;margin:0;padding:0;overflow-x:hi
   #pros .toolbar button{grid-column:1/-1;width:100%}
 }
 </style>
+
+<style>.pro-mobile-list{display:none}.pro-mobile-card{background:#fff;border:1px solid #dbe7f3;border-radius:16px;padding:18px;margin:12px 0;box-shadow:0 5px 18px rgba(30,88,140,.05)}.pm-row{display:flex;justify-content:space-between;gap:18px;padding:9px 0;border-bottom:1px solid #edf1f5}.pm-label{color:#68758a}.pm-value{font-weight:800;text-align:right}.pm-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:16px;flex-wrap:wrap}.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.detail-grid>div{background:#f7fafc;border:1px solid #e4edf5;border-radius:10px;padding:11px}.detail-grid b{display:block;color:#68758a;font-size:12px;margin-bottom:4px}.detail-grid span{font-weight:800}@media(max-width:650px){.pro-mobile-list{display:block}.tablewrap:has(#proTable){display:none}.detail-grid{grid-template-columns:1fr}.pm-row{align-items:flex-start}.pm-value{max-width:68%}}</style>
 </head>
 <body>
 <div id="loginGate" class="login-gate">
@@ -243,6 +245,7 @@ html,body{width:100%;min-width:0;max-width:100%;margin:0;padding:0;overflow-x:hi
 <h3>⚙ Senvia Admin</h3>
 <div class="nav active" onclick="show('dashboard',this)">📊 <span data-hi="Dashboard" data-en="Dashboard">Dashboard</span></div>
 <div class="nav" onclick="show('pros',this)">👥 <span data-hi="Professionals" data-en="Professionals">Professionals</span></div>
+<div class="nav" onclick="show('pending',this)">📋 <span data-hi="Pending Approvals" data-en="Pending Approvals">Pending Approvals</span></div>
 <div class="nav" onclick="show('customers',this)">👤 <span data-hi="Customers" data-en="Customers">Customers</span></div>
 <div class="nav" onclick="show('services',this)">🛠 <span data-hi="Services" data-en="Services">Services</span></div>
 <div class="nav" onclick="show('areas',this)">📍 <span data-hi="Areas" data-en="Areas">Areas</span></div>
@@ -255,13 +258,15 @@ html,body{width:100%;min-width:0;max-width:100%;margin:0;padding:0;overflow-x:hi
 <div class="stat"><small>Verified Professionals</small><b id="countVerified">3</b><span class="trend">↑ +10%</span></div>
 <div class="stat"><small>Total Customers</small><b id="countCust">0</b><span class="trend">↑ +18%</span></div></div>
 <div class="dashboard-welcome"><div><h2>Welcome to Senvia Admin Panel!</h2><p>Manage local professionals, verify services, and help us build stronger communities.</p></div><div class="motto">Together for<br><b>a Better Tomorrow</b></div></div>
-<div class="dashboard-tabs"><button class="selected">☷ &nbsp; Recent Registrations</button><button onclick="show('pros',null)">◷ &nbsp; Pending Approvals</button><button onclick="show('pros',null)">✓ &nbsp; Verified Professionals</button><button>💬 &nbsp; Recent Enquiries</button></div>
+<div class="dashboard-tabs"><button class="selected">☷ &nbsp; Recent Registrations</button><button onclick="show('pending',null)">◷ &nbsp; Pending Approvals</button><button onclick="show('pros',null)">✓ &nbsp; Verified Professionals</button><button>💬 &nbsp; Recent Enquiries</button></div>
 <div class="dashboard-search"><input placeholder="⌕  Search by name, phone, service..." oninput="document.getElementById('proSearch').value=this.value;renderPros()"></div>
 <div class="dashboard-table"><div class="tablewrap"><table><thead><tr><th>#</th><th>Name</th><th>Phone</th><th>Service(s)</th><th>Area / Block</th><th>Status</th><th>Registered On</th><th>Action</th></tr></thead><tbody id="dashboardTableBody"></tbody></table></div><div class="dashboard-foot"><span id="dashCount">Showing recent entries</span><div class="pager"><button>‹</button><button class="current">1</button><button>2</button><button>3</button><button>4</button><button>5</button><button>›</button></div></div></div>
 <div class="panel" style="display:none"><div id="recent"></div></div>
 </section>
 
 <section id="pros" style="display:none"><h1>Professionals</h1><div class="panel"><div class="toolbar"><input id="proSearch" placeholder="Search name/mobile/block"><select id="statusFilter"><option value="">All Status</option><option>Verified</option><option>Pending</option><option>Rejected</option></select><button class="green" onclick="openPro()">+ Add Professional</button></div><div class="tablewrap"><table><thead><tr><th>Name</th><th>Mobile</th><th>Area</th><th>Services</th><th>Status</th><th>Action</th></tr></thead><tbody id="proTable"></tbody></table></div><div id="proMobileList" class="pro-mobile-list"></div></div></section>
+
+<section id="pending" style="display:none"><h1>Pending Approvals</h1><div class="panel"><div class="toolbar"><input id="pendingSearch" placeholder="Search pending professional"><span class="badge pending" style="align-self:center">Pending only</span></div><div id="pendingList" class="pro-mobile-list"></div><div id="pendingEmpty" class="empty" style="display:none">No pending approvals.</div></div></section>
 
 <section id="customers" style="display:none"><h1>Customers</h1><div class="panel"><p class="empty">Customer registration data will appear here after customers register on the portal.</p></div></section>
 
@@ -273,6 +278,7 @@ html,body{width:100%;min-width:0;max-width:100%;margin:0;padding:0;overflow-x:hi
 <div class="modal" id="modal"><div class="box"><div style="display:flex;justify-content:space-between"><h2>Add Professional</h2><button class="outline" onclick="closePro()">✕</button></div>
 <div class="form"><input id="pn" placeholder="Full Name"><input id="pm" placeholder="Mobile Number"><select id="pb"></select><input id="pp" placeholder="Panchayat"><input id="pv" placeholder="Village / Area"><input id="pe" placeholder="Experience"></div>
 <h3>Services</h3><div class="checks" id="checks"></div><p><button class="green" onclick="savePro()">Save Profile</button> <button class="outline" onclick="closePro()">Cancel</button></p></div></div>
+<div class="modal" id="viewModal"><div class="box"><div style="display:flex;justify-content:space-between;align-items:center"><h2 id="viewTitle">Professional Details</h2><button class="outline" onclick="closeProView()">✕</button></div><div id="viewBody" style="line-height:1.8"></div><div id="viewActions" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:18px"></div></div></div>
 
 <script>
 const SUPABASE_URL='https://hxdrvhiowurbwlgmczju.supabase.co';
@@ -440,7 +446,8 @@ async function loadFromSupabase(){
  render();
 }
 function setDbStatus(t,c){let el=document.getElementById('dbStatus');if(el){el.textContent=t;el.style.background=c==='ok'?'#e7f7e4':'#fff4d7';el.style.color=c==='ok'?'#23751c':'#8a6500'}}
-function openProView(id){const p=pros.find(x=>String(x.id||'')===String(id));if(!p){alert('Professional details उपलब्ध नहीं हैं।');return}alert(`Name: ${p.name||''}\nMobile: ${p.mobile||''}\nArea: ${p.block||''}\nServices: ${(p.services||[]).join(', ')}\nStatus: ${p.status||''}`)}
+function openProView(id){const p=pros.find(x=>String(x.id||'')===String(id));if(!p){alert('Professional details उपलब्ध नहीं हैं।');return}const vm=document.getElementById('viewModal'),body=document.getElementById('viewBody'),actions=document.getElementById('viewActions');if(!vm||!body)return;const area=[p.block,p.panchayat,p.village].filter(Boolean).join(' → ')||'—';body.innerHTML=`<div class="detail-grid"><div><b>Name</b><span>${p.name||'—'}</span></div><div><b>Mobile</b><span>${p.mobile||'—'}</span></div><div><b>Area</b><span>${area}</span></div><div><b>Experience</b><span>${p.experience||'—'}</span></div><div><b>Services</b><span>${(p.services||[]).join(', ')||'—'}</span></div><div><b>Status</b><span class="badge ${proStatus(p).toLowerCase()}">${proStatus(p)}</span></div></div>`;actions.innerHTML=proStatus(p)==='Pending'?`<button class="green" onclick="approveById('${String(p.id||'').replace(/'/g,"\'")}');closeProView()">Approve</button><button class="danger" onclick="rejectById('${String(p.id||'').replace(/'/g,"\'")}');closeProView()">Reject</button>`:'';vm.classList.add('show')}
+function closeProView(){document.getElementById('viewModal')?.classList.remove('show')}
 function renderDashboard(){const body=document.getElementById('dashboardTableBody');if(!body)return;const arr=pros.slice(0,6);body.innerHTML=arr.map((p,i)=>`<tr><td>${i+1}</td><td><b>${p.name}</b></td><td>${p.mobile||''}</td><td>${(p.services||[]).join(', ')}</td><td>${p.block||''}</td><td><span class="badge ${p.status==='Verified'?'verified':'pending'}">${p.status||'Pending'}</span></td><td>${p.registered_at?new Date(p.registered_at).toLocaleDateString('en-IN'):'—'}</td><td>${p.status!=='Verified'?`<button class="action-approve" onclick="approvePro('${p.id||''}')">Approve</button> `:''}<button class="action-view" onclick="openProView('${p.id||''}')">View</button></td></tr>`).join('');document.getElementById('dashCount').textContent=`Showing 1 to ${arr.length} of ${pros.length} entries`;const cv=document.getElementById('countVerified');if(cv)cv.textContent=pros.filter(x=>x.status==='Verified').length}
 function setLang(l){lang=l;document.querySelectorAll('[data-hi]').forEach(e=>e.textContent=e.dataset[l]);document.getElementById('hi').className=l==='hi'?'on':'';document.getElementById('en').className=l==='en'?'on':''}
 function show(id,el){document.querySelectorAll('main section').forEach(s=>s.style.display='none');document.getElementById(id).style.display='block';document.querySelectorAll('.nav').forEach(n=>n.classList.remove('active'));if(el)el.classList.add('active');render()}
@@ -453,7 +460,7 @@ function render(){
   if(cpend) cpend.textContent=pros.filter(p=>proStatus(p)==='Pending').length;
   if(cc) cc.textContent=customers;
   if(cs) cs.textContent=services.length;
-  renderTable(); renderRecent(); renderServices(); renderAreas();
+  renderTable(); renderPending(); renderRecent(); renderServices(); renderAreas();
 }
 function renderTable(){
   const table=document.getElementById('proTable');
@@ -467,6 +474,7 @@ function renderTable(){
     mobileList.innerHTML=filtered.map(p=>`<div class="pro-mobile-card"><div class="pm-row"><span class="pm-label">Name</span><span class="pm-value">${p.name||'—'}</span></div><div class="pm-row"><span class="pm-label">Mobile</span><span class="pm-value">${p.mobile||'—'}</span></div><div class="pm-row"><span class="pm-label">Area</span><span class="pm-value">${p.block||'—'}${p.panchayat?' → '+p.panchayat:''}${p.village?' → '+p.village:''}</span></div><div class="pm-row"><span class="pm-label">Services</span><span class="pm-value">${(p.services||[]).join(', ')||'—'}</span></div><div class="pm-row"><span class="pm-label">Status</span><span class="pm-value"><span class="badge ${proStatus(p).toLowerCase()}">${proStatus(p)}</span></span></div><div class="pm-actions">${proStatus(p)==='Pending'?`<button class="green" onclick="approveById('${String(p.id||'').replace(/'/g,"\\'")}')">Approve</button>`:''}<button class="outline" onclick="openProView('${String(p.id||'').replace(/'/g,"\\'")}')">View</button><button class="danger" onclick="removeProById('${String(p.id||'').replace(/'/g,"\\'")}')">Delete</button></div></div>`).join('')||'<div class="empty">No professionals found.</div>';
   }
 }
+function renderPending(){const el=document.getElementById('pendingList'),empty=document.getElementById('pendingEmpty');if(!el)return;const q=(document.getElementById('pendingSearch')?.value||'').toLowerCase();const arr=pros.filter(p=>proStatus(p)==='Pending'&&(!q||JSON.stringify(p).toLowerCase().includes(q)));if(empty)empty.style.display=arr.length?'none':'block';el.innerHTML=arr.map(p=>{const id=String(p.id||'').replace(/'/g,"\'");return `<div class="pro-mobile-card"><div class="pm-row"><span class="pm-label">Name</span><span class="pm-value">${p.name||'—'}</span></div><div class="pm-row"><span class="pm-label">Mobile</span><span class="pm-value">${p.mobile||'—'}</span></div><div class="pm-row"><span class="pm-label">Area</span><span class="pm-value">${[p.block,p.panchayat,p.village].filter(Boolean).join(' → ')||'—'}</span></div><div class="pm-row"><span class="pm-label">Services</span><span class="pm-value">${(p.services||[]).join(', ')||'—'}</span></div><div class="pm-actions"><button class="green" onclick="approveById('${id}')">Approve</button><button class="outline" onclick="openProView('${id}')">View</button><button class="danger" onclick="rejectById('${id}')">Reject</button></div></div>`}).join('')}
 function renderRecent(){const el=document.getElementById('recent');if(!el)return;el.innerHTML=pros.slice(-5).reverse().map(p=>`<div style="padding:10px 0;border-bottom:1px solid #edf1f5"><b>${p.name||''}</b> — ${p.block||''} — ${(p.services||[]).join(', ')||'—'} <span class="badge ${proStatus(p).toLowerCase()}">${proStatus(p)}</span></div>`).join('')}
 function renderServices(){const el=document.getElementById('serviceList');if(!el)return;el.innerHTML=services.map((s,i)=>`<div style="display:flex;justify-content:space-between;padding:11px;border-bottom:1px solid #edf1f5"><span>${s}</span><button class="danger" onclick="delService(${i})">Delete</button></div>`).join('')}
 function renderAreas(){const a=document.getElementById('availableList'),c=document.getElementById('comingList');if(a)a.innerHTML=blocks.map(b=>`<span class="badge verified" style="margin:4px">${b}</span>`).join('');if(c)c.innerHTML=coming.map(b=>`<span class="badge" style="background:#eaf5ff;color:#0879c9;margin:4px">${b}</span>`).join('')}
@@ -485,6 +493,7 @@ if(pid){
 }
 closePro();await loadFromSupabase();alert('Professional added as Pending Verification.')}catch(e){console.error('Supabase save failed:',e);alert('Supabase save failed. Please check the table columns/RLS policies.\n\n'+(e.message||e));} }
 async function approveById(id){if(!(await requireAdmin()))return;const p=pros.find(x=>String(x.id||'')===String(id));if(!dbMode||!p?.id){alert('Live database connection is required for approval.');return}try{await api('professionals?id=eq.'+encodeURIComponent(p.id),{method:'PATCH',body:JSON.stringify({Status:'Verified'})});await loadFromSupabase();}catch(e){alert('Approve failed. '+(e.message||'Check Supabase RLS policy.'))}}
+async function rejectById(id){if(!(await requireAdmin()))return;if(!confirm('Reject this professional?'))return;const p=pros.find(x=>String(x.id||'')===String(id));if(!dbMode||!p?.id){alert('Live database connection is required for rejection.');return}try{await api('professionals?id=eq.'+encodeURIComponent(p.id),{method:'PATCH',body:JSON.stringify({Status:'Rejected'})});await loadFromSupabase();show('pending',null)}catch(e){alert('Reject failed. '+(e.message||'Check Supabase RLS policy.'))}}
 async function removeProById(id){if(!(await requireAdmin()))return;if(!confirm('Delete this professional?'))return;const p=pros.find(x=>String(x.id||'')===String(id));if(!dbMode||!p?.id){alert('Live database connection is required for deletion.');return}try{await api('professional_services?professional_id=eq.'+encodeURIComponent(p.id),{method:'DELETE'});await api('professionals?id=eq.'+encodeURIComponent(p.id),{method:'DELETE'});await loadFromSupabase();}catch(e){alert('Delete failed. '+(e.message||'Check Supabase RLS policy.'))}}
 async function approve(i){return approveById(pros[i]?.id)}
 async function removePro(i){return removeProById(pros[i]?.id)}
@@ -494,6 +503,7 @@ const forgotBtn=document.getElementById('forgotPasswordBtn');
 if(forgotBtn) forgotBtn.addEventListener('click',()=>window.forgotPassword());
 document.getElementById('proSearch')?.addEventListener('input',renderTable);
 document.getElementById('statusFilter')?.addEventListener('change',renderTable);
+document.getElementById('pendingSearch')?.addEventListener('input',renderPending);
 const db=document.createElement('div');db.id='dbStatus';db.style='margin:12px 0 0;padding:10px 12px;border-radius:9px;font-weight:700;background:#fff4d7;color:#8a6500';db.textContent='Connecting to Supabase…';document.querySelector('.content').prepend(db);
 document.getElementById('loginPassword')?.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();adminLogin()}});
 document.getElementById('loginEmail')?.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();adminLogin()}});
