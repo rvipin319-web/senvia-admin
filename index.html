@@ -1,6 +1,9 @@
 <!doctype html>
 <html lang="hi">
 <head>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <!-- Senvia Admin Login Technical Fix v2026-09-22 -->
 <title>Senvia Admin Panel</title>
@@ -217,12 +220,16 @@ window.adminLogin=async function adminLogin(){
  localStorage.setItem('senvia_admin_email',email);
  try{
   const btn=document.getElementById('adminLoginBtn'); if(btn){btn.disabled=true;btn.querySelector('span').textContent='Signing in…';} msg.style.color='#174a87';msg.textContent='Signing in…';
-  const r=await fetchWithTimeout(SUPABASE_URL+'/auth/v1/token?grant_type=password',{method:'POST',headers:{apikey:SUPABASE_KEY,'Content-Type':'application/json'},body:JSON.stringify({email,password})},15000);
-  const d=await r.json();
+  const r=await fetchWithTimeout(SUPABASE_URL+'/auth/v1/token?grant_type=password',{method:'POST',headers:{apikey:SUPABASE_KEY,'Content-Type':'application/json','Cache-Control':'no-cache'},body:JSON.stringify({email,password}),cache:'no-store'},12000);
+  const raw=await r.text();
+  let d={}; try{d=raw?JSON.parse(raw):{};}catch{throw new Error('Supabase ने invalid response दिया।');}
   if(!r.ok)throw new Error(d.error_description||d.error||d.msg||('HTTP '+r.status));
   if(!d.access_token)throw new Error('Access token नहीं मिला');
   accessToken=d.access_token;sessionStorage.setItem('senvia_admin_token',accessToken);
-  const ok=await requireAdmin();
+  const ok=await Promise.race([
+    requireAdmin(),
+    new Promise((_,reject)=>setTimeout(()=>reject(new Error('Admin verification timeout. कृपया page को HTTPS GitHub Pages पर refresh करके फिर Login करें।')),12000))
+  ]);
   if(ok){document.getElementById('loginGate').style.display='none';await loadFromSupabase();renderDashboard();}
  }catch(e){console.error(e);msg.textContent='Login failed: '+e.message;msg.style.color='#b42318';}
  finally{const btn=document.getElementById('adminLoginBtn');if(btn){btn.disabled=false;btn.querySelector('span').textContent='Login';}}
