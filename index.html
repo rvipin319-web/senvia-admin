@@ -1,11 +1,7 @@
 <!doctype html>
 <html lang="hi">
 <head>
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Expires" content="0">
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<!-- Senvia Admin Login Technical Fix v2026-09-22 -->
 <title>Senvia Admin Panel</title>
 <style>
 :root{--navy:#082455;--blue:#0879c9;--green:#45b51f;--bg:#f4f7fb;--line:#dce5ef;--text:#18253d;--muted:#68758a}
@@ -59,7 +55,7 @@ html,body{width:100%;min-width:0;max-width:100%;margin:0;padding:0;overflow-x:hi
 *,*::before,*::after{box-sizing:border-box}
 .login-gate{
   position:fixed!important;inset:0!important;width:100%!important;height:100dvh!important;min-height:100vh!important;
-  display:flex!important;align-items:center!important;justify-content:center!important;
+  display:flex;align-items:center!important;justify-content:center!important;
   padding:125px 16px 24px!important;overflow-y:auto!important;overflow-x:hidden!important;
 }
 .login-card{
@@ -106,7 +102,7 @@ html,body{width:100%;min-width:0;max-width:100%;margin:0;padding:0;overflow-x:hi
 <style id="senvia-mobile-final-fix">
 @media (max-width:700px){
   html,body{width:100%!important;min-width:0!important;max-width:100%!important;overflow-x:hidden!important;}
-  .login-gate{width:100%!important;min-width:0!important;height:100dvh!important;min-height:100vh!important;display:flex!important;align-items:center!important;justify-content:center!important;padding:70px 12px 18px!important;overflow-y:auto!important;overflow-x:hidden!important;}
+  .login-gate{width:100%!important;min-width:0!important;height:100dvh!important;min-height:100vh!important;display:flex;align-items:center!important;justify-content:center!important;padding:70px 12px 18px!important;overflow-y:auto!important;overflow-x:hidden!important;}
   .login-card{width:calc(100vw - 24px)!important;max-width:none!important;min-width:0!important;margin:0 auto!important;padding:68px 16px 16px!important;border-radius:22px!important;}
   .login-logo{width:128px!important;height:128px!important;max-width:128px!important;top:-64px!important;left:50%!important;object-fit:cover!important;border-radius:50%!important;}
   .login-card h1{font-size:36px!important;line-height:1!important;margin:0 0 2px!important;}
@@ -197,56 +193,46 @@ let services=[...demoServices],pros=[...demoPros],customers=0,lang='hi',dbMode=f
 let accessToken=sessionStorage.getItem('senvia_admin_token')||'';
 const authHeaders=()=>accessToken?{apikey:SUPABASE_KEY,Authorization:'Bearer '+accessToken}:{apikey:SUPABASE_KEY};
 const api=async(path,opt={})=>{
- const r=await fetchWithTimeout(SUPABASE_URL+'/rest/v1/'+path,{...opt,headers:{...authHeaders(),'Content-Type':'application/json',...(opt.headers||{})}},15000);
+ const r=await fetchWithTimeout(SUPABASE_URL+'/rest/v1/'+path,{...opt,headers:{...authHeaders(),'Content-Type':'application/json',...(opt.headers||{})}},12000);
  const text=await r.text();
  if(!r.ok) throw new Error(text||('HTTP '+r.status));
  if(!text.trim()) return null;
  try{return JSON.parse(text)}catch(e){throw new Error('Invalid JSON response: '+text.slice(0,300))}
 };
 async function fetchWithTimeout(url, options={}, ms=15000){
-  const controller = new AbortController();
-  const timer = setTimeout(()=>controller.abort(), ms);
-  try { return await fetch(url, {...options, signal: controller.signal}); }
-  catch(e){
-    if(e && e.name==='AbortError') throw new Error('Server response timeout. Please open this page from HTTPS hosting, not a downloaded content:// file.');
-    throw e;
-  } finally { clearTimeout(timer); }
+  let timer;
+  const timeout = new Promise((_, reject)=>{
+    timer=setTimeout(()=>reject(new Error('TIMEOUT: Supabase server ने 15 seconds में जवाब नहीं दिया. Internet/VPN/Ad-blocker या Supabase connection check करें.')),ms);
+  });
+  try { return await Promise.race([fetch(url, options), timeout]); }
+  finally { clearTimeout(timer); }
 }
 
 window.adminLogin=async function adminLogin(){
- const email=document.getElementById('loginEmail').value.trim(), password=document.getElementById('loginPassword').value;
- const msg=document.getElementById('loginMsg');
- if(!email||!password){msg.style.color='#b42318';msg.textContent='Email और password भरें।';return}
- localStorage.setItem('senvia_admin_email',email);
- const btn=document.getElementById('adminLoginBtn');
+ const email=document.getElementById('loginEmail').value.trim(),password=document.getElementById('loginPassword').value;
+ const msg=document.getElementById('loginMsg');msg.textContent='';
+ if(!email||!password){msg.textContent='Email और password भरें।';return}
  try{
-  if(btn){btn.disabled=true;btn.querySelector('span').textContent='Signing in…';}
-  msg.style.color='#174a87'; msg.textContent='Signing in…';
-  const r=await fetchWithTimeout(SUPABASE_URL+'/auth/v1/token?grant_type=password',{
-    method:'POST',headers:{apikey:SUPABASE_KEY,'Content-Type':'application/json','Cache-Control':'no-cache'},
-    body:JSON.stringify({email,password}),cache:'no-store'
-  },12000);
-  const raw=await r.text(); let d={}; try{d=raw?JSON.parse(raw):{}}catch{throw new Error('Supabase ने invalid response दिया।')}
-  if(!r.ok) throw new Error(d.error_description||d.error||d.msg||('HTTP '+r.status));
-  if(!d.access_token) throw new Error('Access token नहीं मिला');
-  accessToken=d.access_token; sessionStorage.setItem('senvia_admin_token',accessToken);
+  const btn=document.getElementById('adminLoginBtn'); if(btn){btn.disabled=true;const sp=btn.querySelector('span');if(sp)sp.textContent='Signing in…';} msg.style.color='#174a87';msg.textContent='Connecting to Senvia…';
+  const r=await fetchWithTimeout(SUPABASE_URL+'/auth/v1/token?grant_type=password',{method:'POST',headers:{apikey:SUPABASE_KEY,'Content-Type':'application/json'},body:JSON.stringify({email,password})},15000);
+  const raw=await r.text();
+  let d={}; try{d=raw?JSON.parse(raw):{};}catch{}
+  if(!r.ok)throw new Error(d.error_description||d.msg||d.error||raw||('HTTP '+r.status));
+  if(!d.access_token)throw new Error('Access token नहीं मिला');
+  accessToken=d.access_token;sessionStorage.setItem('senvia_admin_token',accessToken);
+  msg.textContent='Login successful. Checking admin authorization…';
   const ok=await requireAdmin();
-  if(!ok) return;
-  document.getElementById('loginGate').style.display='none';
-  render(); renderDashboard();
-  loadFromSupabase().then(()=>{render();renderDashboard()}).catch(e=>{
-    console.error('Dashboard data load failed:',e);
-    setDbStatus('🟠 Dashboard opened; live data could not be loaded right now.','warn');
-    render();renderDashboard();
-  });
- }catch(e){
-  console.error('Senvia login:',e);
-  accessToken='';sessionStorage.removeItem('senvia_admin_token');
-  msg.style.color='#b42318';msg.textContent='Login failed: '+(e.message||e);
- }finally{
-  if(btn){btn.disabled=false;btn.querySelector('span').textContent='Login';}
+  if(ok){
+   msg.textContent='Admin verified. Loading dashboard…';
+   document.getElementById('loginGate').style.display='none';
+   await loadFromSupabase();
+   renderDashboard();
+   if(document.getElementById('loginGate').style.display!=='none') document.getElementById('loginGate').style.display='none';
  }
+ }catch(e){console.error('Senvia login error:',e);msg.textContent='Login failed: '+(e?.message||String(e));msg.style.color='#b42318';}
+ finally{const btn=document.getElementById('adminLoginBtn');if(btn){btn.disabled=false;const sp=btn.querySelector('span');if(sp)sp.textContent='Login';}}
 }
+
 window.forgotPassword=async function forgotPassword(){
   const email=document.getElementById('loginEmail').value.trim();
   const msg=document.getElementById('loginMsg');
@@ -270,40 +256,36 @@ window.forgotPassword=async function forgotPassword(){
 function adminLogout(){accessToken='';sessionStorage.removeItem('senvia_admin_token');location.reload()}
 async function requireAdmin(){
  if(!accessToken){document.getElementById('loginGate').style.display='flex';return false}
- const msg=document.getElementById('loginMsg');
  try{
-  msg.style.color='#174a87'; msg.textContent='Checking admin access…';
-  const r=await fetchWithTimeout(SUPABASE_URL+'/auth/v1/user',{headers:authHeaders()},12000);
-  const raw=await r.text();
-  let user={}; try{user=raw?JSON.parse(raw):{}}catch{}
+  const r=await fetch(SUPABASE_URL+'/auth/v1/user',{headers:authHeaders()});
+  const raw=await r.text(); let user={}; try{user=raw?JSON.parse(raw):{};}catch{}
   if(!r.ok) throw new Error(user.msg||user.error_description||raw||('Auth verification HTTP '+r.status));
   if(!user?.id) throw new Error('Authenticated user ID नहीं मिला');
 
+  // Do NOT read admin_users directly from the browser. RLS intentionally blocks
+  // direct access to that table. Ask the SECURITY DEFINER function instead.
   const ar=await fetchWithTimeout(SUPABASE_URL+'/rest/v1/rpc/is_senvia_admin',{
-    method:'POST',
-    headers:{...authHeaders(),'Content-Type':'application/json','Accept':'application/json'},
-    body:'{}'
-  },12000);
+    method:'POST',headers:{...authHeaders(),'Content-Type':'application/json'},body:'{}'
+  },15000);
   const atext=await ar.text();
-  if(!ar.ok) throw new Error('Admin RPC HTTP '+ar.status+': '+atext);
-  let allowed=false;
-  try{
-    const parsed=atext?JSON.parse(atext):false;
-    allowed = parsed===true || parsed==='true' || parsed?.is_senvia_admin===true;
-  }catch{ throw new Error('Admin RPC returned invalid response: '+atext); }
-  if(!allowed) throw new Error('यह account Senvia Admin के रूप में authorized नहीं है।');
-
-  msg.textContent='';
+  if(!ar.ok) throw new Error(atext||('Admin authorization HTTP '+ar.status));
+  let allowed=false; try{allowed=JSON.parse(atext)===true;}catch{throw new Error('Admin authorization response invalid');}
+  if(!allowed){
+   accessToken='';sessionStorage.removeItem('senvia_admin_token');
+   document.getElementById('loginGate').style.display='flex';
+   document.getElementById('loginMsg').textContent='यह account Senvia Admin के रूप में authorized नहीं है।';
+   return false;
+  }
   return true;
  }catch(e){
   console.error('Senvia admin verification:',e);
-  accessToken=''; sessionStorage.removeItem('senvia_admin_token');
+  accessToken='';sessionStorage.removeItem('senvia_admin_token');
   document.getElementById('loginGate').style.display='flex';
-  msg.style.color='#b42318';
-  msg.textContent='Login failed: '+(e.message||e);
+  document.getElementById('loginMsg').textContent='Admin verification failed: '+(e.message||e);
   return false;
  }
 }
+
 window.togglePassword=function togglePassword(){
  const input=document.getElementById('loginPassword');
  const btn=document.getElementById('showPasswordBtn');
@@ -403,32 +385,8 @@ if(pid){
 closePro();await loadFromSupabase();alert('Professional added as Pending Verification.')}catch(e){console.error('Supabase save failed:',e);alert('Supabase save failed. Please check the table columns/RLS policies.\n\n'+(e.message||e));} }
 async function approve(i){if(!(await requireAdmin()))return;const p=pros[i];if(!dbMode||!p.id){alert('Live database connection is required for approval.');return}try{await api('professionals?id=eq.'+encodeURIComponent(p.id),{method:'PATCH',body:JSON.stringify({Status:'Verified'})});await loadFromSupabase()}catch(e){alert('Approve failed. Check Supabase RLS policy.')}}
 async function removePro(i){if(!(await requireAdmin()))return;if(!confirm('Delete this professional?'))return;const p=pros[i];if(!dbMode||!p.id){alert('Live database connection is required for deletion.');return}try{await api('professional_services?professional_id=eq.'+encodeURIComponent(p.id),{method:'DELETE'});await api('professionals?id=eq.'+encodeURIComponent(p.id),{method:'DELETE'});await loadFromSupabase()}catch(e){alert('Delete failed. Check Supabase RLS policy.')}}
-async function addService(){
- if(!(await requireAdmin()))return;
- let s=newSvc.value.trim();
- if(!s)return;
- if(!dbMode){if(!services.includes(s))services.push(s);newSvc.value='';render();return}
- try{
-  // Detect the real service-name column from the rows already loaded from Supabase.
-  // This avoids assuming name/name_en when the existing schema uses another column.
-  const sample=serviceRows.find(x=>x&&typeof x==='object')||{};
-  const candidates=['name_en','name','title','service_name','name_hi','Service Name','Service'];
-  const key=candidates.find(k=>Object.prototype.hasOwnProperty.call(sample,k));
-  if(!key) throw new Error('Services table का service-name column नहीं मिला।');
-  const payload={}; payload[key]=s;
-  await api('services',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify(payload)});
-  newSvc.value='';
-  await loadFromSupabase();
- }catch(e){
-  console.error('Service add failed:',e);
-  alert('Service add failed. '+(e.message||e));
- }
-}
+async function addService(){if(!(await requireAdmin()))return;let s=newSvc.value.trim();if(!s)return;if(!dbMode){if(!services.includes(s))services.push(s);newSvc.value='';render();return}try{await api('services',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify({name:s})});newSvc.value='';await loadFromSupabase()}catch(e){alert('Service add failed. If your services table uses name_en instead of name, we will adjust it in the next step.')}}
 async function delService(i){if(!(await requireAdmin()))return;if(!confirm('Delete this service?'))return;let s=serviceRows.find(x=>svcLabel(x)===services[i]);if(!dbMode||!s?.id){services.splice(i,1);render();return}try{await api('services?id=eq.'+encodeURIComponent(s.id),{method:'DELETE'});await loadFromSupabase()}catch(e){alert('Service delete failed. Check RLS and linked professional_services records.')}}
-const savedAdminEmail=localStorage.getItem('senvia_admin_email')||'';
-const emailField=document.getElementById('loginEmail');
-if(emailField && savedAdminEmail) emailField.value=savedAdminEmail;
-emailField?.addEventListener('input',()=>{const v=emailField.value.trim();if(v)localStorage.setItem('senvia_admin_email',v);});
 const forgotBtn=document.getElementById('forgotPasswordBtn');
 if(forgotBtn) forgotBtn.addEventListener('click',()=>window.forgotPassword());
 document.getElementById('proSearch')?.addEventListener('input',renderTable);
@@ -436,6 +394,6 @@ document.getElementById('statusFilter')?.addEventListener('change',renderTable);
 const db=document.createElement('div');db.id='dbStatus';db.style='margin:12px 0 0;padding:10px 12px;border-radius:9px;font-weight:700;background:#fff4d7;color:#8a6500';db.textContent='Connecting to Supabase…';document.querySelector('.content').prepend(db);
 document.getElementById('loginPassword')?.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();adminLogin()}});
 document.getElementById('loginEmail')?.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();adminLogin()}});
-if(accessToken){requireAdmin().then(ok=>{if(ok){document.getElementById('loginGate').style.display='none';loadFromSupabase()}});}
+requireAdmin().then(ok=>{if(ok){document.getElementById('loginGate').style.display='none';loadFromSupabase()}});
 </script>
 </body></html>
