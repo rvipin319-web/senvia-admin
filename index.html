@@ -193,7 +193,7 @@ let services=[...demoServices],pros=[...demoPros],customers=0,lang='hi',dbMode=f
 let accessToken=sessionStorage.getItem('senvia_admin_token')||'';
 const authHeaders=()=>accessToken?{apikey:SUPABASE_KEY,Authorization:'Bearer '+accessToken}:{apikey:SUPABASE_KEY};
 const api=async(path,opt={})=>{
- const r=await fetch(SUPABASE_URL+'/rest/v1/'+path,{...opt,headers:{...authHeaders(),'Content-Type':'application/json',...(opt.headers||{})}});
+ const r=await fetchWithTimeout(SUPABASE_URL+'/rest/v1/'+path,{...opt,headers:{...authHeaders(),'Content-Type':'application/json',...(opt.headers||{})}},12000);
  const text=await r.text();
  if(!r.ok) throw new Error(text||('HTTP '+r.status));
  if(!text.trim()) return null;
@@ -222,7 +222,13 @@ window.adminLogin=async function adminLogin(){
   accessToken=d.access_token;sessionStorage.setItem('senvia_admin_token',accessToken);
   msg.textContent='Login successful. Checking admin authorization…';
   const ok=await requireAdmin();
-  if(ok){msg.textContent='Admin verified. Loading dashboard…';document.getElementById('loginGate').style.display='none';await loadFromSupabase();renderDashboard();}
+  if(ok){
+   msg.textContent='Admin verified. Loading dashboard…';
+   document.getElementById('loginGate').style.display='none';
+   await loadFromSupabase();
+   renderDashboard();
+   if(document.getElementById('loginGate').style.display!=='none') document.getElementById('loginGate').style.display='none';
+ }
  }catch(e){console.error('Senvia login error:',e);msg.textContent='Login failed: '+(e?.message||String(e));msg.style.color='#b42318';}
  finally{const btn=document.getElementById('adminLoginBtn');if(btn){btn.disabled=false;const sp=btn.querySelector('span');if(sp)sp.textContent='Login';}}
 }
