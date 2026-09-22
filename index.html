@@ -214,43 +214,39 @@ async function fetchWithTimeout(url, options={}, ms=15000){
 }
 
 window.adminLogin=async function adminLogin(){
- const email=document.getElementById('loginEmail').value.trim(),password=document.getElementById('loginPassword').value;
- const msg=document.getElementById('loginMsg');msg.textContent='';
- if(!email||!password){msg.textContent='Email और password भरें।';return}
+ const email=document.getElementById('loginEmail').value.trim(), password=document.getElementById('loginPassword').value;
+ const msg=document.getElementById('loginMsg');
+ if(!email||!password){msg.style.color='#b42318';msg.textContent='Email और password भरें।';return}
  localStorage.setItem('senvia_admin_email',email);
+ const btn=document.getElementById('adminLoginBtn');
  try{
-  const btn=document.getElementById('adminLoginBtn'); if(btn){btn.disabled=true;btn.querySelector('span').textContent='Signing in…';} msg.style.color='#174a87';msg.textContent='Signing in…';
-  const r=await fetchWithTimeout(SUPABASE_URL+'/auth/v1/token?grant_type=password',{method:'POST',headers:{apikey:SUPABASE_KEY,'Content-Type':'application/json','Cache-Control':'no-cache'},body:JSON.stringify({email,password}),cache:'no-store'},12000);
-  const raw=await r.text();
-  let d={}; try{d=raw?JSON.parse(raw):{};}catch{throw new Error('Supabase ने invalid response दिया।');}
-  if(!r.ok)throw new Error(d.error_description||d.error||d.msg||('HTTP '+r.status));
-  if(!d.access_token)throw new Error('Access token नहीं मिला');
-  accessToken=d.access_token;sessionStorage.setItem('senvia_admin_token',accessToken);
-  const ok=await Promise.race([
-    requireAdmin(),
-    new Promise((_,reject)=>setTimeout(()=>reject(new Error('Admin verification timeout. कृपया page को HTTPS GitHub Pages पर refresh करके फिर Login करें।')),12000))
-  ]);
-  if(ok){
-    // Authentication is complete. Do not keep the login button in "Signing in…"
-    // while optional dashboard data is loading. Show the dashboard immediately
-    // using the safe local data, then refresh it from Supabase in the background.
-    document.getElementById('loginGate').style.display='none';
-    const btn=document.getElementById('adminLoginBtn');
-    if(btn){btn.disabled=false;btn.querySelector('span').textContent='Login';}
-    msg.textContent='';
-    render();
-    renderDashboard();
-    loadFromSupabase().then(()=>renderDashboard()).catch(e=>{
-      console.error('Dashboard data load failed:',e);
-      setDbStatus('🟠 Dashboard opened; live data could not be loaded right now.','warn');
-      render(); renderDashboard();
-    });
-    return;
-  }
- }catch(e){console.error(e);msg.textContent='Login failed: '+e.message;msg.style.color='#b42318';}
- finally{const btn=document.getElementById('adminLoginBtn');if(btn){btn.disabled=false;btn.querySelector('span').textContent='Login';}}
+  if(btn){btn.disabled=true;btn.querySelector('span').textContent='Signing in…';}
+  msg.style.color='#174a87'; msg.textContent='Signing in…';
+  const r=await fetchWithTimeout(SUPABASE_URL+'/auth/v1/token?grant_type=password',{
+    method:'POST',headers:{apikey:SUPABASE_KEY,'Content-Type':'application/json','Cache-Control':'no-cache'},
+    body:JSON.stringify({email,password}),cache:'no-store'
+  },12000);
+  const raw=await r.text(); let d={}; try{d=raw?JSON.parse(raw):{}}catch{throw new Error('Supabase ने invalid response दिया।')}
+  if(!r.ok) throw new Error(d.error_description||d.error||d.msg||('HTTP '+r.status));
+  if(!d.access_token) throw new Error('Access token नहीं मिला');
+  accessToken=d.access_token; sessionStorage.setItem('senvia_admin_token',accessToken);
+  const ok=await requireAdmin();
+  if(!ok) return;
+  document.getElementById('loginGate').style.display='none';
+  render(); renderDashboard();
+  loadFromSupabase().then(()=>{render();renderDashboard()}).catch(e=>{
+    console.error('Dashboard data load failed:',e);
+    setDbStatus('🟠 Dashboard opened; live data could not be loaded right now.','warn');
+    render();renderDashboard();
+  });
+ }catch(e){
+  console.error('Senvia login:',e);
+  accessToken='';sessionStorage.removeItem('senvia_admin_token');
+  msg.style.color='#b42318';msg.textContent='Login failed: '+(e.message||e);
+ }finally{
+  if(btn){btn.disabled=false;btn.querySelector('span').textContent='Login';}
+ }
 }
-
 window.forgotPassword=async function forgotPassword(){
   const email=document.getElementById('loginEmail').value.trim();
   const msg=document.getElementById('loginMsg');
@@ -274,57 +270,40 @@ window.forgotPassword=async function forgotPassword(){
 function adminLogout(){accessToken='';sessionStorage.removeItem('senvia_admin_token');location.reload()}
 async function requireAdmin(){
  if(!accessToken){document.getElementById('loginGate').style.display='flex';return false}
+ const msg=document.getElementById('loginMsg');
  try{
-  const r=await fetchWithTimeout(SUPABASE_URL+'/auth/v1/user',{headers:authHeaders()},15000);
-  const raw=await r.text(); let user={}; try{user=raw?JSON.parse(raw):{};}catch{}
+  msg.style.color='#174a87'; msg.textContent='Checking admin access…';
+  const r=await fetchWithTimeout(SUPABASE_URL+'/auth/v1/user',{headers:authHeaders()},12000);
+  const raw=await r.text();
+  let user={}; try{user=raw?JSON.parse(raw):{}}catch{}
   if(!r.ok) throw new Error(user.msg||user.error_description||raw||('Auth verification HTTP '+r.status));
   if(!user?.id) throw new Error('Authenticated user ID नहीं मिला');
 
-  // Do NOT read admin_users directly from the browser. RLS intentionally blocks
-  // direct access to that table. Ask the SECURITY DEFINER function instead.
   const ar=await fetchWithTimeout(SUPABASE_URL+'/rest/v1/rpc/is_senvia_admin',{
-    method:'POST',headers:{...authHeaders(),'Content-Type':'application/json'},body:'{}'
-  },15000);
+    method:'POST',
+    headers:{...authHeaders(),'Content-Type':'application/json','Accept':'application/json'},
+    body:'{}'
+  },12000);
   const atext=await ar.text();
-  let rpcError='';
-  if(!ar.ok) rpcError=atext||('Admin authorization HTTP '+ar.status);
+  if(!ar.ok) throw new Error('Admin RPC HTTP '+ar.status+': '+atext);
   let allowed=false;
-  try {
-    const parsed = atext ? JSON.parse(atext) : false;
-    allowed = parsed === true || parsed === 'true' || parsed?.is_senvia_admin === true;
-  } catch {
-    throw new Error('Admin authorization response invalid');
-  }
-  // Compatibility fallback for an older deployment where the RPC may not yet
-  // be visible in PostgREST's schema cache. This does not grant any write access.
-  if(!allowed && rpcError){
-    try {
-      const legacy = await fetchWithTimeout(
-        SUPABASE_URL+'/rest/v1/admin_users?select=user_id&user_id=eq.'+encodeURIComponent(user.id)+'&limit=1',
-        {headers:{...authHeaders(),'Content-Type':'application/json'}},
-        10000
-      );
-      const lraw=await legacy.text();
-      if(legacy.ok){ const rows=lraw?JSON.parse(lraw):[]; allowed=Array.isArray(rows)&&rows.length===1; }
-    } catch {}
-  }
-  if(!allowed){
-   if(rpcError && !document.getElementById('loginMsg').textContent){}
-   accessToken='';sessionStorage.removeItem('senvia_admin_token');
-   document.getElementById('loginGate').style.display='flex';
-   document.getElementById('loginMsg').textContent=rpcError ? 'Admin verification failed: '+rpcError : 'यह account Senvia Admin के रूप में authorized नहीं है।';
-   return false;
-  }
+  try{
+    const parsed=atext?JSON.parse(atext):false;
+    allowed = parsed===true || parsed==='true' || parsed?.is_senvia_admin===true;
+  }catch{ throw new Error('Admin RPC returned invalid response: '+atext); }
+  if(!allowed) throw new Error('यह account Senvia Admin के रूप में authorized नहीं है।');
+
+  msg.textContent='';
   return true;
  }catch(e){
   console.error('Senvia admin verification:',e);
-  accessToken='';sessionStorage.removeItem('senvia_admin_token');
+  accessToken=''; sessionStorage.removeItem('senvia_admin_token');
   document.getElementById('loginGate').style.display='flex';
-  document.getElementById('loginMsg').textContent='Admin verification failed: '+(e.message||e);
+  msg.style.color='#b42318';
+  msg.textContent='Login failed: '+(e.message||e);
   return false;
  }
 }
-
 window.togglePassword=function togglePassword(){
  const input=document.getElementById('loginPassword');
  const btn=document.getElementById('showPasswordBtn');
@@ -457,6 +436,6 @@ document.getElementById('statusFilter')?.addEventListener('change',renderTable);
 const db=document.createElement('div');db.id='dbStatus';db.style='margin:12px 0 0;padding:10px 12px;border-radius:9px;font-weight:700;background:#fff4d7;color:#8a6500';db.textContent='Connecting to Supabase…';document.querySelector('.content').prepend(db);
 document.getElementById('loginPassword')?.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();adminLogin()}});
 document.getElementById('loginEmail')?.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();adminLogin()}});
-requireAdmin().then(ok=>{if(ok){document.getElementById('loginGate').style.display='none';loadFromSupabase()}});
+if(accessToken){requireAdmin().then(ok=>{if(ok){document.getElementById('loginGate').style.display='none';loadFromSupabase()}});}
 </script>
 </body></html>
