@@ -197,7 +197,7 @@ let services=[...demoServices],pros=[...demoPros],customers=0,lang='hi',dbMode=f
 let accessToken=sessionStorage.getItem('senvia_admin_token')||'';
 const authHeaders=()=>accessToken?{apikey:SUPABASE_KEY,Authorization:'Bearer '+accessToken}:{apikey:SUPABASE_KEY};
 const api=async(path,opt={})=>{
- const r=await fetch(SUPABASE_URL+'/rest/v1/'+path,{...opt,headers:{...authHeaders(),'Content-Type':'application/json',...(opt.headers||{})}});
+ const r=await fetchWithTimeout(SUPABASE_URL+'/rest/v1/'+path,{...opt,headers:{...authHeaders(),'Content-Type':'application/json',...(opt.headers||{})}},15000);
  const text=await r.text();
  if(!r.ok) throw new Error(text||('HTTP '+r.status));
  if(!text.trim()) return null;
@@ -230,7 +230,23 @@ window.adminLogin=async function adminLogin(){
     requireAdmin(),
     new Promise((_,reject)=>setTimeout(()=>reject(new Error('Admin verification timeout. कृपया page को HTTPS GitHub Pages पर refresh करके फिर Login करें।')),12000))
   ]);
-  if(ok){document.getElementById('loginGate').style.display='none';await loadFromSupabase();renderDashboard();}
+  if(ok){
+    // Authentication is complete. Do not keep the login button in "Signing in…"
+    // while optional dashboard data is loading. Show the dashboard immediately
+    // using the safe local data, then refresh it from Supabase in the background.
+    document.getElementById('loginGate').style.display='none';
+    const btn=document.getElementById('adminLoginBtn');
+    if(btn){btn.disabled=false;btn.querySelector('span').textContent='Login';}
+    msg.textContent='';
+    render();
+    renderDashboard();
+    loadFromSupabase().then(()=>renderDashboard()).catch(e=>{
+      console.error('Dashboard data load failed:',e);
+      setDbStatus('🟠 Dashboard opened; live data could not be loaded right now.','warn');
+      render(); renderDashboard();
+    });
+    return;
+  }
  }catch(e){console.error(e);msg.textContent='Login failed: '+e.message;msg.style.color='#b42318';}
  finally{const btn=document.getElementById('adminLoginBtn');if(btn){btn.disabled=false;btn.querySelector('span').textContent='Login';}}
 }
