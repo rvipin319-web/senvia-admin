@@ -55,7 +55,7 @@ html,body{width:100%;min-width:0;max-width:100%;margin:0;padding:0;overflow-x:hi
 *,*::before,*::after{box-sizing:border-box}
 .login-gate{
   position:fixed!important;inset:0!important;width:100%!important;height:100dvh!important;min-height:100vh!important;
-  display:flex;align-items:center!important;justify-content:center!important;
+  display:flex!important;align-items:center!important;justify-content:center!important;
   padding:125px 16px 24px!important;overflow-y:auto!important;overflow-x:hidden!important;
 }
 .login-card{
@@ -102,7 +102,7 @@ html,body{width:100%;min-width:0;max-width:100%;margin:0;padding:0;overflow-x:hi
 <style id="senvia-mobile-final-fix">
 @media (max-width:700px){
   html,body{width:100%!important;min-width:0!important;max-width:100%!important;overflow-x:hidden!important;}
-  .login-gate{width:100%!important;min-width:0!important;height:100dvh!important;min-height:100vh!important;display:flex;align-items:center!important;justify-content:center!important;padding:70px 12px 18px!important;overflow-y:auto!important;overflow-x:hidden!important;}
+  .login-gate{width:100%!important;min-width:0!important;height:100dvh!important;min-height:100vh!important;display:flex!important;align-items:center!important;justify-content:center!important;padding:70px 12px 18px!important;overflow-y:auto!important;overflow-x:hidden!important;}
   .login-card{width:calc(100vw - 24px)!important;max-width:none!important;min-width:0!important;margin:0 auto!important;padding:68px 16px 16px!important;border-radius:22px!important;}
   .login-logo{width:128px!important;height:128px!important;max-width:128px!important;top:-64px!important;left:50%!important;object-fit:cover!important;border-radius:50%!important;}
   .login-card h1{font-size:36px!important;line-height:1!important;margin:0 0 2px!important;}
@@ -123,108 +123,6 @@ html,body{width:100%;min-width:0;max-width:100%;margin:0;padding:0;overflow-x:hi
   .login-footer span{font-size:12px!important;}
   .login-footer small{font-size:9px!important;letter-spacing:2px!important;}
 }
-</style>
-
-<style id="senvia-dashboard-mobile-final">
-/* Final mobile dashboard: keep desktop unchanged and contain all horizontal overflow */
-@media (max-width:650px){
-  html,body{width:100%!important;max-width:100%!important;overflow-x:hidden!important}
-  header{width:100%!important;min-height:78px!important;height:auto!important;padding:10px 12px!important;display:flex!important;align-items:center!important;justify-content:space-between!important;gap:8px!important;box-sizing:border-box!important;overflow:hidden!important}
-  .admin-brand{flex:0 1 auto!important;min-width:0!important;max-width:58%!important;overflow:hidden!important}
-  .admin-logo{width:150px!important;height:58px!important;max-width:100%!important;object-fit:contain!important;object-position:left center!important}
-  .admin-actions{flex:0 0 auto!important;margin-left:auto!important;padding:5px!important;gap:4px!important;white-space:nowrap!important;max-width:42%!important}
-  .admin-actions #hi,.admin-actions #en{display:none!important}
-  .admin-actions .logout-btn{font-size:13px!important;padding:9px 12px!important;white-space:nowrap!important}
-  .layout{display:block!important;width:100%!important;min-width:0!important;max-width:100%!important}
-  aside{width:100%!important;max-width:100%!important;display:flex!important;flex-wrap:nowrap!important;overflow-x:auto!important;overflow-y:hidden!important;padding:8px!important;gap:5px!important;box-sizing:border-box!important;-webkit-overflow-scrolling:touch!important}
-  .nav{flex:0 0 auto!important;white-space:nowrap!important;font-size:14px!important;margin:0!important;padding:11px 13px!important}
-  .content{width:100%!important;max-width:100%!important;min-width:0!important;padding:16px 10px!important;box-sizing:border-box!important;overflow:hidden!important}
-  .stats{width:100%!important;display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important}
-  .stat{width:100%!important;min-width:0!important;min-height:125px!important;padding:14px!important;box-sizing:border-box!important;overflow:hidden!important}
-  .stat:before{left:13px!important;top:12px!important;font-size:23px!important}
-  .stat b{font-size:28px!important;margin-top:25px!important}
-  .stat small{font-size:13px!important;white-space:normal!important;overflow-wrap:anywhere!important}
-  .trend{font-size:14px!important}
-  .dashboard-welcome{width:100%!important;box-sizing:border-box!important;margin-top:18px!important;padding:18px!important;display:block!important;overflow:hidden!important}
-  .dashboard-welcome h2{font-size:20px!important;line-height:1.25!important;overflow-wrap:anywhere!important}
-  .dashboard-welcome p{font-size:14px!important;line-height:1.45!important;overflow-wrap:anywhere!important}
-  .motto{display:none!important}
-  .dashboard-tabs{width:100%!important;max-width:100%!important;overflow-x:auto!important;overflow-y:hidden!important;display:flex!important;flex-wrap:nowrap!important;gap:4px!important;-webkit-overflow-scrolling:touch!important}
-  .dashboard-tabs button{flex:0 0 auto!important;white-space:nowrap!important;padding:12px 15px!important;font-size:14px!important}
-  .dashboard-search{width:100%!important;display:block!important;margin:8px 0!important}
-  .dashboard-search input{width:100%!important;max-width:100%!important;box-sizing:border-box!important}
-  .dashboard-table{width:100%!important;max-width:100%!important;overflow-x:auto!important;overflow-y:hidden!important;-webkit-overflow-scrolling:touch!important}
-  .dashboard-table table{min-width:760px!important;width:760px!important}
-  .dashboard-foot{min-width:760px!important;box-sizing:border-box!important}
-  section{max-width:100%!important;min-width:0!important}
-  .panel{max-width:100%!important;box-sizing:border-box!important;overflow:hidden!important}
-  .toolbar{max-width:100%!important}
-  .toolbar input,.toolbar select{max-width:100%!important;box-sizing:border-box!important}
-  .tablewrap{width:100%!important;max-width:100%!important;overflow-x:auto!important;-webkit-overflow-scrolling:touch!important}
-}
-@media (max-width:380px){
-  .stats{grid-template-columns:1fr!important}
-  .admin-logo{width:130px!important}
-  .admin-brand{max-width:55%!important}
-  .admin-actions{max-width:45%!important}
-}
-</style>
-
-<style id="senvia-professionals-mobile-cards">
-@media (max-width:650px){
-  #pros .panel{padding:14px!important;border-radius:18px!important}
-  #pros .toolbar{display:grid!important;grid-template-columns:minmax(0,1fr) 140px!important;gap:10px!important;align-items:stretch!important}
-  #pros .toolbar input,#pros .toolbar select{width:100%!important;min-width:0!important;box-sizing:border-box!important;height:52px!important}
-  #pros .toolbar .green{grid-column:1 / -1!important;width:max-content!important;max-width:100%!important;height:48px!important}
-  #pros .tablewrap{overflow:visible!important;width:100%!important}
-  #pros table{display:block!important;width:100%!important;min-width:0!important;border-collapse:separate!important}
-  #pros thead{display:none!important}
-  #pros tbody{display:block!important;width:100%!important}
-  #pros tbody tr{display:block!important;width:100%!important;box-sizing:border-box!important;background:#fff!important;border:1px solid #dce7f1!important;border-radius:14px!important;margin:10px 0!important;padding:8px 12px!important;box-shadow:0 4px 14px rgba(18,59,103,.06)!important}
-  #pros tbody td{display:flex!important;justify-content:space-between!important;align-items:flex-start!important;gap:12px!important;width:100%!important;box-sizing:border-box!important;border:0!important;border-bottom:1px solid #edf1f5!important;padding:9px 2px!important;text-align:right!important;white-space:normal!important;word-break:break-word!important;font-size:13px!important;line-height:1.3!important}
-  #pros tbody td:last-child{border-bottom:0!important;padding-bottom:5px!important}
-  #pros tbody td:before{font-weight:700!important;color:#6b7b8d!important;text-align:left!important;flex:0 0 82px!important}
-  #pros tbody td:nth-child(1):before{content:'Name'}
-  #pros tbody td:nth-child(2):before{content:'Mobile'}
-  #pros tbody td:nth-child(3):before{content:'Area'}
-  #pros tbody td:nth-child(4):before{content:'Services'}
-  #pros tbody td:nth-child(5):before{content:'Status'}
-  #pros tbody td:nth-child(6):before{content:'Action'}
-  #pros tbody td:nth-child(1){font-size:15px!important;font-weight:700!important;color:#123b67!important}
-  #pros tbody td:nth-child(3),#pros tbody td:nth-child(4){max-width:none!important}
-  #pros tbody td:nth-child(6){justify-content:flex-end!important;gap:7px!important}
-  #pros tbody td:nth-child(6):before{margin-right:auto}
-  #pros tbody td button{font-size:12px!important;padding:7px 10px!important}
-}
-@media (max-width:380px){
-  #pros .toolbar{grid-template-columns:1fr!important}
-  #pros .toolbar .green{grid-column:auto!important;width:100%!important}
-}
-</style>
-
-<style id="senvia-professionals-final-responsive">
-.pro-mobile-list{display:none}
-.pro-mobile-card{background:#fff;border:1px solid #dce6ef;border-radius:16px;padding:15px;margin-top:12px;box-shadow:0 5px 18px rgba(18,59,103,.07)}
-.pro-mobile-card .pm-row{display:flex;justify-content:space-between;gap:12px;padding:7px 0;border-bottom:1px solid #edf1f5;font-size:13px}
-.pro-mobile-card .pm-row:last-child{border-bottom:0}
-.pro-mobile-card .pm-label{color:#68758a;font-weight:700;min-width:78px}
-.pro-mobile-card .pm-value{text-align:right;word-break:break-word;color:#123b67;font-weight:700}
-.pro-mobile-card .pm-actions{display:flex;gap:8px;margin-top:12px}
-.pro-mobile-card .pm-actions button{flex:1;padding:10px;border-radius:9px;border:0;font-weight:800;cursor:pointer}
-@media(max-width:700px){
-  .pro-mobile-list{display:block}
-  #pros .tablewrap{display:none}
-  #pros .toolbar{display:grid;grid-template-columns:1fr 1fr;gap:9px}
-  #pros .toolbar input{grid-column:1/-1;width:100%;box-sizing:border-box}
-  #pros .toolbar button{grid-column:1/-1;width:100%}
-}
-</style>
-
-<style>.pro-mobile-list{display:none}.pro-mobile-card{background:#fff;border:1px solid #dbe7f3;border-radius:16px;padding:18px;margin:12px 0;box-shadow:0 5px 18px rgba(30,88,140,.05)}.pm-row{display:flex;justify-content:space-between;gap:18px;padding:9px 0;border-bottom:1px solid #edf1f5}.pm-label{color:#68758a}.pm-value{font-weight:800;text-align:right}.pm-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:16px;flex-wrap:wrap}.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.detail-grid>div{background:#f7fafc;border:1px solid #e4edf5;border-radius:10px;padding:11px}.detail-grid b{display:block;color:#68758a;font-size:12px;margin-bottom:4px}.detail-grid span{font-weight:800}@media(max-width:650px){.pro-mobile-list{display:block}.tablewrap:has(#proTable){display:none}.detail-grid{grid-template-columns:1fr}.pm-row{align-items:flex-start}.pm-value{max-width:68%}}</style>
-
-<style id="senvia-services-final">
-.service-count{color:#68758a;font-weight:700;margin:-4px 0 10px}.service-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.service-card{background:#fff;border:1px solid #dce7f1;border-radius:14px;padding:14px;display:flex;align-items:center;justify-content:space-between;gap:12px;box-shadow:0 4px 14px rgba(18,59,103,.06)}.service-name{display:flex;align-items:center;gap:10px;font-weight:800;color:#123b67;min-width:0}.service-name span:last-child{overflow-wrap:anywhere}.service-icon{width:34px;height:34px;border-radius:10px;background:#eaf5ff;display:grid;place-items:center;flex:0 0 34px}.service-actions{display:flex;gap:7px;flex:0 0 auto}.service-actions button{padding:8px 11px}.service-edit-box{max-width:520px!important}
-@media(max-width:650px){.service-toolbar{display:grid!important;grid-template-columns:1fr!important}.service-toolbar input,.service-toolbar button{width:100%!important;box-sizing:border-box!important}.service-list{grid-template-columns:1fr!important}.service-card{align-items:flex-start;flex-direction:column}.service-actions{width:100%;display:grid;grid-template-columns:1fr 1fr}.service-actions button{width:100%}.service-edit-box{width:calc(100vw - 36px)!important;box-sizing:border-box!important}}
 </style>
 </head>
 <body>
@@ -250,7 +148,6 @@ html,body{width:100%;min-width:0;max-width:100%;margin:0;padding:0;overflow-x:hi
 <h3>⚙ Senvia Admin</h3>
 <div class="nav active" onclick="show('dashboard',this)">📊 <span data-hi="Dashboard" data-en="Dashboard">Dashboard</span></div>
 <div class="nav" onclick="show('pros',this)">👥 <span data-hi="Professionals" data-en="Professionals">Professionals</span></div>
-<div class="nav" onclick="show('pending',this)">📋 <span data-hi="Pending Approvals" data-en="Pending Approvals">Pending Approvals</span></div>
 <div class="nav" onclick="show('customers',this)">👤 <span data-hi="Customers" data-en="Customers">Customers</span></div>
 <div class="nav" onclick="show('services',this)">🛠 <span data-hi="Services" data-en="Services">Services</span></div>
 <div class="nav" onclick="show('areas',this)">📍 <span data-hi="Areas" data-en="Areas">Areas</span></div>
@@ -263,29 +160,24 @@ html,body{width:100%;min-width:0;max-width:100%;margin:0;padding:0;overflow-x:hi
 <div class="stat"><small>Verified Professionals</small><b id="countVerified">3</b><span class="trend">↑ +10%</span></div>
 <div class="stat"><small>Total Customers</small><b id="countCust">0</b><span class="trend">↑ +18%</span></div></div>
 <div class="dashboard-welcome"><div><h2>Welcome to Senvia Admin Panel!</h2><p>Manage local professionals, verify services, and help us build stronger communities.</p></div><div class="motto">Together for<br><b>a Better Tomorrow</b></div></div>
-<div class="dashboard-tabs"><button class="selected">☷ &nbsp; Recent Registrations</button><button onclick="show('pending',null)">◷ &nbsp; Pending Approvals</button><button onclick="show('pros',null)">✓ &nbsp; Verified Professionals</button><button>💬 &nbsp; Recent Enquiries</button></div>
+<div class="dashboard-tabs"><button class="selected">☷ &nbsp; Recent Registrations</button><button onclick="show('pros',null)">◷ &nbsp; Pending Approvals</button><button onclick="show('pros',null)">✓ &nbsp; Verified Professionals</button><button>💬 &nbsp; Recent Enquiries</button></div>
 <div class="dashboard-search"><input placeholder="⌕  Search by name, phone, service..." oninput="document.getElementById('proSearch').value=this.value;renderPros()"></div>
 <div class="dashboard-table"><div class="tablewrap"><table><thead><tr><th>#</th><th>Name</th><th>Phone</th><th>Service(s)</th><th>Area / Block</th><th>Status</th><th>Registered On</th><th>Action</th></tr></thead><tbody id="dashboardTableBody"></tbody></table></div><div class="dashboard-foot"><span id="dashCount">Showing recent entries</span><div class="pager"><button>‹</button><button class="current">1</button><button>2</button><button>3</button><button>4</button><button>5</button><button>›</button></div></div></div>
 <div class="panel" style="display:none"><div id="recent"></div></div>
 </section>
 
-<section id="pros" style="display:none"><h1>Professionals</h1><div class="panel"><div class="toolbar"><input id="proSearch" placeholder="Search name/mobile/block"><select id="statusFilter"><option value="">All Status</option><option>Verified</option><option>Pending</option><option>Rejected</option></select><button class="green" onclick="openPro()">+ Add Professional</button></div><div class="tablewrap"><table><thead><tr><th>Name</th><th>Mobile</th><th>Area</th><th>Services</th><th>Status</th><th>Action</th></tr></thead><tbody id="proTable"></tbody></table></div><div id="proMobileList" class="pro-mobile-list"></div></div></section>
-
-<section id="pending" style="display:none"><h1>Pending Approvals</h1><div class="panel"><div class="toolbar"><input id="pendingSearch" placeholder="Search pending professional"><span class="badge pending" style="align-self:center">Pending only</span></div><div id="pendingList" class="pro-mobile-list"></div><div id="pendingEmpty" class="empty" style="display:none">No pending approvals.</div></div></section>
+<section id="pros" style="display:none"><h1>Professionals</h1><div class="panel"><div class="toolbar"><input id="proSearch" placeholder="Search name/mobile/block"><select id="statusFilter"><option value="">All Status</option><option>Verified</option><option>Pending</option><option>Rejected</option></select><button class="green" onclick="openPro()">+ Add Professional</button></div><div class="tablewrap"><table><thead><tr><th>Name</th><th>Mobile</th><th>Area</th><th>Services</th><th>Status</th><th>Action</th></tr></thead><tbody id="proTable"></tbody></table></div></div></section>
 
 <section id="customers" style="display:none"><h1>Customers</h1><div class="panel"><p class="empty">Customer registration data will appear here after customers register on the portal.</p></div></section>
 
-<section id="services" style="display:none"><h1>Services</h1><div class="panel service-panel"><div class="toolbar service-toolbar"><input id="serviceSearch" placeholder="Search service name"><input id="newSvc" placeholder="New service name"><button class="green" onclick="addService()">+ Add Service</button></div><div id="serviceCount" class="service-count"></div><div id="serviceList" class="service-list"></div></div></section>
+<section id="services" style="display:none"><h1>Services</h1><div class="panel"><div class="toolbar"><input id="newSvc" placeholder="New service name"><button class="green" onclick="addService()">+ Add Service</button></div><div id="serviceList"></div></div></section>
 
 <section id="areas" style="display:none"><h1>Blocks & Areas</h1><div class="panel"><h3>Available Blocks</h3><div id="availableList"></div><h3 style="margin-top:25px">Coming Soon Blocks</h3><div id="comingList"></div><p style="color:#68758a">Admin can move a block from Coming Soon to Available after onboarding is completed.</p></div></section>
 </main></div>
 
-<div class="modal" id="serviceEditModal"><div class="box service-edit-box"><div style="display:flex;justify-content:space-between;align-items:center"><h2>Edit Service</h2><button class="outline" onclick="closeServiceEdit()">✕</button></div><label style="display:block;margin:18px 0 8px;font-weight:800;color:#68758a">Service Name</label><input id="editSvcName" style="width:100%;box-sizing:border-box;font-size:16px" placeholder="Service name"><p style="margin-top:18px"><button class="green" onclick="saveServiceEdit()">Save Changes</button> <button class="outline" onclick="closeServiceEdit()">Cancel</button></p></div></div>
-
 <div class="modal" id="modal"><div class="box"><div style="display:flex;justify-content:space-between"><h2>Add Professional</h2><button class="outline" onclick="closePro()">✕</button></div>
 <div class="form"><input id="pn" placeholder="Full Name"><input id="pm" placeholder="Mobile Number"><select id="pb"></select><input id="pp" placeholder="Panchayat"><input id="pv" placeholder="Village / Area"><input id="pe" placeholder="Experience"></div>
 <h3>Services</h3><div class="checks" id="checks"></div><p><button class="green" onclick="savePro()">Save Profile</button> <button class="outline" onclick="closePro()">Cancel</button></p></div></div>
-<div class="modal" id="viewModal"><div class="box"><div style="display:flex;justify-content:space-between;align-items:center"><h2 id="viewTitle">Professional Details</h2><button class="outline" onclick="closeProView()">✕</button></div><div id="viewBody" style="line-height:1.8"></div><div id="viewActions" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:18px"></div></div></div>
 
 <script>
 const SUPABASE_URL='https://hxdrvhiowurbwlgmczju.supabase.co';
@@ -301,44 +193,38 @@ let services=[...demoServices],pros=[...demoPros],customers=0,lang='hi',dbMode=f
 let accessToken=sessionStorage.getItem('senvia_admin_token')||'';
 const authHeaders=()=>accessToken?{apikey:SUPABASE_KEY,Authorization:'Bearer '+accessToken}:{apikey:SUPABASE_KEY};
 const api=async(path,opt={})=>{
- const r=await fetchWithTimeout(SUPABASE_URL+'/rest/v1/'+path,{...opt,headers:{...authHeaders(),'Content-Type':'application/json',...(opt.headers||{})}},12000);
+ const r=await fetch(SUPABASE_URL+'/rest/v1/'+path,{...opt,headers:{...authHeaders(),'Content-Type':'application/json',...(opt.headers||{})}});
  const text=await r.text();
  if(!r.ok) throw new Error(text||('HTTP '+r.status));
  if(!text.trim()) return null;
  try{return JSON.parse(text)}catch(e){throw new Error('Invalid JSON response: '+text.slice(0,300))}
 };
 async function fetchWithTimeout(url, options={}, ms=15000){
-  let timer;
-  const timeout = new Promise((_, reject)=>{
-    timer=setTimeout(()=>reject(new Error('TIMEOUT: Supabase server ने 15 seconds में जवाब नहीं दिया. Internet/VPN/Ad-blocker या Supabase connection check करें.')),ms);
-  });
-  try { return await Promise.race([fetch(url, options), timeout]); }
-  finally { clearTimeout(timer); }
+  const controller = new AbortController();
+  const timer = setTimeout(()=>controller.abort(), ms);
+  try { return await fetch(url, {...options, signal: controller.signal}); }
+  catch(e){
+    if(e && e.name==='AbortError') throw new Error('Server response timeout. Please open this page from HTTPS hosting, not a downloaded content:// file.');
+    throw e;
+  } finally { clearTimeout(timer); }
 }
 
 window.adminLogin=async function adminLogin(){
  const email=document.getElementById('loginEmail').value.trim(),password=document.getElementById('loginPassword').value;
  const msg=document.getElementById('loginMsg');msg.textContent='';
  if(!email||!password){msg.textContent='Email और password भरें।';return}
+ localStorage.setItem('senvia_admin_email',email);
  try{
-  const btn=document.getElementById('adminLoginBtn'); if(btn){btn.disabled=true;const sp=btn.querySelector('span');if(sp)sp.textContent='Signing in…';} msg.style.color='#174a87';msg.textContent='Connecting to Senvia…';
+  const btn=document.getElementById('adminLoginBtn'); if(btn){btn.disabled=true;btn.querySelector('span').textContent='Signing in…';} msg.style.color='#174a87';msg.textContent='Signing in…';
   const r=await fetchWithTimeout(SUPABASE_URL+'/auth/v1/token?grant_type=password',{method:'POST',headers:{apikey:SUPABASE_KEY,'Content-Type':'application/json'},body:JSON.stringify({email,password})},15000);
-  const raw=await r.text();
-  let d={}; try{d=raw?JSON.parse(raw):{};}catch{}
-  if(!r.ok)throw new Error(d.error_description||d.msg||d.error||raw||('HTTP '+r.status));
+  const d=await r.json();
+  if(!r.ok)throw new Error(d.error_description||d.error||d.msg||('HTTP '+r.status));
   if(!d.access_token)throw new Error('Access token नहीं मिला');
   accessToken=d.access_token;sessionStorage.setItem('senvia_admin_token',accessToken);
-  msg.textContent='Login successful. Checking admin authorization…';
   const ok=await requireAdmin();
-  if(ok){
-   msg.textContent='Admin verified. Loading dashboard…';
-   document.getElementById('loginGate').style.display='none';
-   await loadFromSupabase();
-   renderDashboard();
-   if(document.getElementById('loginGate').style.display!=='none') document.getElementById('loginGate').style.display='none';
- }
- }catch(e){console.error('Senvia login error:',e);msg.textContent='Login failed: '+(e?.message||String(e));msg.style.color='#b42318';}
- finally{const btn=document.getElementById('adminLoginBtn');if(btn){btn.disabled=false;const sp=btn.querySelector('span');if(sp)sp.textContent='Login';}}
+  if(ok){document.getElementById('loginGate').style.display='none';await loadFromSupabase();renderDashboard();}
+ }catch(e){console.error(e);msg.textContent='Login failed: '+e.message;msg.style.color='#b42318';}
+ finally{const btn=document.getElementById('adminLoginBtn');if(btn){btn.disabled=false;btn.querySelector('span').textContent='Login';}}
 }
 
 window.forgotPassword=async function forgotPassword(){
@@ -453,8 +339,7 @@ async function loadFromSupabase(){
  render();
 }
 function setDbStatus(t,c){let el=document.getElementById('dbStatus');if(el){el.textContent=t;el.style.background=c==='ok'?'#e7f7e4':'#fff4d7';el.style.color=c==='ok'?'#23751c':'#8a6500'}}
-function openProView(id){const p=pros.find(x=>String(x.id||'')===String(id));if(!p){alert('Professional details उपलब्ध नहीं हैं।');return}const vm=document.getElementById('viewModal'),body=document.getElementById('viewBody'),actions=document.getElementById('viewActions');if(!vm||!body)return;const area=[p.block,p.panchayat,p.village].filter(Boolean).join(' → ')||'—';body.innerHTML=`<div class="detail-grid"><div><b>Name</b><span>${p.name||'—'}</span></div><div><b>Mobile</b><span>${p.mobile||'—'}</span></div><div><b>Area</b><span>${area}</span></div><div><b>Experience</b><span>${p.experience||'—'}</span></div><div><b>Services</b><span>${(p.services||[]).join(', ')||'—'}</span></div><div><b>Status</b><span class="badge ${proStatus(p).toLowerCase()}">${proStatus(p)}</span></div></div>`;actions.innerHTML=proStatus(p)==='Pending'?`<button class="green" onclick="approveById('${String(p.id||'').replace(/'/g,"\'")}');closeProView()">Approve</button><button class="danger" onclick="rejectById('${String(p.id||'').replace(/'/g,"\'")}');closeProView()">Reject</button>`:'';vm.classList.add('show')}
-function closeProView(){document.getElementById('viewModal')?.classList.remove('show')}
+function openProView(id){const p=pros.find(x=>String(x.id||'')===String(id));if(!p){alert('Professional details उपलब्ध नहीं हैं।');return}alert(`Name: ${p.name||''}\nMobile: ${p.mobile||''}\nArea: ${p.block||''}\nServices: ${(p.services||[]).join(', ')}\nStatus: ${p.status||''}`)}
 function renderDashboard(){const body=document.getElementById('dashboardTableBody');if(!body)return;const arr=pros.slice(0,6);body.innerHTML=arr.map((p,i)=>`<tr><td>${i+1}</td><td><b>${p.name}</b></td><td>${p.mobile||''}</td><td>${(p.services||[]).join(', ')}</td><td>${p.block||''}</td><td><span class="badge ${p.status==='Verified'?'verified':'pending'}">${p.status||'Pending'}</span></td><td>${p.registered_at?new Date(p.registered_at).toLocaleDateString('en-IN'):'—'}</td><td>${p.status!=='Verified'?`<button class="action-approve" onclick="approvePro('${p.id||''}')">Approve</button> `:''}<button class="action-view" onclick="openProView('${p.id||''}')">View</button></td></tr>`).join('');document.getElementById('dashCount').textContent=`Showing 1 to ${arr.length} of ${pros.length} entries`;const cv=document.getElementById('countVerified');if(cv)cv.textContent=pros.filter(x=>x.status==='Verified').length}
 function setLang(l){lang=l;document.querySelectorAll('[data-hi]').forEach(e=>e.textContent=e.dataset[l]);document.getElementById('hi').className=l==='hi'?'on':'';document.getElementById('en').className=l==='en'?'on':''}
 function show(id,el){document.querySelectorAll('main section').forEach(s=>s.style.display='none');document.getElementById(id).style.display='block';document.querySelectorAll('.nav').forEach(n=>n.classList.remove('active'));if(el)el.classList.add('active');render()}
@@ -467,23 +352,16 @@ function render(){
   if(cpend) cpend.textContent=pros.filter(p=>proStatus(p)==='Pending').length;
   if(cc) cc.textContent=customers;
   if(cs) cs.textContent=services.length;
-  renderTable(); renderPending(); renderRecent(); renderServices(); renderAreas();
+  renderTable(); renderRecent(); renderServices(); renderAreas();
 }
 function renderTable(){
-  const table=document.getElementById('proTable');
-  const mobileList=document.getElementById('proMobileList');
-  if(!table)return;
+  const table=document.getElementById('proTable'); if(!table)return;
   const search=document.getElementById('proSearch'); const filter=document.getElementById('statusFilter');
   let q=(search?.value||'').toLowerCase(),st=filter?.value||'';
-  const filtered=pros.filter(p=>(!q||JSON.stringify(p).toLowerCase().includes(q))&&(!st||proStatus(p)===st));
-  table.innerHTML=filtered.map(p=>`<tr><td><b>${p.name||''}</b></td><td>${p.mobile||''}</td><td>${p.block||''} → ${p.panchayat||''}<br>${p.village||''}</td><td>${(p.services||[]).join(', ')||'—'}</td><td><span class="badge ${proStatus(p).toLowerCase()}">${proStatus(p)}</span></td><td>${proStatus(p)==='Pending'?`<button class="green" onclick="approveById('${String(p.id||'').replace(/'/g,"\\'")}')">Approve</button> `:''}<button class="outline" onclick="openProView('${String(p.id||'').replace(/'/g,"\\'")}')">View</button> <button class="danger" onclick="removeProById('${String(p.id||'').replace(/'/g,"\\'")}')">Delete</button></td></tr>`).join('')||'<tr><td colspan="6" class="empty">No professionals found.</td></tr>';
-  if(mobileList){
-    mobileList.innerHTML=filtered.map(p=>`<div class="pro-mobile-card"><div class="pm-row"><span class="pm-label">Name</span><span class="pm-value">${p.name||'—'}</span></div><div class="pm-row"><span class="pm-label">Mobile</span><span class="pm-value">${p.mobile||'—'}</span></div><div class="pm-row"><span class="pm-label">Area</span><span class="pm-value">${p.block||'—'}${p.panchayat?' → '+p.panchayat:''}${p.village?' → '+p.village:''}</span></div><div class="pm-row"><span class="pm-label">Services</span><span class="pm-value">${(p.services||[]).join(', ')||'—'}</span></div><div class="pm-row"><span class="pm-label">Status</span><span class="pm-value"><span class="badge ${proStatus(p).toLowerCase()}">${proStatus(p)}</span></span></div><div class="pm-actions">${proStatus(p)==='Pending'?`<button class="green" onclick="approveById('${String(p.id||'').replace(/'/g,"\\'")}')">Approve</button>`:''}<button class="outline" onclick="openProView('${String(p.id||'').replace(/'/g,"\\'")}')">View</button><button class="danger" onclick="removeProById('${String(p.id||'').replace(/'/g,"\\'")}')">Delete</button></div></div>`).join('')||'<div class="empty">No professionals found.</div>';
-  }
+  table.innerHTML=pros.filter(p=>(!q||JSON.stringify(p).toLowerCase().includes(q))&&(!st||proStatus(p)===st)).map((p,i)=>`<tr><td><b>${p.name||''}</b></td><td>${p.mobile||''}</td><td>${p.block||''} → ${p.panchayat||''}<br>${p.village||''}</td><td>${(p.services||[]).join(', ')||'—'}</td><td><span class="badge ${proStatus(p).toLowerCase()}">${proStatus(p)}</span></td><td>${proStatus(p)==='Pending'?`<button class="green" onclick="approve(${i})">Approve</button> `:''}<button class="danger" onclick="removePro(${i})">Delete</button></td></tr>`).join('')||'<tr><td colspan="6" class="empty">No professionals found.</td></tr>';
 }
-function renderPending(){const el=document.getElementById('pendingList'),empty=document.getElementById('pendingEmpty');if(!el)return;const q=(document.getElementById('pendingSearch')?.value||'').toLowerCase();const arr=pros.filter(p=>proStatus(p)==='Pending'&&(!q||JSON.stringify(p).toLowerCase().includes(q)));if(empty)empty.style.display=arr.length?'none':'block';el.innerHTML=arr.map(p=>{const id=String(p.id||'').replace(/'/g,"\'");return `<div class="pro-mobile-card"><div class="pm-row"><span class="pm-label">Name</span><span class="pm-value">${p.name||'—'}</span></div><div class="pm-row"><span class="pm-label">Mobile</span><span class="pm-value">${p.mobile||'—'}</span></div><div class="pm-row"><span class="pm-label">Area</span><span class="pm-value">${[p.block,p.panchayat,p.village].filter(Boolean).join(' → ')||'—'}</span></div><div class="pm-row"><span class="pm-label">Services</span><span class="pm-value">${(p.services||[]).join(', ')||'—'}</span></div><div class="pm-actions"><button class="green" onclick="approveById('${id}')">Approve</button><button class="outline" onclick="openProView('${id}')">View</button><button class="danger" onclick="rejectById('${id}')">Reject</button></div></div>`}).join('')}
 function renderRecent(){const el=document.getElementById('recent');if(!el)return;el.innerHTML=pros.slice(-5).reverse().map(p=>`<div style="padding:10px 0;border-bottom:1px solid #edf1f5"><b>${p.name||''}</b> — ${p.block||''} — ${(p.services||[]).join(', ')||'—'} <span class="badge ${proStatus(p).toLowerCase()}">${proStatus(p)}</span></div>`).join('')}
-function renderServices(){const el=document.getElementById('serviceList');if(!el)return;const q=(document.getElementById('serviceSearch')?.value||'').trim().toLowerCase();const filtered=services.map((name,index)=>({name,index})).filter(x=>!q||x.name.toLowerCase().includes(q));const count=document.getElementById('serviceCount');if(count)count.textContent=`Showing ${filtered.length} of ${services.length} services`;el.innerHTML=filtered.map(x=>`<div class="service-card"><div class="service-name"><span class="service-icon">🛠️</span><span>${x.name}</span></div><div class="service-actions"><button class="outline" onclick="editService(${x.index})">Edit</button><button class="danger" onclick="delService(${x.index})">Delete</button></div></div>`).join('')||'<div class="empty">No services found.</div>'}
+function renderServices(){const el=document.getElementById('serviceList');if(!el)return;el.innerHTML=services.map((s,i)=>`<div style="display:flex;justify-content:space-between;padding:11px;border-bottom:1px solid #edf1f5"><span>${s}</span><button class="danger" onclick="delService(${i})">Delete</button></div>`).join('')}
 function renderAreas(){const a=document.getElementById('availableList'),c=document.getElementById('comingList');if(a)a.innerHTML=blocks.map(b=>`<span class="badge verified" style="margin:4px">${b}</span>`).join('');if(c)c.innerHTML=coming.map(b=>`<span class="badge" style="background:#eaf5ff;color:#0879c9;margin:4px">${b}</span>`).join('')}
 function openPro(){modal.classList.add('show');pb.innerHTML='<option value="">Select Block</option>'+blocks.map(b=>`<option>${b}</option>`).join('');checks.innerHTML=services.map(s=>`<label><input type="checkbox" value="${s}"> ${s}</label>`).join('')}
 function closePro(){modal.classList.remove('show')}
@@ -499,26 +377,41 @@ if(pid){
   if(ids.length) await api('professional_services',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify(ids.map(id=>({professional_id:pid,service_id:id}))) });
 }
 closePro();await loadFromSupabase();alert('Professional added as Pending Verification.')}catch(e){console.error('Supabase save failed:',e);alert('Supabase save failed. Please check the table columns/RLS policies.\n\n'+(e.message||e));} }
-async function approveById(id){if(!(await requireAdmin()))return;const p=pros.find(x=>String(x.id||'')===String(id));if(!dbMode||!p?.id){alert('Live database connection is required for approval.');return}try{await api('professionals?id=eq.'+encodeURIComponent(p.id),{method:'PATCH',body:JSON.stringify({Status:'Verified'})});await loadFromSupabase();}catch(e){alert('Approve failed. '+(e.message||'Check Supabase RLS policy.'))}}
-async function rejectById(id){if(!(await requireAdmin()))return;if(!confirm('Reject this professional?'))return;const p=pros.find(x=>String(x.id||'')===String(id));if(!dbMode||!p?.id){alert('Live database connection is required for rejection.');return}try{await api('professionals?id=eq.'+encodeURIComponent(p.id),{method:'PATCH',body:JSON.stringify({Status:'Rejected'})});await loadFromSupabase();show('pending',null)}catch(e){alert('Reject failed. '+(e.message||'Check Supabase RLS policy.'))}}
-async function removeProById(id){if(!(await requireAdmin()))return;if(!confirm('Delete this professional?'))return;const p=pros.find(x=>String(x.id||'')===String(id));if(!dbMode||!p?.id){alert('Live database connection is required for deletion.');return}try{await api('professional_services?professional_id=eq.'+encodeURIComponent(p.id),{method:'DELETE'});await api('professionals?id=eq.'+encodeURIComponent(p.id),{method:'DELETE'});await loadFromSupabase();}catch(e){alert('Delete failed. '+(e.message||'Check Supabase RLS policy.'))}}
-async function approve(i){return approveById(pros[i]?.id)}
-async function removePro(i){return removeProById(pros[i]?.id)}
-async function addService(){if(!(await requireAdmin()))return;let s=newSvc.value.trim();if(!s)return;if(services.some(x=>x.toLowerCase()===s.toLowerCase())){alert('This service already exists.');return}if(!dbMode){services.push(s);newSvc.value='';render();return}try{await api('services',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify({name_en:s})});newSvc.value='';await loadFromSupabase()}catch(e){alert('Service add failed. '+(e.message||'Check the services table/RLS policy.'))}}
-function editService(i){const modal=document.getElementById('serviceEditModal'),input=document.getElementById('editSvcName');if(!modal||!input)return;input.value=services[i]||'';modal.dataset.index=String(i);modal.classList.add('show');setTimeout(()=>input.focus(),50)}
-function closeServiceEdit(){document.getElementById('serviceEditModal')?.classList.remove('show')}
-async function saveServiceEdit(){if(!(await requireAdmin()))return;const modal=document.getElementById('serviceEditModal'),input=document.getElementById('editSvcName');const i=Number(modal?.dataset.index);const next=(input?.value||'').trim();if(!Number.isInteger(i)||!services[i]||!next)return;if(services.some((x,j)=>j!==i&&x.toLowerCase()===next.toLowerCase())){alert('This service already exists.');return}if(!dbMode){services[i]=next;closeServiceEdit();render();return}const row=serviceRows.find(x=>svcLabel(x)===services[i]);if(!row?.id){alert('Service ID नहीं मिला।');return}try{await api('services?id=eq.'+encodeURIComponent(row.id),{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({name_en:next})});closeServiceEdit();await loadFromSupabase()}catch(e){alert('Service update failed. '+(e.message||'Check Supabase RLS policy.'))}}
-async function delService(i){if(!(await requireAdmin()))return;if(!confirm('Delete this service?'))return;let s=serviceRows.find(x=>svcLabel(x)===services[i]);if(!dbMode||!s?.id){services.splice(i,1);render();return}try{await api('services?id=eq.'+encodeURIComponent(s.id),{method:'DELETE'});await loadFromSupabase()}catch(e){alert('Service delete failed. If this service is linked to professionals, remove the linked service records first or enable the appropriate cascade policy.\n\n'+(e.message||''))}}
+async function approve(i){if(!(await requireAdmin()))return;const p=pros[i];if(!dbMode||!p.id){alert('Live database connection is required for approval.');return}try{await api('professionals?id=eq.'+encodeURIComponent(p.id),{method:'PATCH',body:JSON.stringify({Status:'Verified'})});await loadFromSupabase()}catch(e){alert('Approve failed. Check Supabase RLS policy.')}}
+async function removePro(i){if(!(await requireAdmin()))return;if(!confirm('Delete this professional?'))return;const p=pros[i];if(!dbMode||!p.id){alert('Live database connection is required for deletion.');return}try{await api('professional_services?professional_id=eq.'+encodeURIComponent(p.id),{method:'DELETE'});await api('professionals?id=eq.'+encodeURIComponent(p.id),{method:'DELETE'});await loadFromSupabase()}catch(e){alert('Delete failed. Check Supabase RLS policy.')}}
+async function addService(){
+ if(!(await requireAdmin()))return;
+ let s=newSvc.value.trim();
+ if(!s)return;
+ if(!dbMode){if(!services.includes(s))services.push(s);newSvc.value='';render();return}
+ try{
+  // Detect the real service-name column from the rows already loaded from Supabase.
+  // This avoids assuming name/name_en when the existing schema uses another column.
+  const sample=serviceRows.find(x=>x&&typeof x==='object')||{};
+  const candidates=['name_en','name','title','service_name','name_hi','Service Name','Service'];
+  const key=candidates.find(k=>Object.prototype.hasOwnProperty.call(sample,k));
+  if(!key) throw new Error('Services table का service-name column नहीं मिला।');
+  const payload={}; payload[key]=s;
+  await api('services',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify(payload)});
+  newSvc.value='';
+  await loadFromSupabase();
+ }catch(e){
+  console.error('Service add failed:',e);
+  alert('Service add failed. '+(e.message||e));
+ }
+}
+async function delService(i){if(!(await requireAdmin()))return;if(!confirm('Delete this service?'))return;let s=serviceRows.find(x=>svcLabel(x)===services[i]);if(!dbMode||!s?.id){services.splice(i,1);render();return}try{await api('services?id=eq.'+encodeURIComponent(s.id),{method:'DELETE'});await loadFromSupabase()}catch(e){alert('Service delete failed. Check RLS and linked professional_services records.')}}
+const savedAdminEmail=localStorage.getItem('senvia_admin_email')||'';
+const emailField=document.getElementById('loginEmail');
+if(emailField && savedAdminEmail) emailField.value=savedAdminEmail;
+emailField?.addEventListener('input',()=>{const v=emailField.value.trim();if(v)localStorage.setItem('senvia_admin_email',v);});
 const forgotBtn=document.getElementById('forgotPasswordBtn');
 if(forgotBtn) forgotBtn.addEventListener('click',()=>window.forgotPassword());
 document.getElementById('proSearch')?.addEventListener('input',renderTable);
 document.getElementById('statusFilter')?.addEventListener('change',renderTable);
-document.getElementById('pendingSearch')?.addEventListener('input',renderPending);
-document.getElementById('serviceSearch')?.addEventListener('input',renderServices);
 const db=document.createElement('div');db.id='dbStatus';db.style='margin:12px 0 0;padding:10px 12px;border-radius:9px;font-weight:700;background:#fff4d7;color:#8a6500';db.textContent='Connecting to Supabase…';document.querySelector('.content').prepend(db);
 document.getElementById('loginPassword')?.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();adminLogin()}});
 document.getElementById('loginEmail')?.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();adminLogin()}});
-try{const savedAdminEmail=localStorage.getItem('senvia_admin_email');const emailEl=document.getElementById('loginEmail');if(emailEl&&savedAdminEmail)emailEl.value=savedAdminEmail;emailEl?.addEventListener('change',()=>{if(emailEl.value.trim())localStorage.setItem('senvia_admin_email',emailEl.value.trim())});emailEl?.addEventListener('blur',()=>{if(emailEl.value.trim())localStorage.setItem('senvia_admin_email',emailEl.value.trim())});}catch(e){}
 requireAdmin().then(ok=>{if(ok){document.getElementById('loginGate').style.display='none';loadFromSupabase()}});
 </script>
 </body></html>
