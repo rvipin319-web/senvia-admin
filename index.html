@@ -2,6 +2,7 @@
 <html lang="hi">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<!-- Senvia Admin Login Technical Fix v2026-09-22 -->
 <title>Senvia Admin Panel</title>
 <style>
 :root{--navy:#082455;--blue:#0879c9;--green:#45b51f;--bg:#f4f7fb;--line:#dce5ef;--text:#18253d;--muted:#68758a}
@@ -262,12 +263,33 @@ async function requireAdmin(){
     method:'POST',headers:{...authHeaders(),'Content-Type':'application/json'},body:'{}'
   },15000);
   const atext=await ar.text();
-  if(!ar.ok) throw new Error(atext||('Admin authorization HTTP '+ar.status));
-  let allowed=false; try{allowed=JSON.parse(atext)===true;}catch{throw new Error('Admin authorization response invalid');}
+  let rpcError='';
+  if(!ar.ok) rpcError=atext||('Admin authorization HTTP '+ar.status);
+  let allowed=false;
+  try {
+    const parsed = atext ? JSON.parse(atext) : false;
+    allowed = parsed === true || parsed === 'true' || parsed?.is_senvia_admin === true;
+  } catch {
+    throw new Error('Admin authorization response invalid');
+  }
+  // Compatibility fallback for an older deployment where the RPC may not yet
+  // be visible in PostgREST's schema cache. This does not grant any write access.
+  if(!allowed && rpcError){
+    try {
+      const legacy = await fetchWithTimeout(
+        SUPABASE_URL+'/rest/v1/admin_users?select=user_id&user_id=eq.'+encodeURIComponent(user.id)+'&limit=1',
+        {headers:{...authHeaders(),'Content-Type':'application/json'}},
+        10000
+      );
+      const lraw=await legacy.text();
+      if(legacy.ok){ const rows=lraw?JSON.parse(lraw):[]; allowed=Array.isArray(rows)&&rows.length===1; }
+    } catch {}
+  }
   if(!allowed){
+   if(rpcError && !document.getElementById('loginMsg').textContent){}
    accessToken='';sessionStorage.removeItem('senvia_admin_token');
    document.getElementById('loginGate').style.display='flex';
-   document.getElementById('loginMsg').textContent='यह account Senvia Admin के रूप में authorized नहीं है।';
+   document.getElementById('loginMsg').textContent=rpcError ? 'Admin verification failed: '+rpcError : 'यह account Senvia Admin के रूप में authorized नहीं है।';
    return false;
   }
   return true;
