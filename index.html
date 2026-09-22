@@ -201,6 +201,24 @@ html,body{width:100%;min-width:0;max-width:100%;margin:0;padding:0;overflow-x:hi
   #pros .toolbar .green{grid-column:auto!important;width:100%!important}
 }
 </style>
+
+<style id="senvia-professionals-final-responsive">
+.pro-mobile-list{display:none}
+.pro-mobile-card{background:#fff;border:1px solid #dce6ef;border-radius:16px;padding:15px;margin-top:12px;box-shadow:0 5px 18px rgba(18,59,103,.07)}
+.pro-mobile-card .pm-row{display:flex;justify-content:space-between;gap:12px;padding:7px 0;border-bottom:1px solid #edf1f5;font-size:13px}
+.pro-mobile-card .pm-row:last-child{border-bottom:0}
+.pro-mobile-card .pm-label{color:#68758a;font-weight:700;min-width:78px}
+.pro-mobile-card .pm-value{text-align:right;word-break:break-word;color:#123b67;font-weight:700}
+.pro-mobile-card .pm-actions{display:flex;gap:8px;margin-top:12px}
+.pro-mobile-card .pm-actions button{flex:1;padding:10px;border-radius:9px;border:0;font-weight:800;cursor:pointer}
+@media(max-width:700px){
+  .pro-mobile-list{display:block}
+  #pros .tablewrap{display:none}
+  #pros .toolbar{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+  #pros .toolbar input{grid-column:1/-1;width:100%;box-sizing:border-box}
+  #pros .toolbar button{grid-column:1/-1;width:100%}
+}
+</style>
 </head>
 <body>
 <div id="loginGate" class="login-gate">
@@ -210,7 +228,7 @@ html,body{width:100%;min-width:0;max-width:100%;margin:0;padding:0;overflow-x:hi
     <div class="login-title">Admin Login</div>
     <div class="login-divider"><span></span><b>•</b><span></span></div>
     <div class="login-subtitle">Secure Access • Manage • Grow Together</div>
-    <label class="field"><span>✉</span><input id="loginEmail" type="email" placeholder="Admin email" autocomplete="email"></label>
+    <label class="field"><span>✉</span><input id="loginEmail" type="email" placeholder="Admin email" autocomplete="username"></label>
     <label class="field password-field"><span>🔒</span><input id="loginPassword" type="password" placeholder="Password" autocomplete="current-password"><button type="button" id="showPasswordBtn" class="show-password" aria-label="Show password" onclick="togglePassword()">👁️</button></label>
     <button type="button" id="adminLoginBtn" class="login-btn" onclick="adminLogin()">↪ <span>Login</span></button>
     <button type="button" id="forgotPasswordBtn" class="forgot-btn">Forgot Password?</button>
@@ -243,7 +261,7 @@ html,body{width:100%;min-width:0;max-width:100%;margin:0;padding:0;overflow-x:hi
 <div class="panel" style="display:none"><div id="recent"></div></div>
 </section>
 
-<section id="pros" style="display:none"><h1>Professionals</h1><div class="panel"><div class="toolbar"><input id="proSearch" placeholder="Search name/mobile/block"><select id="statusFilter"><option value="">All Status</option><option>Verified</option><option>Pending</option><option>Rejected</option></select><button class="green" onclick="openPro()">+ Add Professional</button></div><div class="tablewrap"><table><thead><tr><th>Name</th><th>Mobile</th><th>Area</th><th>Services</th><th>Status</th><th>Action</th></tr></thead><tbody id="proTable"></tbody></table></div></div></section>
+<section id="pros" style="display:none"><h1>Professionals</h1><div class="panel"><div class="toolbar"><input id="proSearch" placeholder="Search name/mobile/block"><select id="statusFilter"><option value="">All Status</option><option>Verified</option><option>Pending</option><option>Rejected</option></select><button class="green" onclick="openPro()">+ Add Professional</button></div><div class="tablewrap"><table><thead><tr><th>Name</th><th>Mobile</th><th>Area</th><th>Services</th><th>Status</th><th>Action</th></tr></thead><tbody id="proTable"></tbody></table></div><div id="proMobileList" class="pro-mobile-list"></div></div></section>
 
 <section id="customers" style="display:none"><h1>Customers</h1><div class="panel"><p class="empty">Customer registration data will appear here after customers register on the portal.</p></div></section>
 
@@ -285,28 +303,10 @@ async function fetchWithTimeout(url, options={}, ms=15000){
   finally { clearTimeout(timer); }
 }
 
-// Remember admin email on this device/browser. Password is never stored.
-const SENVIA_SAVED_ADMIN_EMAIL_KEY='senvia_saved_admin_email';
-function restoreSavedAdminEmail(){
-  try{
-    const saved=localStorage.getItem(SENVIA_SAVED_ADMIN_EMAIL_KEY)||'';
-    const el=document.getElementById('loginEmail');
-    if(el && saved && !el.value) el.value=saved;
-  }catch(e){}
-}
-function saveAdminEmail(){
-  try{
-    const el=document.getElementById('loginEmail');
-    const email=(el?.value||'').trim();
-    if(email) localStorage.setItem(SENVIA_SAVED_ADMIN_EMAIL_KEY,email);
-  }catch(e){}
-}
-
 window.adminLogin=async function adminLogin(){
  const email=document.getElementById('loginEmail').value.trim(),password=document.getElementById('loginPassword').value;
  const msg=document.getElementById('loginMsg');msg.textContent='';
  if(!email||!password){msg.textContent='Email और password भरें।';return}
- saveAdminEmail()
  try{
   const btn=document.getElementById('adminLoginBtn'); if(btn){btn.disabled=true;const sp=btn.querySelector('span');if(sp)sp.textContent='Signing in…';} msg.style.color='#174a87';msg.textContent='Connecting to Senvia…';
   const r=await fetchWithTimeout(SUPABASE_URL+'/auth/v1/token?grant_type=password',{method:'POST',headers:{apikey:SUPABASE_KEY,'Content-Type':'application/json'},body:JSON.stringify({email,password})},15000);
@@ -456,10 +456,16 @@ function render(){
   renderTable(); renderRecent(); renderServices(); renderAreas();
 }
 function renderTable(){
-  const table=document.getElementById('proTable'); if(!table)return;
+  const table=document.getElementById('proTable');
+  const mobileList=document.getElementById('proMobileList');
+  if(!table)return;
   const search=document.getElementById('proSearch'); const filter=document.getElementById('statusFilter');
   let q=(search?.value||'').toLowerCase(),st=filter?.value||'';
-  table.innerHTML=pros.filter(p=>(!q||JSON.stringify(p).toLowerCase().includes(q))&&(!st||proStatus(p)===st)).map((p,i)=>`<tr><td><b>${p.name||''}</b></td><td>${p.mobile||''}</td><td>${p.block||''} → ${p.panchayat||''}<br>${p.village||''}</td><td>${(p.services||[]).join(', ')||'—'}</td><td><span class="badge ${proStatus(p).toLowerCase()}">${proStatus(p)}</span></td><td>${proStatus(p)==='Pending'?`<button class="green" onclick="approve(${i})">Approve</button> `:''}<button class="danger" onclick="removePro(${i})">Delete</button></td></tr>`).join('')||'<tr><td colspan="6" class="empty">No professionals found.</td></tr>';
+  const filtered=pros.filter(p=>(!q||JSON.stringify(p).toLowerCase().includes(q))&&(!st||proStatus(p)===st));
+  table.innerHTML=filtered.map(p=>`<tr><td><b>${p.name||''}</b></td><td>${p.mobile||''}</td><td>${p.block||''} → ${p.panchayat||''}<br>${p.village||''}</td><td>${(p.services||[]).join(', ')||'—'}</td><td><span class="badge ${proStatus(p).toLowerCase()}">${proStatus(p)}</span></td><td>${proStatus(p)==='Pending'?`<button class="green" onclick="approveById('${String(p.id||'').replace(/'/g,"\\'")}')">Approve</button> `:''}<button class="outline" onclick="openProView('${String(p.id||'').replace(/'/g,"\\'")}')">View</button> <button class="danger" onclick="removeProById('${String(p.id||'').replace(/'/g,"\\'")}')">Delete</button></td></tr>`).join('')||'<tr><td colspan="6" class="empty">No professionals found.</td></tr>';
+  if(mobileList){
+    mobileList.innerHTML=filtered.map(p=>`<div class="pro-mobile-card"><div class="pm-row"><span class="pm-label">Name</span><span class="pm-value">${p.name||'—'}</span></div><div class="pm-row"><span class="pm-label">Mobile</span><span class="pm-value">${p.mobile||'—'}</span></div><div class="pm-row"><span class="pm-label">Area</span><span class="pm-value">${p.block||'—'}${p.panchayat?' → '+p.panchayat:''}${p.village?' → '+p.village:''}</span></div><div class="pm-row"><span class="pm-label">Services</span><span class="pm-value">${(p.services||[]).join(', ')||'—'}</span></div><div class="pm-row"><span class="pm-label">Status</span><span class="pm-value"><span class="badge ${proStatus(p).toLowerCase()}">${proStatus(p)}</span></span></div><div class="pm-actions">${proStatus(p)==='Pending'?`<button class="green" onclick="approveById('${String(p.id||'').replace(/'/g,"\\'")}')">Approve</button>`:''}<button class="outline" onclick="openProView('${String(p.id||'').replace(/'/g,"\\'")}')">View</button><button class="danger" onclick="removeProById('${String(p.id||'').replace(/'/g,"\\'")}')">Delete</button></div></div>`).join('')||'<div class="empty">No professionals found.</div>';
+  }
 }
 function renderRecent(){const el=document.getElementById('recent');if(!el)return;el.innerHTML=pros.slice(-5).reverse().map(p=>`<div style="padding:10px 0;border-bottom:1px solid #edf1f5"><b>${p.name||''}</b> — ${p.block||''} — ${(p.services||[]).join(', ')||'—'} <span class="badge ${proStatus(p).toLowerCase()}">${proStatus(p)}</span></div>`).join('')}
 function renderServices(){const el=document.getElementById('serviceList');if(!el)return;el.innerHTML=services.map((s,i)=>`<div style="display:flex;justify-content:space-between;padding:11px;border-bottom:1px solid #edf1f5"><span>${s}</span><button class="danger" onclick="delService(${i})">Delete</button></div>`).join('')}
@@ -478,8 +484,10 @@ if(pid){
   if(ids.length) await api('professional_services',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify(ids.map(id=>({professional_id:pid,service_id:id}))) });
 }
 closePro();await loadFromSupabase();alert('Professional added as Pending Verification.')}catch(e){console.error('Supabase save failed:',e);alert('Supabase save failed. Please check the table columns/RLS policies.\n\n'+(e.message||e));} }
-async function approve(i){if(!(await requireAdmin()))return;const p=pros[i];if(!dbMode||!p.id){alert('Live database connection is required for approval.');return}try{await api('professionals?id=eq.'+encodeURIComponent(p.id),{method:'PATCH',body:JSON.stringify({Status:'Verified'})});await loadFromSupabase()}catch(e){alert('Approve failed. Check Supabase RLS policy.')}}
-async function removePro(i){if(!(await requireAdmin()))return;if(!confirm('Delete this professional?'))return;const p=pros[i];if(!dbMode||!p.id){alert('Live database connection is required for deletion.');return}try{await api('professional_services?professional_id=eq.'+encodeURIComponent(p.id),{method:'DELETE'});await api('professionals?id=eq.'+encodeURIComponent(p.id),{method:'DELETE'});await loadFromSupabase()}catch(e){alert('Delete failed. Check Supabase RLS policy.')}}
+async function approveById(id){if(!(await requireAdmin()))return;const p=pros.find(x=>String(x.id||'')===String(id));if(!dbMode||!p?.id){alert('Live database connection is required for approval.');return}try{await api('professionals?id=eq.'+encodeURIComponent(p.id),{method:'PATCH',body:JSON.stringify({Status:'Verified'})});await loadFromSupabase();}catch(e){alert('Approve failed. '+(e.message||'Check Supabase RLS policy.'))}}
+async function removeProById(id){if(!(await requireAdmin()))return;if(!confirm('Delete this professional?'))return;const p=pros.find(x=>String(x.id||'')===String(id));if(!dbMode||!p?.id){alert('Live database connection is required for deletion.');return}try{await api('professional_services?professional_id=eq.'+encodeURIComponent(p.id),{method:'DELETE'});await api('professionals?id=eq.'+encodeURIComponent(p.id),{method:'DELETE'});await loadFromSupabase();}catch(e){alert('Delete failed. '+(e.message||'Check Supabase RLS policy.'))}}
+async function approve(i){return approveById(pros[i]?.id)}
+async function removePro(i){return removeProById(pros[i]?.id)}
 async function addService(){if(!(await requireAdmin()))return;let s=newSvc.value.trim();if(!s)return;if(!dbMode){if(!services.includes(s))services.push(s);newSvc.value='';render();return}try{await api('services',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify({name:s})});newSvc.value='';await loadFromSupabase()}catch(e){alert('Service add failed. If your services table uses name_en instead of name, we will adjust it in the next step.')}}
 async function delService(i){if(!(await requireAdmin()))return;if(!confirm('Delete this service?'))return;let s=serviceRows.find(x=>svcLabel(x)===services[i]);if(!dbMode||!s?.id){services.splice(i,1);render();return}try{await api('services?id=eq.'+encodeURIComponent(s.id),{method:'DELETE'});await loadFromSupabase()}catch(e){alert('Service delete failed. Check RLS and linked professional_services records.')}}
 const forgotBtn=document.getElementById('forgotPasswordBtn');
@@ -489,8 +497,7 @@ document.getElementById('statusFilter')?.addEventListener('change',renderTable);
 const db=document.createElement('div');db.id='dbStatus';db.style='margin:12px 0 0;padding:10px 12px;border-radius:9px;font-weight:700;background:#fff4d7;color:#8a6500';db.textContent='Connecting to Supabase…';document.querySelector('.content').prepend(db);
 document.getElementById('loginPassword')?.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();adminLogin()}});
 document.getElementById('loginEmail')?.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();adminLogin()}});
-document.getElementById('loginEmail')?.addEventListener('input',saveAdminEmail);
-restoreSavedAdminEmail();
+try{const savedAdminEmail=localStorage.getItem('senvia_admin_email');const emailEl=document.getElementById('loginEmail');if(emailEl&&savedAdminEmail)emailEl.value=savedAdminEmail;emailEl?.addEventListener('change',()=>{if(emailEl.value.trim())localStorage.setItem('senvia_admin_email',emailEl.value.trim())});emailEl?.addEventListener('blur',()=>{if(emailEl.value.trim())localStorage.setItem('senvia_admin_email',emailEl.value.trim())});}catch(e){}
 requireAdmin().then(ok=>{if(ok){document.getElementById('loginGate').style.display='none';loadFromSupabase()}});
 </script>
 </body></html>
