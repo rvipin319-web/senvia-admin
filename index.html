@@ -99,7 +99,30 @@ table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:11px 8px
 .field{display:flex;align-items:center;gap:16px;border:1px solid #d2dfeb;border-radius:16px;padding:0 20px;margin:16px 0;background:#fff;box-shadow:0 3px 12px rgba(20,70,120,.05)}.field span{font-size:25px;color:#607694}.field input{border:0!important;outline:0;width:100%;padding:19px 5px;font-size:18px;background:transparent}
 .login-btn{width:100%;padding:18px;border:0;border-radius:15px;background:#25b92b;color:#fff;font-size:22px;box-shadow:0 8px 18px rgba(37,185,43,.2);margin-top:10px;cursor:pointer}.login-btn:disabled{opacity:.8}
 .forgot-btn{background:transparent;border:0;color:#174a87;text-decoration:underline;font-weight:700;font-size:17px;cursor:pointer;margin-top:18px}.authorized{margin-top:25px;color:#637795;font-size:17px}.authorized i{display:inline-flex;width:30px;height:30px;border-radius:50%;background:#6f82a0;color:#fff;align-items:center;justify-content:center;font-style:normal;margin-right:8px}.login-msg{min-height:20px;margin-top:10px;color:#b42318}.login-footer{position:absolute;bottom:10px;text-align:center;color:#092f68;display:flex;flex-direction:column;gap:4px}.login-footer strong{font-family:Georgia,serif;font-size:30px}.login-footer span{font-size:18px;font-weight:700}.login-footer small{letter-spacing:4px;color:#6d7d93}
+@media(min-width:651px){
+  .login-gate{padding:70px 20px 35px;align-items:center}
+  .login-card{width:min(520px,88vw);padding:36px 42px 24px;border-radius:22px}
+  .login-logo{width:150px;height:150px;top:-75px}
+  .login-card h1{font-size:36px;margin:58px 0 2px}
+  .login-title{font-size:21px}
+  .login-subtitle{font-size:12px;margin-bottom:20px}
+  .login-divider span{width:52px}
+  .field{height:46px;margin-top:10px}
+  .field input{font-size:14px}
+  .login-btn{height:46px;font-size:17px;margin-top:12px}
+  .forgot-btn{font-size:14px;margin-top:11px}
+  .authorized{margin-top:14px;font-size:13px}
+  .authorized i{width:24px;height:24px}
+  .login-footer strong{font-size:20px}.login-footer span{font-size:12px}.login-footer small{font-size:7px;letter-spacing:2px}
+}
 @media(max-width:650px){.login-gate{align-items:flex-start;padding:155px 16px 24px}.login-card{padding:40px 25px 28px;border-radius:24px}.login-logo{width:220px;height:220px;top:-110px}.login-card h1{font-size:48px;margin-top:85px}.login-title{font-size:25px}.login-subtitle{font-size:16px}.login-divider span{width:70px}.login-footer{position:static;margin-top:20px}.login-footer small{letter-spacing:2px}}
+</style>
+
+<style>
+.header-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.logout-btn{border:0;border-radius:10px;padding:10px 16px;background:#d93636;color:#fff;font-weight:800;cursor:pointer;box-shadow:0 4px 12px rgba(217,54,54,.18)}
+.logout-btn:hover{filter:brightness(.96)}
+@media(max-width:600px){.header-actions{gap:6px}.logout-btn{padding:8px 11px;font-size:12px}}
 </style>
 </head>
 <body>
@@ -122,9 +145,8 @@ table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:11px 8px
     <div class="authorized"><i>✓</i> Authorized Access Only</div>
     <div id="loginMsg" class="login-msg"></div>
   </div>
-  <div class="login-footer"><strong>Senvia</strong><span>हर घर का अपना साथी</span><small>SERVING A BRIGHTER TOMORROW</small></div>
 </div>
-<header><div><div class="logo"><span>S</span>envia</div><div class="tag">हर घर का अपना साथी • Admin Panel</div></div><div class="lang"><button id="hi" class="on" onclick="setLang('hi')">हिंदी</button> <button id="en" onclick="setLang('en')">English</button></div></header>
+<header><div><div class="logo"><span>S</span>envia</div><div class="tag">हर घर का अपना साथी • Admin Panel</div></div><div class="header-actions"><div class="lang"><button id="hi" class="on" onclick="setLang('hi')">हिंदी</button> <button id="en" onclick="setLang('en')">English</button></div><button type="button" id="logoutBtn" class="logout-btn" onclick="adminLogout()">↪ Logout</button></div></header>
 <div class="layout">
 <aside>
 <h3>⚙ Senvia Admin</h3>
