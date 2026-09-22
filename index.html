@@ -124,6 +124,18 @@ table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:11px 8px
 .logout-btn:hover{filter:brightness(.96)}
 @media(max-width:600px){.header-actions{gap:6px}.logout-btn{padding:8px 11px;font-size:12px}}
 </style>
+
+<style id="senvia-list-grid-all">
+.view-toggle-group{display:inline-flex;gap:6px;align-items:center;margin-left:auto}.view-toggle-group button{padding:9px 12px;font-size:13px}.view-toggle-group button.active{background:#0b6fa4!important;color:#fff!important;border-color:#0b6fa4!important}
+#services.grid-view #serviceList{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+#services.grid-view .service-row{border:1px solid #d7e4ef;border-radius:15px;padding:15px;background:#fff;box-shadow:0 5px 18px rgba(20,70,120,.07);display:flex;flex-direction:column;align-items:flex-start;min-height:95px}
+#services.grid-view .service-row-actions{width:100%;justify-content:flex-end;margin-top:auto}
+#areas.grid-view .area-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+#areas.grid-view .area-item{display:flex!important;align-items:center;justify-content:center;min-height:58px;margin:0!important;border-radius:14px!important;font-size:14px}
+#customers.grid-view #customerList{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
+#customers.grid-view .customer-card{border:1px solid #d7e4ef;border-radius:15px;padding:16px;background:#fff;box-shadow:0 5px 18px rgba(20,70,120,.07)}
+@media(max-width:600px){.view-toggle-group{width:100%;margin-left:0}.view-toggle-group button{flex:1}#services.grid-view #serviceList,#areas.grid-view .area-list,#customers.grid-view #customerList{grid-template-columns:1fr}}
+</style>
 </head>
 <body>
 <div id="senviaBusy" aria-live="polite" aria-label="System busy">
@@ -164,11 +176,11 @@ table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:11px 8px
 
 <section id="pros" style="display:none"><h1>Professionals</h1><div class="panel"><div class="toolbar"><input id="proSearch" placeholder="Search name/mobile/block"><select id="statusFilter"><option value="">All Status</option><option>Verified</option><option>Pending</option><option>Rejected</option></select><button class="green" onclick="openPro()">+ Add Professional</button><button class="outline pro-view-toggle" type="button" id="viewToggle" onclick="toggleCardView()">▦ Card View</button></div><div class="tablewrap"><table><thead><tr><th>Name</th><th>Mobile</th><th>Area</th><th>Services</th><th>Status</th><th>Action</th></tr></thead><tbody id="proTable"></tbody></table></div></div></section>
 
-<section id="customers" style="display:none"><h1>Customers</h1><div class="panel"><p class="empty">Customer registration data will appear here after customers register on the portal.</p></div></section>
+<section id="customers" style="display:none"><h1>Customers</h1><div class="panel"><div class="toolbar"><div class="view-toggle-group"><button id="customerListBtn" class="outline active" type="button" onclick="setCustomerView('list')">☰ List View</button><button id="customerGridBtn" class="outline" type="button" onclick="setCustomerView('grid')">▦ Grid View</button></div></div><div id="customerList"><p class="empty">Customer registration data will appear here after customers register on the portal.</p></div></div></section>
 
-<section id="services" style="display:none"><h1>Services</h1><div class="panel"><div class="toolbar"><input id="newSvc" placeholder="New service name"><button class="green" onclick="addService()">+ Add Service</button></div><div id="serviceList"></div></div></section>
+<section id="services" style="display:none"><h1>Services</h1><div class="panel"><div class="toolbar"><input id="newSvc" placeholder="New service name"><button class="green" onclick="addService()">+ Add Service</button><div class="view-toggle-group"><button id="serviceListBtn" class="outline active" type="button" onclick="setServiceView('list')">☰ List View</button><button id="serviceGridBtn" class="outline" type="button" onclick="setServiceView('grid')">▦ Grid View</button></div></div><div id="serviceList"></div></div></section>
 
-<section id="areas" style="display:none"><h1>Blocks & Areas</h1><div class="panel"><h3>Available Blocks</h3><div id="availableList"></div><h3 style="margin-top:25px">Coming Soon Blocks</h3><div id="comingList"></div><p style="color:#68758a">Admin can move a block from Coming Soon to Available after onboarding is completed.</p></div></section>
+<section id="areas" style="display:none"><h1>Blocks & Areas</h1><div class="panel"><div class="toolbar"><div class="view-toggle-group"><button id="areaListBtn" class="outline active" type="button" onclick="setAreaView('list')">☰ List View</button><button id="areaGridBtn" class="outline" type="button" onclick="setAreaView('grid')">▦ Grid View</button></div></div><h3>Available Blocks</h3><div id="availableList" class="area-list"></div><h3 style="margin-top:25px">Coming Soon Blocks</h3><div id="comingList" class="area-list"></div><p style="color:#68758a">Admin can move a block from Coming Soon to Available after onboarding is completed.</p></div></section>
 </main></div>
 
 
@@ -320,10 +332,15 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeProView();clos
 function restoreProfessionalView(){const sec=document.getElementById('pros');const pref=localStorage.getItem('senvia_prof_view')||'card';const on=pref==='card';sec.classList.toggle('card-view',on);sec.classList.toggle('table-view',!on);const b=document.getElementById('viewToggle');if(b)b.textContent=on?'☷ Table View':'▦ Card View'}
 function setLang(l){lang=l;document.querySelectorAll('[data-hi]').forEach(e=>e.textContent=e.dataset[l]);document.getElementById('hi').className=l==='hi'?'on':'';document.getElementById('en').className=l==='en'?'on':''}
 function show(id,el){document.querySelectorAll('main section').forEach(s=>s.style.display='none');document.getElementById(id).style.display='block';document.querySelectorAll('.nav').forEach(n=>n.classList.remove('active'));if(el)el.classList.add('active');render()}
+function setServiceView(v){const sec=document.getElementById('services');sec.classList.toggle('grid-view',v==='grid');sec.classList.toggle('list-view',v==='list');localStorage.setItem('senvia_service_view',v);document.getElementById('serviceListBtn')?.classList.toggle('active',v==='list');document.getElementById('serviceGridBtn')?.classList.toggle('active',v==='grid')}
+function restoreServiceView(){setServiceView(localStorage.getItem('senvia_service_view')||'list')}
+function setAreaView(v){const sec=document.getElementById('areas');sec.classList.toggle('grid-view',v==='grid');sec.classList.toggle('list-view',v==='list');localStorage.setItem('senvia_area_view',v);document.getElementById('areaListBtn')?.classList.toggle('active',v==='list');document.getElementById('areaGridBtn')?.classList.toggle('active',v==='grid')}
+function restoreAreaView(){setAreaView(localStorage.getItem('senvia_area_view')||'list')}
+function setCustomerView(v){const sec=document.getElementById('customers');sec.classList.toggle('grid-view',v==='grid');sec.classList.toggle('list-view',v==='list');localStorage.setItem('senvia_customer_view',v);document.getElementById('customerListBtn')?.classList.toggle('active',v==='list');document.getElementById('customerGridBtn')?.classList.toggle('active',v==='grid')}
 function render(){countPro.textContent=pros.length;countPending.textContent=pros.filter(p=>proStatus(p)==='Pending').length;countCust.textContent=customers;countSvc.textContent=services.length;renderTable();renderRecent();renderServices();renderAreas()}
 function renderTable(){let q=(proSearch?.value||'').toLowerCase(),st=statusFilter?.value||'';proTable.innerHTML=pros.filter(p=>(!q||JSON.stringify(p).toLowerCase().includes(q))&&(!st||proStatus(p)===st)).map((p,i)=>`<tr><td><b>${p.name}</b></td><td>${p.mobile}</td><td>${p.block} → ${p.panchayat}<br>${p.village}</td><td>${p.services.join(', ')||'—'}</td><td><span class="badge ${proStatus(p).toLowerCase()}">${proStatus(p)}</span></td><td>${proStatus(p)==='Pending'?`<button class="green" onclick="approve(${i})">Approve</button> `:''}<button class="outline" onclick="viewPro(${i})">View</button> <button class="danger" onclick="removePro(${i})">Delete</button></td></tr>`).join('')||'<tr><td colspan="6" class="empty">No professionals found.</td></tr>'}
 function renderRecent(){recent.innerHTML=pros.slice(-5).reverse().map(p=>`<div style="padding:10px 0;border-bottom:1px solid #edf1f5"><b>${p.name}</b> — ${p.block} — ${p.services.join(', ')||'—'} <span class="badge ${proStatus(p).toLowerCase()}">${proStatus(p)}</span></div>`).join('')}
-function renderServices(){serviceList.innerHTML=services.map((s,i)=>`<div class="service-row"><span class="service-row-name">${s}</span><div class="service-row-actions"><button class="service-edit-btn" type="button" onclick="openServiceEdit(${i})">✎ Edit</button><button class="danger" type="button" onclick="delService(${i})">Delete</button></div></div>`).join('')}
+function renderServices(){serviceList.innerHTML=services.map((s,i)=>`<div class="service-row"><span class="service-row-name">${s}</span><div class="service-row-actions"><button class="service-edit-btn" type="button" onclick="openServiceEdit(${i})">✎ Edit</button><button class="danger" type="button" onclick="delService(${i})">Delete</button></div></div>`).join('');restoreServiceView()}
 let editingServiceIndex=-1;
 function serviceNameKey(row){
  if(!row||typeof row!=='object')return null;
@@ -361,7 +378,7 @@ async function saveServiceEdit(){
 }
 document.getElementById('serviceEditModal')?.addEventListener('click',e=>{if(e.target.id==='serviceEditModal')closeServiceEdit()});
 
-function renderAreas(){availableList.innerHTML=blocks.map(b=>`<span class="badge verified" style="margin:4px">${b}</span>`).join('');comingList.innerHTML=coming.map(b=>`<span class="badge" style="background:#eaf5ff;color:#0879c9;margin:4px">${b}</span>`).join('')}
+function renderAreas(){availableList.innerHTML=blocks.map(b=>`<span class="badge verified area-item" style="margin:4px">${b}</span>`).join('');comingList.innerHTML=coming.map(b=>`<span class="badge area-item" style="background:#eaf5ff;color:#0879c9;margin:4px">${b}</span>`).join('');restoreAreaView()}
 function openPro(){modal.classList.add('show');pb.innerHTML='<option value="">Select Block</option>'+blocks.map(b=>`<option>${b}</option>`).join('');checks.innerHTML=services.map(s=>`<label><input type="checkbox" value="${s}"> ${s}</label>`).join('')}
 function closePro(){modal.classList.remove('show')}
 async function savePro(){let ss=[...document.querySelectorAll('#checks input:checked')].map(x=>x.value),name=pn.value.trim(),mobile=pm.value.trim(),block=pb.value,panchayat=pp.value.trim(),village=pv.value.trim(),experience=pe.value.trim();if(!name||!mobile||!block||!panchayat||!village||!ss.length){alert('Please fill all required fields and select at least one service.');return}let p={Name:name,Phone:mobile,Block:block,Panchayat:panchayat,Village_Area:village,Status:'Pending'};if(!dbMode){pros.push({name,mobile,block,panchayat,village,experience,status:'Pending',services:ss});closePro();render();alert('Professional added in demo mode.');return}try{const rows=await api('professionals',{method:'POST',headers:{Prefer:'return=representation'},body:JSON.stringify(p)});
@@ -389,7 +406,7 @@ window.fetch=async function(...args){
   try{return await senviaNativeFetch(...args)}finally{if(topLevelBusy)hideBusy()}
 };
 restoreAdminEmail();
-restoreProfessionalView();
+restoreProfessionalView();restoreServiceView();restoreAreaView();setCustomerView(localStorage.getItem('senvia_customer_view')||'list');
 requireAdmin().then(ok=>{if(ok) loadFromSupabase()});
 </script>
 </body></html>
