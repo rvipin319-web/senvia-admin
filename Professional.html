@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Senvia Professional Dashboard</title>
+<style>
+:root{--navy:#082455;--blue:#0879c9;--green:#35b92f;--bg:#f4f8fc;--line:#dce6ef;--text:#18304a;--muted:#6d7d90;--danger:#c93636}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,"Noto Sans Devanagari",sans-serif;background:var(--bg);color:var(--text)}
+header{height:72px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 5%;position:sticky;top:0;z-index:5}
+.logo{font-size:27px;font-weight:900;color:var(--navy)}.logo span{color:var(--green)}.tag{font-size:11px;color:var(--muted)}
+.lang button{border:1px solid #cbd8e5;background:#fff;border-radius:20px;padding:7px 11px;font-weight:800}.lang .on{background:var(--blue);color:#fff}
+.login{min-height:calc(100vh - 72px);display:flex;align-items:center;justify-content:center;padding:30px 16px;background:linear-gradient(180deg,#eef8ff,#f8fbff)}
+.card{background:#fff;border:1px solid var(--line);border-radius:24px;box-shadow:0 18px 55px rgba(20,70,120,.13)}
+.login-card{width:min(470px,100%);padding:32px}
+.login-card h1{margin:0;color:var(--navy);font-size:30px}.login-card p{color:var(--muted);line-height:1.5}
+.field{margin:14px 0}.field label{display:block;font-size:12px;font-weight:800;color:#607286;margin-bottom:6px}.field input{width:100%;padding:13px;border:1px solid #d3dfeb;border-radius:11px;font-size:16px;outline:none}.field input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(8,121,201,.1)}
+button{border:0;border-radius:10px;padding:12px 16px;font-weight:800;cursor:pointer}.primary{background:var(--green);color:#fff;width:100%;font-size:16px}.msg{min-height:22px;color:#b42318;margin-top:10px;font-size:13px}
+.dashboard{display:none}.hero{background:linear-gradient(135deg,#07366d,#087f86);color:#fff;padding:30px 5%}.hero-inner{max-width:1250px;margin:auto;display:flex;justify-content:space-between;align-items:center;gap:20px}.hero h1{margin:0 0 5px;font-size:32px}.hero p{margin:0;opacity:.86}.hero-actions{display:flex;gap:8px}.hero-actions button{background:rgba(255,255,255,.14);color:#fff;border:1px solid rgba(255,255,255,.25)}.hero-actions .logout{background:#d93636;border:0}
+.wrap{max-width:1250px;margin:0 auto;padding:24px 5% 45px}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.stat{padding:18px;background:#fff;border:1px solid var(--line);border-radius:16px}.stat small{display:block;color:var(--muted);font-weight:700}.stat b{display:block;color:var(--navy);font-size:22px;margin-top:6px}
+.panel{margin-top:18px;padding:22px}.panel h2{margin:0 0 16px;color:var(--navy);font-size:21px}.info{display:grid;grid-template-columns:1fr 1fr;gap:12px}.item{background:#f7fbff;border:1px solid #e2ebf3;border-radius:13px;padding:13px}.item span{display:block;color:var(--muted);font-size:11px;font-weight:800;margin-bottom:5px}.item b{color:#173c60}.full{grid-column:1/-1}
+.pills{display:flex;gap:7px;flex-wrap:wrap}.pill{background:#e8f7ef;color:#14733a;border:1px solid #ccebd9;border-radius:999px;padding:7px 11px;font-size:12px;font-weight:800}
+.status{display:inline-block;border-radius:999px;padding:7px 11px;font-size:12px;font-weight:900}.verified{background:#e7f7e4;color:#23751c}.pending{background:#fff4d7;color:#8a6500}.rejected{background:#fde8e8;color:#a72828}
+.note{background:#fff9e8;border:1px solid #f1df9e;color:#735b13;padding:13px;border-radius:12px;font-size:13px;line-height:1.5}
+@media(max-width:800px){.grid{grid-template-columns:1fr 1fr}.hero-inner{align-items:flex-start;flex-direction:column}.info{grid-template-columns:1fr}.full{grid-column:auto}}
+@media(max-width:500px){header{height:62px;padding:0 4%}.logo{font-size:23px}.tag{display:none}.grid{grid-template-columns:1fr}.hero{padding:24px 4%}.hero h1{font-size:27px}.wrap{padding:18px 4%}.panel{padding:17px}}
+</style>
+</head>
+<body>
+<header>
+  <div><div class="logo">Sen<span>via</span></div><div class="tag" id="tag">हर घर का अपना साथी</div></div>
+  <div class="lang"><button id="hi" class="on" onclick="setLang('hi')">हिंदी</button><button id="en" onclick="setLang('en')">EN</button></div>
+</header>
+
+<section class="login" id="login">
+  <div class="card login-card">
+    <h1 id="loginTitle">Professional Login</h1>
+    <p id="loginSub">अपने Senvia Professional ID और registered mobile number से प्रवेश करें।</p>
+    <div class="field"><label id="idLabel">Senvia Professional ID</label><input id="proId" placeholder="जैसे 08809202603"></div>
+    <div class="field"><label id="mobileLabel">Registered Mobile</label><input id="mobile" inputmode="numeric" maxlength="10" placeholder="10 digit mobile number"></div>
+    <button class="primary" id="loginBtn" onclick="login()">Login</button>
+    <div class="msg" id="msg"></div>
+  </div>
+</section>
+
+<section class="dashboard" id="dashboard">
+  <div class="hero">
+    <div class="hero-inner">
+      <div><h1 id="welcome">Professional Dashboard</h1><p id="welcomeSub">Manage your Senvia professional profile</p></div>
+      <div class="hero-actions"><button onclick="refreshProfile()">↻ Refresh</button><button class="logout" onclick="logout()">Logout</button></div>
+    </div>
+  </div>
+  <main class="wrap">
+    <div class="grid">
+      <div class="stat"><small id="s1">Professional ID</small><b id="statId">—</b></div>
+      <div class="stat"><small id="s2">Status</small><b id="statStatus">—</b></div>
+      <div class="stat"><small id="s3">Area</small><b id="statArea">—</b></div>
+      <div class="stat"><small id="s4">Services</small><b id="statServices">0</b></div>
+    </div>
+
+    <div class="card panel">
+      <h2 id="profileTitle">👤 My Profile</h2>
+      <div class="info">
+        <div class="item"><span id="n1">Name</span><b id="pName">—</b></div>
+        <div class="item"><span id="n2">Mobile</span><b id="pMobile">—</b></div>
+        <div class="item"><span id="n3">Block</span><b id="pBlock">—</b></div>
+        <div class="item"><span id="n4">Panchayat</span><b id="pPanchayat">—</b></div>
+        <div class="item"><span id="n5">Village / Area</span><b id="pVillage">—</b></div>
+        <div class="item"><span id="n6">Experience</span><b id="pExperience">—</b></div>
+        <div class="item"><span id="n7">Verification Status</span><b id="pStatus">—</b></div>
+        <div class="item"><span id="n8">Senvia Professional ID</span><b id="pCode">—</b></div>
+        <div class="item full"><span id="n9">My Services</span><div class="pills" id="pServices"></div></div>
+      </div>
+    </div>
+
+    <div class="card panel">
+      <h2 id="editTitle">✏️ Profile Management</h2>
+      <div class="note" id="editNote">
+        अभी Professional profile का secure self-edit connection तैयार करने के लिए Professional account को Supabase Auth से link करना आवश्यक है। इस dashboard में ID, verification status और live profile data सुरक्षित रूप से दिखाया जा रहा है; बिना authenticated account के public database update नहीं किया जाएगा।
+      </div>
+    </div>
+  </main>
+</section>
+
+<script>
+const API='https://hxdrvhiowurbwlgmczju.supabase.co/rest/v1/';
+const KEY='sb_publishable_cvh_b0gklN5SOcH5MsGs8g_4JI9-PxT';
+let lang='hi', current=null;
+
+const T={
+hi:{tag:'हर घर का अपना साथी',loginTitle:'Professional Login',loginSub:'अपने Senvia Professional ID और registered mobile number से प्रवेश करें।',idLabel:'Senvia Professional ID',mobileLabel:'Registered Mobile',loginBtn:'Login',welcome:'Professional Dashboard',welcomeSub:'अपने Senvia professional profile को देखें और manage करें',s1:'Professional ID',s2:'Status',s3:'Area',s4:'Services',profileTitle:'👤 My Profile',n1:'Name',n2:'Mobile',n3:'Block',n4:'Panchayat',n5:'Village / Area',n6:'Experience',n7:'Verification Status',n8:'Senvia Professional ID',n9:'My Services',editTitle:'✏️ Profile Management',editNote:'अभी Professional profile का secure self-edit connection तैयार करने के लिए Professional account को Supabase Auth से link करना आवश्यक है। इस dashboard में ID, verification status और live profile data सुरक्षित रूप से दिखाया जा रहा है; बिना authenticated account के public database update नहीं किया जाएगा।',bad:'Professional ID और registered mobile number दर्ज करें।',notfound:'Professional record नहीं मिला। ID और mobile number जाँचें।',failed:'Login नहीं हो सका। कृपया थोड़ी देर बाद फिर कोशिश करें।',pending:'Pending',verified:'Verified',rejected:'Rejected',unknown:'Unknown',services:'Services'},
+en:{tag:'Your own partner for every home',loginTitle:'Professional Login',loginSub:'Enter your Senvia Professional ID and registered mobile number.',idLabel:'Senvia Professional ID',mobileLabel:'Registered Mobile',loginBtn:'Login',welcome:'Professional Dashboard',welcomeSub:'View and manage your Senvia professional profile',s1:'Professional ID',s2:'Status',s3:'Area',s4:'Services',profileTitle:'👤 My Profile',n1:'Name',n2:'Mobile',n3:'Block',n4:'Panchayat',n5:'Village / Area',n6:'Experience',n7:'Verification Status',n8:'Senvia Professional ID',n9:'My Services',editTitle:'✏️ Profile Management',editNote:'Secure self-edit requires the Professional account to be linked with Supabase Auth. This dashboard safely displays the live profile, ID and verification status; it does not perform public database updates without authenticated authorization.',bad:'Enter Professional ID and registered mobile number.',notfound:'Professional record not found. Please check the ID and mobile number.',failed:'Login failed. Please try again later.',pending:'Pending',verified:'Verified',rejected:'Rejected',unknown:'Unknown',services:'Services'}
+};
+function $(id){return document.getElementById(id)}
+function setLang(l){lang=l;const t=T[l];Object.keys(t).forEach(k=>{const e=$(k);if(e&&['bad','notfound','failed'].indexOf(k)<0)e.textContent=t[k]});$('hi').className=l==='hi'?'on':'';$('en').className=l==='en'?'on':'';document.documentElement.lang=l;if(current)render(current)}
+function esc(v){return String(v??'—').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+async function getProfile(id,mobile){
+  const url=API+'professionals?select=*&professional_code=eq.'+encodeURIComponent(id)+'&Phone=eq.'+encodeURIComponent(mobile)+'&limit=1';
+  const r=await fetch(url,{headers:{apikey:KEY,Authorization:'Bearer '+KEY}});
+  if(!r.ok) throw new Error(await r.text());
+  const rows=await r.json();
+  return rows[0]||null;
+}
+function statusClass(s){const x=String(s||'').toLowerCase();return x==='verified'?'verified':x==='pending'?'pending':x==='rejected'?'rejected':''}
+function render(p){
+ current=p;
+ $('statId').textContent=p.professional_code||'—';
+ $('statStatus').innerHTML='<span class="status '+statusClass(p.Status)+'">'+esc(p.Status||T[lang].unknown)+'</span>';
+ $('statArea').textContent=[p.Block,p.Panchayat].filter(Boolean).join(' → ')||'—';
+ const sv=String(p.Services||'').split(',').map(x=>x.trim()).filter(Boolean);
+ $('statServices').textContent=sv.length;
+ $('pName').textContent=p.Name||'—';$('pMobile').textContent=p.Phone||'—';$('pBlock').textContent=p.Block||'—';$('pPanchayat').textContent=p.Panchayat||'—';$('pVillage').textContent=p.Village_Area||'—';$('pExperience').textContent=p.Experience||'—';$('pCode').textContent=p.professional_code||'—';
+ $('pStatus').innerHTML='<span class="status '+statusClass(p.Status)+'">'+esc(p.Status||T[lang].unknown)+'</span>';
+ $('pServices').innerHTML=sv.length?sv.map(x=>'<span class="pill">'+esc(x)+'</span>').join(''):'<span>—</span>';
+}
+async function login(){
+ const id=$('proId').value.trim(),mobile=$('mobile').value.replace(/\D/g,'');
+ const msg=$('msg');msg.textContent='';
+ if(!id||mobile.length!==10){msg.textContent=T[lang].bad;return}
+ $('loginBtn').disabled=true;$('loginBtn').textContent=lang==='hi'?'जाँच हो रही है…':'Checking…';
+ try{
+   const p=await getProfile(id,mobile);
+   if(!p){msg.textContent=T[lang].notfound;return}
+   localStorage.setItem('senvia_pro_dashboard_id',p.professional_code||id);
+   localStorage.setItem('senvia_pro_dashboard_mobile',mobile);
+   render(p);$('login').style.display='none';$('dashboard').style.display='block';
+ }catch(e){console.error(e);msg.textContent=T[lang].failed}
+ finally{$('loginBtn').disabled=false;$('loginBtn').textContent=T[lang].loginBtn}
+}
+async function refreshProfile(){
+ if(!current)return;
+ try{const p=await getProfile(current.professional_code,current.Phone);if(p)render(p)}catch(e){}
+}
+function logout(){localStorage.removeItem('senvia_pro_dashboard_id');localStorage.removeItem('senvia_pro_dashboard_mobile');current=null;$('dashboard').style.display='none';$('login').style.display='flex'}
+async function restore(){
+ const id=localStorage.getItem('senvia_pro_dashboard_id'),mobile=localStorage.getItem('senvia_pro_dashboard_mobile');
+ if(!id||!mobile)return;
+ try{const p=await getProfile(id,mobile);if(p){render(p);$('login').style.display='none';$('dashboard').style.display='block'}}catch(e){}
+}
+$('mobile').addEventListener('input',e=>e.target.value=e.target.value.replace(/\D/g,'').slice(0,10));
+setLang('hi');restore();
+</script>
+</body>
+</html>
