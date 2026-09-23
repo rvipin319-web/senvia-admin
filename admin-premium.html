@@ -438,13 +438,15 @@ function restoreProfessionalView(){const sec=document.getElementById('pros');con
 function setLang(l){lang=l;document.querySelectorAll('[data-hi]').forEach(e=>e.textContent=e.dataset[l]);document.getElementById('hi').className=l==='hi'?'on':'';document.getElementById('en').className=l==='en'?'on':''}
 function show(id,el){document.querySelectorAll('main section').forEach(s=>s.style.display='none');document.getElementById(id).style.display='block';document.querySelectorAll('.nav').forEach(n=>n.classList.remove('active'));if(el)el.classList.add('active');render()}
 function render(){
- countPro.textContent=pros.length;
- countPending.textContent=pros.filter(p=>proStatus(p)==='Pending').length;
- countCust.textContent=customers.length;
- countSvc.textContent=services.length;
+ const pendingCount=pros.filter(p=>proStatus(p)==='Pending').length;
+ const cp=document.getElementById('countPro'); if(cp) cp.textContent=pros.length;
+ const cc=document.getElementById('countCust'); if(cc) cc.textContent=customers.length;
+ const cs=document.getElementById('countSvc'); if(cs) cs.textContent=services.length;
+ const cb=document.getElementById('countBlocks'); if(cb) cb.textContent=4;
  renderTable();renderRecent();renderServices();renderCustomers();renderMessages();renderAreas();
  renderPremiumDashboard();
 }
+document.getElementById('senviaBusy')?.classList.remove('show');
 function renderPremiumDashboard(){
  const months=[]; const now=new Date();
  for(let i=5;i>=0;i--){const d=new Date(now.getFullYear(),now.getMonth()-i,1);months.push({key:d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'),label:d.toLocaleString('en',{month:'short'})});}
