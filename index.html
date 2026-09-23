@@ -231,8 +231,35 @@ const demoPros=[
 {name:'Vipin Kumar',mobile:'7992477919',block:'Gaighat',panchayat:'Mahamdpur Sura',village:'Mahamdpur Sura',services:['Mobile Repair','Electronics Repair'],status:'Verified'},
 {name:'Sanjay Kumar',mobile:'7281073721',block:'Bochahan',panchayat:'Jhaphan',village:'Jhaphan',services:['Plumber'],status:'Verified'}];
 let services=[...demoServices],pros=[...demoPros],customers=[],customerRows=[],messageRows=[],lang='hi',dbMode=false,serviceRows=[],proRows=[];
-let accessToken=''; sessionStorage.removeItem('senvia_admin_token');
+let accessToken=localStorage.getItem('senvia_admin_token')||sessionStorage.getItem('senvia_admin_token')||'';
+let refreshToken=localStorage.getItem('senvia_admin_refresh_token')||'';
 const authHeaders=()=>accessToken?{apikey:SUPABASE_KEY,Authorization:'Bearer '+accessToken}:{apikey:SUPABASE_KEY};
+function saveAuthSession(d){
+  accessToken=d?.access_token||'';
+  refreshToken=d?.refresh_token||refreshToken||'';
+  if(accessToken)localStorage.setItem('senvia_admin_token',accessToken);
+  if(refreshToken)localStorage.setItem('senvia_admin_refresh_token',refreshToken);
+  if(accessToken)sessionStorage.setItem('senvia_admin_token',accessToken);
+}
+function clearAuthSession(){
+  accessToken='';refreshToken='';
+  localStorage.removeItem('senvia_admin_token');
+  localStorage.removeItem('senvia_admin_refresh_token');
+  sessionStorage.removeItem('senvia_admin_token');
+}
+async function refreshAdminSession(){
+  const rt=refreshToken||localStorage.getItem('senvia_admin_refresh_token')||'';
+  if(!rt)return false;
+  try{
+    const r=await fetch(SUPABASE_URL+'/auth/v1/token?grant_type=refresh_token',{
+      method:'POST',headers:{apikey:SUPABASE_KEY,'Content-Type':'application/json'},
+      body:JSON.stringify({refresh_token:rt})
+    });
+    const d=await r.json();
+    if(!r.ok||!d.access_token)throw new Error(d.error_description||d.error||'Refresh failed');
+    saveAuthSession(d);return true;
+  }catch(e){console.warn('Senvia admin session refresh failed:',e);return false}
+}
 const api=async(path,opt={})=>{
  const r=await fetch(SUPABASE_URL+'/rest/v1/'+path,{...opt,headers:{...authHeaders(),'Content-Type':'application/json',...(opt.headers||{})}});
  const text=await r.text();
@@ -257,10 +284,27 @@ async function forgotPassword(){
   msg.style.color='#23751c'; msg.textContent='Password reset link आपके email पर भेज दिया गया है।';
  }catch(e){console.error('Forgot password failed:',e);msg.style.color='#b42318';msg.textContent='Password reset failed: '+(e.message||e)}finally{hideBusy()}
 }
-async function adminLogin(){const email=document.getElementById('loginEmail').value.trim(),password=document.getElementById('loginPassword').value;localStorage.setItem('senvia_admin_email',email);const msg=document.getElementById('loginMsg');msg.textContent='';if(!email||!password){msg.textContent='Email और password भरें।';return}showBusy();try{const r=await fetch(SUPABASE_URL+'/auth/v1/token?grant_type=password',{method:'POST',headers:{apikey:SUPABASE_KEY,'Content-Type':'application/json'},body:JSON.stringify({email,password})});const d=await r.json();if(!r.ok)throw new Error(d.error_description||d.error||d.msg||('HTTP '+r.status)); if(!d.access_token) throw new Error('Access token नहीं मिला'); accessToken=d.access_token;sessionStorage.setItem('senvia_admin_token',accessToken);document.getElementById('loginGate').style.display='none';restoreAdminEmail();const ok=await requireAdmin();if(ok) await loadFromSupabase();}catch(e){console.error(e);document.getElementById('loginGate').style.display='flex';msg.textContent='Login failed: '+e.message; msg.style.color='#b42318';}finally{hideBusy()}}
+async function adminLogin(){const email=document.getElementById('loginEmail').value.trim(),password=document.getElementById('loginPassword').value;localStorage.setItem('senvia_admin_email',email);const msg=document.getElementById('loginMsg');msg.textContent='';if(!email||!password){msg.textContent='Email और password भरें।';return}showBusy();try{const r=await fetch(SUPABASE_URL+'/auth/v1/token?grant_type=password',{method:'POST',headers:{apikey:SUPABASE_KEY,'Content-Type':'application/json'},body:JSON.stringify({email,password})});const d=await r.json();if(!r.ok)throw new Error(d.error_description||d.error||d.msg||('HTTP '+r.status)); if(!d.access_token) throw new Error('Access token नहीं मिला'); saveAuthSession(d);document.getElementById('loginGate').style.display='none';restoreAdminEmail();const ok=await requireAdmin();if(ok) await loadFromSupabase();}catch(e){console.error(e);document.getElementById('loginGate').style.display='flex';msg.textContent='Login failed: '+e.message; msg.style.color='#b42318';}finally{hideBusy()}}
 
-function adminLogout(){accessToken='';sessionStorage.removeItem('senvia_admin_token');location.reload()}
-async function requireAdmin(){if(!accessToken){document.getElementById('loginGate').style.display='flex';return false}try{const r=await fetch(SUPABASE_URL+'/auth/v1/user',{headers:authHeaders()});if(!r.ok){const t=await r.text();throw new Error(t||('HTTP '+r.status))}document.getElementById('loginGate').style.display='none';return true}catch(e){console.error('Session check failed',e);accessToken='';sessionStorage.removeItem('senvia_admin_token');document.getElementById('loginGate').style.display='flex';document.getElementById('loginMsg').textContent='Session check failed: '+e.message;return false}}
+function adminLogout(){clearAuthSession();location.reload()}
+async function requireAdmin(){
+  if(!accessToken) await refreshAdminSession();
+  if(!accessToken){document.getElementById('loginGate').style.display='flex';return false}
+  try{
+    let r=await fetch(SUPABASE_URL+'/auth/v1/user',{headers:authHeaders()});
+    if(!r.ok && (r.status===401||r.status===403)){
+      const refreshed=await refreshAdminSession();
+      if(refreshed) r=await fetch(SUPABASE_URL+'/auth/v1/user',{headers:authHeaders()});
+    }
+    if(!r.ok){const t=await r.text();throw new Error(t||('HTTP '+r.status))}
+    document.getElementById('loginGate').style.display='none';return true;
+  }catch(e){
+    console.error('Session check failed',e);clearAuthSession();
+    document.getElementById('loginGate').style.display='flex';
+    document.getElementById('loginMsg').textContent='Session check failed: '+e.message;
+    return false;
+  }
+}
 function keyCI(o,names){if(!o)return null;const ks=Object.keys(o);const wanted=names.map(x=>String(x).toLowerCase().replace(/[_\s-]/g,''));return ks.find(k=>wanted.includes(String(k).toLowerCase().replace(/[_\s-]/g,'')))||null}
 function valCI(o,names){const k=keyCI(o,names);return k?o[k]:''}
 function svcLabel(s){return valCI(s,['name_en','name','service','service_name','service_name_en','service_name_hi','title','name_hi','label','category','Service Name','Service'])||''}
@@ -451,7 +495,7 @@ window.fetch=async function(...args){
 };
 restoreAdminEmail();
 restoreProfessionalView();restoreCollectionViews();
-requireAdmin().then(ok=>{if(ok) loadFromSupabase()});
+refreshAdminSession().then(()=>requireAdmin()).then(ok=>{if(ok) loadFromSupabase()});
 </script>
 <div class="msg-detail-modal" id="msgViewModal" onclick="if(event.target===this)closeMessageView()"><div class="msg-detail-card"><div class="msg-detail-head"><h2 id="msgViewTitle">Message Details</h2><button class="msg-detail-close" type="button" onclick="closeMessageView()">✕</button></div><div class="msg-detail-body" id="msgViewBody"></div></div></div>
 </body></html>
