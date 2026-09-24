@@ -51,7 +51,7 @@ footer{background:#062c4b;color:#dcebf5;padding:25px 18px;text-align:center}.soc
 
 <div class="modal" id="reqModal"><div class="box">
 <button class="close" onclick="closeReq()">×</button><h2>🛠 Request Service</h2><div id="reqPro" class="sub"></div>
-<div class="form"><div class="meta" id="customerInfo"></div><input id="rnote" placeholder="काम की जरूरत / Note (optional)"><div class="note" id="reqNote"></div><button class="btn green" onclick="submitRequest()">Send Request</button></div>
+<div class="form"><div class="meta" id="customerInfo"></div><input id="rnote" placeholder="काम की जरूरत / Note (optional)"><div class="note" id="reqNote"></div><button class="btn green" id="sendRequestBtn" onclick="submitRequest()">Send Request</button></div>
 </div></div>
 
 <footer>Senvia — हर घर का अपना साथी<div class="social"><a class="fb" href="https://www.facebook.com/" target="_blank">f</a><a class="ig" href="https://www.instagram.com/" target="_blank">◎</a><a class="yt" href="https://www.youtube.com/" target="_blank">▶</a><a class="wa" href="https://wa.me/919905411421" target="_blank">◔</a></div></footer>
@@ -181,9 +181,56 @@ async function copyCustomerId(){
 async function submitRequest(){
  const p=selected?.p,service=selected?.service,note=document.getElementById('reqNote'),extra=document.getElementById('rnote').value.trim(),name=sessionStorage.getItem('senvia_customer_name')||'',phone=sessionStorage.getItem('senvia_customer_mobile')||'',block=sessionStorage.getItem('senvia_customer_block')||'',pin=sessionStorage.getItem('senvia_customer_pin')||'',code=sessionStorage.getItem('senvia_customer_code')||'';
  note.textContent='';if(!p||!name||phone.length!==10){note.textContent='Customer registration details missing हैं।';return}
- try{const detail=`Service Request\nService: ${service}\nProfessional: ${p.name}\nProfessional Mobile: ${p.mobile}\nCustomer: ${name}\nCustomer Mobile: ${phone}\nCustomer ID: ${code||'—'}\nBlock: ${block}\nPIN Code: ${pin}\nNote: ${extra||'—'}`;const h={...H,Prefer:'return=minimal'};const r=await fetch(API+'messages',{method:'POST',headers:h,body:JSON.stringify({user_name:name,user_type:'Customer',mobile:phone,user_code:code,message_type:'Service Request',message:detail})});if(!r.ok)throw Error(await r.text());try{await fetch(API+'messages',{method:'POST',headers:h,body:JSON.stringify({user_name:name,user_type:'Professional',mobile:p.mobile,user_code:p.code||p.id||'',message_type:'Service Request',message:detail})})}catch(e){}closeReq();alert('✅ Service Request सफलतापूर्वक भेजी गई।')}catch(e){console.error(e);note.textContent='Request submit नहीं हो सकी। कृपया फिर कोशिश करें।'}
+ try{
+   const r=await fetch(API+'rpc/submit_senvia_service_request',{method:'POST',headers:H,body:JSON.stringify({
+     p_customer_code:code,p_customer_name:name,p_customer_phone:phone,p_customer_block:block,p_customer_pin:pin,
+     p_service:service,p_professional_name:p.name,p_professional_phone:p.mobile||'',p_professional_code:p.code||p.professional_code||p.id||'',
+     p_note:extra||''
+   })});
+   const raw=await r.text();
+   if(!r.ok) throw Error(raw||'Request could not be saved');
+   closeReq();
+   alert('✅ Service Request सफलतापूर्वक भेजी गई।');
+ }catch(e){console.error(e);note.textContent='Request submit नहीं हो सकी: '+(e.message||e)}
 }
 restoreView();
 load();
 </script>
+
+<!--
+Supabase RPC required once:
+CREATE OR REPLACE FUNCTION public.submit_senvia_service_request(
+  p_customer_code text,
+  p_customer_name text,
+  p_customer_phone text,
+  p_customer_block text,
+  p_customer_pin text,
+  p_service text,
+  p_professional_name text,
+  p_professional_phone text,
+  p_professional_code text,
+  p_note text
+)
+RETURNS void
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+DECLARE v_detail text;
+BEGIN
+  v_detail := format(
+    'Service Request%nService: %s%nProfessional: %s%nProfessional Mobile: %s%nCustomer: %s%nCustomer Mobile: %s%nCustomer ID: %s%nBlock: %s%nPIN Code: %s%nNote: %s',
+    p_service,p_professional_name,p_professional_phone,p_customer_name,p_customer_phone,
+    coalesce(p_customer_code,'—'),coalesce(p_customer_block,'—'),coalesce(p_customer_pin,'—'),coalesce(p_note,'—')
+  );
+  INSERT INTO public.messages(user_type,entity_id,user_code,user_name,mobile,message_type,message,status)
+  VALUES ('Customer',p_customer_code,p_customer_code,p_customer_name,p_customer_phone,'Service Request',v_detail,'New');
+  INSERT INTO public.messages(user_type,entity_id,user_code,user_name,mobile,message_type,message,status)
+  VALUES ('Professional',p_professional_code,p_professional_code,p_professional_name,p_professional_phone,'Service Request',v_detail,'New');
+END;
+$$;
+REVOKE ALL ON FUNCTION public.submit_senvia_service_request(text,text,text,text,text,text,text,text,text,text) FROM PUBLIC;
+GRANT EXECUTE ON FUNCTION public.submit_senvia_service_request(text,text,text,text,text,text,text,text,text,text) TO anon, authenticated;
+-->
+
 </body></html>
