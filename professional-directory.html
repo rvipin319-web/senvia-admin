@@ -9,12 +9,12 @@
 nav{background:#fff;border-bottom:1px solid #e5eef4}.nav{display:flex;gap:5px;overflow:auto}.nav a{padding:14px 12px;color:#244c63;font-weight:700;white-space:nowrap;text-decoration:none}
 main{padding:32px 0 55px}.hero{background:linear-gradient(135deg,#eaf7ff,#fff 55%,#effaf5);border:1px solid #dcecf5;border-radius:26px;padding:28px;box-shadow:0 15px 45px rgba(20,80,120,.08)}
 h1{margin:0;color:#06375f;font-size:32px}.sub{color:#6a7e8d;line-height:1.6}.group{margin-top:25px}.group h2{color:#07528f;margin:0 0 12px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}.card{background:#fff;border:1px solid #dceaf3;border-radius:20px;padding:18px;box-shadow:0 8px 25px rgba(15,73,110,.07)}
+.viewbar{display:flex;align-items:center;justify-content:flex-end;gap:7px;margin-top:20px}.viewbar>span{font-size:13px;color:#718695;font-weight:700;margin-right:3px}.viewbtn{border:1px solid #cfe1ec;background:#fff;color:#31576d;border-radius:10px;padding:9px 13px;font-weight:800;cursor:pointer}.viewbtn.active{background:#0874c1;color:#fff;border-color:#0874c1}.directory{transition:.2s}.directory.grid-view{display:block}.directory.grid-view .group .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:14px}.directory.list-view .group .grid{display:flex;flex-direction:column;gap:10px}.directory.list-view .group .card{display:flex;align-items:center;gap:16px;padding:14px 16px;border-radius:15px}.directory.list-view .group .prohead{min-width:250px;flex:1}.directory.list-view .group .meta{margin:0;min-width:210px}.directory.list-view .group .actions{margin-left:auto;justify-content:flex-end}.directory.list-view .group .lock{margin:0;min-width:190px}.card{background:#fff;border:1px solid #dceaf3;border-radius:20px;padding:18px;box-shadow:0 8px 25px rgba(15,73,110,.07)}
 .prohead{display:flex;gap:12px;align-items:center}.avatar{width:52px;height:52px;border-radius:16px;background:linear-gradient(135deg,#0874c1,#0a9b59);color:#fff;display:grid;place-items:center;font-weight:900;font-size:18px}.card h3{margin:0;color:#123f5d}.meta{font-size:13px;color:#718695;line-height:1.7;margin:12px 0}.actions{display:flex;gap:8px;flex-wrap:wrap}
 .btn{border:0;border-radius:11px;padding:10px 13px;font-weight:800;cursor:pointer}.blue{background:#0874c1;color:#fff}.green{background:#0a9b59;color:#fff}.light{background:#edf7fc;color:#07528f}.lock{font-size:12px;color:#7a8b97;margin-top:8px}.empty{padding:28px;text-align:center;color:#718695;background:#fff;border:1px dashed #cbdde8;border-radius:18px}
 .modal{position:fixed;inset:0;background:rgba(2,24,42,.65);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:16px;z-index:100}.modal.show{display:flex}.box{width:min(470px,100%);background:#fff;border-radius:24px;padding:24px;box-shadow:0 25px 70px rgba(0,0,0,.25)}.box h2{margin-top:0;color:#06375f}.form{display:grid;gap:10px}.form input{width:100%;padding:12px;border:1px solid #cbdde8;border-radius:11px;font-size:15px}.close{float:right;border:0;background:#eef5f9;border-radius:50%;width:34px;height:34px;font-size:20px}.note{font-size:13px;color:#c0392b;min-height:18px}
 footer{background:#062c4b;color:#dcebf5;padding:25px 18px;text-align:center}.social{display:flex;gap:12px;justify-content:center;margin-top:18px}.social a{width:48px;height:48px;border-radius:15px;display:grid;place-items:center;color:#fff;font-size:21px;font-weight:900}.fb{background:#1877f2}.ig{background:linear-gradient(135deg,#833ab4,#fd1d1d,#fcb045)}.yt{background:#f00}.wa{background:#25d366}
-@media(max-width:600px){h1{font-size:27px}.hero{padding:23px}.grid{grid-template-columns:1fr}}
+@media(max-width:700px){.directory.list-view .group .card{display:grid;grid-template-columns:auto 1fr;gap:10px}.directory.list-view .group .prohead{min-width:0}.directory.list-view .group .meta{grid-column:1/-1;min-width:0;margin:0}.directory.list-view .group .actions{grid-column:1/-1;margin-left:0}.directory.list-view .group .lock{grid-column:1/-1;min-width:0}.viewbar{justify-content:flex-start;flex-wrap:wrap}}@media(max-width:600px){h1{font-size:27px}.hero{padding:23px}.directory.grid-view .group .grid{grid-template-columns:1fr}.directory.grid-view .group .card{padding:15px}}
 </style>
 </head>
 <body>
@@ -22,8 +22,8 @@ footer{background:#062c4b;color:#dcebf5;padding:25px 18px;text-align:center}.soc
 <nav><div class="wrap nav"><a href="customer-premium.html">⌂ Home</a><a href="services.html">⚙ Services</a><a href="professional-directory.html">👥 Professionals</a><a href="about.html">ⓘ About</a><a href="contact.html">✉ Contact</a></div></nav>
 
 <main><div class="wrap">
-<div class="hero"><h1>👥 Professionals Directory</h1><p class="sub">सिर्फ <b>Verified Professionals</b> यहाँ दिखाई देंगे। Mobile/WhatsApp contact Customer Registration के बाद ही दिखाई देगा।</p></div>
-<div id="list" style="margin-top:20px"><div class="empty">⏳ Professionals लोड हो रहे हैं…</div></div>
+<div class="hero"><h1>👥 Professionals Directory</h1><p class="sub">सिर्फ <b>Verified Professionals</b> यहाँ दिखाई देंगे। Mobile/WhatsApp contact Customer Registration के बाद ही दिखाई देगा।</p><div class="viewbar"><span>View:</span><button id="gridBtn" class="viewbtn active" onclick="setView('grid')">▦ Grid</button><button id="listBtn" class="viewbtn" onclick="setView('list')">☷ List</button></div></div>
+<div id="list" class="directory grid-view" style="margin-top:20px"><div class="empty">⏳ Professionals लोड हो रहे हैं…</div></div>
 </div></main>
 
 <div class="modal" id="regModal"><div class="box">
@@ -63,6 +63,15 @@ function proServices(p){
   if(Array.isArray(p.service_names))return p.service_names.filter(Boolean);
   return String(valCI(p,['Services','services','service','service_name'])||'').split(/[,|]/).map(x=>x.trim()).filter(Boolean);
 }
+function setView(mode){
+  const box=document.getElementById('list');
+  box.classList.toggle('list-view',mode==='list');
+  box.classList.toggle('grid-view',mode==='grid');
+  document.getElementById('gridBtn').classList.toggle('active',mode==='grid');
+  document.getElementById('listBtn').classList.toggle('active',mode==='list');
+  localStorage.setItem('senvia_directory_view',mode);
+}
+function restoreView(){setView(localStorage.getItem('senvia_directory_view')||'grid')}
 function parse(p,linked){
   const id=valCI(p,['id','ID']);
   const own=proServices(p);
@@ -125,6 +134,7 @@ async function submitRequest(){
  note.textContent='';if(!p||!name||phone.length!==10){note.textContent='Customer registration details missing हैं।';return}
  try{const detail=`Service Request\nService: ${service}\nProfessional: ${p.name}\nProfessional Mobile: ${p.mobile}\nCustomer: ${name}\nCustomer Mobile: ${phone}\nCustomer ID: ${code||'—'}\nBlock: ${block}\nPIN Code: ${pin}\nNote: ${extra||'—'}`;const h={...H,Prefer:'return=minimal'};const r=await fetch(API+'messages',{method:'POST',headers:h,body:JSON.stringify({user_name:name,user_type:'Customer',mobile:phone,user_code:code,message_type:'Service Request',message:detail})});if(!r.ok)throw Error(await r.text());try{await fetch(API+'messages',{method:'POST',headers:h,body:JSON.stringify({user_name:name,user_type:'Professional',mobile:p.mobile,user_code:p.code||p.id||'',message_type:'Service Request',message:detail})})}catch(e){}closeReq();alert('✅ Service Request सफलतापूर्वक भेजी गई।')}catch(e){console.error(e);note.textContent='Request submit नहीं हो सकी। कृपया फिर कोशिश करें।'}
 }
+restoreView();
 load();
 </script>
 </body></html>
