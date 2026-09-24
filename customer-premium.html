@@ -384,16 +384,35 @@ async function copyCustomerId(){
 }
 
 async function regC(){
-  showBusy(lang==='hi'?'कृपया प्रतीक्षा करें…':'Please wait…');
   const name=document.getElementById('cn').value.trim(), phone=document.getElementById('cm').value.trim(), block=document.getElementById('cb').value, village=document.getElementById('cv').value.trim();
-  if(!name||!phone){toast(lang==='hi'?'नाम और मोबाइल नंबर भरें।':'Please enter name and mobile number.');return}
+  if(!name||!phone){
+    toast(lang==='hi'?'नाम और मोबाइल नंबर भरें।':'Please enter name and mobile number.');
+    return;
+  }
+  showBusy(lang==='hi'?'कृपया प्रतीक्षा करें…':'Please wait…');
   try{
     const SUPABASE_URL='https://hxdrvhiowurbwlgmczju.supabase.co', SUPABASE_KEY='sb_publishable_cvh_b0gklN5SOcH5MsGs8g_4JI9-PxT';
-    const r=await fetch(SUPABASE_URL+'/rest/v1/rpc/register_senvia_customer',{method:'POST',headers:{apikey:SUPABASE_KEY,'Content-Type':'application/json'},body:JSON.stringify({p_name:name,p_phone:phone,p_block:block,p_panchayat:'',p_village_area:village})});
-    const raw=await r.text(); if(!r.ok) throw new Error(raw||('HTTP '+r.status)); const d=raw?JSON.parse(raw):[]; const row=Array.isArray(d)?d[0]:d;
+    const r=await fetch(SUPABASE_URL+'/rest/v1/rpc/register_senvia_customer',{
+      method:'POST',
+      headers:{apikey:SUPABASE_KEY,'Content-Type':'application/json'},
+      body:JSON.stringify({p_name:name,p_phone:phone,p_block:block,p_panchayat:'',p_village_area:village})
+    });
+    const raw=await r.text();
+    if(!r.ok) throw new Error(raw||('HTTP '+r.status));
+    const d=raw?JSON.parse(raw):[];
+    const row=Array.isArray(d)?d[0]:d;
     const code=row?.customer_code||'';
-    document.getElementById('cn').value='';document.getElementById('cm').value='';document.getElementById('cv').value='';closeM('customer');showCustomerSuccess(code);
-  }catch(e){console.error('Customer registration failed',e);toast(lang==='hi'?'Registration failed। कृपया फिर कोशिश करें।':'Registration failed. Please try again.')}
+    document.getElementById('cn').value='';
+    document.getElementById('cm').value='';
+    document.getElementById('cv').value='';
+    closeM('customer');
+    showCustomerSuccess(code);
+  }catch(e){
+    console.error('Customer registration failed',e);
+    toast(lang==='hi'?'Registration failed। कृपया फिर कोशिश करें।':'Registration failed. Please try again.');
+  }finally{
+    hideBusy();
+  }
 }
 function setText(selector,text){const e=document.querySelector(selector);if(e)e.textContent=text}
 function setLang(x){
