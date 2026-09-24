@@ -18,7 +18,6 @@ footer{background:#062c4b;color:#dcebf5;padding:25px 18px;text-align:center}.soc
 </style>
 </head>
 <body>
-<div class="top"><div class="wrap">📍 Muzaffarpur, Bihar <span style="float:right">📞 +91 9905411421</span></div></div>
 <header><div class="wrap head"><div><div class="brand">Senvia</div><div class="tag">हर घर का अपना साथी</div></div></div></header>
 <nav><div class="wrap nav"><a href="customer-premium.html">⌂ Home</a><a href="services.html">⚙ Services</a><a href="professional-directory.html">👥 Professionals</a><a href="about.html">ⓘ About</a><a href="contact.html">✉ Contact</a></div></nav>
 
@@ -51,80 +50,80 @@ const URL='https://hxdrvhiowurbwlgmczju.supabase.co',KEY='sb_publishable_cvh_b0g
 const order=['AC Repair','TV / LED Repair','Mobile Repair','Computer / Laptop','Electrician','Plumber','Fridge Repair','Carpenter','Painter','Raj Mistri','Bike Mechanic','RO Repair'];
 const icons={'AC Repair':'❄️','TV / LED Repair':'📺','Mobile Repair':'📱','Computer / Laptop':'💻','Electrician':'⚡','Plumber':'🚰','Fridge Repair':'🧊','Carpenter':'🔨','Painter':'🎨','Raj Mistri':'🧱','Bike Mechanic':'🏍️','RO Repair':'💧'};
 let pros=[],selected=null,pending=null;
-
 function esc(x){return String(x??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
-function norm(x){return String(x||'').trim().toLowerCase()}
-function verified(p){return ['verified','approve','approved'].includes(norm(p.Status||p.status))}
-function parse(r){return {id:r.id,name:r.Name||r.name||'Professional',mobile:r.Phone||r.phone||r.mobile||'',block:r.Block||r.block||'',panchayat:r.Panchayat||r.panchayat||'',village:r.Village_Area||r.Village||r.village||'',pin:r.PIN_Code||r.Pin_Code||r.pin_code||r.PIN||'',services:String(r.Services||r.services||'').split(/[,|]/).map(x=>x.trim()).filter(Boolean),code:r.professional_code||''}}
-
+function keyCI(o,names){if(!o)return null;const ks=Object.keys(o);const wanted=names.map(x=>String(x).toLowerCase().replace(/[_\s-]/g,''));return ks.find(k=>wanted.includes(String(k).toLowerCase().replace(/[_\s-]/g,'')))||null}
+function valCI(o,names){const k=keyCI(o,names);return k?o[k]:''}
+function norm(x){return String(x??'').trim().toLowerCase()}
+function svcLabel(s){return valCI(s,['name_en','name','title','service_name','name_hi','Service Name','Service'])||''}
+function proName(p){return valCI(p,['name','full_name','professional_name','Name'])||'Professional'}
+function proMobile(p){return valCI(p,['mobile','phone','mobile_number','Mobile','Phone'])||''}
+function proStatus(p){return String(valCI(p,['status','Status','verification_status'])||'Pending').trim().toLowerCase()}
+function proServices(p){
+  if(Array.isArray(p.services))return p.services.map(x=>typeof x==='string'?x:(svcLabel(x)||'')).filter(Boolean);
+  if(Array.isArray(p.service_names))return p.service_names.filter(Boolean);
+  return String(valCI(p,['Services','services','service','service_name'])||'').split(/[,|]/).map(x=>x.trim()).filter(Boolean);
+}
+function parse(p,linked){
+  const id=valCI(p,['id','ID']);
+  const own=proServices(p);
+  return {raw:p,id,name:proName(p),mobile:proMobile(p),block:valCI(p,['block','block_name','Block']),panchayat:valCI(p,['panchayat','Panchayat']),village:valCI(p,['village','Village_Area','area','Village','Area']),pin:valCI(p,['PIN_Code','Pin_Code','pin_code','PIN']),code:valCI(p,['professional_code','Professional Code','professionalCode']),status:proStatus(p),services:own.length?own:(linked.get(String(id))||[])};
+}
 async function load(){
+ const list=document.getElementById('list');
+ list.innerHTML='<div class="empty">⏳ Verified Professionals लोड हो रहे हैं…</div>';
  try{
-  const r=await fetch(API+'professionals?select=*&limit=2000',{headers:H,cache:'no-store'});
-  if(!r.ok)throw Error(await r.text());
-  pros=(await r.json()).map(parse).filter(verified); render();
- }catch(e){console.error(e);document.getElementById('list').innerHTML='<div class="empty">Database से Verified Professionals लोड नहीं हो पाए। कृपया Refresh करके फिर देखें।</div>'}
+   // Same data-loading pattern as the working Admin Panel: professionals + service links.
+   const ps=await fetch(API+'professionals?select=*',{headers:H,cache:'no-store'});
+   if(!ps.ok)throw Error(await ps.text());
+   const proRows=await ps.json();
+   let serviceRows=[],links=[];
+   try{const r=await fetch(API+'services?select=*',{headers:H,cache:'no-store'});if(r.ok)serviceRows=await r.json();}catch(e){console.warn('services read failed',e)}
+   try{const r=await fetch(API+'professional_services?select=*',{headers:H,cache:'no-store'});if(r.ok)links=await r.json();}catch(e){console.warn('professional_services read failed',e)}
+   const sm=new Map((Array.isArray(serviceRows)?serviceRows:[]).map(x=>[String(valCI(x,['id','ID','service_id','Service ID'])),svcLabel(x)]));
+   const linked=new Map();
+   (Array.isArray(links)?links:[]).forEach(x=>{
+     const pid=valCI(x,['professional_id','professionalId','Professional ID','ProfessionalID']);
+     const sid=valCI(x,['service_id','serviceId','Service ID','ServiceID']);
+     const label=sm.get(String(sid));
+     if(pid!=null&&pid!==''&&label){if(!linked.has(String(pid)))linked.set(String(pid),[]);if(!linked.get(String(pid)).includes(label))linked.get(String(pid)).push(label)}
+   });
+   pros=(Array.isArray(proRows)?proRows:[]).map(p=>parse(p,linked)).filter(p=>p.status==='verified');
+   const wanted=new URLSearchParams(location.search).get('service');
+   if(wanted)pros=pros.filter(p=>p.services.some(s=>norm(s)===norm(wanted)));
+   render();
+ }catch(e){console.error(e);list.innerHTML='<div class="empty">Database से Verified Professionals लोड नहीं हो पाए। कृपया थोड़ी देर बाद Refresh करें।</div>'}
 }
 function render(){
- const groups={};pros.forEach(p=>p.services.forEach(s=>{const k=order.find(o=>norm(o)===norm(s))||s;(groups[k]??=[]).push(p)}));
- const keys=[...order.filter(k=>groups[k]),...Object.keys(groups).filter(k=>!order.includes(k))];
+ const groups={};
+ pros.forEach(p=>p.services.forEach(s=>{const k=order.find(o=>norm(o)===norm(s))||s;if(!groups[k])groups[k]=[];if(!groups[k].some(x=>x.id===p.id))groups[k].push(p)}));
+ const keys=[...order.filter(k=>groups[k]),...Object.keys(groups).filter(k=>!order.includes(k)).sort()];
  if(!keys.length){document.getElementById('list').innerHTML='<div class="empty">अभी कोई Verified Professional उपलब्ध नहीं है।</div>';return}
  document.getElementById('list').innerHTML=keys.map(k=>`<section class="group"><h2>${icons[k]||'🛠️'} ${esc(k)} Professionals</h2><div class="grid">${groups[k].map(p=>card(p,k)).join('')}</div></section>`).join('');
 }
 function card(p,service){
  const loc=[p.block,p.panchayat,p.village].filter(Boolean).join(' → ');
  const initials=p.name.split(/\s+/).slice(0,2).map(x=>x[0]||'').join('').toUpperCase();
- return `<div class="card"><div class="prohead"><div class="avatar">${esc(initials)}</div><div><h3>${esc(p.name)}</h3><div style="font-size:13px;color:#0874c1;font-weight:700">${icons[service]||'🛠️'} ${esc(service)}</div></div></div>
- <div class="meta">📍 ${esc(loc||'Local Area')}<br>📮 PIN: ${esc(p.pin||'—')}</div>
- <div class="actions">${contactButton(p)}<button class="btn green" onclick='startRequest(${JSON.stringify(p)},${JSON.stringify(service)})'>🛠 Request Service</button></div>
- ${!registered()?'<div class="lock">🔒 Contact registration के बाद उपलब्ध होगा।</div>':''}</div>`;
+ return `<div class="card"><div class="prohead"><div class="avatar">${esc(initials)}</div><div><h3>${esc(p.name)}</h3><div style="font-size:13px;color:#0874c1;font-weight:700">${icons[service]||'🛠️'} ${esc(service)}</div></div></div><div class="meta">📍 ${esc(loc||'Local Area')}<br>📮 PIN: ${esc(p.pin||'—')}</div><div class="actions">${contactButton(p)}<button class="btn green" onclick='startRequest(${JSON.stringify(p).replace(/</g,'\\u003c')},${JSON.stringify(service)})'>🛠 Request Service</button></div>${!registered()?'<div class="lock">🔒 Contact registration के बाद उपलब्ध होगा।</div>':''}</div>`;
 }
 function registered(){return localStorage.getItem('senvia_customer_registered')==='1'}
 function contactButton(p){
- if(registered()&&p.mobile)return `<a class="btn green" href="tel:${esc(p.mobile)}">📞 Call</a><a class="btn light" target="_blank" href="https://wa.me/91${String(p.mobile).replace(/\D/g,'')}">💬 WhatsApp</a>`;
- return `<button class="btn blue" onclick='needReg("contact",${JSON.stringify(p)})'>🔒 Register to view contact</button>`;
+ if(registered()&&p.mobile){const m=String(p.mobile).replace(/\D/g,'');return `<a class="btn green" href="tel:${esc(p.mobile)}">📞 Call</a><a class="btn light" target="_blank" href="https://wa.me/91${m}">💬 WhatsApp</a>`}
+ return `<button class="btn blue" onclick='needReg("contact",${JSON.stringify(p).replace(/</g,'\\u003c')})'>🔒 Register to view contact</button>`;
 }
 function startRequest(p,service){needReg('request',{p,service})}
 function needReg(action,data){pending={action,data};if(registered()){if(action==='request')openRequest(data.p,data.service);else render()}else document.getElementById('regModal').classList.add('show')}
 function closeReg(){document.getElementById('regModal').classList.remove('show')}
 function closeReq(){document.getElementById('reqModal').classList.remove('show')}
-
 async function registerCustomer(){
  const name=document.getElementById('cn').value.trim(),block=document.getElementById('cb').value.trim(),pin=document.getElementById('cp').value.replace(/\D/g,''),phone=document.getElementById('cm').value.replace(/\D/g,''),note=document.getElementById('regNote');
- note.textContent='';
- if(!name||!block||pin.length!==6||phone.length!==10){note.textContent='Name, Block, 6 digit PIN Code और 10 digit Contact No. जरूरी है।';return}
- try{
-  const r=await fetch(API+'rpc/register_senvia_customer',{method:'POST',headers:H,body:JSON.stringify({p_name:name,p_phone:phone,p_block:block,p_panchayat:'',p_village_area:''})});
-  const raw=await r.text();if(!r.ok)throw Error(raw||'Registration failed');
-  let d=raw?JSON.parse(raw):null,row=Array.isArray(d)?d[0]:d;
-  localStorage.setItem('senvia_customer_registered','1');
-  localStorage.setItem('senvia_customer_code',row?.customer_code||'');
-  localStorage.setItem('senvia_customer_name',name);
-  localStorage.setItem('senvia_customer_mobile',phone);
-  localStorage.setItem('senvia_customer_block',block);
-  localStorage.setItem('senvia_customer_pin',pin);
-  closeReg();render();
-  if(pending?.action==='request')openRequest(pending.data.p,pending.data.service);
-  else alert('✅ Registration successful. अब Professional का contact दिखाई देगा।');
-  pending=null;
- }catch(e){console.error(e);note.textContent='Registration failed. कृपया फिर कोशिश करें।'}
+ note.textContent='';if(!name||!block||pin.length!==6||phone.length!==10){note.textContent='Name, Block, 6 digit PIN Code और 10 digit Contact No. जरूरी है।';return}
+ try{const r=await fetch(API+'rpc/register_senvia_customer',{method:'POST',headers:H,body:JSON.stringify({p_name:name,p_phone:phone,p_block:block,p_panchayat:'',p_village_area:''})});const raw=await r.text();if(!r.ok)throw Error(raw||'Registration failed');let d=raw?JSON.parse(raw):null,row=Array.isArray(d)?d[0]:d;localStorage.setItem('senvia_customer_registered','1');localStorage.setItem('senvia_customer_code',row?.customer_code||'');localStorage.setItem('senvia_customer_name',name);localStorage.setItem('senvia_customer_mobile',phone);localStorage.setItem('senvia_customer_block',block);localStorage.setItem('senvia_customer_pin',pin);closeReg();render();if(pending?.action==='request')openRequest(pending.data.p,pending.data.service);else alert('✅ Registration successful. अब Professional का contact दिखाई देगा।');pending=null}catch(e){console.error(e);note.textContent='Registration failed. कृपया फिर कोशिश करें।'}
 }
-function openRequest(p,service){
- selected={p,service};
- document.getElementById('reqPro').innerHTML=`<b>${esc(p.name)}</b> • ${esc(service)}<br>📍 ${esc([p.block,p.panchayat,p.village].filter(Boolean).join(' → '))}`;
- document.getElementById('customerInfo').innerHTML=`👤 ${esc(localStorage.getItem('senvia_customer_name')||'')} &nbsp; 📍 ${esc(localStorage.getItem('senvia_customer_block')||'')} &nbsp; 📮 ${esc(localStorage.getItem('senvia_customer_pin')||'')} &nbsp; 📱 ${esc(localStorage.getItem('senvia_customer_mobile')||'')}`;
- document.getElementById('reqModal').classList.add('show');
-}
+function openRequest(p,service){selected={p,service};document.getElementById('reqPro').innerHTML=`<b>${esc(p.name)}</b> • ${esc(service)}<br>📍 ${esc([p.block,p.panchayat,p.village].filter(Boolean).join(' → '))}`;document.getElementById('customerInfo').innerHTML=`👤 ${esc(localStorage.getItem('senvia_customer_name')||'')} &nbsp; 📍 ${esc(localStorage.getItem('senvia_customer_block')||'')} &nbsp; 📮 ${esc(localStorage.getItem('senvia_customer_pin')||'')} &nbsp; 📱 ${esc(localStorage.getItem('senvia_customer_mobile')||'')}`;document.getElementById('reqModal').classList.add('show')}
 async function submitRequest(){
  const p=selected?.p,service=selected?.service,note=document.getElementById('reqNote'),extra=document.getElementById('rnote').value.trim(),name=localStorage.getItem('senvia_customer_name')||'',phone=localStorage.getItem('senvia_customer_mobile')||'',block=localStorage.getItem('senvia_customer_block')||'',pin=localStorage.getItem('senvia_customer_pin')||'',code=localStorage.getItem('senvia_customer_code')||'';
  note.textContent='';if(!p||!name||phone.length!==10){note.textContent='Customer registration details missing हैं।';return}
- try{
-  const detail=`Service Request\nService: ${service}\nProfessional: ${p.name}\nProfessional Mobile: ${p.mobile}\nCustomer: ${name}\nCustomer Mobile: ${phone}\nCustomer ID: ${code||'—'}\nBlock: ${block}\nPIN Code: ${pin}\nNote: ${extra||'—'}`;
-  const h={...H,Prefer:'return=minimal'};
-  const r=await fetch(API+'messages',{method:'POST',headers:h,body:JSON.stringify({user_name:name,user_type:'Customer',mobile:phone,user_code:code,message_type:'Service Request',message:detail})});
-  if(!r.ok)throw Error(await r.text());
-  try{await fetch(API+'messages',{method:'POST',headers:h,body:JSON.stringify({user_name:name,user_type:'Professional',mobile:p.mobile,user_code:p.code||p.id||'',message_type:'Service Request',message:detail})})}catch(e){}
-  closeReq();alert('✅ Service Request सफलतापूर्वक भेजी गई।');
- }catch(e){note.textContent='Request submit नहीं हो सकी। कृपया फिर कोशिश करें।'}
+ try{const detail=`Service Request\nService: ${service}\nProfessional: ${p.name}\nProfessional Mobile: ${p.mobile}\nCustomer: ${name}\nCustomer Mobile: ${phone}\nCustomer ID: ${code||'—'}\nBlock: ${block}\nPIN Code: ${pin}\nNote: ${extra||'—'}`;const h={...H,Prefer:'return=minimal'};const r=await fetch(API+'messages',{method:'POST',headers:h,body:JSON.stringify({user_name:name,user_type:'Customer',mobile:phone,user_code:code,message_type:'Service Request',message:detail})});if(!r.ok)throw Error(await r.text());try{await fetch(API+'messages',{method:'POST',headers:h,body:JSON.stringify({user_name:name,user_type:'Professional',mobile:p.mobile,user_code:p.code||p.id||'',message_type:'Service Request',message:detail})})}catch(e){}closeReq();alert('✅ Service Request सफलतापूर्वक भेजी गई।')}catch(e){console.error(e);note.textContent='Request submit नहीं हो सकी। कृपया फिर कोशिश करें।'}
 }
 load();
 </script>
