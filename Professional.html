@@ -66,6 +66,7 @@ button{border:0;border-radius:10px;padding:12px 16px;font-weight:800;cursor:poin
         <div class="item"><span id="n3">Block</span><b id="pBlock">—</b></div>
         <div class="item"><span id="n4">Panchayat</span><b id="pPanchayat">—</b></div>
         <div class="item"><span id="n5">Village / Area</span><b id="pVillage">—</b></div>
+        <div class="item"><span id="n10">PIN Code</span><b id="pPin">—</b></div>
         <div class="item"><span id="n6">Experience</span><b id="pExperience">—</b></div>
         <div class="item"><span id="n7">Verification Status</span><b id="pStatus">—</b></div>
         <div class="item"><span id="n8">Senvia Professional ID</span><b id="pCode">—</b></div>
@@ -88,18 +89,24 @@ const KEY='sb_publishable_cvh_b0gklN5SOcH5MsGs8g_4JI9-PxT';
 let lang='hi', current=null;
 
 const T={
-hi:{tag:'हर घर का अपना साथी',loginTitle:'Professional Login',loginSub:'अपने Senvia Professional ID और registered mobile number से प्रवेश करें।',idLabel:'Senvia Professional ID',mobileLabel:'Registered Mobile',loginBtn:'Login',welcome:'Professional Dashboard',welcomeSub:'अपने Senvia professional profile को देखें और manage करें',s1:'Professional ID',s2:'Status',s3:'Area',s4:'Services',profileTitle:'👤 My Profile',n1:'Name',n2:'Mobile',n3:'Block',n4:'Panchayat',n5:'Village / Area',n10:'PIN Code',n6:'Experience',n7:'Verification Status',n8:'Senvia Professional ID',n9:'My Services',editTitle:'✏️ Profile Management',editNote:'अभी Professional profile का secure self-edit connection तैयार करने के लिए Professional account को Supabase Auth से link करना आवश्यक है। इस dashboard में ID, verification status और live profile data सुरक्षित रूप से दिखाया जा रहा है; बिना authenticated account के public database update नहीं किया जाएगा।',bad:'Professional ID और registered mobile number दर्ज करें।',notfound:'Professional record नहीं मिला। ID और mobile number जाँचें।',failed:'Login नहीं हो सका। कृपया थोड़ी देर बाद फिर कोशिश करें।',pending:'Pending',verified:'Verified',rejected:'Rejected',unknown:'Unknown',services:'Services'},
-en:{tag:'Your own partner for every home',loginTitle:'Professional Login',loginSub:'Enter your Senvia Professional ID and registered mobile number.',idLabel:'Senvia Professional ID',mobileLabel:'Registered Mobile',loginBtn:'Login',welcome:'Professional Dashboard',welcomeSub:'View and manage your Senvia professional profile',s1:'Professional ID',s2:'Status',s3:'Area',s4:'Services',profileTitle:'👤 My Profile',n1:'Name',n2:'Mobile',n3:'Block',n4:'Panchayat',n5:'Village / Area',n10:'PIN Code',n6:'Experience',n7:'Verification Status',n8:'Senvia Professional ID',n9:'My Services',editTitle:'✏️ Profile Management',editNote:'Secure self-edit requires the Professional account to be linked with Supabase Auth. This dashboard safely displays the live profile, ID and verification status; it does not perform public database updates without authenticated authorization.',bad:'Enter Professional ID and registered mobile number.',notfound:'Professional record not found. Please check the ID and mobile number.',failed:'Login failed. Please try again later.',pending:'Pending',verified:'Verified',rejected:'Rejected',unknown:'Unknown',services:'Services'}
+hi:{tag:'हर घर का अपना साथी',loginTitle:'Professional Login',loginSub:'अपने Senvia Professional ID और registered mobile number से प्रवेश करें।',idLabel:'Senvia Professional ID',mobileLabel:'Registered Mobile',loginBtn:'Login',welcome:'Professional Dashboard',welcomeSub:'अपने Senvia professional profile को देखें और manage करें',s1:'Professional ID',s2:'Status',s3:'Area',s4:'Services',profileTitle:'👤 My Profile',n1:'Name',n2:'Mobile',n3:'Block',n4:'Panchayat',n5:'Village / Area',n6:'Experience',n7:'Verification Status',n8:'Senvia Professional ID',n9:'My Services',n10:'PIN Code',editTitle:'✏️ Profile Management',editNote:'अभी Professional profile का secure self-edit connection तैयार करने के लिए Professional account को Supabase Auth से link करना आवश्यक है। इस dashboard में ID, verification status और live profile data सुरक्षित रूप से दिखाया जा रहा है; बिना authenticated account के public database update नहीं किया जाएगा।',bad:'Professional ID और registered mobile number दर्ज करें।',notfound:'Professional record नहीं मिला। ID और mobile number जाँचें।',failed:'Login नहीं हो सका। कृपया थोड़ी देर बाद फिर कोशिश करें।',pending:'Pending',verified:'Verified',rejected:'Rejected',unknown:'Unknown',services:'Services'},
+en:{tag:'Your own partner for every home',loginTitle:'Professional Login',loginSub:'Enter your Senvia Professional ID and registered mobile number.',idLabel:'Senvia Professional ID',mobileLabel:'Registered Mobile',loginBtn:'Login',welcome:'Professional Dashboard',welcomeSub:'View and manage your Senvia professional profile',s1:'Professional ID',s2:'Status',s3:'Area',s4:'Services',profileTitle:'👤 My Profile',n1:'Name',n2:'Mobile',n3:'Block',n4:'Panchayat',n5:'Village / Area',n6:'Experience',n7:'Verification Status',n8:'Senvia Professional ID',n9:'My Services',n10:'PIN Code',editTitle:'✏️ Profile Management',editNote:'Secure self-edit requires the Professional account to be linked with Supabase Auth. This dashboard safely displays the live profile, ID and verification status; it does not perform public database updates without authenticated authorization.',bad:'Enter Professional ID and registered mobile number.',notfound:'Professional record not found. Please check the ID and mobile number.',failed:'Login failed. Please try again later.',pending:'Pending',verified:'Verified',rejected:'Rejected',unknown:'Unknown',services:'Services'}
 };
 function $(id){return document.getElementById(id)}
 function setLang(l){lang=l;const t=T[l];Object.keys(t).forEach(k=>{const e=$(k);if(e&&['bad','notfound','failed'].indexOf(k)<0)e.textContent=t[k]});$('hi').className=l==='hi'?'on':'';$('en').className=l==='en'?'on':'';document.documentElement.lang=l;if(current)render(current)}
 function esc(v){return String(v??'—').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
 async function getProfile(id,mobile){
-  const url=API+'professionals?select=*&professional_code=eq.'+encodeURIComponent(id)+'&Phone=eq.'+encodeURIComponent(mobile)+'&limit=1';
-  const r=await fetch(url,{headers:{apikey:KEY,Authorization:'Bearer '+KEY}});
+  // Secure login lookup through a Supabase RPC. This avoids exposing the
+  // professionals table to public SELECT while still allowing a professional
+  // to log in with their own ID + registered mobile.
+  const r=await fetch(API+'rpc/professional_login',{
+    method:'POST',
+    headers:{apikey:KEY,Authorization:'Bearer '+KEY,'Content-Type':'application/json'},
+    body:JSON.stringify({p_code:id,p_phone:mobile})
+  });
   if(!r.ok) throw new Error(await r.text());
   const rows=await r.json();
-  return rows[0]||null;
+  return Array.isArray(rows)?(rows[0]||null):(rows||null);
 }
 function statusClass(s){const x=String(s||'').toLowerCase();return x==='verified'?'verified':x==='pending'?'pending':x==='rejected'?'rejected':''}
 function render(p){
@@ -109,7 +116,7 @@ function render(p){
  $('statArea').textContent=[p.Block,p.Panchayat].filter(Boolean).join(' → ')||'—';
  const sv=String(p.Services||'').split(',').map(x=>x.trim()).filter(Boolean);
  $('statServices').textContent=sv.length;
- $('pName').textContent=p.Name||'—';$('pMobile').textContent=p.Phone||'—';$('pBlock').textContent=p.Block||'—';$('pPanchayat').textContent=p.Panchayat||'—';$('pVillage').textContent=p.Village_Area||'—';$('pPin').textContent=p.PIN_Code||p.pin_code||p.PIN||'—';$('pExperience').textContent=p.Experience||'—';$('pCode').textContent=p.professional_code||'—';
+ $('pName').textContent=p.Name||'—';$('pMobile').textContent=p.Phone||'—';$('pBlock').textContent=p.Block||'—';$('pPanchayat').textContent=p.Panchayat||'—';$('pVillage').textContent=p.Village_Area||'—';$('pPin').textContent=p.PIN_Code||'—';$('pExperience').textContent=p.Experience||'—';$('pCode').textContent=p.professional_code||'—';
  $('pStatus').innerHTML='<span class="status '+statusClass(p.Status)+'">'+esc(p.Status||T[lang].unknown)+'</span>';
  $('pServices').innerHTML=sv.length?sv.map(x=>'<span class="pill">'+esc(x)+'</span>').join(''):'<span>—</span>';
 }
