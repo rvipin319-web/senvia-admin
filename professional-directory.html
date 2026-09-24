@@ -28,7 +28,7 @@ footer{background:#062c4b;color:#dcebf5;padding:25px 18px;text-align:center}.soc
 
 </style>
 </head>
-<body>
+<body><script>try{localStorage.removeItem('senvia_customer_registered');localStorage.removeItem('senvia_customer_code');localStorage.removeItem('senvia_customer_name');localStorage.removeItem('senvia_customer_mobile');localStorage.removeItem('senvia_customer_block');localStorage.removeItem('senvia_customer_pin')}catch(e){}</script>
 <header><div class="wrap head"><div><div class="brand">Senvia</div><div class="tag">हर घर का अपना साथी</div></div></div></header>
 <nav><div class="wrap nav"><a href="customer-premium.html">⌂ Home</a><a href="services.html">⚙ Services</a><a href="professional-directory.html">👥 Professionals</a><a href="about.html">ⓘ About</a><a href="contact.html">✉ Contact</a></div></nav>
 
@@ -139,7 +139,7 @@ function card(p,service){
  const initials=p.name.split(/\s+/).slice(0,2).map(x=>x[0]||'').join('').toUpperCase();
  return `<div class="card"><div class="prohead"><div class="avatar">${esc(initials)}</div><div><h3>${esc(p.name)}</h3><div style="font-size:13px;color:#0874c1;font-weight:700">${icons[service]||'🛠️'} ${esc(service)}</div></div></div><div class="meta">📍 ${esc(loc||'Local Area')}<br>📮 PIN: ${esc(p.pin||'—')}</div><div class="actions">${contactButton(p)}<button class="btn green" onclick='startRequest(${JSON.stringify(p).replace(/</g,'\\u003c')},${JSON.stringify(service)})'>🛠 Request Service</button></div>${!registered()?'<div class="lock">🔒 Contact registration के बाद उपलब्ध होगा।</div>':''}</div>`;
 }
-function registered(){return localStorage.getItem('senvia_customer_registered')==='1'}
+function registered(){return sessionStorage.getItem('senvia_customer_registered')==='1'}
 function contactButton(p){
  if(registered()&&p.mobile){const m=String(p.mobile).replace(/\D/g,'');return `<a class="btn green" href="tel:${esc(p.mobile)}">📞 Call</a><a class="btn light" target="_blank" href="https://wa.me/91${m}">💬 WhatsApp</a>`}
  return `<button class="btn blue" onclick='needReg("contact",${JSON.stringify(p).replace(/</g,'\\u003c')})'>🔒 Register to view contact</button>`;
@@ -151,9 +151,9 @@ function closeReq(){document.getElementById('reqModal').classList.remove('show')
 async function registerCustomer(){
  const name=document.getElementById('cn').value.trim(),block=document.getElementById('cb').value.trim(),pin=document.getElementById('cp').value.replace(/\D/g,''),phone=document.getElementById('cm').value.replace(/\D/g,''),note=document.getElementById('regNote');
  note.textContent='';if(!name||!block||pin.length!==6||phone.length!==10){note.textContent='Name, Block, 6 digit PIN Code और 10 digit Contact No. जरूरी है।';return}
- try{const r=await fetch(API+'rpc/register_senvia_customer',{method:'POST',headers:H,body:JSON.stringify({p_name:name,p_phone:phone,p_block:block,p_panchayat:'',p_village_area:''})});const raw=await r.text();if(!r.ok)throw Error(raw||'Registration failed');let d=raw?JSON.parse(raw):null,row=Array.isArray(d)?d[0]:d;localStorage.setItem('senvia_customer_registered','1');localStorage.setItem('senvia_customer_code',row?.customer_code||'');localStorage.setItem('senvia_customer_name',name);localStorage.setItem('senvia_customer_mobile',phone);localStorage.setItem('senvia_customer_block',block);localStorage.setItem('senvia_customer_pin',pin);closeReg();render();if(pending?.action==='request')openRequest(pending.data.p,pending.data.service);else showCustomerSuccess(row?.customer_code||'');pending=null}catch(e){console.error(e);note.textContent='Registration failed. कृपया फिर कोशिश करें।'}
+ try{const r=await fetch(API+'rpc/register_senvia_customer',{method:'POST',headers:H,body:JSON.stringify({p_name:name,p_phone:phone,p_block:block,p_panchayat:'',p_village_area:''})});const raw=await r.text();if(!r.ok)throw Error(raw||'Registration failed');let d=raw?JSON.parse(raw):null,row=Array.isArray(d)?d[0]:d;sessionStorage.setItem('senvia_customer_registered','1');sessionStorage.setItem('senvia_customer_code',row?.customer_code||'');sessionStorage.setItem('senvia_customer_name',name);sessionStorage.setItem('senvia_customer_mobile',phone);sessionStorage.setItem('senvia_customer_block',block);sessionStorage.setItem('senvia_customer_pin',pin);closeReg();render();showCustomerSuccess(row?.customer_code||'');pending=pending;}catch(e){console.error(e);note.textContent='Registration failed. कृपया फिर कोशिश करें।'}
 }
-function openRequest(p,service){selected={p,service};document.getElementById('reqPro').innerHTML=`<b>${esc(p.name)}</b> • ${esc(service)}<br>📍 ${esc([p.block,p.panchayat,p.village].filter(Boolean).join(' → '))}`;document.getElementById('customerInfo').innerHTML=`👤 ${esc(localStorage.getItem('senvia_customer_name')||'')} &nbsp; 📍 ${esc(localStorage.getItem('senvia_customer_block')||'')} &nbsp; 📮 ${esc(localStorage.getItem('senvia_customer_pin')||'')} &nbsp; 📱 ${esc(localStorage.getItem('senvia_customer_mobile')||'')}`;document.getElementById('reqModal').classList.add('show')}
+function openRequest(p,service){selected={p,service};document.getElementById('reqPro').innerHTML=`<b>${esc(p.name)}</b> • ${esc(service)}<br>📍 ${esc([p.block,p.panchayat,p.village].filter(Boolean).join(' → '))}`;document.getElementById('customerInfo').innerHTML=`👤 ${esc(sessionStorage.getItem('senvia_customer_name')||'')} &nbsp; 📍 ${esc(sessionStorage.getItem('senvia_customer_block')||'')} &nbsp; 📮 ${esc(sessionStorage.getItem('senvia_customer_pin')||'')} &nbsp; 📱 ${esc(sessionStorage.getItem('senvia_customer_mobile')||'')}`;document.getElementById('reqModal').classList.add('show')}
 
 function showCustomerSuccess(code){
   document.getElementById('customerSuccessId').textContent=code||'Customer ID उपलब्ध नहीं हुआ';
@@ -161,20 +161,25 @@ function showCustomerSuccess(code){
 }
 function closeCustomerSuccess(){
   document.getElementById('customerSuccess').classList.remove('show');
+  const next=pending;
+  pending=null;
+  render();
+  if(next?.action==='request') openRequest(next.data.p,next.data.service);
 }
 async function copyCustomerId(){
   const code=document.getElementById('customerSuccessId').textContent.trim();
   if(!code || code==='Customer ID उपलब्ध नहीं हुआ') return;
   try{
     await navigator.clipboard.writeText(code);
-    alert('Customer ID कॉपी हो गया।');
+    const b=document.querySelector('.customer-success-actions .light');
+    if(b){const old=b.textContent;b.textContent='✅ Copied';setTimeout(()=>b.textContent=old,1400);}
   }catch(e){
     alert('Customer ID कॉपी नहीं हो सका।');
   }
 }
 
 async function submitRequest(){
- const p=selected?.p,service=selected?.service,note=document.getElementById('reqNote'),extra=document.getElementById('rnote').value.trim(),name=localStorage.getItem('senvia_customer_name')||'',phone=localStorage.getItem('senvia_customer_mobile')||'',block=localStorage.getItem('senvia_customer_block')||'',pin=localStorage.getItem('senvia_customer_pin')||'',code=localStorage.getItem('senvia_customer_code')||'';
+ const p=selected?.p,service=selected?.service,note=document.getElementById('reqNote'),extra=document.getElementById('rnote').value.trim(),name=sessionStorage.getItem('senvia_customer_name')||'',phone=sessionStorage.getItem('senvia_customer_mobile')||'',block=sessionStorage.getItem('senvia_customer_block')||'',pin=sessionStorage.getItem('senvia_customer_pin')||'',code=sessionStorage.getItem('senvia_customer_code')||'';
  note.textContent='';if(!p||!name||phone.length!==10){note.textContent='Customer registration details missing हैं।';return}
  try{const detail=`Service Request\nService: ${service}\nProfessional: ${p.name}\nProfessional Mobile: ${p.mobile}\nCustomer: ${name}\nCustomer Mobile: ${phone}\nCustomer ID: ${code||'—'}\nBlock: ${block}\nPIN Code: ${pin}\nNote: ${extra||'—'}`;const h={...H,Prefer:'return=minimal'};const r=await fetch(API+'messages',{method:'POST',headers:h,body:JSON.stringify({user_name:name,user_type:'Customer',mobile:phone,user_code:code,message_type:'Service Request',message:detail})});if(!r.ok)throw Error(await r.text());try{await fetch(API+'messages',{method:'POST',headers:h,body:JSON.stringify({user_name:name,user_type:'Professional',mobile:p.mobile,user_code:p.code||p.id||'',message_type:'Service Request',message:detail})})}catch(e){}closeReq();alert('✅ Service Request सफलतापूर्वक भेजी गई।')}catch(e){console.error(e);note.textContent='Request submit नहीं हो सकी। कृपया फिर कोशिश करें।'}
 }
