@@ -683,8 +683,36 @@ async function removePro(i){
    hideBusy();
  }
 }
-async function addService(){let s=newSvc.value.trim();if(!s)return;if(!dbMode){if(!services.includes(s))services.push(s);newSvc.value='';render();return}try{const sample=serviceRows.find(x=>x&&typeof x==='object')||{};const candidates=['name_en','name','service','service_name','service_name_en','service_name_hi','title','name_hi','label','category','Service Name','Service'];const detected=candidates.find(k=>Object.prototype.hasOwnProperty.call(sample,k));const extra=Object.keys(sample).filter(k=>{const v=sample[k];const lk=k.toLowerCase();return typeof v==='string'&&v.trim()&& !['id','created_at','updated_at','status','description'].includes(lk)&&!lk.includes('created')&&!lk.includes('updated')&&!lk.includes('uuid')});const keys=[...new Set([...(detected?[detected]:[]),...candidates,...extra])];let last='';let done=false;for(const key of keys){try{const payload={};payload[key]=s;await api('services',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify(payload)});done=true;break}catch(e){last=e.message||String(e)}}if(!done)throw new Error(last||'Services table का service-name column नहीं मिला।');newSvc.value='';await loadFromSupabase()}catch(e){console.error('Service add failed:',e);alert('Service add failed. '+(e.message||e))}}
-async function delService(i){if(!confirm('Delete this service?'))return;let s=serviceRows.find(x=>svcLabel(x)===services[i]);if(!dbMode||!s?.id){services.splice(i,1);render();return}try{await api('services?id=eq.'+encodeURIComponent(s.id),{method:'DELETE'});await loadFromSupabase()}catch(e){alert('Service delete failed. Check RLS and linked professional_services records.')}}
+async function addService(){
+ let s=(document.getElementById('newSvc')?.value||'').trim();
+ if(!s){showActionPopup('Service Name Required','कृपया पहले Service का नाम दर्ज करें।','warn');document.getElementById('newSvc')?.focus();return}
+ if(services.some(x=>String(x).trim().toLowerCase()===s.toLowerCase())){showActionPopup('Service Already Exists','यह Service पहले से मौजूद है।','warn');return}
+ if(!dbMode){services.push(s);document.getElementById('newSvc').value='';render();showActionPopup('Service Added','“'+s+'” successfully added.');return}
+ try{
+   const sample=serviceRows.find(x=>x&&typeof x==='object')||{};
+   const candidates=['name','name_en','service','service_name','service_name_en','service_name_hi','title','name_hi','label','category','Service Name','Service'];
+   const detected=candidates.find(k=>Object.prototype.hasOwnProperty.call(sample,k));
+   const extra=Object.keys(sample).filter(k=>{const v=sample[k];const lk=k.toLowerCase();return typeof v==='string'&&v.trim()&&!['id','created_at','updated_at','status','description'].includes(lk)&&!lk.includes('created')&&!lk.includes('updated')&&!lk.includes('uuid')});
+   const keys=[...new Set([...(detected?[detected]:[]),...candidates,...extra])];
+   let last='';let done=false;
+   for(const key of keys){try{const payload={};payload[key]=s;await api('services',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify(payload)});done=true;break}catch(e){last=e.message||String(e)}}
+   if(!done)throw new Error(last||'Services table का service-name column नहीं मिला।');
+   document.getElementById('newSvc').value='';
+   await loadFromSupabase();
+   showActionPopup('Service Added','“'+s+'” successfully added to Services.');
+ }catch(e){console.error('Service add failed:',e);showActionPopup('Service Add Failed',e.message||String(e),'error')}
+}
+async function delService(i){
+ if(!confirm('Delete this service?'))return;
+ const name=services[i]||'Service';
+ let s=serviceRows.find(x=>svcLabel(x)===name);
+ if(!dbMode||!s?.id){services.splice(i,1);render();showActionPopup('Service Deleted','“'+name+'” successfully deleted.');return}
+ try{
+   await api('services?id=eq.'+encodeURIComponent(s.id),{method:'DELETE'});
+   await loadFromSupabase();
+   showActionPopup('Service Deleted','“'+name+'” successfully deleted.');
+ }catch(e){console.error('Service delete failed:',e);showActionPopup('Service Delete Failed',e.message||'Check RLS and linked professional_services records.','error')}
+}
 proSearch.oninput=renderTable;statusFilter.onchange=renderTable;custSearch.oninput=renderCustomers;msgSearch.oninput=renderMessages;msgType.onchange=renderMessages;
 const db=document.createElement('div');db.id='dbStatus';db.style='margin:12px 0 0;padding:10px 12px;border-radius:9px;font-weight:700;background:#fff4d7;color:#8a6500';db.textContent='Connecting to Supabase…';document.querySelector('.content').prepend(db);
 const senviaNativeFetch=window.fetch.bind(window);
