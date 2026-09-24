@@ -165,6 +165,19 @@ table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:11px 8px
 .logout-btn:hover{filter:brightness(.96)}
 @media(max-width:600px){.header-actions{gap:6px}.logout-btn{padding:8px 11px;font-size:12px}}
 </style>
+
+<style id="senvia-action-popup-style">
+.senvia-action-popup{position:fixed;inset:0;background:rgba(4,20,40,.58);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:18px;z-index:100002}
+.senvia-action-popup.show{display:flex}
+.senvia-action-card{width:min(430px,100%);background:#fff;border-radius:22px;box-shadow:0 25px 75px rgba(0,30,65,.30);overflow:hidden;text-align:center;border:1px solid #dfe9f2}
+.senvia-action-icon{width:68px;height:68px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:25px auto 12px;font-size:34px;font-weight:900}
+.senvia-action-icon.success{background:#e6f8e9;color:#23833b}
+.senvia-action-icon.error{background:#fde8e8;color:#bd3030}
+.senvia-action-icon.info{background:#e9f4ff;color:#0879c9}
+.senvia-action-card h2{margin:0 20px 8px;color:#082455;font-size:22px}
+.senvia-action-card p{margin:0 24px 20px;color:#5e6f82;line-height:1.5;font-size:14px;white-space:pre-line}
+.senvia-action-card button{min-width:110px;margin:0 auto 22px;border-radius:10px;padding:11px 20px}
+</style>
 </head>
 <body>
 <div id="senviaBusy" aria-live="polite" aria-label="System busy">
@@ -433,7 +446,7 @@ function viewPro(i){const p=pros[i];if(!p)return;
 }
 function closeProView(){document.getElementById('proViewModal')?.classList.remove('show')}
 document.getElementById('proViewModal')?.addEventListener('click',e=>{if(e.target.id==='proViewModal')closeProView()});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeProView();closeServiceEdit()}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeProView();closeServiceEdit();closeActionPopup()}});
 function restoreProfessionalView(){const sec=document.getElementById('pros');const pref=localStorage.getItem('senvia_prof_view')||'card';const on=pref==='card';sec.classList.toggle('card-view',on);sec.classList.toggle('table-view',!on);const b=document.getElementById('viewToggle');if(b)b.textContent=on?'☷ Table View':'▦ Card View'}
 function setLang(l){lang=l;document.querySelectorAll('[data-hi]').forEach(e=>e.textContent=e.dataset[l]);document.getElementById('hi').className=l==='hi'?'on':'';document.getElementById('en').className=l==='en'?'on':''}
 function show(id,el){document.querySelectorAll('main section').forEach(s=>s.style.display='none');document.getElementById(id).style.display='block';document.querySelectorAll('.nav').forEach(n=>n.classList.remove('active'));if(el)el.classList.add('active');render()}
@@ -443,7 +456,7 @@ function render(){
  const cc=document.getElementById('countCust'); if(cc) cc.textContent=customers.length;
  const cs=document.getElementById('countSvc'); if(cs) cs.textContent=services.length;
  const cb=document.getElementById('countBlocks'); if(cb) cb.textContent=4;
- renderTable();renderRecent();renderServices();renderCustomers();renderMessages();renderAreas();
+ renderTable();renderServices();renderCustomers();renderMessages();renderAreas();
  renderPremiumDashboard();
 }
 document.getElementById('senviaBusy')?.classList.remove('show');
@@ -469,7 +482,6 @@ function renderPremiumDashboard(){
  const ov=document.getElementById('platformOverview');if(ov)ov.innerHTML='<div class="overview-item"><small>✅ Verified Professionals</small><b>'+pros.filter(p=>proStatus(p)==='Verified').length+'</b></div><div class="overview-item"><small>⏳ Pending Professionals</small><b>'+pros.filter(p=>proStatus(p)==='Pending').length+'</b></div><div class="overview-item"><small>👤 Active Customers</small><b>'+customers.length+'</b></div><div class="overview-item"><small>🛠 Service Categories</small><b>'+services.length+'</b></div>';
 }
 function renderTable(){let q=(proSearch?.value||'').toLowerCase(),st=statusFilter?.value||'';proTable.innerHTML=pros.filter(p=>(!q||JSON.stringify(p).toLowerCase().includes(q))&&(!st||proStatus(p)===st)).map((p,i)=>`<tr><td><b>${p.name}</b>${p.professional_code?`<br><span class=\"code-pill\">ID: ${p.professional_code}</span>`:''}</td><td>${p.mobile}</td><td>${p.block} → ${p.panchayat}<br>${p.village}</td><td>${p.services.join(', ')||'—'}</td><td><span class="badge ${proStatus(p).toLowerCase()}">${proStatus(p)}</span></td><td>${proStatus(p)==='Pending'?`<button class="green" onclick="approve(${i})">Approve</button> `:''}<button class="outline" onclick="viewPro(${i})">View</button> <button class="danger" onclick="removePro(${i})">Delete</button></td></tr>`).join('')||'<tr><td colspan="6" class="empty">No professionals found.</td></tr>'}
-function renderRecent(){recent.innerHTML=pros.slice(-5).reverse().map(p=>`<div style="padding:10px 0;border-bottom:1px solid #edf1f5"><b>${p.name}</b> — ${p.block} — ${p.services.join(', ')||'—'} <span class="badge ${proStatus(p).toLowerCase()}">${proStatus(p)}</span></div>`).join('')}
 function renderServices(){
  const grid=localStorage.getItem('senvia_services_view')==='grid';
  const box=document.getElementById('serviceList'); box.className=grid?'collection-grid':'collection-list';
@@ -554,20 +566,123 @@ document.getElementById('serviceEditModal')?.addEventListener('click',e=>{if(e.t
 function renderAreas(){const grid=localStorage.getItem('senvia_areas_view')!=='list'; availableList.className=grid?'area-view':'collection-list'; comingList.className=grid?'area-view':'collection-list'; availableList.innerHTML=blocks.map(b=>grid?`<div class="area-card"><b>📍 ${b}</b><p>Available</p></div>`:`<div class="service-row"><span class="service-row-name">📍 ${b}</span><span class="badge verified">Available</span></div>`).join(''); comingList.innerHTML=coming.map(b=>grid?`<div class="area-card"><b>📍 ${b}</b><p class="soon">Coming Soon</p></div>`:`<div class="service-row"><span class="service-row-name">📍 ${b}</span><span class="badge">Coming Soon</span></div>`).join(''); const bt=document.getElementById('areaViewToggle');if(bt)bt.textContent=grid?'☷ List View':'▦ Grid View'}
 function openPro(){modal.classList.add('show');pb.innerHTML='<option value="">Select Block</option>'+blocks.map(b=>`<option>${b}</option>`).join('');checks.innerHTML=services.map(s=>`<label><input type="checkbox" value="${s}"> ${s}</label>`).join('')}
 function closePro(){modal.classList.remove('show')}
-async function savePro(){let ss=[...document.querySelectorAll('#checks input:checked')].map(x=>x.value),name=pn.value.trim(),mobile=pm.value.trim(),block=pb.value,panchayat=pp.value.trim(),village=pv.value.trim(),experience=pe.value.trim();if(!name||!mobile||!block||!panchayat||!village||!ss.length){alert('Please fill all required fields and select at least one service.');return}let p={Name:name,Phone:mobile,Block:block,Panchayat:panchayat,Village_Area:village,Status:'Pending'};if(!dbMode){pros.push({name,mobile,block,panchayat,village,experience,status:'Pending',services:ss});closePro();render();alert('Professional added in demo mode.');return}try{const rows=await api('professionals',{method:'POST',headers:{Prefer:'return=representation'},body:JSON.stringify(p)});
-let created=Array.isArray(rows)?rows[0]:rows;
-if(!created?.id){
-  const found=await api('professionals?select=*&Phone=eq.'+encodeURIComponent(mobile)+'&order=created_at.desc&limit=1');
-  created=Array.isArray(found)?found[0]:found;
+
+function showActionPopup(title,message,type='success'){
+ const modal=document.getElementById('senviaActionPopup');
+ const icon=document.getElementById('senviaActionIcon');
+ const t=document.getElementById('senviaActionTitle');
+ const msg=document.getElementById('senviaActionMessage');
+ if(!modal||!icon||!t||!msg){alert((title?title+'\n\n':'')+(message||''));return}
+ const cfg=type==='error'?{cls:'error',symbol:'!'}:type==='info'?{cls:'info',symbol:'i'}:{cls:'success',symbol:'✓'};
+ icon.className='senvia-action-icon '+cfg.cls;
+ icon.textContent=cfg.symbol;
+ t.textContent=title||'Success';
+ msg.textContent=message||'';
+ modal.classList.add('show');
 }
-const pid=created?.id;
-if(pid){
-  const ids=serviceRows.filter(s=>ss.includes(svcLabel(s))).map(s=>s.id).filter(Boolean);
-  if(ids.length) await api('professional_services',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify(ids.map(id=>({professional_id:pid,service_id:id}))) });
+function closeActionPopup(){document.getElementById('senviaActionPopup')?.classList.remove('show')}
+document.getElementById('senviaActionPopup')?.addEventListener('click',e=>{if(e.target.id==='senviaActionPopup')closeActionPopup()});
+async function savePro(){
+ let ss=[...document.querySelectorAll('#checks input:checked')].map(x=>x.value),
+     name=pn.value.trim(),mobile=pm.value.trim(),block=pb.value,
+     panchayat=pp.value.trim(),village=pv.value.trim(),experience=pe.value.trim();
+ if(!name||!mobile||!block||!panchayat||!village||!ss.length){
+   showActionPopup('Required information missing','Please fill all required fields and select at least one service.','error');
+   return;
+ }
+ let p={Name:name,Phone:mobile,Block:block,Panchayat:panchayat,Village_Area:village,Status:'Pending'};
+ if(!dbMode){
+   pros.push({name,mobile,block,panchayat,village,experience,status:'Pending',services:ss});
+   closePro();render();
+   showActionPopup('Professional Added','Professional added in demo mode.');
+   return;
+ }
+ try{
+   showBusy();
+   const rows=await api('professionals',{
+     method:'POST',
+     headers:{Prefer:'return=representation'},
+     body:JSON.stringify(p)
+   });
+   let created=Array.isArray(rows)?rows[0]:rows;
+   if(!created?.id){
+     const found=await api('professionals?select=*&Phone=eq.'+encodeURIComponent(mobile)+'&order=created_at.desc&limit=1');
+     created=Array.isArray(found)?found[0]:found;
+   }
+   const pid=created?.id;
+   if(pid){
+     const ids=serviceRows.filter(s=>ss.includes(svcLabel(s))).map(s=>s.id).filter(Boolean);
+     if(ids.length){
+       await api('professional_services',{
+         method:'POST',
+         headers:{Prefer:'return=minimal'},
+         body:JSON.stringify(ids.map(id=>({professional_id:pid,service_id:id})))
+       });
+     }
+   }
+   closePro();
+   await loadFromSupabase();
+   showActionPopup('Professional Added','Professional added as Pending Verification.');
+ }catch(e){
+   console.error('Supabase save failed:',e);
+   showActionPopup('Save Failed','Supabase save failed. Please check the table columns/RLS policies.\n\n'+(e.message||e),'error');
+ }finally{
+   hideBusy();
+ }
 }
-closePro();await loadFromSupabase();alert('Professional added as Pending Verification.')}catch(e){console.error('Supabase save failed:',e);alert('Supabase save failed. Please check the table columns/RLS policies.\n\n'+(e.message||e));} }
-async function approve(i){const p=pros[i];if(!dbMode||!p.id){p.status='Verified';render();return}try{await api('professionals?id=eq.'+encodeURIComponent(p.id),{method:'PATCH',body:JSON.stringify({Status:'Verified'})});await loadFromSupabase()}catch(e){alert('Approve failed. Check Supabase RLS policy.')}}
-async function removePro(i){if(!confirm('Delete this professional?'))return;const p=pros[i];if(!dbMode||!p.id){pros.splice(i,1);render();return}try{await api('professional_services?professional_id=eq.'+encodeURIComponent(p.id),{method:'DELETE'});await api('professionals?id=eq.'+encodeURIComponent(p.id),{method:'DELETE'});await loadFromSupabase()}catch(e){alert('Delete failed. Check Supabase RLS policy.')}}
+async function approve(i){
+ const p=pros[i];
+ if(!p)return;
+ const name=p.name||'Professional';
+ if(!dbMode||!p.id){
+   p.status='Verified';
+   render();
+   showActionPopup('Professional Approved',name+' को सफलतापूर्वक Approved कर दिया गया है।');
+   return;
+ }
+ try{
+   showBusy();
+   await api('professionals?id=eq.'+encodeURIComponent(p.id),{
+     method:'PATCH',
+     body:JSON.stringify({Status:'Verified'})
+   });
+   await loadFromSupabase();
+   showActionPopup('Professional Approved',name+' को सफलतापूर्वक Approved कर दिया गया है।');
+ }catch(e){
+   console.error('Approve failed:',e);
+   showActionPopup('Approve Failed',e.message||'Approve failed. Please check Supabase RLS policy.','error');
+ }finally{
+   hideBusy();
+ }
+}
+async function removePro(i){
+ const p=pros[i];
+ if(!p)return;
+ const name=p.name||'Professional';
+ if(!confirm('⚠️ Delete this professional?\\n\\n'+name+' को permanently delete किया जाएगा.'))return;
+ if(!dbMode||!p.id){
+   pros.splice(i,1);
+   render();
+   showActionPopup('Professional Deleted',name+' को सफलतापूर्वक delete कर दिया गया है।');
+   return;
+ }
+ try{
+   showBusy();
+   await api('professional_services?professional_id=eq.'+encodeURIComponent(p.id),{
+     method:'DELETE'
+   });
+   await api('professionals?id=eq.'+encodeURIComponent(p.id),{
+     method:'DELETE'
+   });
+   await loadFromSupabase();
+   showActionPopup('Professional Deleted',name+' को सफलतापूर्वक delete कर दिया गया है।');
+ }catch(e){
+   console.error('Delete failed:',e);
+   showActionPopup('Delete Failed',e.message||'Delete failed. Please check Supabase RLS policy.','error');
+ }finally{
+   hideBusy();
+ }
+}
 async function addService(){let s=newSvc.value.trim();if(!s)return;if(!dbMode){if(!services.includes(s))services.push(s);newSvc.value='';render();return}try{const sample=serviceRows.find(x=>x&&typeof x==='object')||{};const candidates=['name_en','name','service','service_name','service_name_en','service_name_hi','title','name_hi','label','category','Service Name','Service'];const detected=candidates.find(k=>Object.prototype.hasOwnProperty.call(sample,k));const extra=Object.keys(sample).filter(k=>{const v=sample[k];const lk=k.toLowerCase();return typeof v==='string'&&v.trim()&& !['id','created_at','updated_at','status','description'].includes(lk)&&!lk.includes('created')&&!lk.includes('updated')&&!lk.includes('uuid')});const keys=[...new Set([...(detected?[detected]:[]),...candidates,...extra])];let last='';let done=false;for(const key of keys){try{const payload={};payload[key]=s;await api('services',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify(payload)});done=true;break}catch(e){last=e.message||String(e)}}if(!done)throw new Error(last||'Services table का service-name column नहीं मिला।');newSvc.value='';await loadFromSupabase()}catch(e){console.error('Service add failed:',e);alert('Service add failed. '+(e.message||e))}}
 async function delService(i){if(!confirm('Delete this service?'))return;let s=serviceRows.find(x=>svcLabel(x)===services[i]);if(!dbMode||!s?.id){services.splice(i,1);render();return}try{await api('services?id=eq.'+encodeURIComponent(s.id),{method:'DELETE'});await loadFromSupabase()}catch(e){alert('Service delete failed. Check RLS and linked professional_services records.')}}
 proSearch.oninput=renderTable;statusFilter.onchange=renderTable;custSearch.oninput=renderCustomers;msgSearch.oninput=renderMessages;msgType.onchange=renderMessages;
@@ -582,5 +697,14 @@ restoreAdminEmail();
 restoreProfessionalView();restoreCollectionViews();
 refreshAdminSession().then(()=>requireAdmin()).then(ok=>{if(ok) loadFromSupabase()});
 </script>
+
+<div class="senvia-action-popup" id="senviaActionPopup" role="dialog" aria-modal="true" aria-labelledby="senviaActionTitle">
+  <div class="senvia-action-card">
+    <div class="senvia-action-icon success" id="senviaActionIcon">✓</div>
+    <h2 id="senviaActionTitle">Success</h2>
+    <p id="senviaActionMessage"></p>
+    <button type="button" class="blue" onclick="closeActionPopup()">OK</button>
+  </div>
+</div>
 <div class="msg-detail-modal" id="msgViewModal" onclick="if(event.target===this)closeMessageView()"><div class="msg-detail-card"><div class="msg-detail-head"><h2 id="msgViewTitle">Message Details</h2><button class="msg-detail-close" type="button" onclick="closeMessageView()">✕</button></div><div class="msg-detail-body" id="msgViewBody"></div></div></div>
 </body></html>
