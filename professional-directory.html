@@ -151,7 +151,7 @@ function closeReq(){document.getElementById('reqModal').classList.remove('show')
 async function registerCustomer(){
  const name=document.getElementById('cn').value.trim(),block=document.getElementById('cb').value.trim(),pin=document.getElementById('cp').value.replace(/\D/g,''),phone=document.getElementById('cm').value.replace(/\D/g,''),note=document.getElementById('regNote');
  note.textContent='';if(!name||!block||pin.length!==6||phone.length!==10){note.textContent='Name, Block, 6 digit PIN Code और 10 digit Contact No. जरूरी है।';return}
- try{const r=await fetch(API+'rpc/register_senvia_customer',{method:'POST',headers:H,body:JSON.stringify({p_name:name,p_phone:phone,p_block:block,p_panchayat:'',p_village_area:''})});const raw=await r.text();if(!r.ok)throw Error(raw||'Registration failed');let d=raw?JSON.parse(raw):null,row=Array.isArray(d)?d[0]:d;sessionStorage.setItem('senvia_customer_registered','1');sessionStorage.setItem('senvia_customer_code',row?.customer_code||'');sessionStorage.setItem('senvia_customer_name',name);sessionStorage.setItem('senvia_customer_mobile',phone);sessionStorage.setItem('senvia_customer_block',block);sessionStorage.setItem('senvia_customer_pin',pin);closeReg();render();showCustomerSuccess(row?.customer_code||'');pending=pending;}catch(e){console.error(e);note.textContent='Registration failed. कृपया फिर कोशिश करें।'}
+ try{const r=await fetch(API+'rpc/register_senvia_customer',{method:'POST',headers:H,body:JSON.stringify({p_name:name,p_phone:phone,p_block:block,p_panchayat:'',p_village_area:''})});const raw=await r.text();if(!r.ok)throw Error(raw||'Registration failed');let d=raw?JSON.parse(raw):null,row=Array.isArray(d)?d[0]:d;sessionStorage.setItem('senvia_customer_registered','1');sessionStorage.setItem('senvia_customer_code',row?.customer_code||'');sessionStorage.setItem('senvia_customer_name',name);sessionStorage.setItem('senvia_customer_mobile',phone);sessionStorage.setItem('senvia_customer_block',block);sessionStorage.setItem('senvia_customer_pin',pin);closeReg();render();showCustomerSuccess(row?.customer_code ? ('C-'+row.customer_code) : '');pending=pending;}catch(e){console.error(e);note.textContent='Registration failed. कृपया फिर कोशिश करें।'}
 }
 function openRequest(p,service){selected={p,service};document.getElementById('reqPro').innerHTML=`<b>${esc(p.name)}</b> • ${esc(service)}<br>📍 ${esc([p.block,p.panchayat,p.village].filter(Boolean).join(' → '))}`;document.getElementById('customerInfo').innerHTML=`👤 ${esc(sessionStorage.getItem('senvia_customer_name')||'')} &nbsp; 📍 ${esc(sessionStorage.getItem('senvia_customer_block')||'')} &nbsp; 📮 ${esc(sessionStorage.getItem('senvia_customer_pin')||'')} &nbsp; 📱 ${esc(sessionStorage.getItem('senvia_customer_mobile')||'')}`;document.getElementById('reqModal').classList.add('show')}
 
@@ -219,7 +219,7 @@ AS $$
 DECLARE v_detail text;
 BEGIN
   v_detail := format(
-    'Service Request%nService: %s%nProfessional: %s%nProfessional Mobile: %s%nCustomer: %s%nCustomer Mobile: %s%nCustomer ID: %s%nBlock: %s%nPIN Code: %s%nNote: %s',
+    'Service Request%nService: %s%nProfessional: %s%nProfessional Mobile: %s%nCustomer: %s%nCustomer Mobile: %s%nCustomer ID: C-%s%nBlock: %s%nPIN Code: %s%nNote: %s',
     p_service,p_professional_name,p_professional_phone,p_customer_name,p_customer_phone,
     coalesce(p_customer_code,'—'),coalesce(p_customer_block,'—'),coalesce(p_customer_pin,'—'),coalesce(p_note,'—')
   );
