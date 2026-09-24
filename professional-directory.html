@@ -15,6 +15,17 @@ h1{margin:0;color:#06375f;font-size:32px}.sub{color:#6a7e8d;line-height:1.6}.gro
 .modal{position:fixed;inset:0;background:rgba(2,24,42,.65);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:16px;z-index:100}.modal.show{display:flex}.box{width:min(470px,100%);background:#fff;border-radius:24px;padding:24px;box-shadow:0 25px 70px rgba(0,0,0,.25)}.box h2{margin-top:0;color:#06375f}.form{display:grid;gap:10px}.form input{width:100%;padding:12px;border:1px solid #cbdde8;border-radius:11px;font-size:15px}.close{float:right;border:0;background:#eef5f9;border-radius:50%;width:34px;height:34px;font-size:20px}.note{font-size:13px;color:#c0392b;min-height:18px}
 footer{background:#062c4b;color:#dcebf5;padding:25px 18px;text-align:center}.social{display:flex;gap:12px;justify-content:center;margin-top:18px}.social a{width:48px;height:48px;border-radius:15px;display:grid;place-items:center;color:#fff;font-size:21px;font-weight:900}.fb{background:#1877f2}.ig{background:linear-gradient(135deg,#833ab4,#fd1d1d,#fcb045)}.yt{background:#f00}.wa{background:#25d366}
 @media(max-width:700px){.directory.list-view .group .card{display:grid;grid-template-columns:auto 1fr;gap:10px}.directory.list-view .group .prohead{min-width:0}.directory.list-view .group .meta{grid-column:1/-1;min-width:0;margin:0}.directory.list-view .group .actions{grid-column:1/-1;margin-left:0}.directory.list-view .group .lock{grid-column:1/-1;min-width:0}.viewbar{justify-content:flex-start;flex-wrap:wrap}}@media(max-width:600px){h1{font-size:27px}.hero{padding:23px}.directory.grid-view .group .grid{grid-template-columns:1fr}.directory.grid-view .group .card{padding:15px}}
+
+.customer-success{position:fixed;inset:0;background:rgba(2,24,42,.70);backdrop-filter:blur(5px);display:none;align-items:center;justify-content:center;padding:18px;z-index:300}
+.customer-success.show{display:flex}
+.customer-success-box{width:min(440px,100%);background:#fff;border-radius:26px;padding:28px 22px;text-align:center;box-shadow:0 25px 80px rgba(0,0,0,.28)}
+.customer-success-icon{font-size:48px;margin-bottom:8px}
+.customer-success-box h2{margin:0 0 8px;color:#07528f;font-size:25px}
+.customer-success-box p{color:#60798a;line-height:1.5}
+.customer-id{font-size:25px;font-weight:900;letter-spacing:1px;color:#06375f;background:#eef8ff;border:2px dashed #8ec8ed;border-radius:14px;padding:14px;margin:18px 0}
+.customer-success-actions{display:flex;gap:10px}
+.customer-success-actions button{flex:1}
+
 </style>
 </head>
 <body>
@@ -44,6 +55,20 @@ footer{background:#062c4b;color:#dcebf5;padding:25px 18px;text-align:center}.soc
 </div></div>
 
 <footer>Senvia — हर घर का अपना साथी<div class="social"><a class="fb" href="https://www.facebook.com/" target="_blank">f</a><a class="ig" href="https://www.instagram.com/" target="_blank">◎</a><a class="yt" href="https://www.youtube.com/" target="_blank">▶</a><a class="wa" href="https://wa.me/919905411421" target="_blank">◔</a></div></footer>
+
+<div class="customer-success" id="customerSuccess">
+  <div class="customer-success-box">
+    <div class="customer-success-icon">✅</div>
+    <h2>Registration Successful</h2>
+    <p>Customer registration सफलतापूर्वक हो गया है। आपका Customer ID नीचे है।</p>
+    <div class="customer-id" id="customerSuccessId">—</div>
+    <div class="customer-success-actions">
+      <button class="btn light" onclick="copyCustomerId()">📋 Copy ID</button>
+      <button class="btn green" onclick="closeCustomerSuccess()">Done</button>
+    </div>
+  </div>
+</div>
+
 
 <script>
 const URL='https://hxdrvhiowurbwlgmczju.supabase.co',KEY='sb_publishable_cvh_b0gklN5SOcH5MsGs8g_4JI9-PxT',API=URL+'/rest/v1/',H={apikey:KEY,'Content-Type':'application/json'};
@@ -126,9 +151,28 @@ function closeReq(){document.getElementById('reqModal').classList.remove('show')
 async function registerCustomer(){
  const name=document.getElementById('cn').value.trim(),block=document.getElementById('cb').value.trim(),pin=document.getElementById('cp').value.replace(/\D/g,''),phone=document.getElementById('cm').value.replace(/\D/g,''),note=document.getElementById('regNote');
  note.textContent='';if(!name||!block||pin.length!==6||phone.length!==10){note.textContent='Name, Block, 6 digit PIN Code और 10 digit Contact No. जरूरी है।';return}
- try{const r=await fetch(API+'rpc/register_senvia_customer',{method:'POST',headers:H,body:JSON.stringify({p_name:name,p_phone:phone,p_block:block,p_panchayat:'',p_village_area:''})});const raw=await r.text();if(!r.ok)throw Error(raw||'Registration failed');let d=raw?JSON.parse(raw):null,row=Array.isArray(d)?d[0]:d;localStorage.setItem('senvia_customer_registered','1');localStorage.setItem('senvia_customer_code',row?.customer_code||'');localStorage.setItem('senvia_customer_name',name);localStorage.setItem('senvia_customer_mobile',phone);localStorage.setItem('senvia_customer_block',block);localStorage.setItem('senvia_customer_pin',pin);closeReg();render();if(pending?.action==='request')openRequest(pending.data.p,pending.data.service);else alert('✅ Registration successful. अब Professional का contact दिखाई देगा।');pending=null}catch(e){console.error(e);note.textContent='Registration failed. कृपया फिर कोशिश करें।'}
+ try{const r=await fetch(API+'rpc/register_senvia_customer',{method:'POST',headers:H,body:JSON.stringify({p_name:name,p_phone:phone,p_block:block,p_panchayat:'',p_village_area:''})});const raw=await r.text();if(!r.ok)throw Error(raw||'Registration failed');let d=raw?JSON.parse(raw):null,row=Array.isArray(d)?d[0]:d;localStorage.setItem('senvia_customer_registered','1');localStorage.setItem('senvia_customer_code',row?.customer_code||'');localStorage.setItem('senvia_customer_name',name);localStorage.setItem('senvia_customer_mobile',phone);localStorage.setItem('senvia_customer_block',block);localStorage.setItem('senvia_customer_pin',pin);closeReg();render();if(pending?.action==='request')openRequest(pending.data.p,pending.data.service);else showCustomerSuccess(row?.customer_code||'');pending=null}catch(e){console.error(e);note.textContent='Registration failed. कृपया फिर कोशिश करें।'}
 }
 function openRequest(p,service){selected={p,service};document.getElementById('reqPro').innerHTML=`<b>${esc(p.name)}</b> • ${esc(service)}<br>📍 ${esc([p.block,p.panchayat,p.village].filter(Boolean).join(' → '))}`;document.getElementById('customerInfo').innerHTML=`👤 ${esc(localStorage.getItem('senvia_customer_name')||'')} &nbsp; 📍 ${esc(localStorage.getItem('senvia_customer_block')||'')} &nbsp; 📮 ${esc(localStorage.getItem('senvia_customer_pin')||'')} &nbsp; 📱 ${esc(localStorage.getItem('senvia_customer_mobile')||'')}`;document.getElementById('reqModal').classList.add('show')}
+
+function showCustomerSuccess(code){
+  document.getElementById('customerSuccessId').textContent=code||'Customer ID उपलब्ध नहीं हुआ';
+  document.getElementById('customerSuccess').classList.add('show');
+}
+function closeCustomerSuccess(){
+  document.getElementById('customerSuccess').classList.remove('show');
+}
+async function copyCustomerId(){
+  const code=document.getElementById('customerSuccessId').textContent.trim();
+  if(!code || code==='Customer ID उपलब्ध नहीं हुआ') return;
+  try{
+    await navigator.clipboard.writeText(code);
+    alert('Customer ID कॉपी हो गया।');
+  }catch(e){
+    alert('Customer ID कॉपी नहीं हो सका।');
+  }
+}
+
 async function submitRequest(){
  const p=selected?.p,service=selected?.service,note=document.getElementById('reqNote'),extra=document.getElementById('rnote').value.trim(),name=localStorage.getItem('senvia_customer_name')||'',phone=localStorage.getItem('senvia_customer_mobile')||'',block=localStorage.getItem('senvia_customer_block')||'',pin=localStorage.getItem('senvia_customer_pin')||'',code=localStorage.getItem('senvia_customer_code')||'';
  note.textContent='';if(!p||!name||phone.length!==10){note.textContent='Customer registration details missing हैं।';return}
