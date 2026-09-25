@@ -120,7 +120,7 @@ let currentService="";
 function render(rows){
  const el=document.getElementById('result');
  if(!rows.length){el.innerHTML='<div class="empty"><b>इस चयन में कोई Verified Professional नहीं मिला।</b><br><br><a class="btn lock" href="customer-premium.html">← वापस Home</a></div>';return}
- el.innerHTML='<div class="section-title">Verified Professionals</div><div class="grid">'+rows.map(p=>`<article class="card"><div class="name">✓ ${esc(p.name)}</div><div class="services">${esc(p.services.join(' • ')||'Local Service Professional')}</div><div class="area">📍 ${esc(p.block)}${p.panchayat?' → '+esc(p.panchayat):''}${p.village?' → '+esc(p.village):''}${p.pin?' | PIN: '+esc(p.pin):''}</div><div class="actions">${contactHtml(p)}${requestHtml(p,currentService||p.services[0]||'Service')}</div><div class="note">🔒 Contact details registration के बाद उपलब्ध होंगे।</div></article>`).join('')+'</div>';
+ el.innerHTML='<div class="section-title">Verified Professionals</div><div class="grid">'+rows.map(p=>`<article class="card"><div class="name">✓ ${esc(p.name)}</div><div class="area">📍 Area: ${esc(p.village||'—')}<br>🏘️ Block: ${esc(p.block||'—')}<br>🏡 Panchayat: ${esc(p.panchayat||'—')}<br>📮 PIN Code: ${esc(p.pin||'—')}</div><div class="actions">${contactHtml(p)}</div><div class="note">🔒 Contact number registration के बाद unlock होगा।</div></article>`).join('')+'</div>';
 }
 (async()=>{
  try{
