@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded',()=>{
 <nav><div class="wrap nav"><a href="customer-premium.html">⌂ Home</a><a href="services.html">⚙ Services</a><a href="professional-directory.html?v=20260925">👥 Professionals</a><a href="about.html">ⓘ About</a><a href="contact.html">✉ Contact</a></div></nav>
 
 <main><div class="wrap">
-<div class="hero"><h1>👥 Professionals Directory</h1><p class="sub">सिर्फ <b>Verified Professionals</b> यहाँ दिखाई देंगे। Mobile/WhatsApp contact Customer Registration के बाद ही दिखाई देगा।</p><div class="viewbar"><span>View:</span><button id="gridBtn" class="viewbtn active" onclick="setView('grid')">▦ Grid</button><button id="listBtn" class="viewbtn" onclick="setView('list')">☷ List</button><button id="sessionBtn" class="viewbtn" style="display:none" onclick="lockContacts()">🔒 Lock Contacts</button></div></div>
+<div class="hero"><h1>👥 Professionals Directory</h1><p class="sub">सिर्फ <b>Verified Professionals</b> यहाँ दिखाई देंगे। Mobile/WhatsApp contact Customer Registration के बाद ही दिखाई देगा।</p><div class="viewbar"><span>View:</span><button id="gridBtn" class="viewbtn active" onclick="setView('grid')">▦ Grid</button><button id="listBtn" class="viewbtn" onclick="setView('list')">☷ List</button></div></div>
 <div id="list" class="directory grid-view" style="margin-top:20px"><div class="empty">⏳ Professionals लोड हो रहे हैं…</div></div>
 </div></main>
 
@@ -173,8 +173,6 @@ function registered(){
   const mobile=(sessionStorage.getItem('senvia_customer_mobile')||'').replace(/\D/g,'');
   return flag && !!code && !!name && mobile.length===10;
 }
-function syncSessionButton(){const b=document.getElementById('sessionBtn');if(b)b.style.display=registered()?'inline-block':'none';}
-function lockContacts(){['senvia_customer_registered','senvia_customer_code','senvia_customer_name','senvia_customer_mobile','senvia_customer_block','senvia_customer_pin'].forEach(k=>sessionStorage.removeItem(k));syncSessionButton();render();}
 function contactButton(p){
  if(registered()&&p.mobile){
    const m=String(p.mobile).replace(/\D/g,'');
@@ -190,7 +188,7 @@ function closeReq(){document.getElementById('reqModal').classList.remove('show')
 async function registerCustomer(){
  const name=document.getElementById('cn').value.trim(),block=document.getElementById('cb').value.trim(),pin=document.getElementById('cp').value.replace(/\D/g,''),phone=document.getElementById('cm').value.replace(/\D/g,''),note=document.getElementById('regNote');
  note.textContent='';if(!name||!block||pin.length!==6||phone.length!==10){note.textContent='Name, Block, 6 digit PIN Code और 10 digit Contact No. जरूरी है।';return}
- try{const r=await fetch(API+'rpc/register_senvia_customer',{method:'POST',headers:H,body:JSON.stringify({p_name:name,p_phone:phone,p_block:block,p_panchayat:'',p_village_area:''})});const raw=await r.text();if(!r.ok)throw Error(raw||'Registration failed');let d=raw?JSON.parse(raw):null,row=Array.isArray(d)?d[0]:d;sessionStorage.setItem('senvia_customer_registered','1');sessionStorage.setItem('senvia_customer_code',row?.customer_code||'');sessionStorage.setItem('senvia_customer_name',name);sessionStorage.setItem('senvia_customer_mobile',phone);sessionStorage.setItem('senvia_customer_block',block);sessionStorage.setItem('senvia_customer_pin',pin);closeReg();syncSessionButton();render();showCustomerSuccess(row?.customer_code||'');pending=pending;}catch(e){console.error(e);note.textContent='Registration failed. कृपया फिर कोशिश करें।'}
+ try{const r=await fetch(API+'rpc/register_senvia_customer',{method:'POST',headers:H,body:JSON.stringify({p_name:name,p_phone:phone,p_block:block,p_panchayat:'',p_village_area:''})});const raw=await r.text();if(!r.ok)throw Error(raw||'Registration failed');let d=raw?JSON.parse(raw):null,row=Array.isArray(d)?d[0]:d;sessionStorage.setItem('senvia_customer_registered','1');sessionStorage.setItem('senvia_customer_code',row?.customer_code||'');sessionStorage.setItem('senvia_customer_name',name);sessionStorage.setItem('senvia_customer_mobile',phone);sessionStorage.setItem('senvia_customer_block',block);sessionStorage.setItem('senvia_customer_pin',pin);closeReg();render();showCustomerSuccess(row?.customer_code||'');pending=pending;}catch(e){console.error(e);note.textContent='Registration failed. कृपया फिर कोशिश करें।'}
 }
 function openRequest(p,service){selected={p,service};document.getElementById('reqPro').innerHTML=`<b>${esc(p.name)}</b> • ${esc(service)}<br>📍 ${esc([p.block,p.panchayat,p.village].filter(Boolean).join(' → '))}`;document.getElementById('customerInfo').innerHTML=`👤 ${esc(sessionStorage.getItem('senvia_customer_name')||'')} &nbsp; 📍 ${esc(sessionStorage.getItem('senvia_customer_block')||'')} &nbsp; 📮 ${esc(sessionStorage.getItem('senvia_customer_pin')||'')} &nbsp; 📱 ${esc(sessionStorage.getItem('senvia_customer_mobile')||'')}`;document.getElementById('reqModal').classList.add('show')}
 
@@ -223,7 +221,7 @@ async function submitRequest(){
  try{const r=await fetch(API+'rpc/submit_senvia_service_request',{method:'POST',headers:H,body:JSON.stringify({p_customer_code:code,p_customer_name:name,p_customer_phone:phone,p_customer_block:block,p_customer_pin:pin,p_service:service,p_professional_name:p.name,p_professional_phone:p.mobile||'',p_professional_code:p.code||p.id||'',p_note:extra||''})});const raw=await r.text();if(!r.ok)throw Error(raw||'Request submit failed');closeReq();document.getElementById('rnote').value='';alert('✅ Service Request सफलतापूर्वक भेजी गई।')}catch(e){console.error(e);note.textContent='Request submit नहीं हो सकी। कृपया फिर कोशिश करें।'}
 }
 restoreView();
-syncSessionButton();
+
 load();
 </script>
 </body></html>
