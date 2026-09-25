@@ -761,11 +761,11 @@ $('block').addEventListener('change',loadP);$('p').addEventListener('change',loa
   function showRegNote(msg,error=false){const e=document.getElementById('regNote');if(e){e.innerHTML=msg;e.style.color=error?'#b42318':'#526174';}}
   window.regW=async function(){
     const name=document.getElementById('wn')?.value.trim()||'';const phone=cleanPhone(document.getElementById('wm')?.value||'');const block=document.getElementById('wrBlock')?.value||'';const panchayat=document.getElementById('wrPanchayat')?.value||'';const pin=String(document.getElementById('wrPin')?.value||'').replace(/\D/g,'');const village=document.getElementById('wrVillage')?.value.trim()||'';const experience=document.getElementById('wrExperience')?.value.trim()||'';const services=selectedServices();
-    if(!name)return showRegNote(lang==='hi'?'कृपया नाम दर्ज करें।':'Please enter your name.',true);
-    if(phone.length!==10)return showRegNote(lang==='hi'?'कृपया सही 10 अंकों का मोबाइल नंबर दर्ज करें।':'Please enter a valid 10-digit mobile number.',true);
-    if(!block)return showRegNote(lang==='hi'?'कृपया Block चुनें।':'Please select a Block.',true);
-    if(!panchayat)return showRegNote(lang==='hi'?'कृपया Panchayat चुनें।':'Please select a Panchayat.',true);
-    if(pin.length!==6)return showRegNote(lang==='hi'?'कृपया सही 6 अंकों का PIN Code दर्ज करें।':'Please enter a valid 6-digit PIN Code.',true);
+    if(!name){showRegNote(lang==='hi'?'कृपया नाम दर्ज करें।':'Please enter your name.',true);window.alert(lang==='hi'?'कृपया नाम दर्ज करें।':'Please enter your name.');return;}
+    if(phone.length!==10){showRegNote(lang==='hi'?'गलत मोबाइल नंबर। कृपया 10 अंकों का मोबाइल नंबर भरें।':'Invalid mobile number. Please enter exactly 10 digits.',true);window.alert(lang==='hi'?'गलत मोबाइल नंबर। कृपया 10 अंकों का मोबाइल नंबर भरें।':'Invalid mobile number. Please enter exactly 10 digits.');return;}
+    if(!block){showRegNote(lang==='hi'?'कृपया Block चुनें।':'Please select a Block.',true);window.alert(lang==='hi'?'कृपया Block चुनें।':'Please select a Block.');return;}
+    if(!panchayat){showRegNote(lang==='hi'?'कृपया Panchayat चुनें।':'Please select a Panchayat.',true);window.alert(lang==='hi'?'कृपया Panchayat चुनें।':'Please select a Panchayat.');return;}
+    if(pin.length!==6){showRegNote(lang==='hi'?'गलत PIN Code। कृपया 6 अंकों का PIN Code भरें।':'Invalid PIN Code. Please enter exactly 6 digits.',true);window.alert(lang==='hi'?'गलत PIN Code। कृपया 6 अंकों का PIN Code भरें।':'Invalid PIN Code. Please enter exactly 6 digits.');return;}
     if(!village)return showRegNote(lang==='hi'?'कृपया Village / Area दर्ज करें।':'Please enter Village / Area.',true);
     if(!services.length)return showRegNote(lang==='hi'?'कम से कम एक Service चुनें।':'Please select at least one service.',true);
     const btn=document.querySelector('#worker .btn.green');if(btn){btn.disabled=true;btn.textContent=lang==='hi'?'Submit हो रहा है…':'Submitting…';}
