@@ -580,6 +580,7 @@ $('block').addEventListener('change',loadP);$('p').addEventListener('change',loa
     dbPros=normalize(pros,links,services);
     return dbPros;
   } finally { hideBusy(); }
+  }
 
   function esc(v){return String(v??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));}
   function verified(p){ return ['verified','approve','approved'].includes(norm(p.status)); }
@@ -612,6 +613,9 @@ $('block').addEventListener('change',loadP);$('p').addEventListener('change',loa
       return `<div class="card"><div class="pro-head"><div class="avatar">${esc(initials)}</div><div><h3>${esc(p.name)}</h3><small>${esc(p.services.join(' • ')||'Local Service Professional')}</small></div></div><p>📍 ${esc(p.block)}${p.panchayat?' → '+esc(p.panchayat):''}${p.village?' → '+esc(p.village):''}</p><div class="pro-actions"><a href="tel:${esc(p.mobile)}">📞 Call</a>${wa?`<a target="_blank" href="https://wa.me/91${esc(wa)}">💬 WhatsApp</a>`:''}</div></div>`;
     }).join('');
   }
+
+})();
+</script>
 
 </script>
 <script>window.addEventListener('pageshow',()=>{if(window.senviaDbConnected){console.log('Senvia Customer Search: live refresh enabled')}});</script>
@@ -822,3 +826,44 @@ $('block').addEventListener('change',loadP);$('p').addEventListener('change',loa
 })();
 </script>
 </body></html>
+<script>
+/* FINAL SEARCH WIRING: always send Home search to the separate results page */
+(function(){
+  function goToResults(e){
+    if(e) e.preventDefault();
+    const get=id=>document.getElementById(id);
+    const b=(get('block')?.value||'').trim();
+    const p=(get('p')?.value||'').trim();
+    const pin=(get('pin')?.value||'').replace(/\D/g,'');
+    const s=(get('s')?.value||'').trim();
+    if(!b&&!p&&!pin&&!s){
+      if(typeof toast==='function') toast((window.lang==='hi')?'कम से कम एक विकल्प चुनें।':'Please select at least one option.');
+      else alert((window.lang==='hi')?'कम से कम एक विकल्प चुनें।':'Please select at least one option.');
+      return false;
+    }
+    if(pin && pin.length!==6){
+      if(typeof toast==='function') toast((window.lang==='hi')?'कृपया 6 अंकों का PIN Code डालें।':'Please enter a valid 6-digit PIN Code.');
+      else alert((window.lang==='hi')?'कृपया 6 अंकों का PIN Code डालें।':'Please enter a valid 6-digit PIN Code.');
+      return false;
+    }
+    const q=new URLSearchParams();
+    if(b) q.set('block',b);
+    if(p) q.set('panchayat',p);
+    if(pin) q.set('pin',pin);
+    if(s) q.set('service',s);
+    window.location.href='./search-results.html?'+q.toString();
+    return false;
+  }
+  window.senviaRunSearch=goToResults;
+  function wire(){
+    const btn=document.getElementById('find');
+    if(btn){
+      btn.type='button';
+      btn.onclick=goToResults;
+      btn.addEventListener('click',goToResults,{capture:false});
+    }
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',wire,{once:true});
+  else wire();
+})();
+</script>
