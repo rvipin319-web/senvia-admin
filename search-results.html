@@ -1,13 +1,134 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Senvia — Search Results</title><style>body{margin:0;font-family:Arial,sans-serif;background:#f5f8fc;color:#17324d}.top{background:#0b3154;color:#fff;padding:10px 5%;font-size:13px}.wrap{max-width:1100px;margin:auto;padding:22px 16px}.head{background:#fff;border-radius:18px;padding:20px;box-shadow:0 8px 25px #00000012;margin-bottom:18px}.head h1{margin:0 0 8px;font-size:25px}.filters{display:flex;flex-wrap:wrap;gap:8px}.pill{background:#eef5ff;border-radius:20px;padding:8px 12px;font-size:13px}.back{display:inline-block;text-decoration:none;background:#0b6fbf;color:#fff;padding:10px 16px;border-radius:10px;margin-top:12px}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.card{background:#fff;border-radius:16px;padding:18px;box-shadow:0 7px 22px #00000010}.avatar{width:48px;height:48px;border-radius:50%;background:#e8f3ff;display:flex;align-items:center;justify-content:center;font-weight:800;color:#0b6fbf}.prohead{display:flex;gap:12px;align-items:center}.card h3{margin:0 0 5px}.muted{color:#68798a;font-size:13px}.empty{text-align:center;background:#fff;border-radius:16px;padding:35px;box-shadow:0 7px 22px #00000010}.loading{text-align:center;padding:40px}@media(max-width:750px){.grid{grid-template-columns:1fr}.head h1{font-size:21px}}.topnav{display:flex;gap:0;background:#0866b5;overflow:auto;white-space:nowrap}.topnav a{color:#fff;text-decoration:none;font-weight:800;padding:13px 17px}.topnav a:hover{background:#07528f}.request{display:inline-block;margin-top:10px;padding:9px 13px;border-radius:9px;background:#0874c1;color:#fff;text-decoration:none;font-weight:800}
-</style></head><body><nav class="topnav"><a href="customer-premium.html">⌂ Home</a><a href="services.html">⚙ Services</a><a href="professional-directory.html">👥 Professionals</a><a href="about.html">ⓘ About</a><a href="contact.html">✉ Contact</a></nav><div class="top">📍 Muzaffarpur, Bihar</div><main class="wrap"><div class="head"><h1>🔎 Senvia Professional Search</h1><div class="filters" id="filters"></div><a class="back" href="customer-premium.html">← Home पर वापस जाएँ</a></div><div id="result" class="loading">Searching…</div></main><script>
-const URL='https://hxdrvhiowurbwlgmczju.supabase.co',KEY='sb_publishable_cvh_b0gklN5SOcH5MsGs8g_4JI9-PxT',API=URL+'/rest/v1/',H={apikey:KEY,'Content-Type':'application/json'};
-const q=new URLSearchParams(location.search);const wanted={block:(q.get('block')||'').trim(),panchayat:(q.get('panchayat')||'').trim(),pin:(q.get('pin')||'').replace(/\D/g,''),service:(q.get('service')||'').trim()};
-const norm=v=>String(v??'').trim().toLowerCase().replace(/\s+/g,' ');const val=(o,keys,d='')=>{for(const k of keys){if(o&&o[k]!=null&&String(o[k]).trim())return String(o[k]).trim()}return d};
-const serviceNorm=v=>norm(v).replace(/repair/g,'').replace(/professional/g,'').trim();
-const match=(a,b)=>{if(!b)return true;const A=norm(a),B=norm(b);return A===B||A.includes(B)||B.includes(A)};
-function serviceMatch(p,selected){if(!selected)return true;const s=serviceNorm(selected);return (p.services||[]).some(x=>{const q=serviceNorm(x);return q===s||q.includes(s)||s.includes(q)||(s.includes('ac')&&q.includes('ac'))||(s.includes('fridge')&&(q.includes('fridge')||q.includes('refrigerator')))||(s.includes('mobile')&&q.includes('mobile'))||(s.includes('computer')&&(q.includes('computer')||q.includes('laptop')))});}
-function verified(v){return ['verified','approve','approved'].includes(norm(v));}
-async function load(){const r=await fetch(API+'professionals?select=*&limit=2000',{headers:H});if(!r.ok)throw new Error(await r.text());const data=await r.json();return data.map(x=>({name:val(x,['Name','name','full_name'],'Professional'),mobile:val(x,['Phone','phone','mobile','Mobile','Contact']),block:val(x,['Block','block']),panchayat:val(x,['Panchayat','panchayat','panchayat_name','area']),village:val(x,['Village_Area','Village','village','village_area','village_name']),pin:val(x,['PIN_Code','pin_code','PIN','pincode','Pin_Code']),services:val(x,['Services','services','service','service_name'],'').split(/[,|•]/).map(s=>s.trim()).filter(Boolean),status:val(x,['Status','status','verification_status'])}));}
-function render(rows){const el=document.getElementById('result');if(!rows.length){el.innerHTML='<div class="empty"><h2>कोई Verified Professional नहीं मिला</h2><p class="muted">कृपया Block, Panchayat, PIN Code या Service बदलकर फिर खोजें।</p></div>';return;}el.className='grid';el.innerHTML=rows.map(p=>{const initials=p.name.split(/\s+/).slice(0,2).map(x=>x[0]||'').join('').toUpperCase();return `<div class="card"><div class="prohead"><div class="avatar">${initials}</div><div><h3>${p.name}</h3><div class="muted">${p.services.join(' • ')}</div></div></div><p>📍 ${p.block||'—'}${p.panchayat?' → '+p.panchayat:''}${p.village?' → '+p.village:''}</p><p>📮 PIN Code: ${p.pin||'—'}</p><div class="muted">Contact details are available through the Request Service registration flow.</div><a class="request" href="professional-directory.html?service=${encodeURIComponent(p.services[0]||wanted.service||'')}">🔒 Request Service</a></div>`}).join('');}
-(async()=>{const f=document.getElementById('filters');[['Block',wanted.block],['Panchayat',wanted.panchayat],['PIN Code',wanted.pin],['Service',wanted.service]].forEach(([k,v])=>{if(v)f.innerHTML+=`<span class="pill">${k}: ${v}</span>`});try{const all=await load();const rows=all.filter(p=>verified(p.status)).filter(p=>match(p.block,wanted.block)&&match(p.panchayat,wanted.panchayat)&&match(p.pin,wanted.pin)&&serviceMatch(p,wanted.service));render(rows);}catch(e){document.getElementById('result').innerHTML='<div class="empty"><h2>Search अभी उपलब्ध नहीं है</h2><p class="muted">Database से professionals लोड नहीं हो सके।</p></div>';console.error(e)}})();
-</script></body></html>
+<!doctype html>
+<html lang="hi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Senvia — Search Results</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Georgia,"Times New Roman",serif;background:#eef8fb;color:#17324d}
+.top{background:#07528f;color:#fff;padding:10px 14px;display:flex;justify-content:center;gap:8px;flex-wrap:wrap}
+.top a{color:#fff;text-decoration:none;font-weight:700;padding:7px 12px;border-radius:8px}
+.top a:hover{background:rgba(255,255,255,.15)}
+.wrap{max-width:1050px;margin:auto;padding:18px 14px}
+.head{background:#fff;border-radius:20px;padding:22px;box-shadow:0 4px 18px #00000012;margin-bottom:18px}
+h1{margin:0 0 8px;color:#07528f;font-size:28px}
+.filter{color:#667085;font-size:14px}
+.section-title{font-size:21px;font-weight:800;color:#07528f;border-left:5px solid #07528f;padding-left:10px;margin:22px 0 12px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.card{background:#fff;border-radius:16px;padding:16px;box-shadow:0 3px 14px #00000010}
+.name{font-size:20px;font-weight:800;color:#17324d;margin-bottom:6px}
+.services{color:#07528f;font-weight:700;line-height:1.55}
+.area{margin-top:10px;color:#526174;font-size:14px}
+.actions{margin-top:14px;display:flex;gap:8px;flex-wrap:wrap}
+button,.btn{border:0;border-radius:9px;padding:9px 13px;font-weight:700;text-decoration:none;cursor:pointer}
+.lock{background:#0b83c9;color:#fff}.request{background:#10a66a;color:#fff}
+.note{font-size:12px;color:#68727f;margin-top:8px}
+.empty,.busy{background:#fff;border-radius:16px;padding:28px;text-align:center;box-shadow:0 3px 14px #00000010}
+@media(max-width:700px){.top{display:grid;grid-template-columns:repeat(5,1fr);gap:2px;padding:5px}.top a{font-size:11px;text-align:center;padding:7px 2px}.grid{grid-template-columns:1fr}h1{font-size:23px}}
+</style>
+</head>
+<body>
+<nav class="top">
+<a href="customer-premium.html">⌂ होम</a>
+<a href="services.html">⚙ सेवाएँ</a>
+<a href="professional-directory.html">👥 Professionals</a>
+<a href="about.html">ⓘ हमारे बारे में</a>
+<a href="contact.html">✉ संपर्क</a>
+</nav>
+
+<main class="wrap">
+<section class="head">
+<h1>🔎 खोज परिणाम</h1>
+<div id="filter" class="filter">आपकी खोज के अनुसार Verified Professionals</div>
+</section>
+<div id="result"><div class="busy">डेटा लोड हो रहा है…</div></div>
+</main>
+
+<script>
+const SUPABASE_URL='https://hxdrvhiowurbwlgmczju.supabase.co';
+const SUPABASE_KEY='sb_publishable_cvh_b0gklN5SOcH5MsGs8g_4JI9-PxT';
+const API=SUPABASE_URL+'/rest/v1/';
+const headers={apikey:SUPABASE_KEY};
+const str=v=>String(v??'').trim();
+const norm=v=>str(v).toLowerCase().normalize('NFKC').replace(/[–—−]/g,'-').replace(/\s+/g,' ');
+const val=(o,keys,def='')=>{for(const k of keys){if(o&&o[k]!==undefined&&o[k]!==null&&str(o[k])!=='')return o[k]}return def};
+const arr=v=>Array.isArray(v)?v:(typeof v==='string'?v.split(/[,|•]/).map(x=>x.trim()).filter(Boolean):[]);
+const esc=v=>String(v??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+const verified=p=>['verified','approve','approved'].includes(norm(p.status));
+const match=(a,b)=>!b||norm(a)===norm(b)||norm(a).includes(norm(b))||norm(b).includes(norm(a));
+function serviceMatch(p,s){
+ if(!s)return true;
+ const q=norm(s);
+ return (p.services||[]).some(x=>{
+   const v=norm(x);
+   if(v===q||v.includes(q)||q.includes(v))return true;
+   if(q.includes('ac')&&q.includes('repair'))return v.includes('ac');
+   if(q.includes('fridge'))return v.includes('fridge')||v.includes('refrigerator');
+   if(q.includes('mobile'))return v.includes('mobile');
+   if(q.includes('computer'))return v.includes('computer')||v.includes('laptop');
+   return false;
+ });
+}
+async function get(table){
+ const r=await fetch(API+table+'?select=*',{headers,cache:'no-store'});
+ if(!r.ok)throw new Error(table+' HTTP '+r.status);
+ return r.json();
+}
+function normalize(rows,links,services){
+ const sm={};
+ (services||[]).forEach(x=>{if(x&&x.id!=null)sm[String(x.id)]=str(val(x,['Name','name','service_name','title'],''))});
+ const lm={};
+ (links||[]).forEach(l=>{
+   const pid=val(l,['professional_id','pro_id','provider_id']),sid=val(l,['service_id','svc_id']);
+   if(pid!=null&&sid!=null&&sm[String(sid)])(lm[String(pid)]??=[]).push(sm[String(sid)]);
+ });
+ return (rows||[]).map(x=>{
+   const id=val(x,['id','professional_id']);
+   let sv=arr(val(x,['Services','services','service_names'],[]));
+   if(!sv.length&&id!=null&&lm[String(id)])sv=lm[String(id)];
+   return {
+    id,name:str(val(x,['Name','name','full_name','professional_name'],'Professional')),
+    mobile:str(val(x,['Phone','phone','mobile','mobile_number','whatsapp'],'')),
+    block:str(val(x,['Block','block','block_name'],'')),
+    panchayat:str(val(x,['Panchayat','panchayat','panchayat_name','area'],'')),
+    village:str(val(x,['Village_Area','Village','village','village_area','village_name'],'')),
+    pin:str(val(x,['PIN_Code','pin','pincode','pin_code'],'')),
+    services:[...new Set(sv.map(v=>str(typeof v==='object'?val(v,['Name','name','service_name','title'],''):v)).filter(Boolean))],
+    status:str(val(x,['Status','status','verification_status'],''))
+   };
+ });
+}
+function customerRegistered(){return localStorage.getItem('senvia_customer_registered')==='1'}
+function contactHtml(p){
+ if(customerRegistered()&&p.mobile){
+   const n=p.mobile.replace(/\D/g,'');
+   return `<a class="btn lock" href="tel:${esc(p.mobile)}">📞 Call</a>${n?`<a class="btn request" target="_blank" href="https://wa.me/91${esc(n)}">💬 WhatsApp</a>`:''}`;
+ }
+ return `<button class="btn lock" onclick="location.href='customer-premium.html#customer'">🔒 Register to view contact</button>`;
+}
+function render(rows){
+ const el=document.getElementById('result');
+ if(!rows.length){el.innerHTML='<div class="empty"><b>इस चयन में कोई Verified Professional नहीं मिला।</b><br><br><a class="btn lock" href="customer-premium.html">← वापस Home</a></div>';return}
+ el.innerHTML='<div class="section-title">Verified Professionals</div><div class="grid">'+rows.map(p=>`<article class="card"><div class="name">✓ ${esc(p.name)}</div><div class="services">${esc(p.services.join(' • ')||'Local Service Professional')}</div><div class="area">📍 ${esc(p.block)}${p.panchayat?' → '+esc(p.panchayat):''}${p.village?' → '+esc(p.village):''}${p.pin?' | PIN: '+esc(p.pin):''}</div><div class="actions">${contactHtml(p)}<a class="btn request" href="javascript:void(0)">🛠 Request Service</a></div><div class="note">🔒 Contact details registration के बाद उपलब्ध होंगे।</div></article>`).join('')+'</div>';
+}
+(async()=>{
+ try{
+  const q=new URLSearchParams(location.search);
+  const b=q.get('block')||'',p=q.get('panchayat')||'',pin=q.get('pin')||'',s=q.get('service')||'';
+  document.getElementById('filter').textContent=[b&&`Block: ${b}`,p&&`Panchayat: ${p}`,pin&&`PIN: ${pin}`,s&&`Service: ${s}`].filter(Boolean).join(' • ')||'सभी Verified Professionals';
+  let pros=[],services=[],links=[];
+  pros=await get('professionals');
+  try{services=await get('services')}catch(e){}
+  try{links=await get('professional_services')}catch(e){}
+  let rows=normalize(pros,links,services).filter(verified);
+  rows=rows.filter(x=>match(x.block,b)&&match(x.panchayat,p)&&(pin?norm(x.pin)===norm(pin):true)&&serviceMatch(x,s));
+  const seen=new Set(); rows=rows.filter(x=>{const k=String(x.id||x.name).toLowerCase();if(seen.has(k))return false;seen.add(k);return true});
+  render(rows);
+ }catch(e){
+  console.error(e);
+  document.getElementById('result').innerHTML='<div class="empty"><b>Search results अभी load नहीं हो सके।</b><br><br><a class="btn lock" href="customer-premium.html">← वापस Home</a></div>';
+ }
+})();
+</script>
+</body>
+</html>
