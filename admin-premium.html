@@ -196,7 +196,7 @@ table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:11px 8px
 <div class="nav" onclick="show('customers',this)">👤 <span data-hi="Customers" data-en="Customers">Customers</span></div>
 <div class="nav" onclick="show('services',this)">🛠 <span data-hi="Services" data-en="Services">Services</span></div>
 <div class="nav" onclick="show('areas',this)">📍 <span data-hi="Areas" data-en="Areas">Areas</span></div>
-<div class="nav" onclick="location.href='admin-messages.html'">💬 <span data-hi="Messages" data-en="Messages">Messages</span></div>
+<div class="nav" onclick="show('messages',this)">💬 <span data-hi="Messages" data-en="Messages">Messages</span></div>
 </aside>
 <main class="content">
 <section id="dashboard">
@@ -222,7 +222,7 @@ table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:11px 8px
 <div class="pdash-bottom">
   <div class="pdash-card"><h2>⚡ Quick Actions</h2><div class="quick-grid">
     <button class="qblue" onclick="openPro()">＋ Add Professional</button><button class="qgreen" onclick="show('customers',null)">＋ Customers</button><button class="qorange" onclick="show('services',null)">🛠 Manage Services</button>
-    <button class="qpurple" onclick="show('areas',null)">📍 Manage Areas</button><button class="qcyan" onclick="location.href='admin-messages.html'">💬 View Messages</button><button class="qgray" onclick="alert('Report module will be added in the next phase.')">▣ Generate Report</button>
+    <button class="qpurple" onclick="show('areas',null)">📍 Manage Areas</button><button class="qcyan" onclick="show('messages',null)">💬 View Messages</button><button class="qgray" onclick="alert('Report module will be added in the next phase.')">▣ Generate Report</button>
   </div></div>
   <div class="pdash-card"><h2>ℹ️ Platform Overview</h2><div class="overview-grid" id="platformOverview"></div></div>
 </div>
@@ -236,6 +236,7 @@ table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:11px 8px
 
 <section id="areas" style="display:none"><h1>Blocks & Areas</h1><div class="panel"><div class="toolbar"><button class="outline view-toggle" id="areaViewToggle" onclick="toggleCollectionView('areas')">▦ Grid View</button></div><h3>Available Blocks</h3><div id="availableList" class="area-view"></div><h3 style="margin-top:25px">Coming Soon Blocks</h3><div id="comingList" class="area-view"></div><p style="color:#68758a">Admin can move a block from Coming Soon to Available after onboarding is completed.</p></div></section>
 
+<section id="messages" style="display:none"><h1>Messages</h1><div class="panel"><div class="toolbar"><input id="msgSearch" placeholder="Search user / mobile / message / ID"><select id="msgType"><option value="">All Types</option><option>Registration</option><option>Welcome</option></select><button class="outline view-toggle" id="msgViewToggle" onclick="toggleCollectionView('messages')">▦ Grid View</button></div><div id="messageList" class="collection-list"></div></div></section>
 </main></div>
 
 
@@ -284,7 +285,7 @@ const demoPros=[
 {name:'Santosh Kumar Hazra',mobile:'9905077187',block:'Katra',panchayat:'Barari',village:'Barari',services:['TV / LED Repair','AC Repair','Fridge Repair'],status:'Verified'},
 {name:'Vipin Kumar',mobile:'7992477919',block:'Gaighat',panchayat:'Mahamdpur Sura',village:'Mahamdpur Sura',services:['Mobile Repair','Electronics Repair'],status:'Verified'},
 {name:'Sanjay Kumar',mobile:'7281073721',block:'Bochahan',panchayat:'Jhaphan',village:'Jhaphan',services:['Plumber'],status:'Verified'}];
-let services=[...demoServices],pros=[...demoPros],customers=[],customerRows=[],lang='hi',dbMode=false,serviceRows=[],proRows=[];
+let services=[...demoServices],pros=[...demoPros],customers=[],customerRows=[],messageRows=[],lang='hi',dbMode=false,serviceRows=[],proRows=[];
 let accessToken=localStorage.getItem('senvia_admin_token')||sessionStorage.getItem('senvia_admin_token')||'';
 let refreshToken=localStorage.getItem('senvia_admin_refresh_token')||'';
 const authHeaders=()=>accessToken?{apikey:SUPABASE_KEY,Authorization:'Bearer '+accessToken}:{apikey:SUPABASE_KEY};
@@ -400,6 +401,7 @@ async function loadFromSupabase(){
    services=serviceRows.map(s=>svcLabel(s)).filter(Boolean);
    if(!services.length) services=[...demoServices];
    try{ customerRows=await api('customers?select=*&order=created_at.desc'); }catch(e){ customerRows=[]; console.warn('customers read failed',e); }
+   try{ messageRows=await api('messages?select=*&order=created_at.desc'); }catch(e){ messageRows=[]; console.warn('messages read failed',e); }
    customers=Array.isArray(customerRows)?customerRows:[];
    dbMode=true;
    const note=(serviceRows.length?'':' (services table unavailable; using local service names)')+(links.length?'':' (service links unavailable; existing profile service fields used where available)');
@@ -441,7 +443,7 @@ function render(){
  const cc=document.getElementById('countCust'); if(cc) cc.textContent=customers.length;
  const cs=document.getElementById('countSvc'); if(cs) cs.textContent=services.length;
  const cb=document.getElementById('countBlocks'); if(cb) cb.textContent=4;
- renderTable();renderRecent();renderServices();renderCustomers();renderAreas();
+ renderTable();renderServices();renderCustomers();renderMessages();renderAreas();
  renderPremiumDashboard();
 }
 document.getElementById('senviaBusy')?.classList.remove('show');
@@ -467,7 +469,6 @@ function renderPremiumDashboard(){
  const ov=document.getElementById('platformOverview');if(ov)ov.innerHTML='<div class="overview-item"><small>✅ Verified Professionals</small><b>'+pros.filter(p=>proStatus(p)==='Verified').length+'</b></div><div class="overview-item"><small>⏳ Pending Professionals</small><b>'+pros.filter(p=>proStatus(p)==='Pending').length+'</b></div><div class="overview-item"><small>👤 Active Customers</small><b>'+customers.length+'</b></div><div class="overview-item"><small>🛠 Service Categories</small><b>'+services.length+'</b></div>';
 }
 function renderTable(){let q=(proSearch?.value||'').toLowerCase(),st=statusFilter?.value||'';proTable.innerHTML=pros.filter(p=>(!q||JSON.stringify(p).toLowerCase().includes(q))&&(!st||proStatus(p)===st)).map((p,i)=>`<tr><td><b>${p.name}</b>${p.professional_code?`<br><span class=\"code-pill\">ID: ${p.professional_code}</span>`:''}</td><td>${p.mobile}</td><td>${p.block} → ${p.panchayat}<br>${p.village}</td><td>${p.services.join(', ')||'—'}</td><td><span class="badge ${proStatus(p).toLowerCase()}">${proStatus(p)}</span></td><td>${proStatus(p)==='Pending'?`<button class="green" onclick="approve(${i})">Approve</button> `:''}<button class="outline" onclick="viewPro(${i})">View</button> <button class="danger" onclick="removePro(${i})">Delete</button></td></tr>`).join('')||'<tr><td colspan="6" class="empty">No professionals found.</td></tr>'}
-function renderRecent(){recent.innerHTML=pros.slice(-5).reverse().map(p=>`<div style="padding:10px 0;border-bottom:1px solid #edf1f5"><b>${p.name}</b> — ${p.block} — ${p.services.join(', ')||'—'} <span class="badge ${proStatus(p).toLowerCase()}">${proStatus(p)}</span></div>`).join('')}
 function renderServices(){
  const grid=localStorage.getItem('senvia_services_view')==='grid';
  const box=document.getElementById('serviceList'); box.className=grid?'collection-grid':'collection-list';
@@ -497,6 +498,21 @@ async function deleteCustomer(id){
    alert('Customer delete failed. कृपया Admin authorization/RLS policy जाँचें.\n\n'+(e.message||e));
  }finally{hideBusy()}
 }
+function messageStatus(m){ return m.status || m.message_status || m.read_status || (m.is_read===true?'Read':'New'); }
+function messageDate(m){ return m.created_at ? new Date(m.created_at).toLocaleString() : (m.date_time||m.date||'—'); }
+function viewMessage(id){ const m=(messageRows||[]).find(x=>String(x.id)===String(id)); if(!m)return; const modal=document.getElementById('msgViewModal'); if(!modal)return; document.getElementById('msgViewTitle').textContent=(m.message_type||'Message')+' — '+(m.user_name||'—'); document.getElementById('msgViewBody').innerHTML=`<div class="msg-detail-grid"><div><small>User Name</small><b>${m.user_name||'—'}</b></div><div><small>User Type</small><b>${m.user_type||'—'}</b></div><div><small>Mobile</small><b>${m.mobile||'—'}</b></div><div><small>Senvia ID</small><b>${m.user_code||'—'}</b></div><div><small>Message Type</small><b>${m.message_type||'—'}</b></div><div><small>Status</small><b>${messageStatus(m)}</b></div><div class="full"><small>Message</small><p>${m.message||'—'}</p></div><div class="full"><small>Date / Time</small><b>${messageDate(m)}</b></div></div>`; modal.classList.add('show'); }
+function closeMessageView(){ const modal=document.getElementById('msgViewModal'); if(modal)modal.classList.remove('show'); }
+function renderMessages(){
+ const grid=localStorage.getItem('senvia_messages_view')==='grid'; const box=document.getElementById('messageList'); if(!box)return; box.className=grid?'collection-grid':'collection-list';
+ const q=(document.getElementById('msgSearch')?.value||'').toLowerCase(), typ=document.getElementById('msgType')?.value||'';
+ const rows=(Array.isArray(messageRows)?messageRows:[]).filter(m=>(!q||JSON.stringify(m).toLowerCase().includes(q))&&(!typ||m.message_type===typ));
+ box.innerHTML=rows.map(m=>grid?`<div class="collection-card message-card"><div class="msg-head"><h3>💬 ${m.message_type||'Message'}</h3><span class="msg-status">${messageStatus(m)}</span></div><div class="msg-meta"><span><b>User Name:</b> ${m.user_name||'—'}</span><span><b>User Type:</b> ${m.user_type||'—'}</span><span><b>Mobile:</b> ${m.mobile||'—'}</span><span><b>Senvia ID:</b> ${m.user_code||'—'}</span></div><p class="msg-text">${m.message||'—'}</p><small class="msg-date">🕐 ${messageDate(m)}</small><div class="actions"><button class="outline" onclick="viewMessage(${m.id})">View</button><button class="danger" onclick="deleteMessage(${m.id})">Delete</button></div></div>`:`<div class="message-row"><div class="message-row-main"><strong>${m.message_type||'Message'}</strong><span class="code-pill">${m.user_code||'—'}</span><b>${m.user_name||'—'}</b></div><div class="message-row-info"><span><b>User Type:</b> ${m.user_type||'—'}</span><span><b>Mobile:</b> ${m.mobile||'—'}</span><span><b>Status:</b> ${messageStatus(m)}</span><span><b>Date:</b> ${messageDate(m)}</span></div><div class="message-row-text">${m.message||'—'}</div><div class="message-row-actions"><button class="outline" onclick="viewMessage(${m.id})">View</button><button class="danger" onclick="deleteMessage(${m.id})">Delete</button></div></div>`).join('')||'<p class="empty">No messages found.</p>';
+ const b=document.getElementById('msgViewToggle');if(b)b.textContent=grid?'☷ List View':'▦ Grid View';
+}
+function toggleCollectionView(type){const key='senvia_'+type+'_view';const now=localStorage.getItem(key)==='grid'?'list':'grid';localStorage.setItem(key,now);render();}
+function restoreCollectionViews(){renderServices();renderCustomers();renderMessages();}
+async function deleteMessage(id){if(!confirm('Delete this message?'))return;try{await api('messages?id=eq.'+encodeURIComponent(id),{method:'DELETE'});messageRows=messageRows.filter(x=>String(x.id)!==String(id));renderMessages()}catch(e){alert('Message delete failed. Check RLS policy.')}}
+
 let editingServiceIndex=-1;
 function serviceNameKey(row){
  if(!row||typeof row!=='object')return null;
@@ -553,7 +569,7 @@ async function approve(i){const p=pros[i];if(!dbMode||!p.id){p.status='Verified'
 async function removePro(i){if(!confirm('Delete this professional?'))return;const p=pros[i];if(!dbMode||!p.id){pros.splice(i,1);render();return}try{await api('professional_services?professional_id=eq.'+encodeURIComponent(p.id),{method:'DELETE'});await api('professionals?id=eq.'+encodeURIComponent(p.id),{method:'DELETE'});await loadFromSupabase()}catch(e){alert('Delete failed. Check Supabase RLS policy.')}}
 async function addService(){let s=newSvc.value.trim();if(!s)return;if(!dbMode){if(!services.includes(s))services.push(s);newSvc.value='';render();return}try{const sample=serviceRows.find(x=>x&&typeof x==='object')||{};const candidates=['name_en','name','service','service_name','service_name_en','service_name_hi','title','name_hi','label','category','Service Name','Service'];const detected=candidates.find(k=>Object.prototype.hasOwnProperty.call(sample,k));const extra=Object.keys(sample).filter(k=>{const v=sample[k];const lk=k.toLowerCase();return typeof v==='string'&&v.trim()&& !['id','created_at','updated_at','status','description'].includes(lk)&&!lk.includes('created')&&!lk.includes('updated')&&!lk.includes('uuid')});const keys=[...new Set([...(detected?[detected]:[]),...candidates,...extra])];let last='';let done=false;for(const key of keys){try{const payload={};payload[key]=s;await api('services',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify(payload)});done=true;break}catch(e){last=e.message||String(e)}}if(!done)throw new Error(last||'Services table का service-name column नहीं मिला।');newSvc.value='';await loadFromSupabase()}catch(e){console.error('Service add failed:',e);alert('Service add failed. '+(e.message||e))}}
 async function delService(i){if(!confirm('Delete this service?'))return;let s=serviceRows.find(x=>svcLabel(x)===services[i]);if(!dbMode||!s?.id){services.splice(i,1);render();return}try{await api('services?id=eq.'+encodeURIComponent(s.id),{method:'DELETE'});await loadFromSupabase()}catch(e){alert('Service delete failed. Check RLS and linked professional_services records.')}}
-proSearch.oninput=renderTable;statusFilter.onchange=renderTable;custSearch.oninput=renderCustomers;
+proSearch.oninput=renderTable;statusFilter.onchange=renderTable;custSearch.oninput=renderCustomers;msgSearch.oninput=renderMessages;msgType.onchange=renderMessages;
 const db=document.createElement('div');db.id='dbStatus';db.style='margin:12px 0 0;padding:10px 12px;border-radius:9px;font-weight:700;background:#fff4d7;color:#8a6500';db.textContent='Connecting to Supabase…';document.querySelector('.content').prepend(db);
 const senviaNativeFetch=window.fetch.bind(window);
 window.fetch=async function(...args){
@@ -563,7 +579,23 @@ window.fetch=async function(...args){
 };
 restoreAdminEmail();
 restoreProfessionalView();restoreCollectionViews();
-refreshAdminSession().then(()=>requireAdmin()).then(ok=>{if(ok) loadFromSupabase()});
+
+refreshAdminSession()
+  .then(()=>requireAdmin())
+  .then(ok=>{if(ok) return loadFromSupabase();})
+  .catch(e=>{
+    console.error('Admin startup failed:',e);
+    const db=document.getElementById('dbStatus');
+    if(db){
+      db.textContent='⚠️ Admin data loading failed. Please refresh once.';
+      db.style.background='#fff4d7';
+      db.style.color='#8a6500';
+    }
+  })
+  .finally(()=>{
+    senviaBusyCount=0;
+    document.getElementById('senviaBusy')?.classList.remove('show');
+  });
 </script>
 <div class="msg-detail-modal" id="msgViewModal" onclick="if(event.target===this)closeMessageView()"><div class="msg-detail-card"><div class="msg-detail-head"><h2 id="msgViewTitle">Message Details</h2><button class="msg-detail-close" type="button" onclick="closeMessageView()">✕</button></div><div class="msg-detail-body" id="msgViewBody"></div></div></div>
 </body></html>
