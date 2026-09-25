@@ -25,9 +25,12 @@ button,.btn{border:0;border-radius:9px;padding:9px 13px;font-weight:700;text-dec
 .note{font-size:12px;color:#68727f;margin-top:8px}.modal{display:none;position:fixed;inset:0;background:#0008;z-index:9999;align-items:center;justify-content:center;padding:15px}.modal.show{display:flex}.modalbox{width:min(520px,100%);background:#fff;border-radius:18px;padding:20px;box-shadow:0 10px 40px #0005;position:relative}.modalbox h2{margin:0 0 10px;color:#07528f}.close{position:absolute;right:12px;top:8px;border:0;background:none;font-size:28px;cursor:pointer}.form input{width:100%;padding:12px;margin:6px 0;border:1px solid #ccd8e2;border-radius:9px;font-size:15px}
 .empty,.busy{background:#fff;border-radius:16px;padding:28px;text-align:center;box-shadow:0 3px 14px #00000010}
 @media(max-width:700px){.top{display:grid;grid-template-columns:repeat(5,1fr);gap:2px;padding:5px}.top a{font-size:11px;text-align:center;padding:7px 2px}.grid{grid-template-columns:1fr}h1{font-size:23px}}
+
+.search-busy{position:fixed;inset:0;background:rgba(7,82,143,.14);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;z-index:10000}.search-busy.show{display:flex}.v-loader{width:92px;height:92px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#fff;box-shadow:0 10px 40px #07528f35;position:relative}.v-loader:before{content:"";position:absolute;inset:7px;border:4px solid #d9ebf8;border-top-color:#07528f;border-right-color:#10a66a;border-radius:50%;animation:searchVSpin 1s linear infinite}.v-loader span{font:900 42px Arial,sans-serif;color:#07528f;animation:searchVReverse .85s linear infinite}@keyframes searchVSpin{to{transform:rotate(360deg)}}@keyframes searchVReverse{to{transform:rotate(-360deg)}}
 </style>
 </head>
 <body>
+<div class="search-busy show" id="searchBusy"><div class="v-loader"><span>V</span></div></div>
 <nav class="top">
 <a href="customer-premium.html">⌂ होम</a>
 <a href="services.html">⚙ सेवाएँ</a>
@@ -131,10 +134,10 @@ function render(rows){
   let rows=normalize(pros,links,services).filter(verified);
   rows=rows.filter(x=>match(x.block,b)&&match(x.panchayat,p)&&(pin?norm(x.pin)===norm(pin):true)&&serviceMatch(x,s));
   const seen=new Set(); rows=rows.filter(x=>{const k=String(x.id||x.name).toLowerCase();if(seen.has(k))return false;seen.add(k);return true});
-  render(rows);
+  render(rows); document.getElementById('searchBusy')?.classList.remove('show');
  }catch(e){
   console.error(e);
-  document.getElementById('result').innerHTML='<div class="empty"><b>Search results अभी load नहीं हो सके।</b><br><br><a class="btn lock" href="customer-premium.html">← वापस Home</a></div>';
+  document.getElementById('searchBusy')?.classList.remove('show'); document.getElementById('result').innerHTML='<div class="empty"><b>Search results अभी load नहीं हो सके।</b><br><br><a class="btn lock" href="customer-premium.html">← वापस Home</a></div>';
  }
 })();
 </script>
