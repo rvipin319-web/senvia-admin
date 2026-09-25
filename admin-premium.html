@@ -196,7 +196,7 @@ table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:11px 8px
 <div class="nav" onclick="show('customers',this)">👤 <span data-hi="Customers" data-en="Customers">Customers</span></div>
 <div class="nav" onclick="show('services',this)">🛠 <span data-hi="Services" data-en="Services">Services</span></div>
 <div class="nav" onclick="show('areas',this)">📍 <span data-hi="Areas" data-en="Areas">Areas</span></div>
-<div class="nav" onclick="show('messages',this)">💬 <span data-hi="Messages" data-en="Messages">Messages</span></div>
+<div class="nav" onclick="location.href='admin-messages.html?v=20260925'">💬 <span data-hi="Messages" data-en="Messages">Messages</span></div>
 </aside>
 <main class="content">
 <section id="dashboard">
@@ -436,14 +436,14 @@ document.getElementById('proViewModal')?.addEventListener('click',e=>{if(e.targe
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeProView();closeServiceEdit()}});
 function restoreProfessionalView(){const sec=document.getElementById('pros');const pref=localStorage.getItem('senvia_prof_view')||'card';const on=pref==='card';sec.classList.toggle('card-view',on);sec.classList.toggle('table-view',!on);const b=document.getElementById('viewToggle');if(b)b.textContent=on?'☷ Table View':'▦ Card View'}
 function setLang(l){lang=l;document.querySelectorAll('[data-hi]').forEach(e=>e.textContent=e.dataset[l]);document.getElementById('hi').className=l==='hi'?'on':'';document.getElementById('en').className=l==='en'?'on':''}
-function show(id,el){document.querySelectorAll('main section').forEach(s=>s.style.display='none');document.getElementById(id).style.display='block';document.querySelectorAll('.nav').forEach(n=>n.classList.remove('active'));if(el)el.classList.add('active');render()}
+function show(id,el){if(id==='messages'){location.href='admin-messages.html?v=20260925';return;}document.querySelectorAll('main section').forEach(s=>s.style.display='none');document.getElementById(id).style.display='block';document.querySelectorAll('.nav').forEach(n=>n.classList.remove('active'));if(el)el.classList.add('active');render()}
 function render(){
  const pendingCount=pros.filter(p=>proStatus(p)==='Pending').length;
  const cp=document.getElementById('countPro'); if(cp) cp.textContent=pros.length;
  const cc=document.getElementById('countCust'); if(cc) cc.textContent=customers.length;
  const cs=document.getElementById('countSvc'); if(cs) cs.textContent=services.length;
  const cb=document.getElementById('countBlocks'); if(cb) cb.textContent=4;
- renderTable();renderServices();renderCustomers();renderMessages();renderAreas();
+ renderTable();renderServices();renderCustomers();renderAreas();
  renderPremiumDashboard();
 }
 document.getElementById('senviaBusy')?.classList.remove('show');
@@ -510,7 +510,7 @@ function renderMessages(){
  const b=document.getElementById('msgViewToggle');if(b)b.textContent=grid?'☷ List View':'▦ Grid View';
 }
 function toggleCollectionView(type){const key='senvia_'+type+'_view';const now=localStorage.getItem(key)==='grid'?'list':'grid';localStorage.setItem(key,now);render();}
-function restoreCollectionViews(){renderServices();renderCustomers();renderMessages();}
+function restoreCollectionViews(){renderServices();renderCustomers();}
 async function deleteMessage(id){if(!confirm('Delete this message?'))return;try{await api('messages?id=eq.'+encodeURIComponent(id),{method:'DELETE'});messageRows=messageRows.filter(x=>String(x.id)!==String(id));renderMessages()}catch(e){alert('Message delete failed. Check RLS policy.')}}
 
 let editingServiceIndex=-1;
