@@ -47,8 +47,17 @@ async function load(){
 }
 const CUSTOMER_REG_KEY='senvia_customer_registered_v3';
 function customerRegistered(){return localStorage.getItem(CUSTOMER_REG_KEY)==='1'}
-function showContact(p){return customerRegistered()&&p.mobile?`<a class="btn green" href="tel:${esc(p.mobile)}">📞 Call</a><a class="btn light" target="_blank" href="https://wa.me/91${esc(String(p.mobile).replace(/\D/g,''))}">💬 WhatsApp</a>`:`<button class="btn blue" onclick="needRegistration('contact',${JSON.stringify(p).replace(/</g,'\\u003c')})">🔒 Register to view contact</button>`}
-function requestBtn(p,svc){return `<button class="btn green" onclick="needRegistration('request',${JSON.stringify({p,svc}).replace(/</g,'\\u003c')})">🛠 Request Service</button>`}
+function actionPayload(v){return esc(JSON.stringify(v))}
+function showContact(p){
+  if(customerRegistered()&&p.mobile){
+    const mob=String(p.mobile).replace(/\D/g,'');
+    return `<a class="btn green" href="tel:${esc(p.mobile)}">📞 Call</a><a class="btn light" target="_blank" rel="noopener" href="https://wa.me/91${esc(mob)}">💬 WhatsApp</a>`;
+  }
+  return `<button type="button" class="btn blue js-contact-btn" data-payload='${actionPayload(p)}' onclick='needRegistration("contact",JSON.parse(this.dataset.payload))'>🔒 Register to view contact</button>`;
+}
+function requestBtn(p,svc){
+  return `<button type="button" class="btn green js-request-btn" data-payload='${actionPayload({p,svc})}' onclick='needRegistration("request",JSON.parse(this.dataset.payload))'>🛠 Request Service</button>`;
+}
 function render(filter){
   const rows=filter?pros.filter(p=>p.services.some(s=>norm(s)===norm(filter)||norm(s).includes(norm(filter))||norm(filter).includes(norm(s)))):pros;
   const uniq=[...new Map(rows.map(p=>[String(p.id||'')+'|'+norm(p.mobile)+'|'+norm(p.name),p])).values()];
