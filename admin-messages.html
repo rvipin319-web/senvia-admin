@@ -9,13 +9,27 @@
 header{background:#fff;border-bottom:1px solid var(--line);padding:12px 4%;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:5}.logo{font-size:26px;font-weight:900;color:var(--navy)}.logo span{color:var(--green)}.tag{font-size:11px;color:var(--muted)}
 button{border:0;border-radius:9px;padding:10px 14px;font-weight:800;cursor:pointer}.green{background:var(--green);color:#fff}.blue{background:var(--blue);color:#fff}.outline{background:#fff;color:var(--navy);border:1px solid #cbd5e1}.danger{background:#c93636;color:#fff}
 .layout{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - 67px)}aside{background:var(--navy);color:#fff;padding:18px 12px}aside h3{margin:4px 12px 20px}.nav{display:block;padding:12px;border-radius:9px;margin:5px 0;color:#fff;text-decoration:none;cursor:pointer}.nav:hover,.nav.active{background:#0c3c76}.content{padding:24px 4%;max-width:1300px;width:100%;margin:auto}h1{color:var(--navy);margin:0 0 6px}.sub{color:var(--muted);margin-bottom:18px}.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px}.toolbar{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:15px}.toolbar input,.toolbar select{padding:11px;border:1px solid #d3deea;border-radius:9px;background:#fff}.toolbar input{min-width:230px}.messages{display:flex;flex-direction:column;gap:10px}.messages.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}.msg{background:#fff;border:1px solid #dce7f0;border-radius:16px;padding:15px;box-shadow:0 5px 18px rgba(20,70,120,.06)}.msg-head{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.msg h3{margin:0;color:var(--navy);font-size:16px}.pill{display:inline-block;background:#edf9ee;color:#26733b;border:1px solid #ccebd0;border-radius:999px;padding:4px 8px;font-size:11px;font-weight:800}.meta{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:11px 0;font-size:12px;color:#5d6d80}.text{background:#f7fbff;border:1px solid #e1edf6;border-radius:10px;padding:11px;line-height:1.5;font-size:13px;color:#263c52;white-space:pre-wrap}.date{display:block;color:#718197;font-size:11px;margin-top:9px}.actions{display:flex;gap:8px;margin-top:12px}.empty{text-align:center;color:var(--muted);padding:35px}.status{margin:0 0 14px;padding:10px 12px;border-radius:10px;background:#fff4d7;color:#8a6500;font-weight:700}.status.ok{background:#e7f7e4;color:#23751c}.back{margin-bottom:14px}@media(max-width:700px){.layout{grid-template-columns:1fr}aside{padding:10px;display:flex;gap:6px;overflow:auto}aside h3{display:none}.nav{white-space:nowrap;margin:0}.content{padding:18px 3%}.meta{grid-template-columns:1fr}.toolbar input{min-width:0;width:100%}}
+
+
+.folders{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 16px}
+.folder{border:1px solid #d7e2ef;background:#fff;color:#29415f;border-radius:12px;padding:11px 16px;font-weight:700;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.05);transition:.2s}
+.folder:hover{transform:translateY(-1px)}
+.folder.active{background:linear-gradient(135deg,#0b3d78,#1769aa);color:#fff;border-color:#1769aa}
+.folder span{display:inline-flex;min-width:22px;height:22px;padding:0 6px;align-items:center;justify-content:center;border-radius:20px;background:rgba(255,255,255,.22);font-size:12px;margin-left:5px}
+.folder:not(.active) span{background:#eef4fb;color:#1769aa}
+@media(max-width:700px){.folders{display:grid;grid-template-columns:1fr}.folder{text-align:left}}
 </style>
 </head>
 <body>
 <div id="loginGate" style="position:fixed;inset:0;background:#f4f7fb;display:none;align-items:center;justify-content:center;padding:20px;z-index:9999"><div style="width:min(430px,100%);background:#fff;border:1px solid #dce5ef;border-radius:20px;padding:25px;box-shadow:0 20px 60px rgba(0,0,0,.12)"><h2 style="color:#082455;margin-top:0">🔐 Senvia Admin Login</h2><input id="loginEmail" type="email" placeholder="Admin email" style="width:100%;padding:12px;margin:7px 0;border:1px solid #d3deea;border-radius:9px"><input id="loginPassword" type="password" placeholder="Password" style="width:100%;padding:12px;margin:7px 0;border:1px solid #d3deea;border-radius:9px"><button class="blue" style="width:100%;margin-top:8px" onclick="adminLogin()">Login</button><button class="outline" style="width:100%;margin-top:8px" onclick="forgotPassword()">Forgot Password?</button><p id="loginMsg" style="color:#b42318"></p></div></div>
 <header><div><div class="logo"><span>S</span>envia</div><div class="tag">हर घर का अपना साथी • Messages</div></div><button class="danger" onclick="adminLogout()">↪ Logout</button></header>
 <div class="layout"><aside><h3>⚙ Senvia Admin</h3><a class="nav" href="admin-premium.html">📊 Dashboard</a><a class="nav" href="admin-premium.html">👥 Professionals</a><a class="nav" href="admin-premium.html">👤 Customers</a><a class="nav" href="admin-premium.html">🛠 Services</a><a class="nav" href="admin-premium.html">📍 Areas</a><a class="nav active" href="admin-messages.html">💬 Messages</a></aside>
-<main class="content"><div class="back"><button class="outline" onclick="location.href='admin-premium.html'">← Back to Admin Panel</button></div><h1>💬 Messages</h1><div class="sub">Service Requests, registrations और अन्य Senvia messages यहाँ अलग page पर दिखेंगे।</div><div id="status" class="status">Connecting to Supabase…</div><div class="panel"><div class="toolbar"><input id="search" placeholder="Search user / mobile / message / ID"><select id="type"><option value="">All Types</option><option>Service Request</option><option>Registration</option><option>Welcome</option></select><button class="outline" id="viewBtn" onclick="toggleView()">▦ Grid View</button><button class="blue" onclick="loadMessages()">↻ Refresh</button></div><div id="messages" class="messages"></div></div></main></div>
+<main class="content"><div class="back"><button class="outline" onclick="location.href='admin-premium.html'">← Back to Admin Panel</button></div><h1>💬 Messages</h1><div class="sub">Messages को तीन folders में व्यवस्थित किया गया है — Requests, Professionals और Customers.</div><div id="status" class="status">Connecting to Supabase…</div><div class="panel"><div class="folders">
+<button id="folderRequests" class="folder active" onclick="setFolder('requests')">📩 Requests <span id="countRequests">0</span></button>
+<button id="folderProfessionals" class="folder" onclick="setFolder('professionals')">👨‍🔧 Professionals <span id="countProfessionals">0</span></button>
+<button id="folderCustomers" class="folder" onclick="setFolder('customers')">👤 Customers <span id="countCustomers">0</span></button>
+</div>
+<div class="toolbar"><input id="search" placeholder="Search user / mobile / message / ID"><select id="type"><option value="">All Types</option><option>Service Request</option><option>Registration</option><option>Welcome</option></select><button class="outline" id="viewBtn" onclick="toggleView()">▦ Grid View</button><button class="blue" onclick="loadMessages()">↻ Refresh</button></div><div id="messages" class="messages"></div></div></main></div>
 <script>
 const SUPABASE_URL='https://hxdrvhiowurbwlgmczju.supabase.co',SUPABASE_KEY='sb_publishable_cvh_b0gklN5SOcH5MsGs8g_4JI9-PxT';
 let accessToken=localStorage.getItem('senvia_admin_token')||sessionStorage.getItem('senvia_admin_token')||'',refreshToken=localStorage.getItem('senvia_admin_refresh_token')||'',rows=[];
@@ -30,8 +44,64 @@ function adminLogout(){clearAuth();location.reload()}
 function esc(x){return String(x??'—').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
 function date(x){return x?.created_at?new Date(x.created_at).toLocaleString():x?.date_time||x?.date||'—'}
 function status(x){return x?.status||x?.message_status||x?.read_status||(x?.is_read===true?'Read':'New')}
-function render(){const q=search.value.trim().toLowerCase(),t=type.value;const data=rows.filter(m=>(!q||JSON.stringify(m).toLowerCase().includes(q))&&(!t||m.message_type===t));messages.className='messages '+(localStorage.getItem('senvia_messages_view')==='grid'?'grid':'');messages.innerHTML=data.map(m=>`<article class="msg"><div class="msg-head"><h3>💬 ${esc(m.message_type||'Message')}</h3><span class="pill">${esc(status(m))}</span></div><div class="meta"><span><b>User:</b> ${esc(m.user_name)}</span><span><b>Type:</b> ${esc(m.user_type)}</span><span><b>Mobile:</b> ${esc(m.mobile)}</span><span><b>Senvia ID:</b> ${esc(m.user_code)}</span></div><div class="text">${esc(m.message)}</div><span class="date">🕐 ${esc(date(m))}</span><div class="actions"><button class="outline" onclick="view(${JSON.stringify(m.id)})">View</button><button class="danger" onclick="del(${JSON.stringify(m.id)})">Delete</button></div></article>`).join('')||'<div class="empty">No messages found.</div>';viewBtn.textContent=localStorage.getItem('senvia_messages_view')==='grid'?'☷ List View':'▦ Grid View'}
-async function loadMessages(){if(!(await requireAdmin()))return;status.textContent='Loading messages…';try{const r=await fetch(SUPABASE_URL+'/rest/v1/messages?select=*&order=created_at.desc',{headers:{...authHeaders(),'Content-Type':'application/json'}});const raw=await r.text();if(!r.ok)throw Error(raw||('HTTP '+r.status));rows=raw?JSON.parse(raw):[];status.textContent='🟢 Supabase connected — '+rows.length+' message(s) loaded.';status.className='status ok';render()}catch(e){status.textContent='🔴 Messages load failed: '+e.message;status.className='status';messages.innerHTML='<div class="empty">Messages पढ़े नहीं जा सके।</div>'}}
+let currentFolder='requests';
+
+function setFolder(folder){
+  currentFolder=folder;
+  document.querySelectorAll('.folder').forEach(b=>b.classList.remove('active'));
+  const el=document.getElementById('folder'+folder.charAt(0).toUpperCase()+folder.slice(1));
+  if(el)el.classList.add('active');
+  type.value='';
+  render();
+}
+
+function folderRows(){
+  return rows.filter(m=>{
+    const u=String(m.user_type||'').toLowerCase();
+    const mt=String(m.message_type||'').toLowerCase();
+    if(currentFolder==='requests') return mt==='service request' && u==='customer';
+    if(currentFolder==='professionals') return u==='professional' && mt!=='service request';
+    if(currentFolder==='customers') return u==='customer' && mt!=='service request';
+    return true;
+  });
+}
+
+function updateFolderCounts(){
+  const requests=rows.filter(m=>String(m.message_type||'').toLowerCase()==='service request' && String(m.user_type||'').toLowerCase()==='customer').length;
+  const professionals=rows.filter(m=>String(m.user_type||'').toLowerCase()==='professional' && String(m.message_type||'').toLowerCase()!=='service request').length;
+  const customers=rows.filter(m=>String(m.user_type||'').toLowerCase()==='customer' && String(m.message_type||'').toLowerCase()!=='service request').length;
+  document.getElementById('countRequests').textContent=requests;
+  document.getElementById('countProfessionals').textContent=professionals;
+  document.getElementById('countCustomers').textContent=customers;
+}
+
+function render(){
+  const q=search.value.trim().toLowerCase(),t=type.value;
+  const base=folderRows();
+  const data=base.filter(m=>(!q||JSON.stringify(m).toLowerCase().includes(q))&&(!t||m.message_type===t));
+  messages.className='messages '+(localStorage.getItem('senvia_messages_view')==='grid'?'grid':'');
+  messages.innerHTML=data.map(m=>`<article class="msg"><div class="msg-head"><h3>💬 ${esc(m.message_type||'Message')}</h3><span class="pill">${esc(status(m))}</span></div><div class="meta"><span><b>User:</b> ${esc(m.user_name)}</span><span><b>Type:</b> ${esc(m.user_type)}</span><span><b>Mobile:</b> ${esc(m.mobile)}</span><span><b>Senvia ID:</b> ${esc(m.user_code)}</span></div><div class="text">${esc(m.message)}</div><span class="date">🕐 ${esc(date(m))}</span><div class="actions"><button class="outline" onclick="view(${JSON.stringify(m.id)})">View</button><button class="danger" onclick="del(${JSON.stringify(m.id)})">Delete</button></div></article>`).join('')||'<div class="empty">इस folder में अभी कोई message नहीं है।</div>';
+  viewBtn.textContent=localStorage.getItem('senvia_messages_view')==='grid'?'☷ List View':'▦ Grid View';
+  updateFolderCounts();
+}
+
+async function loadMessages(){
+  if(!(await requireAdmin()))return;
+  status.textContent='Loading messages…';
+  try{
+    const r=await fetch(SUPABASE_URL+'/rest/v1/messages?select=*&order=created_at.desc',{headers:{...authHeaders(),'Content-Type':'application/json'}});
+    const raw=await r.text();
+    if(!r.ok)throw Error(raw||('HTTP '+r.status));
+    rows=raw?JSON.parse(raw):[];
+    status.textContent='🟢 Supabase connected — messages loaded.';
+    status.className='status ok';
+    render();
+  }catch(e){
+    status.textContent='🔴 Messages load failed: '+e.message;
+    status.className='status';
+    messages.innerHTML='<div class="empty">Messages पढ़े नहीं जा सके।</div>';
+  }
+}
 function toggleView(){const now=localStorage.getItem('senvia_messages_view')==='grid'?'list':'grid';localStorage.setItem('senvia_messages_view',now);render()}
 function view(id){const m=rows.find(x=>String(x.id)===String(id));if(!m)return;alert((m.message_type||'Message')+'\n\nUser: '+(m.user_name||'—')+'\nMobile: '+(m.mobile||'—')+'\n\n'+(m.message||'—'))}
 async function del(id){if(!confirm('Delete this message?'))return;try{const r=await fetch(SUPABASE_URL+'/rest/v1/messages?id=eq.'+encodeURIComponent(id),{method:'DELETE',headers:{...authHeaders(),'Content-Type':'application/json'}});if(!r.ok)throw Error(await r.text());rows=rows.filter(x=>String(x.id)!==String(id));render()}catch(e){alert('Delete failed: '+e.message)}}
