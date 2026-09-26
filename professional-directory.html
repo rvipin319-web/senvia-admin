@@ -417,13 +417,6 @@ async function regC(){
     const d=raw?JSON.parse(raw):[];
     const row=Array.isArray(d)?d[0]:d;
     const code=row?.customer_code||'';
-    // Keep the successful Customer Registration details for Find Activity logging.
-    localStorage.setItem('senvia_customer_registered','1');
-    localStorage.setItem('senvia_customer_code',code||'');
-    localStorage.setItem('senvia_customer_name',name);
-    localStorage.setItem('senvia_customer_mobile',phone);
-    localStorage.setItem('senvia_customer_block',block||'');
-    localStorage.setItem('senvia_customer_village',village||'');
     document.getElementById('cn').value='';
     document.getElementById('cm').value='';
     document.getElementById('cv').value='';
@@ -894,56 +887,11 @@ $('block').addEventListener('change',loadP);$('p').addEventListener('change',loa
     if(!rows.length){cards.innerHTML='<div class="card" style="grid-column:1/-1;text-align:center;padding:28px"><b>No verified professional found for this selection.</b></div>';return}
     cards.innerHTML=rows.map(p=>{const wa=p.mobile.replace(/\D/g,'');return `<div class="card"><div class="pro-head"><div class="avatar">${esc(p.name.split(/\s+/).slice(0,2).map(x=>x[0]||'').join('').toUpperCase())}</div><div><h3>${esc(p.name)}</h3><small>${esc(p.services.join(' • ')||'Local Service Professional')}</small></div></div><p>📍 ${esc([p.block,p.panchayat,p.village].filter(Boolean).join(' → '))}${p.pin?' • 📮 '+esc(p.pin):''}</p><div class="pro-actions"><a href="tel:${esc(p.mobile)}">📞 Call</a>${wa?`<a target="_blank" href="https://wa.me/91${esc(wa)}">💬 WhatsApp</a>`:''}</div></div>`}).join('')
   }
-  // Save every successful Find result in Supabase.
-  async function logFindActivity(rows, searchService, searchBlock, searchPanchayat, searchPin){
-    if(!rows.length) return {ok:0,failed:0};
-    const customerId=localStorage.getItem('senvia_customer_code')||'';
-    const customerName=localStorage.getItem('senvia_customer_name')||'';
-    const customerMobile=localStorage.getItem('senvia_customer_mobile')||'';
-    const customerBlock=localStorage.getItem('senvia_customer_block')||searchBlock||'';
-    const customerVillage=localStorage.getItem('senvia_customer_village')||'';
-    const jobs=rows.map(async p=>{
-      const serviceName=searchService||p.services?.[0]||'Service';
-      const body={
-        p_customer_id:customerId,
-        p_customer_name:customerName,
-        p_customer_mobile:customerMobile,
-        p_block:searchBlock||customerBlock,
-        p_panchayat:searchPanchayat,
-        p_village_area:customerVillage||p.village||'',
-        p_pin:searchPin||p.pin||'',
-        p_professional_id:String(p.id??''),
-        p_professional_name:p.name||'',
-        p_professional_mobile:p.mobile||'',
-        p_service_id:'',
-        p_service_name:serviceName
-      };
-      const r=await fetch(API+'rpc/log_senvia_find_activity',{
-        method:'POST',
-        headers:{...H,'Content-Type':'application/json'},
-        body:JSON.stringify(body)
-      });
-      if(!r.ok) throw new Error(await r.text());
-      return r;
-    });
-    const results=await Promise.allSettled(jobs);
-    return {ok:results.filter(x=>x.status==='fulfilled').length,failed:results.filter(x=>x.status==='rejected').length};
-  }
-
   window.__senviaSearch=async function(){
     const btn=document.getElementById('find'),b=str(document.getElementById('block')?.value),pin=str(document.getElementById('pin')?.value).replace(/\D/g,''),p=str(document.getElementById('p')?.value),s=str(document.getElementById('s')?.value);
     if(!b&&!pin){toast('कृपया Block या 6 अंकों का PIN Code दर्ज करें।');return}if(pin&&pin.length!==6){toast('PIN Code 6 अंकों का होना चाहिए।');return}
     const old=btn?.innerHTML;if(btn){btn.disabled=true;btn.innerHTML='⏳ Searching...'}
-    try{
-      const all=await loadPros(),v=all.filter(verified),rows=v.filter(x=>(!b||match(x.block,b))&&(!pin||match(x.pin,pin))&&(!p||match(x.panchayat,p))&&(!s||serviceMatch(x,s)));
-      render(rows);
-      // Activity is recorded after the professionals have been found.
-      const logResult=await logFindActivity(rows,s,b,p,pin);
-      document.getElementById('featured')?.scrollIntoView({behavior:'smooth'});
-      if(rows.length && logResult.failed===0){toast('Verified professionals found: '+rows.length+' • Find Activity saved');}
-      else if(rows.length){toast('Professionals found, but '+logResult.failed+' Find Activity record(s) failed.');}
-      else{toast('इस चयन में कोई Verified Professional नहीं मिला।')}
-    }catch(e){console.error(e);toast('Database से Professionals लोड नहीं हो पाए।')}finally{if(btn){btn.disabled=false;btn.innerHTML=old}}
+    try{const all=await loadPros(),v=all.filter(verified),rows=v.filter(x=>(!b||match(x.block,b))&&(!pin||match(x.pin,pin))&&(!p||match(x.panchayat,p))&&(!s||serviceMatch(x,s)));render(rows);document.getElementById('featured')?.scrollIntoView({behavior:'smooth'});toast(rows.length?'Verified professionals found: '+rows.length:'इस चयन में कोई Verified Professional नहीं मिला।')}catch(e){console.error(e);toast('Database से Professionals लोड नहीं हो पाए।')}finally{if(btn){btn.disabled=false;btn.innerHTML=old}}
   };
   function card(p,service){const wa=p.mobile.replace(/\D/g,''),pp=JSON.stringify(p).replace(/</g,'\\u003c').replace(/'/g,'&#39;'),ss=JSON.stringify(service||'').replace(/</g,'\\u003c').replace(/'/g,'&#39;');return `<div class="pro-directory-card"><div class="pro-head"><div class="avatar">${esc(p.name.split(/\s+/).slice(0,2).map(x=>x[0]||'').join('').toUpperCase())}</div><div><h3>${esc(p.name)}</h3><small>${esc(service||p.services.join(' • '))}</small></div></div><div class="pro-meta">📍 ${esc([p.block,p.panchayat,p.village].filter(Boolean).join(' → '))}<br>📮 PIN: ${esc(p.pin||'—')}</div><div class="pro-actions"><a href="tel:${esc(p.mobile)}">📞 Call</a>${wa?`<a target="_blank" href="https://wa.me/91${esc(wa)}">💬 WhatsApp</a>`:''}</div><button class="request-btn" onclick='openRequestFor(${pp},${ss})'>🛠 Request Service</button></div>`}
   window.showProfessionalDirectory=async function(){document.getElementById('professionalDirectory')?.remove();showBusy('Professionals लोड हो रहे हैं…');try{const rows=(await loadPros()).filter(verified),groups={};rows.forEach(p=>(p.services||[]).forEach(s=>{const k=svcKey(s);(groups[k]??=[]).push(p)}));const sec=document.createElement('section');sec.id='professionalDirectory';sec.className='directory-wrap';let html='';serviceOrder.forEach(k=>{const uniq=[...new Map((groups[k]||[]).map(p=>[String(p.id||p.name)+'|'+p.mobile,p])).values()];html+=`<div class="pro-service-group"><h3>${icon[k]||'🛠️'} ${k} Professional</h3>${uniq.length?`<div class="pro-directory-grid">${uniq.map(p=>card(p,k)).join('')}</div>`:'<div class="card" style="text-align:center;padding:18px;color:#667">इस सेवा के लिए अभी कोई Verified Professional उपलब्ध नहीं है।</div>'}</div>`});sec.innerHTML=`<div class="c"><div class="directory-head"><div><h2>👥 Professionals</h2><p>Service-wise Verified Professionals — Request Service available.</p></div></div>${html}</div>`;(document.getElementById('featured')||document.getElementById('professionals'))?.after(sec);sec.scrollIntoView({behavior:'smooth'})}catch(e){console.error(e);toast('Professionals लोड नहीं हो पाए।')}finally{hideBusy()}};
@@ -954,9 +902,22 @@ $('block').addEventListener('change',loadP);$('p').addEventListener('change',loa
     const btn=document.getElementById('rqSubmit');btn.disabled=true;btn.textContent='⏳ Submitting…';showBusy('Request submit हो रही है…');
     try{let customerCode='';try{const r=await fetch(API+'customers?select=*&Phone=eq.'+encodeURIComponent(phone),{headers:H});const a=r.ok?await r.json():[];if(a[0])customerCode=a[0].customer_code||a[0].Customer_Code||a[0].code||''}catch(e){}
       if(!customerCode){const r=await fetch(API+'rpc/register_senvia_customer',{method:'POST',headers:{apikey:SUPABASE_KEY,'Content-Type':'application/json'},body:JSON.stringify({p_name:name,p_phone:phone,p_block:block,p_panchayat:'',p_village_area:village})});const raw=await r.text();if(!r.ok)throw new Error(raw||'Customer registration failed');const d=raw?JSON.parse(raw):[];const row=Array.isArray(d)?d[0]:d;customerCode=row?.customer_code||''}
-      const detail=`Service Request\nService: ${service}\nProfessional: ${p.name}\nProfessional Mobile: ${p.mobile}\nCustomer: ${name}\nCustomer Mobile: ${phone}\nCustomer ID: ${customerCode||'—'}\nBlock: ${block||'—'}\nPIN Code: ${pin||'—'}\nVillage / Area: ${village}`;
-      const h={apikey:SUPABASE_KEY,'Content-Type':'application/json',Prefer:'return=minimal'};const r=await fetch(API+'messages',{method:'POST',headers:h,body:JSON.stringify({user_name:name,user_type:'Customer',mobile:phone,user_code:customerCode||'',message_type:'Service Request',message:detail})});const raw=await r.text();if(!r.ok)throw new Error(raw||'Request could not be saved');
-      try{await fetch(API+'messages',{method:'POST',headers:h,body:JSON.stringify({user_name:name,user_type:'Professional',mobile:p.mobile||'',user_code:p.professional_code||p.id||'',message_type:'Service Request',message:detail})})}catch(e){}
+      const rpcPayload={
+        p_customer_name:name,
+        p_customer_mobile:phone,
+        p_customer_id:customerCode||'',
+        p_professional_id:String(p.professional_code||p.id||''),
+        p_professional_name:p.name||'',
+        p_professional_mobile:p.mobile||'',
+        p_service_name:service||'',
+        p_block:block||'',
+        p_panchayat:p.panchayat||'',
+        p_village_area:village||'',
+        p_pin_code:pin||'',
+        p_note:note?.value||''
+      };
+      const r=await fetch(API+'rpc/create_senvia_service_request',{method:'POST',headers:{apikey:SUPABASE_KEY,'Content-Type':'application/json'},body:JSON.stringify(rpcPayload)});
+      const raw=await r.text();if(!r.ok)throw new Error(raw||'Request could not be saved');
       closeM('serviceRequest');toast('✅ Service Request सफलतापूर्वक भेजी गई।');document.getElementById('rqName').value='';document.getElementById('rqPhone').value='';
     }catch(e){console.error(e);note.textContent='Request submit नहीं हो सकी: '+(e.message||e)}finally{hideBusy();btn.disabled=false;btn.textContent='Request Service'}
   };
