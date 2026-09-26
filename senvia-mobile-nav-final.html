@@ -472,22 +472,40 @@ background:rgba(255,255,255,.45) !important;}
 <style id="senvia-mobile-nav-user-final">
 @media (max-width:767px){
   header{position:relative !important; z-index:1000 !important;}
-  /* Hamburger stays small and sits just below the Senvia logo. */
+  /* Hamburger: small, LEFT side, between the logo/header and hero section. */
+  header{padding-bottom:64px !important;}
   .senvia-mobile-trigger{
-    left:14px !important;
+    left:12px !important;
     right:auto !important;
     top:auto !important;
-    bottom:-21px !important;
+    bottom:14px !important;
     transform:none !important;
-    width:48px !important;
-    height:48px !important;
+    width:46px !important;
+    height:46px !important;
     border-radius:12px !important;
     background:linear-gradient(105deg,#07528f 0%,#087f91 52%,#07977e 100%) !important;
     color:#fff !important;
     font-size:0 !important;
     box-shadow:0 4px 12px rgba(0,50,90,.25) !important;
   }
-  .senvia-mobile-trigger::before{content:"☰" !important;font-size:29px !important;line-height:1 !important;}
+  .senvia-mobile-trigger::before{content:"☰" !important;font-size:25px !important;line-height:1 !important;}
+
+  /* Compact drawer matching the earlier approved mobile design. */
+  .senvia-mobile-drawer{
+    width:min(76vw,310px) !important;
+  }
+  .senvia-mobile-drawer .senvia-mobile-head{
+    padding:12px 12px !important;
+    min-height:72px !important;
+  }
+  .senvia-mobile-logo{width:128px !important;height:62px !important;}
+  .senvia-mobile-close{width:38px !important;height:38px !important;font-size:22px !important;}
+  .senvia-mobile-body{padding:8px 10px 18px !important;}
+  .senvia-mobile-link{min-height:48px !important;padding:8px 10px !important;margin:4px 0 !important;gap:10px !important;border-radius:12px !important;font-size:18px !important;}
+  .senvia-mobile-link .mi{width:28px !important;font-size:20px !important;}
+  .senvia-mobile-link .arr{font-size:21px !important;}
+  .senvia-mobile-lang{gap:7px !important;margin-top:8px !important;padding:8px 0 !important;}
+  .senvia-mobile-lang button{padding:8px !important;font-size:16px !important;}
   /* Match the previously approved mobile drawer proportions. */
   .senvia-mobile-drawer{
     width:min(82vw,576px) !important;
