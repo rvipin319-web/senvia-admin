@@ -196,7 +196,7 @@ table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:11px 8px
 <div class="nav" onclick="show('customers',this)">👤 <span data-hi="Customers" data-en="Customers">Customers</span></div>
 <div class="nav" onclick="show('services',this)">🛠 <span data-hi="Services" data-en="Services">Services</span></div>
 <div class="nav" onclick="show('areas',this)">📍 <span data-hi="Areas" data-en="Areas">Areas</span></div>
-<div class="nav" onclick="location.href='admin-messages.html?v=20260925'">💬 <span data-hi="Messages" data-en="Messages">Messages</span></div>
+<div class="nav" onclick="show('messages',this)">💬 <span data-hi="Messages" data-en="Messages">Messages</span></div>
 </aside>
 <main class="content">
 <section id="dashboard">
@@ -234,7 +234,7 @@ table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:11px 8px
 
 <section id="services" style="display:none"><h1>Services</h1><div class="panel"><div class="toolbar"><input id="newSvc" placeholder="New service name"><button class="green" onclick="addService()">+ Add Service</button><button class="outline view-toggle" id="svcViewToggle" onclick="toggleCollectionView('services')">▦ Grid View</button></div><div id="serviceList" class="collection-list"></div></div></section>
 
-<section id="areas" style="display:none"><h1>Blocks & Areas</h1><div class="panel"><div class="toolbar"><button class="outline view-toggle" id="areaViewToggle" onclick="toggleCollectionView('areas')">▦ Grid View</button></div><h3>Available Blocks</h3><div id="availableList" class="area-view"></div><h3 style="margin-top:25px">Coming Soon Blocks</h3><div id="comingList" class="area-view"></div><p style="color:#68758a">Admin can move a block from Coming Soon to Available after onboarding is completed.</p></div></section>
+<section id="areas" style="display:none"><h1>Blocks & Areas</h1><div class="panel"><div class="toolbar"><input id="newArea" placeholder="New area / block name" autocomplete="off"><select id="newAreaType" aria-label="Area type"><option value="available">Available</option><option value="coming">Coming Soon</option></select><button class="green" type="button" onclick="addArea()">+ Add Area</button><button class="outline view-toggle" id="areaViewToggle" onclick="toggleCollectionView('areas')">▦ Grid View</button></div><h3>Available Blocks</h3><div id="availableList" class="area-view"></div><h3 style="margin-top:25px">Coming Soon Blocks</h3><div id="comingList" class="area-view"></div></div></section>
 
 <section id="messages" style="display:none"><h1>Messages</h1><div class="panel"><div class="toolbar"><input id="msgSearch" placeholder="Search user / mobile / message / ID"><select id="msgType"><option value="">All Types</option><option>Registration</option><option>Welcome</option></select><button class="outline view-toggle" id="msgViewToggle" onclick="toggleCollectionView('messages')">▦ Grid View</button></div><div id="messageList" class="collection-list"></div></div></section>
 </main></div>
@@ -436,14 +436,14 @@ document.getElementById('proViewModal')?.addEventListener('click',e=>{if(e.targe
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeProView();closeServiceEdit()}});
 function restoreProfessionalView(){const sec=document.getElementById('pros');const pref=localStorage.getItem('senvia_prof_view')||'card';const on=pref==='card';sec.classList.toggle('card-view',on);sec.classList.toggle('table-view',!on);const b=document.getElementById('viewToggle');if(b)b.textContent=on?'☷ Table View':'▦ Card View'}
 function setLang(l){lang=l;document.querySelectorAll('[data-hi]').forEach(e=>e.textContent=e.dataset[l]);document.getElementById('hi').className=l==='hi'?'on':'';document.getElementById('en').className=l==='en'?'on':''}
-function show(id,el){if(id==='messages'){location.href='admin-messages.html?v=20260925';return;}document.querySelectorAll('main section').forEach(s=>s.style.display='none');document.getElementById(id).style.display='block';document.querySelectorAll('.nav').forEach(n=>n.classList.remove('active'));if(el)el.classList.add('active');render()}
+function show(id,el){document.querySelectorAll('main section').forEach(s=>s.style.display='none');document.getElementById(id).style.display='block';document.querySelectorAll('.nav').forEach(n=>n.classList.remove('active'));if(el)el.classList.add('active');render()}
 function render(){
  const pendingCount=pros.filter(p=>proStatus(p)==='Pending').length;
  const cp=document.getElementById('countPro'); if(cp) cp.textContent=pros.length;
  const cc=document.getElementById('countCust'); if(cc) cc.textContent=customers.length;
  const cs=document.getElementById('countSvc'); if(cs) cs.textContent=services.length;
  const cb=document.getElementById('countBlocks'); if(cb) cb.textContent=4;
- renderTable();renderServices();renderCustomers();renderAreas();
+ renderTable();renderRecent();renderServices();renderCustomers();renderMessages();renderAreas();
  renderPremiumDashboard();
 }
 document.getElementById('senviaBusy')?.classList.remove('show');
@@ -469,6 +469,7 @@ function renderPremiumDashboard(){
  const ov=document.getElementById('platformOverview');if(ov)ov.innerHTML='<div class="overview-item"><small>✅ Verified Professionals</small><b>'+pros.filter(p=>proStatus(p)==='Verified').length+'</b></div><div class="overview-item"><small>⏳ Pending Professionals</small><b>'+pros.filter(p=>proStatus(p)==='Pending').length+'</b></div><div class="overview-item"><small>👤 Active Customers</small><b>'+customers.length+'</b></div><div class="overview-item"><small>🛠 Service Categories</small><b>'+services.length+'</b></div>';
 }
 function renderTable(){let q=(proSearch?.value||'').toLowerCase(),st=statusFilter?.value||'';proTable.innerHTML=pros.filter(p=>(!q||JSON.stringify(p).toLowerCase().includes(q))&&(!st||proStatus(p)===st)).map((p,i)=>`<tr><td><b>${p.name}</b>${p.professional_code?`<br><span class=\"code-pill\">ID: ${p.professional_code}</span>`:''}</td><td>${p.mobile}</td><td>${p.block} → ${p.panchayat}<br>${p.village}</td><td>${p.services.join(', ')||'—'}</td><td><span class="badge ${proStatus(p).toLowerCase()}">${proStatus(p)}</span></td><td>${proStatus(p)==='Pending'?`<button class="green" onclick="approve(${i})">Approve</button> `:''}<button class="outline" onclick="viewPro(${i})">View</button> <button class="danger" onclick="removePro(${i})">Delete</button></td></tr>`).join('')||'<tr><td colspan="6" class="empty">No professionals found.</td></tr>'}
+function renderRecent(){recent.innerHTML=pros.slice(-5).reverse().map(p=>`<div style="padding:10px 0;border-bottom:1px solid #edf1f5"><b>${p.name}</b> — ${p.block} — ${p.services.join(', ')||'—'} <span class="badge ${proStatus(p).toLowerCase()}">${proStatus(p)}</span></div>`).join('')}
 function renderServices(){
  const grid=localStorage.getItem('senvia_services_view')==='grid';
  const box=document.getElementById('serviceList'); box.className=grid?'collection-grid':'collection-list';
@@ -510,7 +511,7 @@ function renderMessages(){
  const b=document.getElementById('msgViewToggle');if(b)b.textContent=grid?'☷ List View':'▦ Grid View';
 }
 function toggleCollectionView(type){const key='senvia_'+type+'_view';const now=localStorage.getItem(key)==='grid'?'list':'grid';localStorage.setItem(key,now);render();}
-function restoreCollectionViews(){renderServices();renderCustomers();}
+function restoreCollectionViews(){renderServices();renderCustomers();renderMessages();}
 async function deleteMessage(id){if(!confirm('Delete this message?'))return;try{await api('messages?id=eq.'+encodeURIComponent(id),{method:'DELETE'});messageRows=messageRows.filter(x=>String(x.id)!==String(id));renderMessages()}catch(e){alert('Message delete failed. Check RLS policy.')}}
 
 let editingServiceIndex=-1;
@@ -550,7 +551,11 @@ async function saveServiceEdit(){
 }
 document.getElementById('serviceEditModal')?.addEventListener('click',e=>{if(e.target.id==='serviceEditModal')closeServiceEdit()});
 
-function renderAreas(){const grid=localStorage.getItem('senvia_areas_view')!=='list'; availableList.className=grid?'area-view':'collection-list'; comingList.className=grid?'area-view':'collection-list'; availableList.innerHTML=blocks.map(b=>grid?`<div class="area-card"><b>📍 ${b}</b><p>Available</p></div>`:`<div class="service-row"><span class="service-row-name">📍 ${b}</span><span class="badge verified">Available</span></div>`).join(''); comingList.innerHTML=coming.map(b=>grid?`<div class="area-card"><b>📍 ${b}</b><p class="soon">Coming Soon</p></div>`:`<div class="service-row"><span class="service-row-name">📍 ${b}</span><span class="badge">Coming Soon</span></div>`).join(''); const bt=document.getElementById('areaViewToggle');if(bt)bt.textContent=grid?'☷ List View':'▦ Grid View'}
+function getManagedAreas(){try{const saved=JSON.parse(localStorage.getItem('senvia_managed_areas')||'null');if(saved&&Array.isArray(saved.blocks)&&Array.isArray(saved.coming))return saved}catch(e){}return {blocks:[...blocks],coming:[...coming]}}
+function saveManagedAreas(a){localStorage.setItem('senvia_managed_areas',JSON.stringify({blocks:a.blocks,coming:a.coming}))}
+function addArea(){const input=document.getElementById('newArea'),type=document.getElementById('newAreaType');const name=(input?.value||'').trim();if(!name){alert('Area / Block name डालिए।');return}const a=getManagedAreas();const exists=[...a.blocks,...a.coming].some(x=>String(x).toLowerCase()===name.toLowerCase());if(exists){alert('यह area पहले से मौजूद है।');return}if(type?.value==='coming')a.coming.push(name);else a.blocks.push(name);saveManagedAreas(a);input.value='';renderAreas()}
+function deleteArea(type,index){const a=getManagedAreas();const list=type==='coming'?a.coming:a.blocks;const name=list[index];if(!name)return;if(!confirm('क्या आप '+name+' को delete करना चाहते हैं?'))return;list.splice(index,1);saveManagedAreas(a);renderAreas()}
+function renderAreas(){const grid=localStorage.getItem('senvia_areas_view')!=='list';const a=getManagedAreas();availableList.className=grid?'area-view':'collection-list';comingList.className=grid?'area-view':'collection-list';availableList.innerHTML=a.blocks.map((b,i)=>grid?`<div class="area-card"><b>📍 ${b}</b><p>Available</p><button class="danger" type="button" onclick="deleteArea('available',${i})">Delete</button></div>`:`<div class="service-row"><span class="service-row-name">📍 ${b}</span><span class="badge verified">Available</span><button class="danger" type="button" onclick="deleteArea('available',${i})">Delete</button></div>`).join('')||'<p class="empty">No available areas.</p>';comingList.innerHTML=a.coming.map((b,i)=>grid?`<div class="area-card"><b>📍 ${b}</b><p class="soon">Coming Soon</p><button class="danger" type="button" onclick="deleteArea('coming',${i})">Delete</button></div>`:`<div class="service-row"><span class="service-row-name">📍 ${b}</span><span class="badge">Coming Soon</span><button class="danger" type="button" onclick="deleteArea('coming',${i})">Delete</button></div>`).join('')||'<p class="empty">No coming-soon areas.</p>';const bt=document.getElementById('areaViewToggle');if(bt)bt.textContent=grid?'☷ List View':'▦ Grid View'}
 function openPro(){modal.classList.add('show');pb.innerHTML='<option value="">Select Block</option>'+blocks.map(b=>`<option>${b}</option>`).join('');checks.innerHTML=services.map(s=>`<label><input type="checkbox" value="${s}"> ${s}</label>`).join('')}
 function closePro(){modal.classList.remove('show')}
 async function savePro(){let ss=[...document.querySelectorAll('#checks input:checked')].map(x=>x.value),name=pn.value.trim(),mobile=pm.value.trim(),block=pb.value,panchayat=pp.value.trim(),village=pv.value.trim(),experience=pe.value.trim();if(!name||!mobile||!block||!panchayat||!village||!ss.length){alert('Please fill all required fields and select at least one service.');return}let p={Name:name,Phone:mobile,Block:block,Panchayat:panchayat,Village_Area:village,Status:'Pending'};if(!dbMode){pros.push({name,mobile,block,panchayat,village,experience,status:'Pending',services:ss});closePro();render();alert('Professional added in demo mode.');return}try{const rows=await api('professionals',{method:'POST',headers:{Prefer:'return=representation'},body:JSON.stringify(p)});
@@ -579,23 +584,7 @@ window.fetch=async function(...args){
 };
 restoreAdminEmail();
 restoreProfessionalView();restoreCollectionViews();
-
-refreshAdminSession()
-  .then(()=>requireAdmin())
-  .then(ok=>{if(ok) return loadFromSupabase();})
-  .catch(e=>{
-    console.error('Admin startup failed:',e);
-    const db=document.getElementById('dbStatus');
-    if(db){
-      db.textContent='⚠️ Admin data loading failed. Please refresh once.';
-      db.style.background='#fff4d7';
-      db.style.color='#8a6500';
-    }
-  })
-  .finally(()=>{
-    senviaBusyCount=0;
-    document.getElementById('senviaBusy')?.classList.remove('show');
-  });
+refreshAdminSession().then(()=>requireAdmin()).then(ok=>{if(ok) loadFromSupabase()});
 </script>
 <div class="msg-detail-modal" id="msgViewModal" onclick="if(event.target===this)closeMessageView()"><div class="msg-detail-card"><div class="msg-detail-head"><h2 id="msgViewTitle">Message Details</h2><button class="msg-detail-close" type="button" onclick="closeMessageView()">✕</button></div><div class="msg-detail-body" id="msgViewBody"></div></div></div>
 </body></html>
