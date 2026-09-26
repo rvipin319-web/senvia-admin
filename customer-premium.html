@@ -25,10 +25,10 @@
 </style>
 <style>
 header .logo-img-wrap{flex:0 0 155px!important}
-header .logo-img-wrap img{width:150px!important;height:82px!important;object-fit:contain!important}
+header .logo-img-wrap img{width:150px!important;height:82px!important;object-fit:contain!important;mix-blend-mode:multiply}
 @media(max-width:550px){
   header .logo-img-wrap{flex-basis:130px!important;width:130px!important;height:70px!important}
-  header .logo-img-wrap img{width:128px!important;height:70px!important}
+  header .logo-img-wrap img{width:128px!important;height:70px!important;mix-blend-mode:multiply}
 }
 </style>
 
@@ -517,6 +517,7 @@ $('block').addEventListener('change',loadP);$('p').addEventListener('change',loa
   };
   window.senviaSetLang=function(l){
     window.lang=l==='en'?'en':'hi';
+    try{localStorage.setItem('senvia_lang',window.lang)}catch(e){}
     try{ lang=window.lang; }catch(e){}
     const t=translations[window.lang];
     const map={
@@ -542,9 +543,17 @@ $('block').addEventListener('change',loadP);$('p').addEventListener('change',loa
     const cs=document.querySelector('.coming-heading');
     if(cs) cs.textContent=window.lang==='hi'?'जल्द आ रहा है':'Coming Soon';
     document.querySelectorAll('.coming-grid .coming-soon b').forEach((el,i)=>{const names=['Bandra','Kanti','Kurhani','Marwan','Motipur','Muraul','Mushahari','Paroo','Sahebganj','Sakra','Saraiya']; el.textContent=soonName(names[i]);});
+    document.querySelectorAll('a[href]').forEach(a=>{
+      const raw=(a.getAttribute('href')||'').split('#')[0].split('?')[0];
+      if(['services.html','professional-directory.html','about.html','contact.html','customer-premium.html'].includes(raw)){
+        const hash=(a.getAttribute('href')||'').includes('#')?'#'+a.getAttribute('href').split('#')[1]:'';
+        a.setAttribute('href',raw+'?lang='+window.lang+hash);
+      }
+    });
     setTimeout(()=>{if(typeof renderComingSoon==='function') renderComingSoon();},0);
   };
-  window.senviaSetLang('en');
+  let __initialLang='en'; try{__initialLang=localStorage.getItem('senvia_lang')==='hi'?'hi':'en'}catch(e){}
+  window.senviaSetLang(__initialLang);
 })();
 </script>
 
