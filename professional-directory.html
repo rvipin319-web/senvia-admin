@@ -21,6 +21,18 @@
 @media(max-width:700px){.head{gap:10px}.lang{gap:5px}.lang button{padding:7px 10px;font-size:13px}}
 </style>
 
+
+<style id="senvia-nav-final-fix">
+.desktop-nav{display:block!important;width:100%!important;background:#07528f!important;border-bottom:2px solid #06375f!important;position:relative!important;z-index:50!important;overflow:hidden!important}
+.desktop-nav .nav{display:flex!important;justify-content:center!important;align-items:center!important;gap:4px!important;overflow-x:auto!important;overflow-y:hidden!important;white-space:nowrap!important;width:100%!important;box-sizing:border-box!important}
+.desktop-nav .nav a{display:block!important;color:#fff!important;text-decoration:none!important;font-weight:800!important;padding:12px 14px!important;margin:0!important;white-space:nowrap!important;border-radius:0!important}
+.mobile-nav{display:none!important;width:100%!important;background:#07528f!important;border-bottom:2px solid #06375f!important;box-sizing:border-box!important;overflow:hidden!important}
+.mobile-nav-bar{display:grid!important;grid-template-columns:repeat(5,1fr)!important;gap:0!important;width:100%!important;box-sizing:border-box!important}
+.mobile-nav a{display:flex!important;color:#fff!important;text-decoration:none!important;font-weight:800!important;text-align:center!important;align-items:center!important;justify-content:center!important;flex-direction:column!important;gap:2px!important;padding:8px 2px!important;margin:0!important;font-size:12px!important;min-width:0!important;white-space:nowrap!important}
+.mobile-nav a span{font-size:11px!important;line-height:1.1!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;max-width:100%!important}
+@media(max-width:900px){.desktop-nav{display:none!important}.mobile-nav{display:block!important}}
+@media(min-width:901px){.desktop-nav{display:block!important}.mobile-nav{display:none!important}}
+</style>
 </head><body><div class="top">📍 Muzaffarpur, Bihar <span style="float:right">📞 +91 9905411421</span></div><header><div class="wrap head"><div><div class="brand">Senvia</div><div class="tag">हर घर का अपना साथी</div></div><div class="lang" aria-label="Language"><button id="hi" type="button" onclick="senviaSetLang('hi')">हिंदी</button><button id="en" class="on" type="button" onclick="senviaSetLang('en')">English</button></div></div></header><nav class="desktop-nav" aria-label="Desktop navigation">
   <div class="wrap nav">
     <a id="navHome" href="customer-premium.html">⌂ होम</a>
