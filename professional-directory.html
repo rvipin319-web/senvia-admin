@@ -36,7 +36,19 @@
 @media(max-width:900px){.desktop-nav{display:none!important}.mobile-nav{display:block!important}}
 @media(min-width:901px){.desktop-nav{display:block!important}.mobile-nav{display:none!important}}
 </style>
-<style>#reqModal{display:none!important}</style></head><body><header><div class="wrap head"><div><div class="brand">Senvia</div><div class="tag">हर घर का अपना साथी</div></div></div></header><nav class="desktop-nav" aria-label="Desktop navigation">
+<style>#reqModal{display:none!important}</style>
+<style id="senvia-grid-list-highlight">
+.directory-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 18px;flex-wrap:wrap}
+.directory-title{display:inline-flex;align-items:center;gap:10px;margin:0;padding:10px 16px;border-radius:16px;color:#06375f;background:linear-gradient(135deg,#e8f5ff,#effaf5);border:2px solid #0874c1;box-shadow:0 6px 18px rgba(8,116,193,.12);font-weight:900}
+.view-toggle{display:inline-flex;gap:4px;padding:4px;border-radius:13px;background:#eaf4fa;border:1px solid #c9dce8}
+.view-toggle button{border:0;border-radius:9px;padding:9px 13px;background:transparent;color:#496777;font-weight:800;cursor:pointer}
+.view-toggle button.active{background:#07528f;color:#fff;box-shadow:0 3px 10px rgba(7,82,143,.2)}
+.grid.list-view{display:flex;flex-direction:column;gap:12px}
+.grid.list-view .card{width:100%}
+@media(max-width:600px){.directory-toolbar{align-items:stretch}.directory-title{font-size:20px;width:100%}.view-toggle{width:100%}.view-toggle button{flex:1}}
+</style>
+
+</head><body><header><div class="wrap head"><div><div class="brand">Senvia</div><div class="tag">हर घर का अपना साथी</div></div></div></header><nav class="desktop-nav" aria-label="Desktop navigation">
   <div class="wrap nav">
     <a id="navHome" href="customer-premium.html">⌂ होम</a>
     <a id="navServices" href="services.html">⚙ सेवाएँ</a>
@@ -53,7 +65,15 @@
     <a href="about.html">ⓘ<span>हमारे बारे में</span></a>
     <a href="contact.html">✉<span>संपर्क</span></a>
   </div>
-</nav><main><div class="wrap"><div class="hero"><h1>👥 Professionals Directory</h1><p class="sub">सभी Verified Professionals service-wise यहाँ दिखाई देंगे। Professional का mobile/WhatsApp contact <b>Customer Registration के बिना नहीं दिखेगा</b>।</p></div><div id="list" style="margin-top:20px"><div class="empty">⏳ Professionals लोड हो रहे हैं…</div></div></div></main>
+</nav><main><div class="wrap"><div class="hero">
+<div class="directory-toolbar">
+<h1 class="directory-title">👥 Professionals Directory</h1>
+<div class="view-toggle" aria-label="View">
+<button id="gridViewBtn" class="active" type="button" onclick="setView('grid')">▦ Grid</button>
+<button id="listViewBtn" type="button" onclick="setView('list')">☷ List</button>
+</div>
+</div>
+<p class="sub">सभी Verified Professionals service-wise यहाँ दिखाई देंगे। Professional का mobile/WhatsApp contact <b>Customer Registration के बिना नहीं दिखेगा</b>।</p></div><div id="list" style="margin-top:20px"><div class="empty">⏳ Professionals लोड हो रहे हैं…</div></div></div></main>
 <div class="modal" id="regModal"><div class="box"><button class="close" onclick="closeReg()">×</button><h2>👤 Customer Registration</h2><p class="sub">Professional का contact देखने या Request Service भेजने के लिए पहले registration करें।</p><div class="form"><input id="cn" placeholder="नाम / Name"><input id="cm" placeholder="Mobile Number / मोबाइल नंबर" maxlength="10" inputmode="numeric"><input id="cb" placeholder="Block"><input id="cv" placeholder="Village / Area"><div class="note" id="regNote"></div><button class="btn blue" onclick="registerCustomer()">Register & Continue</button></div></div></div>
 <div class="modal" id="reqModal"><div class="box"><button class="close" onclick="closeReq()">×</button><h2>🛠 Request Service</h2><div id="reqPro" class="sub"></div><div class="form"><input id="rn" placeholder="नाम / Name"><input id="rm" placeholder="Mobile Number / मोबाइल नंबर" maxlength="10" inputmode="numeric"><input id="rv" placeholder="Village / Area"><input id="rp" placeholder="PIN Code" maxlength="6" inputmode="numeric"><input id="rnote" placeholder="काम की जरूरत / Note (optional)"><div class="note" id="reqNote"></div><button class="btn green" onclick="submitRequest()">Send Request</button></div></div></div>
 <footer>Senvia — हर घर का अपना साथी<div class="social"><a class="fb" href="https://www.facebook.com/" target="_blank">f</a><a class="ig" href="https://www.instagram.com/" target="_blank">◎</a><a class="yt" href="https://www.youtube.com/" target="_blank">▶</a><a class="wa" href="https://wa.me/919905411421" target="_blank">◔</a></div></footer>
@@ -78,7 +98,18 @@ async function load(){
 function customerRegistered(){return localStorage.getItem('senvia_customer_registered')==='1'}
 function showContact(p,showActions){if(!showActions)return '';return customerRegistered()&&p.mobile?`<a class="btn green" href="tel:${esc(p.mobile)}">📞 Call</a><a class="btn light wa-only" target="_blank" aria-label="WhatsApp" title="WhatsApp" href="https://wa.me/91${esc(String(p.mobile).replace(/\D/g,''))}"><svg class="wa-logo" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="15" fill="#25D366"/><path fill="#fff" d="M23.4 8.5A10.5 10.5 0 0 0 6.8 20.9L5.3 26l5.2-1.5A10.5 10.5 0 1 0 23.4 8.5Zm-7.4 15a8.5 8.5 0 0 1-4.3-1.2l-.3-.2-3.1.9.9-3-.2-.3a8.5 8.5 0 1 1 7 3.8Zm4.7-6.4c-.3-.2-1.8-.9-2.1-1-.3-.1-.5-.2-.7.2-.2.3-.7 1-.8 1.1-.2.2-.3.2-.6.1-1.6-.8-2.7-1.4-3.8-3.2-.3-.5.3-.5.8-1.7.1-.2 0-.4 0-.6l-.7-1.7c-.2-.5-.4-.5-.7-.5h-.6c-.2 0-.6.1-.9.4-.3.3-1.2 1.1-1.2 2.8s1.2 3.2 1.4 3.4c.2.2 2.3 3.6 5.7 5 .8.3 1.4.5 1.9.6.8.2 1.5.2 2.1.1.6-.1 1.8-.7 2-1.4.2-.7.2-1.3.1-1.4-.1-.1-.3-.2-.6-.3Z"/></svg></a>`:`<button class="btn blue" onclick="needRegistration('contact',${JSON.stringify(p).replace(/</g,'\\u003c')})">🔒 Register to view contact</button>`}
 function requestBtn(p,svc,showActions){if(!showActions)return '';return `<button class="btn green" onclick="needRegistration('request',${JSON.stringify({p,svc}).replace(/</g,'\\u003c')})">🛠 Request Service</button>`}
-function render(filter){const showActions=!!filter;let rows=filter?pros.filter(p=>p.services.some(s=>norm(s)===norm(filter)||norm(s).includes(norm(filter))||norm(filter).includes(norm(s)))):pros;const groups={};rows.forEach(p=>p.services.forEach(s=>{const k=order.find(o=>norm(o)===norm(s))||s;(groups[k]??=[]).push(p)}));let keys=[...order.filter(k=>groups[k]),...Object.keys(groups).filter(k=>!order.includes(k))];if(!keys.length){document.getElementById('list').innerHTML='<div class="empty">अभी कोई Verified Professional उपलब्ध नहीं है।</div>';return}document.getElementById('list').innerHTML=keys.map(k=>{const uniq=[...new Map(groups[k].map(p=>[String(p.id)+'|'+p.mobile,p])).values()];return `<section class="group"><h2>${icons[k]||'🛠️'} ${esc(k)} Professionals</h2><div class="grid">${uniq.map(p=>`<div class="card"><div class="headpro"><div class="avatar">${esc(p.name.split(/\s+/).slice(0,2).map(x=>x[0]||'').join('').toUpperCase())}</div><div><h3>${esc(p.name)}</h3><div class="muted">${esc(p.services.join(' • '))}</div></div></div><div class="meta">📍 ${esc([p.block,p.panchayat,p.village].filter(Boolean).join(' → '))}<br>📮 PIN: ${esc(p.pin||'—')}</div><div class="actions">${showContact(p,showActions)}${requestBtn(p,k,showActions)}</div>${!customerRegistered()?'<div class="lock">🔒 Contact details registration के बाद उपलब्ध होंगे।</div>':''}</div>`).join('')}</div></section>`}).join('')}
+
+let currentView=localStorage.getItem('senvia_pro_view')||'grid';
+function setView(view){
+  currentView=view==='list'?'list':'grid';
+  localStorage.setItem('senvia_pro_view',currentView);
+  const g=document.getElementById('gridViewBtn'), l=document.getElementById('listViewBtn');
+  if(g)g.classList.toggle('active',currentView==='grid');
+  if(l)l.classList.toggle('active',currentView==='list');
+  document.querySelectorAll('#list .grid').forEach(el=>el.classList.toggle('list-view',currentView==='list'));
+}
+
+function render(filter){const showActions=!!filter;let rows=filter?pros.filter(p=>p.services.some(s=>norm(s)===norm(filter)||norm(s).includes(norm(filter))||norm(filter).includes(norm(s)))):pros;const groups={};rows.forEach(p=>p.services.forEach(s=>{const k=order.find(o=>norm(o)===norm(s))||s;(groups[k]??=[]).push(p)}));let keys=[...order.filter(k=>groups[k]),...Object.keys(groups).filter(k=>!order.includes(k))];if(!keys.length){document.getElementById('list').innerHTML='<div class="empty">अभी कोई Verified Professional उपलब्ध नहीं है।</div>';return}document.getElementById('list').innerHTML=keys.map(k=>{const uniq=[...new Map(groups[k].map(p=>[String(p.id)+'|'+p.mobile,p])).values()];return `<section class="group"><h2>${icons[k]||'🛠️'} ${esc(k)} Professionals</h2><div class="grid${currentView==='list'?' list-view':''}">${uniq.map(p=>`<div class="card"><div class="headpro"><div class="avatar">${esc(p.name.split(/\s+/).slice(0,2).map(x=>x[0]||'').join('').toUpperCase())}</div><div><h3>${esc(p.name)}</h3><div class="muted">${esc(p.services.join(' • '))}</div></div></div><div class="meta">📍 ${esc([p.block,p.panchayat,p.village].filter(Boolean).join(' → '))}<br>📮 PIN: ${esc(p.pin||'—')}</div><div class="actions">${showContact(p,showActions)}${requestBtn(p,k,showActions)}</div>${!customerRegistered()?'<div class="lock">🔒 Contact details registration के बाद उपलब्ध होंगे।</div>':''}</div>`).join('')}</div></section>`}).join('')}
 function openReg(){document.getElementById('regModal').classList.add('show')};function closeReg(){document.getElementById('regModal').classList.remove('show')};function closeReq(){document.getElementById('reqModal').classList.remove('show')}
 function needRegistration(action,data){pendingAction={action,data};if(customerRegistered()){if(action==='contact'){alert('Registration already complete. Contact details अब उपलब्ध हैं।');render(new URLSearchParams(location.search).get('service')||'');}else openRequest(data.p,data.svc)}else openReg()}
 async function registerCustomer(){const name=document.getElementById('cn').value.trim(),phone=document.getElementById('cm').value.replace(/\D/g,''),block=document.getElementById('cb').value.trim(),village=document.getElementById('cv').value.trim();const note=document.getElementById('regNote');note.textContent='';if(!name||phone.length!==10){note.textContent='नाम और सही 10 अंकों का मोबाइल नंबर दें।';return}try{const r=await fetch(API+'rpc/register_senvia_customer',{method:'POST',headers:H,body:JSON.stringify({p_name:name,p_phone:phone,p_block:block,p_panchayat:'',p_village_area:village})});const raw=await r.text();if(!r.ok)throw Error(raw||'Registration failed');let d=raw?JSON.parse(raw):null,row=Array.isArray(d)?d[0]:d;localStorage.setItem('senvia_customer_registered','1');localStorage.setItem('senvia_customer_code',row?.customer_code||'');localStorage.setItem('senvia_customer_mobile',phone);localStorage.setItem('senvia_customer_name',name);closeReg();render(new URLSearchParams(location.search).get('service')||'');if(pendingAction?.action==='request')openRequest(pendingAction.data.p,pendingAction.data.svc);else alert('Registration successful. अब Professional का contact दिखाई देगा।');pendingAction=null}catch(e){note.textContent='Registration failed. कृपया फिर कोशिश करें।'}}
