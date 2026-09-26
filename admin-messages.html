@@ -29,7 +29,7 @@ button{border:0;border-radius:9px;padding:10px 14px;font-weight:800;cursor:point
 <button id="folderProfessionals" class="folder" onclick="setFolder('professionals')">👨‍🔧 Professionals <span id="countProfessionals">0</span></button>
 <button id="folderCustomers" class="folder" onclick="setFolder('customers')">👤 Customers <span id="countCustomers">0</span></button>
 </div>
-<div class="toolbar"><input id="search" placeholder="Search user / mobile / message / ID"><select id="type"><option value="">All Types</option><option>Service Request</option><option>Registration</option><option>Welcome</option></select><button class="outline" id="viewBtn" onclick="toggleView()">▦ Grid View</button><button class="blue" onclick="loadMessages()">↻ Refresh</button></div><div id="messages" class="messages"></div></div></main></div>
+<div class="toolbar"><input id="search" placeholder="Search user / mobile / message / ID"><select id="type"><option value="">All Types</option><option>Service Request</option><option>Find Activity</option><option>Registration</option><option>Welcome</option></select><button class="outline" id="viewBtn" onclick="toggleView()">▦ Grid View</button><button class="blue" onclick="loadMessages()">↻ Refresh</button></div><div id="messages" class="messages"></div></div></main></div>
 <script>
 const SUPABASE_URL='https://hxdrvhiowurbwlgmczju.supabase.co',SUPABASE_KEY='sb_publishable_cvh_b0gklN5SOcH5MsGs8g_4JI9-PxT';
 let accessToken=localStorage.getItem('senvia_admin_token')||sessionStorage.getItem('senvia_admin_token')||'',refreshToken=localStorage.getItem('senvia_admin_refresh_token')||'',rows=[];
@@ -59,7 +59,7 @@ function folderRows(){
   return rows.filter(m=>{
     const u=String(m.user_type||'').toLowerCase();
     const mt=String(m.message_type||'').toLowerCase();
-    if(currentFolder==='requests') return mt==='service request' && u==='customer';
+    if(currentFolder==='requests') return (mt==='service request' || mt==='find activity') && u==='customer';
     if(currentFolder==='professionals') return u==='professional' && mt!=='service request';
     if(currentFolder==='customers') return u==='customer' && mt!=='service request';
     return true;
@@ -67,7 +67,7 @@ function folderRows(){
 }
 
 function updateFolderCounts(){
-  const requests=rows.filter(m=>String(m.message_type||'').toLowerCase()==='service request' && String(m.user_type||'').toLowerCase()==='customer').length;
+  const requests=rows.filter(m=>(String(m.message_type||'').toLowerCase()==='service request' || String(m.message_type||'').toLowerCase()==='find activity') && String(m.user_type||'').toLowerCase()==='customer').length;
   const professionals=rows.filter(m=>String(m.user_type||'').toLowerCase()==='professional' && String(m.message_type||'').toLowerCase()!=='service request').length;
   const customers=rows.filter(m=>String(m.user_type||'').toLowerCase()==='customer' && String(m.message_type||'').toLowerCase()!=='service request').length;
   document.getElementById('countRequests').textContent=requests;
