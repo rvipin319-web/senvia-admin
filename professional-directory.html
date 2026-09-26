@@ -36,18 +36,29 @@
 @media(max-width:900px){.desktop-nav{display:none!important}.mobile-nav{display:block!important}}
 @media(min-width:901px){.desktop-nav{display:block!important}.mobile-nav{display:none!important}}
 </style>
-<style>#reqModal{display:none!important}</style><style id="senvia-global-loader-css">
-#senviaPageLoader{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(232,246,255,.72);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);z-index:2147483647;opacity:1;visibility:visible;transition:opacity .28s ease,visibility .28s ease}
-#senviaPageLoader.hide{opacity:0;visibility:hidden;pointer-events:none}
-.senvia-loader-ring{width:82px;height:82px;border-radius:50%;padding:7px;background:conic-gradient(#0874c1 0 34%,#fff 34% 50%,#0aa56f 50% 68%,#fff 68% 82%,#0874c1 82% 100%);box-shadow:0 10px 35px rgba(20,70,120,.20);box-sizing:border-box;animation:senviaLoaderSpin 1.15s linear infinite}
-.senvia-loader-core{width:100%;height:100%;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;border:3px solid #d9eaf8;box-sizing:border-box}
-.senvia-loader-v{font-family:Georgia,serif;font-size:47px;font-weight:800;font-style:italic;color:#07528f;line-height:1;animation:senviaVLetter 1.15s ease-in-out infinite}
-@keyframes senviaLoaderSpin{to{transform:rotate(360deg)}}
-@keyframes senviaVLetter{0%,100%{transform:scale(1) rotate(0deg)}50%{transform:scale(1.04) rotate(-10deg)}}
-@media(max-width:520px){.senvia-loader-ring{width:78px;height:78px}.senvia-loader-v{font-size:43px}}
+<style>#reqModal{display:none!important}</style>
+<style id="senvia-v-loader-fix">
+.senvia-v-loader{
+  width:96px;height:96px;border-radius:50%;
+  border:8px solid rgba(8,116,193,.14);
+  border-top-color:#07528f;border-right-color:#07528f;
+  border-bottom-color:#08a66a;
+  display:inline-flex;align-items:center;justify-content:center;
+  animation:senviaVSpin 1.05s linear infinite;
+  box-sizing:border-box;background:#fff;
+  box-shadow:0 6px 22px rgba(7,82,143,.12);
+}
+.senvia-v-loader span{
+  font-family:Georgia,serif;font-weight:700;font-size:54px;line-height:1;
+  color:#07528f;transform:scaleX(.9);
+}
+@keyframes senviaVSpin{to{transform:rotate(360deg)}}
+.senvia-loading-box{
+  min-height:160px;display:flex;align-items:center;justify-content:center;
+}
 </style>
-</head><body>
-<div id="senviaPageLoader" aria-live="polite" aria-label="Senvia loading"><div class="senvia-loader-ring"><div class="senvia-loader-core"><div class="senvia-loader-v">V</div></div></div></div><header><div class="wrap head"><div><div class="brand">Senvia</div><div class="tag">हर घर का अपना साथी</div></div></div></header><nav class="desktop-nav" aria-label="Desktop navigation">
+
+</head><body><header><div class="wrap head"><div><div class="brand">Senvia</div><div class="tag">हर घर का अपना साथी</div></div></div></header><nav class="desktop-nav" aria-label="Desktop navigation">
   <div class="wrap nav">
     <a id="navHome" href="customer-premium.html">⌂ होम</a>
     <a id="navServices" href="services.html">⚙ सेवाएँ</a>
@@ -64,7 +75,7 @@
     <a href="about.html">ⓘ<span>हमारे बारे में</span></a>
     <a href="contact.html">✉<span>संपर्क</span></a>
   </div>
-</nav><main><div class="wrap"><div class="hero"><h1>👥 Professionals Directory</h1><p class="sub">सभी Verified Professionals service-wise यहाँ दिखाई देंगे। Professional का mobile/WhatsApp contact <b>Customer Registration के बिना नहीं दिखेगा</b>।</p></div><div id="list" style="margin-top:20px"><div class="empty">⏳ Professionals लोड हो रहे हैं…</div></div></div></main>
+</nav><main><div class="wrap"><div class="hero"><h1>👥 Professionals Directory</h1><p class="sub">सभी Verified Professionals service-wise यहाँ दिखाई देंगे। Professional का mobile/WhatsApp contact <b>Customer Registration के बिना नहीं दिखेगा</b>।</p></div><div id="list" style="margin-top:20px"><div class="empty">⏳ <span class="senvia-v-loader" aria-label="Loading"><span>V</span></span></div></div></div></main>
 <div class="modal" id="regModal"><div class="box"><button class="close" onclick="closeReg()">×</button><h2>👤 Customer Registration</h2><p class="sub">Professional का contact देखने या Request Service भेजने के लिए पहले registration करें।</p><div class="form"><input id="cn" placeholder="नाम / Name"><input id="cm" placeholder="Mobile Number / मोबाइल नंबर" maxlength="10" inputmode="numeric"><input id="cb" placeholder="Block"><input id="cv" placeholder="Village / Area"><div class="note" id="regNote"></div><button class="btn blue" onclick="registerCustomer()">Register & Continue</button></div></div></div>
 <div class="modal" id="reqModal"><div class="box"><button class="close" onclick="closeReq()">×</button><h2>🛠 Request Service</h2><div id="reqPro" class="sub"></div><div class="form"><input id="rn" placeholder="नाम / Name"><input id="rm" placeholder="Mobile Number / मोबाइल नंबर" maxlength="10" inputmode="numeric"><input id="rv" placeholder="Village / Area"><input id="rp" placeholder="PIN Code" maxlength="6" inputmode="numeric"><input id="rnote" placeholder="काम की जरूरत / Note (optional)"><div class="note" id="reqNote"></div><button class="btn green" onclick="submitRequest()">Send Request</button></div></div></div>
 <footer>Senvia — हर घर का अपना साथी<div class="social"><a class="fb" href="https://www.facebook.com/" target="_blank">f</a><a class="ig" href="https://www.instagram.com/" target="_blank">◎</a><a class="yt" href="https://www.youtube.com/" target="_blank">▶</a><a class="wa" href="https://wa.me/919905411421" target="_blank">◔</a></div></footer>
@@ -134,14 +145,25 @@ async function submitRequest(){const p=selected?.p,svc=selected?.svc,name=docume
 })();
 </script>
 
-<script id="senvia-global-loader-js">
+
+<script id="senvia-loader-failsafe">
 (function(){
-  const el=document.getElementById('senviaPageLoader');
-  if(!el)return;
-  const hide=()=>{el.classList.add('hide');setTimeout(()=>el.remove(),350)};
-  if(document.readyState==='complete') setTimeout(hide,250);
-  else window.addEventListener('load',()=>setTimeout(hide,250),{once:true});
-  setTimeout(hide,5000);
+  var started=Date.now();
+  var timer=setInterval(function(){
+    var el=document.getElementById('list');
+    if(!el){clearInterval(timer);return;}
+    if(el.querySelector('.professional-card,.pro-card,.empty') || el.children.length>1){
+      clearInterval(timer); return;
+    }
+    if(Date.now()-started>8000){
+      el.innerHTML='<div class="empty" style="text-align:center;padding:28px">\
+        <div style="margin-bottom:14px"><span class="senvia-v-loader" style="width:68px;height:68px;border-width:6px"><span style="font-size:38px">V</span></span></div>\
+        Professionals अभी load नहीं हो पाए।<br><button onclick="location.reload()" style="margin-top:14px;padding:10px 18px;border:0;border-radius:10px;background:#07528f;color:#fff;font-weight:700">फिर से प्रयास करें</button>\
+      </div>';
+      clearInterval(timer);
+    }
+  },250);
 })();
 </script>
+
 </body></html>
