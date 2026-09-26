@@ -94,8 +94,20 @@ load();
     loading:'Services are loading…',
     footer:'Senvia — Your own partner for every home'
   };
-  function apply(){
-    let l='en'; try{const q=new URLSearchParams(location.search).get('lang'); l=q==='hi'?'hi':(q==='en'?'en':(localStorage.getItem('senvia_lang')==='hi'?'hi':'en')); localStorage.setItem('senvia_lang',l)}catch(e){}
+  function getLang(){
+    try{
+      const q=new URLSearchParams(location.search).get('lang');
+      if(q==='hi' || q==='en') return q;
+    }catch(e){}
+    try{
+      const saved=localStorage.getItem('senvia_lang');
+      if(saved==='hi' || saved==='en') return saved;
+    }catch(e){}
+    return 'en';
+  }
+  function apply(forced){
+    const l=(forced==='hi'||forced==='en') ? forced : getLang();
+    try{localStorage.setItem('senvia_lang',l)}catch(e){}
     const t=l==='hi'?hi:en;
     document.documentElement.lang=l;
     ['navHome','navServices','navPros','navAbout','navContact'].forEach(id=>{const e=document.getElementById(id);if(e)e.innerHTML=t[id]});
@@ -104,8 +116,21 @@ load();
     const hb=document.getElementById('hi'),eb=document.getElementById('en'); if(hb)hb.classList.toggle('on',l==='hi'); if(eb)eb.classList.toggle('on',l==='en');
     const foot=document.querySelector('footer'); if(foot && foot.firstChild) foot.firstChild.textContent=t.footer;
   }
-  window.senviaSetLang=function(l){try{localStorage.setItem('senvia_lang',l==='hi'?'hi':'en')}catch(e){};apply()};
-  apply();
+  window.senviaSetLang=function(l){
+    const target=l==='hi'?'hi':'en';
+    try{localStorage.setItem('senvia_lang',target)}catch(e){}
+    try{
+      const u=new URL(location.href);
+      u.searchParams.set('lang',target);
+      history.replaceState(null,'',u.pathname+u.search+u.hash);
+    }catch(e){}
+    apply(target);
+  };
+  // Apply the language already chosen on the previous page. Do not force English.
+  apply(getLang());
+  const hiBtn=document.getElementById('hi'), enBtn=document.getElementById('en');
+  if(hiBtn) hiBtn.addEventListener('click',e=>{e.preventDefault();window.senviaSetLang('hi')});
+  if(enBtn) enBtn.addEventListener('click',e=>{e.preventDefault();window.senviaSetLang('en')});
 })();
 </script>
 
