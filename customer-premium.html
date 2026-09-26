@@ -25,10 +25,10 @@
 </style>
 <style>
 header .logo-img-wrap{flex:0 0 155px!important}
-header .logo-img-wrap img{width:150px!important;height:82px!important;object-fit:contain!important;mix-blend-mode:multiply}
+header .logo-img-wrap img{width:150px!important;height:82px!important;object-fit:contain!important}
 @media(max-width:550px){
   header .logo-img-wrap{flex-basis:130px!important;width:130px!important;height:70px!important}
-  header .logo-img-wrap img{width:128px!important;height:70px!important;mix-blend-mode:multiply}
+  header .logo-img-wrap img{width:128px!important;height:70px!important}
 }
 </style>
 
@@ -405,7 +405,7 @@ function loadP(){let b=$('block').value;let list=b?(data[b]||[]):Object.values(d
 function loadV(){}
 function selectB(b){$('block').value=b;loadP();$('search').scrollIntoView({behavior:'smooth'})}
 function quick(x){$('s').value=x;$('search').scrollIntoView({behavior:'smooth'});toast(serviceName(x)+' '+T[lang].selected)}
-async function find(){ const b=str($('block')?.value), p=str($('p')?.value), pin=str($('pin')?.value).replace(/\D/g,''), s=str($('s')?.value); if(!b&&!p&&!pin&&!s){toast(lang==='hi'?'कम से कम एक विकल्प चुनें।':'Please select at least one option.');return;} if(pin && pin.length!==6){toast(lang==='hi'?'कृपया 6 अंकों का PIN Code डालें।':'Please enter a valid 6-digit PIN Code.');return;} const btn=$('find'); if(btn){btn.disabled=true;btn.dataset.old=btn.innerHTML;btn.innerHTML='<span class="search-v-spinner">V</span> '+(lang==='hi'?'खोजा जा रहा है…':'Searching…');} const q=new URLSearchParams(); if(b)q.set('block',b); if(p)q.set('panchayat',p); if(pin)q.set('pin',pin); if(s)q.set('service',s); showBusy(lang==='hi'?'Verified Professionals खोजे जा रहे हैं…':'Searching Verified Professionals…'); setTimeout(()=>{location.href='search-results.html?'+q.toString()},450); }
+async function find(){ const clean=v=>String(v??'').trim(); const b=clean($('block')?.value), p=clean($('p')?.value), pin=clean($('pin')?.value).replace(/\D/g,''), s=clean($('s')?.value); if(!b&&!p&&!pin&&!s){toast(lang==='hi'?'कम से कम एक विकल्प चुनें।':'Please select at least one option.');return;} if(pin && pin.length!==6){toast(lang==='hi'?'कृपया 6 अंकों का PIN Code डालें।':'Please enter a valid 6-digit PIN Code.');return;} const btn=$('find'); if(btn){btn.disabled=true;btn.dataset.old=btn.innerHTML;btn.innerHTML='<span class="search-v-spinner">V</span> '+(lang==='hi'?'खोजा जा रहा है…':'Searching…');} const q=new URLSearchParams(); if(b)q.set('block',b); if(p)q.set('panchayat',p); if(pin)q.set('pin',pin); if(s)q.set('service',s); showBusy(lang==='hi'?'Verified Professionals खोजे जा रहे हैं…':'Searching Verified Professionals…'); setTimeout(()=>{location.href='search-results.html?'+q.toString()},450); }
 function all(){location.href='services.html'}
 function openM(x){$(x).classList.add('show')}
 function closeM(x){$(x).classList.remove('show')}
@@ -517,7 +517,6 @@ $('block').addEventListener('change',loadP);$('p').addEventListener('change',loa
   };
   window.senviaSetLang=function(l){
     window.lang=l==='en'?'en':'hi';
-    try{localStorage.setItem('senvia_lang',window.lang)}catch(e){}
     try{ lang=window.lang; }catch(e){}
     const t=translations[window.lang];
     const map={
@@ -543,17 +542,9 @@ $('block').addEventListener('change',loadP);$('p').addEventListener('change',loa
     const cs=document.querySelector('.coming-heading');
     if(cs) cs.textContent=window.lang==='hi'?'जल्द आ रहा है':'Coming Soon';
     document.querySelectorAll('.coming-grid .coming-soon b').forEach((el,i)=>{const names=['Bandra','Kanti','Kurhani','Marwan','Motipur','Muraul','Mushahari','Paroo','Sahebganj','Sakra','Saraiya']; el.textContent=soonName(names[i]);});
-    document.querySelectorAll('a[href]').forEach(a=>{
-      const raw=(a.getAttribute('href')||'').split('#')[0].split('?')[0];
-      if(['services.html','professional-directory.html','about.html','contact.html','customer-premium.html'].includes(raw)){
-        const hash=(a.getAttribute('href')||'').includes('#')?'#'+a.getAttribute('href').split('#')[1]:'';
-        a.setAttribute('href',raw+'?lang='+window.lang+hash);
-      }
-    });
     setTimeout(()=>{if(typeof renderComingSoon==='function') renderComingSoon();},0);
   };
-  let __initialLang='en'; try{__initialLang=localStorage.getItem('senvia_lang')==='hi'?'hi':'en'}catch(e){}
-  window.senviaSetLang(__initialLang);
+  window.senviaSetLang('en');
 })();
 </script>
 
