@@ -12,21 +12,31 @@
 .senvia-nav a span{display:inline}
 @media(max-width:700px){.senvia-nav-inner{padding:4px 3px;gap:2px}.senvia-nav a{flex-direction:column;gap:2px;padding:7px 2px;font-size:11px}.senvia-nav a span{font-size:10px;overflow:hidden;text-overflow:ellipsis;max-width:100%;white-space:nowrap}}
 </style>
-<style id="senvia-single-nav">
-.senvia-nav{display:block!important;width:100%;background:#07528f!important;border-bottom:1px solid #06375f!important;position:relative;z-index:1000;box-sizing:border-box}
-.senvia-nav-inner{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));align-items:center;max-width:1200px;margin:0 auto;padding:4px 8px;gap:3px;box-sizing:border-box}
-.senvia-nav a{display:flex;align-items:center;justify-content:center;gap:4px;min-width:0;padding:10px 8px;color:#fff!important;text-decoration:none!important;font-weight:800;font-size:14px;line-height:1.1;border-radius:7px;white-space:nowrap;box-sizing:border-box}
-.senvia-nav a:hover,.senvia-nav a:focus{background:rgba(255,255,255,.16);color:#fff!important}
-.senvia-nav a span{display:inline}
-@media(max-width:700px){.senvia-nav-inner{padding:4px 3px;gap:2px}.senvia-nav a{flex-direction:column;gap:2px;padding:7px 2px;font-size:11px}.senvia-nav a span{font-size:10px;overflow:hidden;text-overflow:ellipsis;max-width:100%;white-space:nowrap}}
+
+<style id="senvia-language-buttons">
+.lang{display:flex;gap:8px;align-items:center;margin-left:auto}
+.lang button{border:1px solid #1678b8;background:#fff;color:#07528f;border-radius:10px;padding:9px 14px;font-weight:800;font-size:15px;cursor:pointer}
+.lang button.on{background:#1678b8;color:#fff}
+.lang button:focus{outline:2px solid rgba(22,120,184,.35);outline-offset:2px}
+@media(max-width:700px){.head{gap:10px}.lang{gap:5px}.lang button{padding:7px 10px;font-size:13px}}
 </style>
-</head><body><div class="top">📍 Muzaffarpur, Bihar <span style="float:right">📞 +91 9905411421</span></div><header><div class="wrap head"><div><div class="brand">Senvia</div><div class="tag">हर घर का अपना साथी</div></div></div></header><nav class="senvia-nav" aria-label="Senvia navigation">
-  <div class="senvia-nav-inner">
-    <a id="navHome" href="customer-premium.html">⌂ <span>होम</span></a>
-    <a id="navServices" href="services.html">⚙ <span>सेवाएँ</span></a>
-    <a id="navPros" href="professional-directory.html">👥 <span>Professionals</span></a>
-    <a id="navAbout" href="about.html">ⓘ <span>हमारे बारे में</span></a>
-    <a id="navContact" href="contact.html">✉ <span>संपर्क</span></a>
+
+</head><body><div class="top">📍 Muzaffarpur, Bihar <span style="float:right">📞 +91 9905411421</span></div><header><div class="wrap head"><div><div class="brand">Senvia</div><div class="tag">हर घर का अपना साथी</div></div><div class="lang" aria-label="Language"><button id="hi" type="button" onclick="senviaSetLang('hi')">हिंदी</button><button id="en" class="on" type="button" onclick="senviaSetLang('en')">English</button></div></div></header><nav class="desktop-nav" aria-label="Desktop navigation">
+  <div class="wrap nav">
+    <a id="navHome" href="customer-premium.html">⌂ होम</a>
+    <a id="navServices" href="services.html">⚙ सेवाएँ</a>
+    <a id="navPros" href="professional-directory.html">👥 Professionals</a>
+    <a id="navAbout" href="about.html">ⓘ हमारे बारे में</a>
+    <a id="navContact" href="contact.html">✉ संपर्क</a>
+  </div>
+</nav>
+<nav class="mobile-nav" aria-label="Mobile navigation">
+  <div class="wrap mobile-nav-bar">
+    <a href="customer-premium.html">⌂<span>होम</span></a>
+    <a href="services.html">⚙<span>सेवाएँ</span></a>
+    <a href="professional-directory.html">👥<span>Professionals</span></a>
+    <a href="about.html">ⓘ<span>हमारे बारे में</span></a>
+    <a href="contact.html">✉<span>संपर्क</span></a>
   </div>
 </nav><main><div class="wrap"><div class="hero"><h1>⚙ Services Directory</h1><p class="sub">Senvia पर उपलब्ध सभी services की live directory। Professional registration में नई service जुड़ने पर वह भी यहाँ automatically दिखाई जाएगी।</p></div><div id="services" class="grid"><div class="card"><div class="icon">⏳</div><b>Services लोड हो रही हैं…</b></div></div></div></main><script>
 const URL='https://hxdrvhiowurbwlgmczju.supabase.co',KEY='sb_publishable_cvh_b0gklN5SOcH5MsGs8g_4JI9-PxT',API=URL+'/rest/v1/',H={apikey:KEY,'Content-Type':'application/json'};
@@ -55,4 +65,36 @@ async function load(){
   }
 }
 load();
-</script><footer>Senvia — हर घर का अपना साथी<div class="social"><a class="fb" href="https://www.facebook.com/" target="_blank">f</a><a class="ig" href="https://www.instagram.com/" target="_blank">◎</a><a class="yt" href="https://www.youtube.com/" target="_blank">▶</a><a class="wa" href="https://wa.me/919905411421" target="_blank">◔</a></div></footer></body></html>
+</script><footer>Senvia — हर घर का अपना साथी<div class="social"><a class="fb" href="https://www.facebook.com/" target="_blank">f</a><a class="ig" href="https://www.instagram.com/" target="_blank">◎</a><a class="yt" href="https://www.youtube.com/" target="_blank">▶</a><a class="wa" href="https://wa.me/919905411421" target="_blank">◔</a></div></footer>
+<script id="senvia-page-language">
+(function(){
+  const hi={
+    navHome:'⌂ होम',navServices:'⚙ सेवाएँ',navPros:'👥 Professionals',navAbout:'ⓘ हमारे बारे में',navContact:'✉ संपर्क',
+    title:'⚙ सेवाओं की डायरेक्टरी',
+    sub:'Senvia पर उपलब्ध सभी services की live directory। Professional registration में नई service जुड़ने पर वह भी यहाँ automatically दिखाई जाएगी.',
+    loading:'सेवाएँ लोड हो रही हैं…',
+    footer:'Senvia — हर घर का अपना साथी'
+  };
+  const en={
+    navHome:'⌂ Home',navServices:'⚙ Services',navPros:'👥 Professionals',navAbout:'ⓘ About Us',navContact:'✉ Contact',
+    title:'⚙ Services Directory',
+    sub:'Live directory of all services available on Senvia. New services added through Professional Registration will also appear here automatically.',
+    loading:'Services are loading…',
+    footer:'Senvia — Your own partner for every home'
+  };
+  function apply(){
+    let l='en'; try{l=localStorage.getItem('senvia_lang')==='hi'?'hi':'en'}catch(e){}
+    const t=l==='hi'?hi:en;
+    document.documentElement.lang=l;
+    ['navHome','navServices','navPros','navAbout','navContact'].forEach(id=>{const e=document.getElementById(id);if(e)e.innerHTML=t[id]});
+    const h=document.querySelector('main .hero h1'); if(h) h.textContent=t.title;
+    const sub=document.querySelector('main .hero .sub'); if(sub) sub.textContent=t.sub;
+    const hb=document.getElementById('hi'),eb=document.getElementById('en'); if(hb)hb.classList.toggle('on',l==='hi'); if(eb)eb.classList.toggle('on',l==='en');
+    const foot=document.querySelector('footer'); if(foot && foot.firstChild) foot.firstChild.textContent=t.footer;
+  }
+  window.senviaSetLang=function(l){try{localStorage.setItem('senvia_lang',l==='hi'?'hi':'en')}catch(e){};apply()};
+  apply();
+})();
+</script>
+
+</body></html>
