@@ -36,7 +36,18 @@
 @media(max-width:900px){.desktop-nav{display:none!important}.mobile-nav{display:block!important}}
 @media(min-width:901px){.desktop-nav{display:block!important}.mobile-nav{display:none!important}}
 </style>
-<style>#reqModal{display:none!important}</style></head><body><header><div class="wrap head"><div><div class="brand">Senvia</div><div class="tag">हर घर का अपना साथी</div></div></div></header><nav class="desktop-nav" aria-label="Desktop navigation">
+<style>#reqModal{display:none!important}</style><style id="senvia-global-loader-css">
+#senviaPageLoader{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(232,246,255,.72);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);z-index:2147483647;opacity:1;visibility:visible;transition:opacity .28s ease,visibility .28s ease}
+#senviaPageLoader.hide{opacity:0;visibility:hidden;pointer-events:none}
+.senvia-loader-ring{width:82px;height:82px;border-radius:50%;padding:7px;background:conic-gradient(#0874c1 0 34%,#fff 34% 50%,#0aa56f 50% 68%,#fff 68% 82%,#0874c1 82% 100%);box-shadow:0 10px 35px rgba(20,70,120,.20);box-sizing:border-box;animation:senviaLoaderSpin 1.15s linear infinite}
+.senvia-loader-core{width:100%;height:100%;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;border:3px solid #d9eaf8;box-sizing:border-box}
+.senvia-loader-v{font-family:Georgia,serif;font-size:47px;font-weight:800;font-style:italic;color:#07528f;line-height:1;animation:senviaVLetter 1.15s ease-in-out infinite}
+@keyframes senviaLoaderSpin{to{transform:rotate(360deg)}}
+@keyframes senviaVLetter{0%,100%{transform:scale(1) rotate(0deg)}50%{transform:scale(1.04) rotate(-10deg)}}
+@media(max-width:520px){.senvia-loader-ring{width:78px;height:78px}.senvia-loader-v{font-size:43px}}
+</style>
+</head><body>
+<div id="senviaPageLoader" aria-live="polite" aria-label="Senvia loading"><div class="senvia-loader-ring"><div class="senvia-loader-core"><div class="senvia-loader-v">V</div></div></div></div><header><div class="wrap head"><div><div class="brand">Senvia</div><div class="tag">हर घर का अपना साथी</div></div></div></header><nav class="desktop-nav" aria-label="Desktop navigation">
   <div class="wrap nav">
     <a id="navHome" href="customer-premium.html">⌂ होम</a>
     <a id="navServices" href="services.html">⚙ सेवाएँ</a>
@@ -123,4 +134,14 @@ async function submitRequest(){const p=selected?.p,svc=selected?.svc,name=docume
 })();
 </script>
 
+<script id="senvia-global-loader-js">
+(function(){
+  const el=document.getElementById('senviaPageLoader');
+  if(!el)return;
+  const hide=()=>{el.classList.add('hide');setTimeout(()=>el.remove(),350)};
+  if(document.readyState==='complete') setTimeout(hide,250);
+  else window.addEventListener('load',()=>setTimeout(hide,250),{once:true});
+  setTimeout(hide,5000);
+})();
+</script>
 </body></html>
