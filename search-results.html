@@ -52,7 +52,7 @@ button,.btn{border:0;border-radius:9px;padding:9px 13px;font-weight:700;text-dec
 const SUPABASE_URL='https://hxdrvhiowurbwlgmczju.supabase.co';
 const SUPABASE_KEY='sb_publishable_cvh_b0gklN5SOcH5MsGs8g_4JI9-PxT';
 const API=SUPABASE_URL+'/rest/v1/';
-const headers={apikey:SUPABASE_KEY};
+const headers={apikey:SUPABASE_KEY,'Content-Type':'application/json'};
 const str=v=>String(v??'').trim();
 const norm=v=>str(v).toLowerCase().normalize('NFKC').replace(/[–—−]/g,'-').replace(/\s+/g,' ');
 const val=(o,keys,def='')=>{for(const k of keys){if(o&&o[k]!==undefined&&o[k]!==null&&str(o[k])!=='')return o[k]}return def};
