@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="hi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Senvia — Search Results</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Georgia,"Times New Roman",serif;background:#eef8fb;color:#17324d}
+.top{background:#07528f;color:#fff;padding:10px 14px;display:flex;justify-content:center;gap:8px;flex-wrap:wrap}
+.top a{color:#fff;text-decoration:none;font-weight:700;padding:7px 12px;border-radius:8px}
+.top a:hover{background:rgba(255,255,255,.15)}
+.wrap{max-width:1050px;margin:auto;padding:18px 14px}
+.head{background:#fff;border-radius:20px;padding:22px;box-shadow:0 4px 18px #00000012;margin-bottom:18px}
+h1{margin:0 0 8px;color:#07528f;font-size:28px}
+.filter{color:#667085;font-size:14px}
+.section-title{font-size:21px;font-weight:800;color:#07528f;border-left:5px solid #07528f;padding-left:10px;margin:22px 0 12px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.card{background:#fff;border-radius:16px;padding:16px;box-shadow:0 3px 14px #00000010}
+.name{font-size:20px;font-weight:800;color:#17324d;margin-bottom:6px}
+.services{color:#07528f;font-weight:700;line-height:1.55}
+.area{margin-top:10px;color:#526174;font-size:14px}
+.actions{margin-top:14px;display:flex;gap:8px;flex-wrap:wrap}
+button,.btn{border:0;border-radius:9px;padding:9px 13px;font-weight:700;text-decoration:none;cursor:pointer}
+.lock{background:#0b83c9;color:#fff}.request{background:#10a66a;color:#fff}
+.note{font-size:12px;color:#68727f;margin-top:8px}.modal{display:none;position:fixed;inset:0;background:#0008;z-index:9999;align-items:center;justify-content:center;padding:15px}.modal.show{display:flex}.modalbox{width:min(520px,100%);background:#fff;border-radius:18px;padding:20px;box-shadow:0 10px 40px #0005;position:relative}.modalbox h2{margin:0 0 10px;color:#07528f}.close{position:absolute;right:12px;top:8px;border:0;background:none;font-size:28px;cursor:pointer}.form input{width:100%;padding:12px;margin:6px 0;border:1px solid #ccd8e2;border-radius:9px;font-size:15px}
+.empty,.busy{background:#fff;border-radius:16px;padding:28px;text-align:center;box-shadow:0 3px 14px #00000010}
+@media(max-width:700px){.top{display:grid;grid-template-columns:repeat(5,1fr);gap:2px;padding:5px}.top a{font-size:11px;text-align:center;padding:7px 2px}.grid{grid-template-columns:1fr}h1{font-size:23px}}
+
+.search-busy{position:fixed;inset:0;background:rgba(7,82,143,.14);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;z-index:10000}.search-busy.show{display:flex}.v-loader{width:92px;height:92px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#fff;box-shadow:0 10px 40px #07528f35;position:relative}.v-loader:before{content:"";position:absolute;inset:7px;border:4px solid #d9ebf8;border-top-color:#07528f;border-right-color:#10a66a;border-radius:50%;animation:searchVSpin 1s linear infinite}.v-loader span{font:900 42px Arial,sans-serif;color:#07528f;animation:searchVReverse .85s linear infinite}@keyframes searchVSpin{to{transform:rotate(360deg)}}@keyframes searchVReverse{to{transform:rotate(-360deg)}}
+</style>
+</head>
+<body>
+<div class="search-busy show" id="searchBusy"><div class="v-loader"><span>V</span></div></div>
+<nav class="top">
+<a href="customer-premium.html">⌂ होम</a>
+<a href="services.html">⚙ सेवाएँ</a>
+<a href="professional-directory.html">👥 Professionals</a>
+<a href="about.html">ⓘ हमारे बारे में</a>
+<a href="contact.html">✉ संपर्क</a>
+</nav>
+
+<div class="modal" id="regModal"><div class="modalbox"><button class="close" onclick="closeModal('regModal')">×</button><h2>👤 Customer Registration</h2><p>Professional का contact देखने या Request Service भेजने के लिए पहले registration करें।</p><div class="form"><input id="cn" placeholder="नाम / Name"><input id="cm" placeholder="Mobile Number / मोबाइल नंबर" maxlength="10" inputmode="numeric"><input id="cb" placeholder="Block"><input id="cv" placeholder="Village / Area"><div class="note" id="regNote"></div><button class="btn lock" onclick="registerCustomer()">Register & Continue</button></div></div></div><div class="modal" id="reqModal"><div class="modalbox"><button class="close" onclick="closeModal('reqModal')">×</button><h2>🛠 Request Service</h2><div id="reqPro"></div><div class="form"><input id="rn" placeholder="नाम / Name"><input id="rm" placeholder="Mobile Number / मोबाइल नंबर" maxlength="10" inputmode="numeric"><input id="rv" placeholder="Village / Area"><input id="rp" placeholder="PIN Code" maxlength="6" inputmode="numeric"><input id="rnote" placeholder="काम की जरूरत / Note (optional)"><div class="note" id="reqNote"></div><button class="btn request" onclick="submitRequest()">Send Request</button></div></div></div>
+<main class="wrap">
+<section class="head">
+<h1>🔎 खोज परिणाम</h1>
+<div id="filter" class="filter">आपकी खोज के अनुसार Verified Professionals</div>
+</section>
+<div id="result"><div class="busy">डेटा लोड हो रहा है…</div></div>
+</main>
+
+<script>
+const SUPABASE_URL='https://hxdrvhiowurbwlgmczju.supabase.co';
+const SUPABASE_KEY='sb_publishable_cvh_b0gklN5SOcH5MsGs8g_4JI9-PxT';
+const API=SUPABASE_URL+'/rest/v1/';
+const headers={apikey:SUPABASE_KEY,Authorization:'Bearer '+SUPABASE_KEY,'Content-Type':'application/json'};
+const H=headers;
+const str=v=>String(v??'').trim();
+const norm=v=>str(v).toLowerCase().normalize('NFKC').replace(/[–—−]/g,'-').replace(/\s+/g,' ');
+const val=(o,keys,def='')=>{for(const k of keys){if(o&&o[k]!==undefined&&o[k]!==null&&str(o[k])!=='')return o[k]}return def};
+const arr=v=>Array.isArray(v)?v:(typeof v==='string'?v.split(/[,|•]/).map(x=>x.trim()).filter(Boolean):[]);
+const esc=v=>String(v??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+const verified=p=>['verified','approve','approved'].includes(norm(p.status));
+const match=(a,b)=>!b||norm(a)===norm(b)||norm(a).includes(norm(b))||norm(b).includes(norm(a));
+function serviceMatch(p,s){
+ if(!s)return true;
+ const q=norm(s);
+ return (p.services||[]).some(x=>{
+   const v=norm(x);
+   if(v===q||v.includes(q)||q.includes(v))return true;
+   if(q.includes('ac')&&q.includes('repair'))return v.includes('ac');
+   if(q.includes('fridge'))return v.includes('fridge')||v.includes('refrigerator');
+   if(q.includes('mobile'))return v.includes('mobile');
+   if(q.includes('computer'))return v.includes('computer')||v.includes('laptop');
+   return false;
+ });
+}
+async function get(table){
+ const r=await fetch(API+table+'?select=*',{headers,cache:'no-store'});
+ if(!r.ok)throw new Error(table+' HTTP '+r.status);
+ return r.json();
+}
+function normalize(rows,links,services){
+ const sm={};
+ (services||[]).forEach(x=>{if(x&&x.id!=null)sm[String(x.id)]=str(val(x,['Name','name','service_name','title'],''))});
+ const lm={};
+ (links||[]).forEach(l=>{
+   const pid=val(l,['professional_id','pro_id','provider_id']),sid=val(l,['service_id','svc_id']);
+   if(pid!=null&&sid!=null&&sm[String(sid)])(lm[String(pid)]??=[]).push(sm[String(sid)]);
+ });
+ return (rows||[]).map(x=>{
+   const id=val(x,['id','professional_id']);
+   let sv=arr(val(x,['Services','services','service_names'],[]));
+   if(!sv.length&&id!=null&&lm[String(id)])sv=lm[String(id)];
+   return {
+    id,name:str(val(x,['Name','name','full_name','professional_name'],'Professional')),
+    mobile:str(val(x,['Phone','phone','mobile','mobile_number','whatsapp'],'')),
+    block:str(val(x,['Block','block','block_name'],'')),
+    panchayat:str(val(x,['Panchayat','panchayat','panchayat_name','area'],'')),
+    village:str(val(x,['Village_Area','Village','village','village_area','village_name'],'')),
+    pin:str(val(x,['PIN_Code','pin','pincode','pin_code'],'')),
+    services:[...new Set(sv.map(v=>str(typeof v==='object'?val(v,['Name','name','service_name','title'],''):v)).filter(Boolean))],
+    status:str(val(x,['Status','status','verification_status'],''))
+   };
+ });
+}
+const CUSTOMER_REG_KEY='senvia_customer_registered_v3';
+function customerRegistered(){return localStorage.getItem(CUSTOMER_REG_KEY)==='1'||localStorage.getItem('senvia_customer_registered')==='1'}
+let selected=null,pendingAction=null;
+function requestSuccess(p,svc){const key='senvia_request_success_'+String(p.id||p.code||p.mobile||p.name).replace(/\W/g,'_')+'_'+norm(svc||'service').replace(/\W/g,'_');return localStorage.getItem(key)==='1';}
+function contactHtml(p){
+ const svc=currentService||p.services?.[0]||'Service';
+ if(requestSuccess(p,svc)&&p.mobile){const n=p.mobile.replace(/\D/g,'');return `<a class="btn lock" href="tel:${esc(p.mobile)}">📞 Call</a>${n?`<a class="btn request" target="_blank" href="https://wa.me/91${esc(n)}">💬 WhatsApp</a>`:''}`;}
+ return `<button class="btn request" onclick='needRegistration("request",${JSON.stringify({p,svc}).replace(/</g,'\\u003c')})'>🛠 Request Service</button>`;
+}
+function requestHtml(p,svc){return `<button class="btn request" onclick='needRegistration("request",${JSON.stringify({p,svc}).replace(/</g,'\\u003c')})'>🛠 Request Service</button>`;}
+function needRegistration(action,data){if(customerRegistered()){if(action==='request')openRequest(data.p,data.svc);return;}pendingAction={action,data};document.getElementById('cn').value=localStorage.getItem('senvia_customer_name')||'';document.getElementById('cm').value=localStorage.getItem('senvia_customer_mobile')||'';document.getElementById('regModal').classList.add('show');}
+function closeModal(id){document.getElementById(id).classList.remove('show');}
+async function registerCustomer(){const name=document.getElementById('cn').value.trim(),phone=document.getElementById('cm').value.replace(/\D/g,''),block=document.getElementById('cb').value.trim(),village=document.getElementById('cv').value.trim(),note=document.getElementById('regNote');note.textContent='';if(!name||phone.length!==10){note.textContent='नाम और सही 10 अंकों का मोबाइल नंबर दें।';return;}try{const r=await fetch(API+'rpc/register_senvia_customer',{method:'POST',headers:headers,body:JSON.stringify({p_name:name,p_phone:phone,p_block:block,p_panchayat:'',p_village_area:village})});const raw=await r.text();if(!r.ok)throw Error(raw||'Registration failed');const d=raw?JSON.parse(raw):null,row=Array.isArray(d)?d[0]:d;localStorage.setItem(CUSTOMER_REG_KEY,'1');localStorage.setItem('senvia_customer_registered','1');localStorage.setItem('senvia_customer_code',row?.customer_code||'');localStorage.setItem('senvia_customer_mobile',phone);localStorage.setItem('senvia_customer_name',name);closeModal('regModal');const a=pendingAction;pendingAction=null;if(a?.action==='request')openRequest(a.data.p,a.data.svc);else render(currentService);alert('Registration successful. अब Professional का contact उपलब्ध है।');}catch(e){note.textContent='Registration failed. कृपया फिर कोशिश करें।';console.error(e);}}
+function openRequest(p,svc){selected={p,svc};document.getElementById('reqPro').innerHTML=`<b>${esc(p.name)}</b> • ${esc(svc)}<br>📍 ${esc([p.block,p.panchayat,p.village].filter(Boolean).join(' → '))}`;document.getElementById('rn').value=localStorage.getItem('senvia_customer_name')||'';document.getElementById('rm').value=localStorage.getItem('senvia_customer_mobile')||'';document.getElementById('reqModal').classList.add('show');}
+async function submitRequest(){const p=selected?.p,svc=selected?.svc,name=document.getElementById('rn').value.trim(),phone=document.getElementById('rm').value.replace(/\D/g,''),village=document.getElementById('rv').value.trim(),pin=document.getElementById('rp').value.replace(/\D/g,''),extra=document.getElementById('rnote').value.trim(),note=document.getElementById('reqNote');note.textContent='';if(!p||!name||phone.length!==10){note.textContent='नाम और सही मोबाइल नंबर जरूरी है।';return;}try{const code=localStorage.getItem('senvia_customer_code')||'';const detail=`Service Request\nService: ${svc}\nProfessional: ${p.name}\nProfessional Mobile: ${p.mobile}\nCustomer: ${name}\nCustomer Mobile: ${phone}\nCustomer ID: ${code||'—'}\nBlock: ${p.block||'—'}\nPIN Code: ${pin||p.pin||'—'}\nVillage / Area: ${village||'—'}\nNote: ${extra||'—'}`;const r=await fetch(API+'messages?select=id',{method:'POST',headers:{...H,Prefer:'return=representation'},body:JSON.stringify({user_name:name,user_type:'Customer',mobile:phone,user_code:code,message_type:'Service Request',message:detail})});const raw=await r.text();if(!r.ok)throw Error(raw||('HTTP '+r.status));try{await fetch(API+'messages',{method:'POST',headers:{...H,Prefer:'return=minimal'},body:JSON.stringify({user_name:name,user_type:'Professional',mobile:p.mobile,user_code:p.code||p.id||'',message_type:'Service Request',message:detail})})}catch(e){}const requestKey='senvia_request_success_'+String(p.id||p.code||p.mobile||p.name).replace(/\W/g,'_')+'_'+norm(svc||'service').replace(/\W/g,'_');localStorage.setItem(requestKey,'1');closeModal('reqModal');render(window.__senvia_rows||[]);alert('✅ Service Request सफलतापूर्वक भेजी गई। अब Call / WhatsApp unlock हो गया है।');}catch(e){note.textContent='Request submit नहीं हो सकी: '+(e?.message||'Network/Policy error');console.error(e);}}
+
+let currentService="";
+function render(rows){
+ window.__senvia_rows=rows;
+ const el=document.getElementById('result');
+ if(!rows.length){el.innerHTML='<div class="empty"><b>इस चयन में कोई Verified Professional नहीं मिला।</b><br><br><a class="btn lock" href="customer-premium.html">← वापस Home</a></div>';return}
+ el.innerHTML='<div class="section-title">Verified Professionals</div><div class="grid">'+rows.map(p=>`<article class="card"><div class="name">✓ ${esc(p.name)}</div><div class="area">📍 Area: ${esc(p.village||'—')}<br>🏘️ Block: ${esc(p.block||'—')}<br>🏡 Panchayat: ${esc(p.panchayat||'—')}<br>📮 PIN Code: ${esc(p.pin||'—')}</div><div class="actions">${contactHtml(p)}</div><div class="note">🔒 Service Request सफल होने के बाद Call / WhatsApp unlock होगा।</div></article>`).join('')+'</div>';
+}
+(async()=>{
+ try{
+  const q=new URLSearchParams(location.search);
+  const b=q.get('block')||'',p=q.get('panchayat')||'',pin=q.get('pin')||'',s=q.get('service')||''; currentService=s;
+  document.getElementById('filter').textContent=[b&&`Block: ${b}`,p&&`Panchayat: ${p}`,pin&&`PIN: ${pin}`,s&&`Service: ${s}`].filter(Boolean).join(' • ')||'सभी Verified Professionals';
+  let pros=[],services=[],links=[];
+  pros=await get('professionals');
+  try{services=await get('services')}catch(e){}
+  try{links=await get('professional_services')}catch(e){}
+  let rows=normalize(pros,links,services).filter(verified);
+  rows=rows.filter(x=>match(x.block,b)&&match(x.panchayat,p)&&(pin?norm(x.pin)===norm(pin):true)&&serviceMatch(x,s));
+  const seen=new Set(); rows=rows.filter(x=>{const k=String(x.id||x.name).toLowerCase();if(seen.has(k))return false;seen.add(k);return true});
+  render(rows); document.getElementById('searchBusy')?.classList.remove('show');
+ }catch(e){
+  console.error(e);
+  document.getElementById('searchBusy')?.classList.remove('show'); document.getElementById('result').innerHTML='<div class="empty"><b>Search results अभी load नहीं हो सके।</b><br><br><a class="btn lock" href="customer-premium.html">← वापस Home</a></div>';
+ }
+})();
+</script>
+</body>
+</html>
