@@ -401,6 +401,38 @@ header .logo-img-wrap img{width:150px!important;height:82px!important;object-fit
 }
 </style>
 
+
+<style id="senvia-mobile-nav-restore-final">
+@media (max-width:767px){
+header{position:relative !important;}
+.senvia-mobile-trigger{
+display:flex !important;position:absolute !important;right:14px !important;top:50% !important;
+transform:translateY(-50%) !important;width:48px !important;height:48px !important;
+padding:0 !important;margin:0 !important;border:0 !important;border-radius:12px !important;
+background:#07528f !important;color:#fff !important;align-items:center !important;
+justify-content:center !important;font-family:Arial,sans-serif !important;font-size:28px !important;
+font-weight:700 !important;line-height:1 !important;z-index:10002 !important;
+box-shadow:0 4px 12px rgba(7,82,143,.22) !important;
+}
+.senvia-nav,nav.senvia-nav,.senvia-nav-inner{display:none !important;}
+.senvia-mobile-overlay{display:none !important;position:fixed !important;inset:0 !important;
+background:rgba(0,0,0,.42) !important;z-index:10000 !important;}
+body.senvia-menu-open .senvia-mobile-overlay{display:block !important;}
+.senvia-mobile-drawer{display:block !important;position:fixed !important;top:0 !important;left:0 !important;
+width:min(82vw,360px) !important;height:100dvh !important;transform:translateX(-105%) !important;
+transition:transform .25s ease !important;z-index:10001 !important;overflow-y:auto !important;
+background:linear-gradient(180deg,#eaf6ff 0%,#dff5f0 100%) !important;
+box-shadow:8px 0 28px rgba(0,0,0,.22) !important;}
+body.senvia-menu-open .senvia-mobile-drawer{transform:translateX(0) !important;}
+.senvia-mobile-drawer .senvia-mobile-head{display:flex !important;align-items:center !important;
+justify-content:space-between !important;padding:18px 16px !important;min-height:86px !important;
+background:rgba(255,255,255,.45) !important;}
+}
+@media (min-width:768px){
+.senvia-mobile-trigger,.senvia-mobile-overlay,.senvia-mobile-drawer{display:none !important;}
+}
+</style>
+
 </head><body>
 <div id="senviaBusy" aria-live="polite" aria-label="System busy">
   <div class="senvia-v-spinner"><b>V</b></div>
