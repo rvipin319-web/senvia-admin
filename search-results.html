@@ -102,7 +102,9 @@ function normalize(rows,links,services){
    };
  });
 }
-const CUSTOMER_REG_KEY='senvia_customer_registration_verified_v1';
+const CUSTOMER_REG_KEY='senvia_search_registration_verified_v2';
+// Never trust the older registration flag from other pages/old test versions.
+localStorage.removeItem('senvia_customer_registration_verified_v1');
 function customerRegistered(){return localStorage.getItem(CUSTOMER_REG_KEY)==='1'}
 let selected=null,pendingAction=null;
 function contactHtml(p){
