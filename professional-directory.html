@@ -12,21 +12,31 @@
 .senvia-nav a span{display:inline}
 @media(max-width:700px){.senvia-nav-inner{padding:4px 3px;gap:2px}.senvia-nav a{flex-direction:column;gap:2px;padding:7px 2px;font-size:11px}.senvia-nav a span{font-size:10px;overflow:hidden;text-overflow:ellipsis;max-width:100%;white-space:nowrap}}
 </style>
-<style id="senvia-single-nav">
-.senvia-nav{display:block!important;width:100%;background:#07528f!important;border-bottom:1px solid #06375f!important;position:relative;z-index:1000;box-sizing:border-box}
-.senvia-nav-inner{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));align-items:center;max-width:1200px;margin:0 auto;padding:4px 8px;gap:3px;box-sizing:border-box}
-.senvia-nav a{display:flex;align-items:center;justify-content:center;gap:4px;min-width:0;padding:10px 8px;color:#fff!important;text-decoration:none!important;font-weight:800;font-size:14px;line-height:1.1;border-radius:7px;white-space:nowrap;box-sizing:border-box}
-.senvia-nav a:hover,.senvia-nav a:focus{background:rgba(255,255,255,.16);color:#fff!important}
-.senvia-nav a span{display:inline}
-@media(max-width:700px){.senvia-nav-inner{padding:4px 3px;gap:2px}.senvia-nav a{flex-direction:column;gap:2px;padding:7px 2px;font-size:11px}.senvia-nav a span{font-size:10px;overflow:hidden;text-overflow:ellipsis;max-width:100%;white-space:nowrap}}
+
+<style id="senvia-language-buttons">
+.lang{display:flex;gap:8px;align-items:center;margin-left:auto}
+.lang button{border:1px solid #1678b8;background:#fff;color:#07528f;border-radius:10px;padding:9px 14px;font-weight:800;font-size:15px;cursor:pointer}
+.lang button.on{background:#1678b8;color:#fff}
+.lang button:focus{outline:2px solid rgba(22,120,184,.35);outline-offset:2px}
+@media(max-width:700px){.head{gap:10px}.lang{gap:5px}.lang button{padding:7px 10px;font-size:13px}}
 </style>
-</head><body><div class="top">📍 Muzaffarpur, Bihar <span style="float:right">📞 +91 9905411421</span></div><header><div class="wrap head"><div><div class="brand">Senvia</div><div class="tag">हर घर का अपना साथी</div></div></div></header><nav class="senvia-nav" aria-label="Senvia navigation">
-  <div class="senvia-nav-inner">
-    <a id="navHome" href="customer-premium.html">⌂ <span>होम</span></a>
-    <a id="navServices" href="services.html">⚙ <span>सेवाएँ</span></a>
-    <a id="navPros" href="professional-directory.html">👥 <span>Professionals</span></a>
-    <a id="navAbout" href="about.html">ⓘ <span>हमारे बारे में</span></a>
-    <a id="navContact" href="contact.html">✉ <span>संपर्क</span></a>
+
+</head><body><div class="top">📍 Muzaffarpur, Bihar <span style="float:right">📞 +91 9905411421</span></div><header><div class="wrap head"><div><div class="brand">Senvia</div><div class="tag">हर घर का अपना साथी</div></div><div class="lang" aria-label="Language"><button id="hi" type="button" onclick="senviaSetLang('hi')">हिंदी</button><button id="en" class="on" type="button" onclick="senviaSetLang('en')">English</button></div></div></header><nav class="desktop-nav" aria-label="Desktop navigation">
+  <div class="wrap nav">
+    <a id="navHome" href="customer-premium.html">⌂ होम</a>
+    <a id="navServices" href="services.html">⚙ सेवाएँ</a>
+    <a id="navPros" href="professional-directory.html">👥 Professionals</a>
+    <a id="navAbout" href="about.html">ⓘ हमारे बारे में</a>
+    <a id="navContact" href="contact.html">✉ संपर्क</a>
+  </div>
+</nav>
+<nav class="mobile-nav" aria-label="Mobile navigation">
+  <div class="wrap mobile-nav-bar">
+    <a href="customer-premium.html">⌂<span>होम</span></a>
+    <a href="services.html">⚙<span>सेवाएँ</span></a>
+    <a href="professional-directory.html">👥<span>Professionals</span></a>
+    <a href="about.html">ⓘ<span>हमारे बारे में</span></a>
+    <a href="contact.html">✉<span>संपर्क</span></a>
   </div>
 </nav><main><div class="wrap"><div class="hero"><h1>👥 Professionals Directory</h1><p class="sub">सभी Verified Professionals service-wise यहाँ दिखाई देंगे। Professional का mobile/WhatsApp contact <b>Customer Registration के बिना नहीं दिखेगा</b>।</p></div><div id="list" style="margin-top:20px"><div class="empty">⏳ Professionals लोड हो रहे हैं…</div></div></div></main>
 <div class="modal" id="regModal"><div class="box"><button class="close" onclick="closeReg()">×</button><h2>👤 Customer Registration</h2><p class="sub">Professional का contact देखने या Request Service भेजने के लिए पहले registration करें।</p><div class="form"><input id="cn" placeholder="नाम / Name"><input id="cm" placeholder="Mobile Number / मोबाइल नंबर" maxlength="10" inputmode="numeric"><input id="cb" placeholder="Block"><input id="cv" placeholder="Village / Area"><div class="note" id="regNote"></div><button class="btn blue" onclick="registerCustomer()">Register & Continue</button></div></div></div>
@@ -52,4 +62,41 @@ async function registerCustomer(){const name=document.getElementById('cn').value
 function openRequest(p,svc){selected={p,svc};document.getElementById('reqPro').innerHTML=`<b>${esc(p.name)}</b> • ${esc(svc)}<br>📍 ${esc([p.block,p.panchayat,p.village].filter(Boolean).join(' → '))}`;document.getElementById('rn').value=localStorage.getItem('senvia_customer_name')||'';document.getElementById('rm').value=localStorage.getItem('senvia_customer_mobile')||'';document.getElementById('reqModal').classList.add('show')}
 async function submitRequest(){const p=selected?.p,svc=selected?.svc,name=document.getElementById('rn').value.trim(),phone=document.getElementById('rm').value.replace(/\D/g,''),village=document.getElementById('rv').value.trim(),pin=document.getElementById('rp').value.replace(/\D/g,''),extra=document.getElementById('rnote').value.trim(),note=document.getElementById('reqNote');note.textContent='';if(!p||!name||phone.length!==10){note.textContent='नाम और सही मोबाइल नंबर जरूरी है।';return}try{const code=localStorage.getItem('senvia_customer_code')||'';const detail=`Service Request\nService: ${svc}\nProfessional: ${p.name}\nProfessional Mobile: ${p.mobile}\nCustomer: ${name}\nCustomer Mobile: ${phone}\nCustomer ID: ${code||'—'}\nBlock: ${p.block||'—'}\nPIN Code: ${pin||p.pin||'—'}\nVillage / Area: ${village||'—'}\nNote: ${extra||'—'}`;const r=await fetch(API+'messages',{method:'POST',headers:{...H,Prefer:'return=minimal'},body:JSON.stringify({user_name:name,user_type:'Customer',mobile:phone,user_code:code,message_type:'Service Request',message:detail})});if(!r.ok)throw Error(await r.text());try{await fetch(API+'messages',{method:'POST',headers:{...H,Prefer:'return=minimal'},body:JSON.stringify({user_name:name,user_type:'Professional',mobile:p.mobile,user_code:p.code||p.id||'',message_type:'Service Request',message:detail})})}catch(e){}closeReq();alert('✅ Service Request सफलतापूर्वक भेजी गई।')}catch(e){note.textContent='Request submit नहीं हो सकी। कृपया फिर कोशिश करें।'}}
 (async()=>{try{pros=await load();render(new URLSearchParams(location.search).get('service')||'')}catch(e){document.getElementById('list').innerHTML='<div class="empty">Database से Professionals लोड नहीं हो पाए।</div>'}})();
-</script></body></html>
+</script>
+<script id="senvia-page-language">
+(function(){
+  const hi={
+    navHome:'⌂ होम',navServices:'⚙ सेवाएँ',navPros:'👥 Professionals',navAbout:'ⓘ हमारे बारे में',navContact:'✉ संपर्क',
+    title:'👥 Professionals Directory',
+    sub:'सभी Verified Professionals service-wise यहाँ दिखाई देंगे। Professional का mobile/WhatsApp contact Customer Registration के बिना नहीं दिखेगा।',
+    reg:'👤 Customer Registration', regSub:'Professional का contact देखने या Request Service भेजने के लिए पहले registration करें.',
+    continue:'Register & Continue', request:'🛠 Request Service', call:'📞 Call', wa:'💬 WhatsApp',
+    lock:'🔒 Register to view contact'
+  };
+  const en={
+    navHome:'⌂ Home',navServices:'⚙ Services',navPros:'👥 Professionals',navAbout:'ⓘ About Us',navContact:'✉ Contact',
+    title:'👥 Professionals Directory',
+    sub:'All verified professionals are shown here by service. Professional mobile/WhatsApp contact is hidden until Customer Registration.',
+    reg:'👤 Customer Registration', regSub:'Register first to view a professional contact or send a service request.',
+    continue:'Register & Continue', request:'🛠 Request Service', call:'📞 Call', wa:'💬 WhatsApp',
+    lock:'🔒 Register to view contact'
+  };
+  function apply(){
+    let l='en'; try{l=localStorage.getItem('senvia_lang')==='hi'?'hi':'en'}catch(e){}
+    const t=l==='hi'?hi:en;
+    document.documentElement.lang=l;
+    ['navHome','navServices','navPros','navAbout','navContact'].forEach(id=>{const e=document.getElementById(id);if(e)e.innerHTML=t[id]});
+    const h=document.querySelector('main .hero h1');if(h)h.textContent=t.title;
+    const sub=document.querySelector('main .hero .sub');if(sub)sub.innerHTML=t.sub;
+    const rh=document.querySelector('#regModal h2');if(rh)rh.textContent=t.reg;
+    const rs=document.querySelector('#regModal .sub');if(rs)rs.textContent=t.regSub;
+    const rb=document.querySelector('#regModal .btn');if(rb)rb.textContent=t.continue;
+    const qh=document.querySelector('#reqModal h2');if(qh)qh.textContent=t.request;
+    const hb=document.getElementById('hi'),eb=document.getElementById('en');if(hb)hb.classList.toggle('on',l==='hi');if(eb)eb.classList.toggle('on',l==='en');
+  }
+  window.senviaSetLang=function(l){try{localStorage.setItem('senvia_lang',l==='hi'?'hi':'en')}catch(e){};apply()};
+  apply();
+})();
+</script>
+
+</body></html>
