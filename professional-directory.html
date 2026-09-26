@@ -33,7 +33,7 @@
 @media(max-width:900px){.desktop-nav{display:none!important}.mobile-nav{display:block!important}}
 @media(min-width:901px){.desktop-nav{display:block!important}.mobile-nav{display:none!important}}
 </style>
-</head><body><div class="top">📍 Muzaffarpur, Bihar <span style="float:right">📞 +91 9905411421</span></div><header><div class="wrap head"><div><div class="brand">Senvia</div><div class="tag">हर घर का अपना साथी</div></div><div class="lang" aria-label="Language"><button id="hi" type="button" onclick="senviaSetLang('hi')">हिंदी</button><button id="en" class="on" type="button" onclick="senviaSetLang('en')">English</button></div></div></header><nav class="desktop-nav" aria-label="Desktop navigation">
+</head><body><div class="top">📍 Muzaffarpur, Bihar <span style="float:right">📞 +91 9905411421</span></div><header><div class="wrap head"><div><div class="brand">Senvia</div><div class="tag">हर घर का अपना साथी</div></div></div></header><nav class="desktop-nav" aria-label="Desktop navigation">
   <div class="wrap nav">
     <a id="navHome" href="customer-premium.html">⌂ होम</a>
     <a id="navServices" href="services.html">⚙ सेवाएँ</a>
@@ -61,8 +61,8 @@ const icons={'AC Repair':'❄️','TV / LED Repair':'📺','Mobile Repair':'📱
 let pros=[],selected=null,pendingAction=null;
 function esc(x){return String(x??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
 function norm(x){return String(x||'').trim().toLowerCase()}
-function verified(p){return ['verified','approve','approved'].includes(norm(p.Status||p.status))}
-function parse(row){return {id:row.id,name:row.Name||row.name||'Professional',mobile:row.Phone||row.phone||row.mobile||'',block:row.Block||row.block||'',panchayat:row.Panchayat||row.panchayat||'',village:row.Village_Area||row.Village||row.village||'',pin:row.PIN_Code||row.pin||'',services:String(row.Services||row.services||'').split(/[,|]/).map(x=>x.trim()).filter(Boolean),code:row.professional_code||''}}
+function verified(p){return ['verified','approve','approved','active'].includes(norm(p.Status||p.status||p.verification_status))}
+function parse(row){return {id:row.id,name:row.Name||row.name||'Professional',mobile:row.Phone||row.phone||row.mobile||'',block:row.Block||row.block||'',panchayat:row.Panchayat||row.panchayat||'',village:row.Village_Area||row.Village||row.village||'',pin:row.PIN_Code||row.pin||'',services:String(row.Services||row.services||row.service_names||row.service||'').split(/[,|]/).map(x=>x.trim()).filter(Boolean),code:row.professional_code||row.Professional_Code||'',status:row.Status||row.status||row.verification_status||''}}
 async function load(){const r=await fetch(API+'professionals?select=*&limit=1000',{headers:H});if(!r.ok)throw Error('load failed');return (await r.json()).map(parse).filter(verified)}
 function customerRegistered(){return localStorage.getItem('senvia_customer_registered')==='1'}
 function showContact(p){return customerRegistered()&&p.mobile?`<a class="btn green" href="tel:${esc(p.mobile)}">📞 Call</a><a class="btn light" target="_blank" href="https://wa.me/91${esc(String(p.mobile).replace(/\D/g,''))}">💬 WhatsApp</a>`:`<button class="btn blue" onclick="needRegistration('contact',${JSON.stringify(p).replace(/</g,'\\u003c')})">🔒 Register to view contact</button>`}
