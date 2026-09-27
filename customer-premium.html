@@ -419,10 +419,106 @@ function fill(){
  loadP();
 }
 let areaStates=[{id:'fallback-bihar',name:'Bihar',is_visible:true}],areaDistricts=[{id:'fallback-muzaffarpur',name:'Muzaffarpur',state_name:'Bihar',is_visible:true,state_id:'fallback-bihar'}],areaBlocks=[];
-async function loadAreaStates(){try{const r=await fetch(API+'senvia_states?select=id,name,is_visible&is_visible=eq.true&order=name.asc',{headers:{apikey:SUPABASE_KEY},cache:'no-store'});if(r.ok){const rows=await r.json();if(rows.length)areaStates=rows;}}catch(e){} const st=$('state'); if(st){st.innerHTML=areaStates.map(x=>`<option value="${String(x.name).replace(/"/g,'&quot;')}">${String(x.name).replace(/</g,'&lt;')}</option>`).join('');st.value='Bihar';} await loadDistricts();}
-async function loadDistricts(){const state=$('state')?.value||'Bihar';try{const st=areaStates.find(x=>String(x.name).toLowerCase()===state.toLowerCase());const q=st?.id&&!String(st.id).startsWith('fallback-')?'senvia_districts?select=id,name,state_id,is_visible&is_visible=eq.true&state_id=eq.'+encodeURIComponent(st.id)+'&order=name.asc':null;if(q){const r=await fetch(API+q,{headers:{apikey:SUPABASE_KEY},cache:'no-store'});if(r.ok){const rows=await r.json();areaDistricts=rows.length?rows:areaDistricts.filter(x=>x.state_name===state);}}}catch(e){} const ds=areaDistricts.filter(x=>String(x.state_name||'').toLowerCase()===state.toLowerCase()||String(x.state_id||'').toLowerCase()===String(areaStates.find(x=>x.name===state)?.id||'').toLowerCase());const d=$('district');if(d){d.innerHTML=ds.map(x=>`<option value="${String(x.name).replace(/"/g,'&quot;')}">${String(x.name).replace(/</g,'&lt;')}</option>`).join('');if(state==='Bihar')d.value='Muzaffarpur';}await loadBlocks();}
-async function loadBlocks(){const district=$('district')?.value||'Muzaffarpur';const drow=areaDistricts.find(x=>String(x.name).toLowerCase()===district.toLowerCase());let rows=[];try{if(drow&&!String(drow.id).startsWith('fallback-')){const r=await fetch(API+'senvia_blocks?select=id,name,district_id,is_visible&is_visible=eq.true&district_id=eq.'+encodeURIComponent(drow.id)+'&order=name.asc',{headers:{apikey:SUPABASE_KEY},cache:'no-store'});if(r.ok)rows=await r.json();}}catch(e){} if(!rows.length){rows=Object.keys(data).map(x=>({id:'fallback-'+x,name:x,is_visible:true,district_id:'fallback-muzaffarpur'}));}areaBlocks=rows;const b=$('block');if(b)b.innerHTML='<option value="">'+(lang==='hi'?'-- Block चुनें --':'-- Select Block --')+'</option>'+rows.map(x=>`<option value="${String(x.name).replace(/"/g,'&quot;')}">${String(x.name).replace(/</g,'&lt;')}</option>`).join('');loadP();}
-async function loadP(){const b=$('block')?.value||'';let list=[];const brow=areaBlocks.find(x=>String(x.name).toLowerCase()===b.toLowerCase());try{if(brow&&!String(brow.id).startsWith('fallback-')){const r=await fetch(API+'senvia_panchayats?select=id,name,block_id,is_visible&is_visible=eq.true&block_id=eq.'+encodeURIComponent(brow.id)+'&order=name.asc',{headers:{apikey:SUPABASE_KEY},cache:'no-store'});if(r.ok){const rows=await r.json();list=rows.map(x=>x.name);}}}catch(e){} if(!list.length&&b)list=data[b]||[];list=[...new Set(list)].sort();const p=$('p');if(p)p.innerHTML='<option value="">'+(lang==='hi'?'-- Panchayat चुनें --':'-- Select Panchayat --')+'</option>'+list.map(x=>`<option value="${String(x).replace(/"/g,'&quot;')}">${String(x).replace(/</g,'&lt;')}</option>`).join('')}
+
+/* Senvia customer area hierarchy: only Admin-visible records are shown.
+   State -> District -> Block -> Panchayat, with Bihar/Muzaffarpur as default. */
+const areaVisible=v => v===true || v===1 || String(v).toLowerCase()==='true' || String(v)==='1';
+const areaEsc=v=>String(v??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const areaName=v=>String(v??'').trim();
+
+async function areaGet(path){
+  const r=await fetch(API+path,{headers:{apikey:SUPABASE_KEY},cache:'no-store'});
+  if(!r.ok) throw new Error('Area API '+r.status);
+  return await r.json();
+}
+
+async function loadAreaStates(){
+  try{
+    const rows=await areaGet('senvia_states?select=id,name,is_visible&is_visible=eq.true&order=name.asc');
+    const visible=Array.isArray(rows)?rows.filter(x=>areaVisible(x.is_visible)&&areaName(x.name)):[];
+    if(visible.length) areaStates=visible;
+  }catch(e){console.warn('Senvia states load failed',e)}
+
+  const st=$('state');
+  if(st){
+    st.innerHTML=areaStates.filter(x=>areaVisible(x.is_visible)).map(x=>`<option value="${areaEsc(x.name)}">${areaEsc(x.name)}</option>`).join('');
+    const bihar=areaStates.find(x=>areaName(x.name).toLowerCase()==='bihar');
+    st.value=bihar ? bihar.name : (areaStates[0]?.name||'Bihar');
+  }
+  await loadDistricts(true);
+}
+
+async function loadDistricts(initial=false){
+  const state=$('state')?.value||'Bihar';
+  const st=areaStates.find(x=>areaName(x.name).toLowerCase()===areaName(state).toLowerCase());
+  let rows=[];
+
+  try{
+    if(st && !String(st.id).startsWith('fallback-')){
+      rows=await areaGet('senvia_districts?select=id,name,state_id,is_visible&is_visible=eq.true&state_id=eq.'+encodeURIComponent(st.id)+'&order=name.asc');
+      rows=Array.isArray(rows)?rows.filter(x=>areaVisible(x.is_visible)&&areaName(x.name)):[];
+    }
+  }catch(e){console.warn('Senvia districts load failed',e)}
+
+  // Demo fallback is used only for Bihar/Muzaffarpur; other states show only
+  // districts that Admin has marked visible in Supabase.
+  if(!rows.length && areaName(state).toLowerCase()==='bihar'){
+    rows=[{id:'fallback-muzaffarpur',name:'Muzaffarpur',state_name:'Bihar',is_visible:true,state_id:'fallback-bihar'}];
+  }
+  areaDistricts=rows;
+
+  const d=$('district');
+  if(d){
+    d.innerHTML=rows.map(x=>`<option value="${areaEsc(x.name)}">${areaEsc(x.name)}</option>`).join('');
+    const muza=rows.find(x=>areaName(x.name).toLowerCase()==='muzaffarpur');
+    if(areaName(state).toLowerCase()==='bihar' && muza) d.value=muza.name;
+  }
+  await loadBlocks(true);
+}
+
+async function loadBlocks(initial=false){
+  const district=$('district')?.value||'';
+  const drow=areaDistricts.find(x=>areaName(x.name).toLowerCase()===areaName(district).toLowerCase());
+  let rows=[];
+
+  try{
+    if(drow && !String(drow.id).startsWith('fallback-')){
+      rows=await areaGet('senvia_blocks?select=id,name,district_id,is_visible&is_visible=eq.true&district_id=eq.'+encodeURIComponent(drow.id)+'&order=name.asc');
+      rows=Array.isArray(rows)?rows.filter(x=>areaVisible(x.is_visible)&&areaName(x.name)):[];
+    }
+  }catch(e){console.warn('Senvia blocks load failed',e)}
+
+  // Existing local demo blocks are kept only for the default Bihar/Muzaffarpur
+  // fallback, so other districts/states never receive hidden records.
+  if(!rows.length && drow && String(drow.id).startsWith('fallback-')){
+    rows=Object.keys(data).map(x=>({id:'fallback-'+x,name:x,is_visible:true,district_id:drow.id}));
+  }
+  areaBlocks=rows;
+
+  const b=$('block');
+  if(b)b.innerHTML='<option value="">'+(lang==='hi'?'-- Block चुनें --':'-- Select Block --')+'</option>'+rows.map(x=>`<option value="${areaEsc(x.name)}">${areaEsc(x.name)}</option>`).join('');
+  await loadP();
+}
+
+async function loadP(){
+  const b=$('block')?.value||'';
+  let list=[];
+  const brow=areaBlocks.find(x=>areaName(x.name).toLowerCase()===areaName(b).toLowerCase());
+
+  try{
+    if(brow && !String(brow.id).startsWith('fallback-')){
+      const rows=await areaGet('senvia_panchayats?select=id,name,block_id,is_visible&is_visible=eq.true&block_id='+encodeURIComponent(brow.id)+'&order=name.asc');
+      list=(Array.isArray(rows)?rows:[]).filter(x=>areaVisible(x.is_visible)&&areaName(x.name)).map(x=>x.name);
+    }
+  }catch(e){console.warn('Senvia panchayats load failed',e)}
+
+  if(!list.length && brow && String(brow.id).startsWith('fallback-') && b) list=data[b]||[];
+  list=[...new Set(list.map(areaName).filter(Boolean))].sort((a,z)=>a.localeCompare(z));
+
+  const p=$('p');
+  if(p)p.innerHTML='<option value="">'+(lang==='hi'?'-- Panchayat चुनें --':'-- Select Panchayat --')+'</option>'+list.map(x=>`<option value="${areaEsc(x)}">${areaEsc(x)}</option>`).join('');
+}
+
 function loadV(){}
 function selectB(b){$('block').value=b;loadP();$('search').scrollIntoView({behavior:'smooth'})}
 function quick(x){$('s').value=x;$('search').scrollIntoView({behavior:'smooth'});toast(serviceName(x)+' '+T[lang].selected)}
