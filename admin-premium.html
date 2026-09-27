@@ -400,7 +400,12 @@ async function loadFromSupabase(){
    }));
    services=serviceRows.map(s=>svcLabel(s)).filter(Boolean);
    if(!services.length) services=[...demoServices];
-   try{ customerRows=await api('rpc/get_senvia_admin_customers'); }catch(e){
+   try{
+     customerRows=await api('rpc/get_senvia_admin_customers',{
+       method:'POST',
+       body:'{}'
+     });
+   }catch(e){
      console.warn('admin customer RPC failed, trying direct customers read',e);
      try{ customerRows=await api('customers?select=*&order=created_at.desc'); }catch(e2){ customerRows=[]; console.warn('customers read failed',e2); }
    }
