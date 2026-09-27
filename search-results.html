@@ -45,7 +45,7 @@ button,.btn{border:0;border-radius:9px;padding:9px 13px;font-weight:700;text-dec
 <h1>🔎 खोज परिणाम</h1>
 <div id="filter" class="filter">आपकी खोज के अनुसार Verified Professionals</div>
 </section>
-<div id="result"><div class="busy">डेटा लोड हो रहा है…</div></div>
+<div id="result"><div class="busy">डेटा लोड हो रहा है…</div></div><div style="margin-top:22px;padding:14px;text-align:center;color:#667085;font-size:12px">© 2026 Senvia — हर घर का अपना साथी</div>
 </main>
 
 <script>
@@ -166,8 +166,8 @@ function render(rows){
 (async()=>{
  try{
   const q=new URLSearchParams(location.search);
-  const b=q.get('block')||'',p=q.get('panchayat')||'',pin=q.get('pin')||'',s=q.get('service')||''; currentService=s;
-  document.getElementById('filter').textContent=[b&&`Block: ${b}`,p&&`Panchayat: ${p}`,pin&&`PIN: ${pin}`,s&&`Service: ${s}`].filter(Boolean).join(' • ')||'सभी Verified Professionals';
+  const state=q.get('state')||'Bihar',district=q.get('district')||'Muzaffarpur',b=q.get('block')||'',p=q.get('panchayat')||'',pin=q.get('pin')||'',s=q.get('service')||''; currentService=s;
+  document.getElementById('filter').textContent=[state&&`State: ${state}`,district&&`District: ${district}`,b&&`Block: ${b}`,p&&`Panchayat: ${p}`,pin&&`PIN: ${pin}`,s&&`Service: ${s}`].filter(Boolean).join(' • ')||'सभी Verified Professionals';
   let pros=[],services=[],links=[];
   pros=await get('professionals');
   try{services=await get('services')}catch(e){}
@@ -175,7 +175,7 @@ function render(rows){
   let rows=normalize(pros,links,services).filter(verified);
   rows=rows.filter(x=>match(x.block,b)&&match(x.panchayat,p)&&(pin?norm(x.pin)===norm(pin):true)&&serviceMatch(x,s));
   const seen=new Set(); rows=rows.filter(x=>{const k=String(x.id||x.name).toLowerCase();if(seen.has(k))return false;seen.add(k);return true});
-  window.__senviaFindFilters={block:b,panchayat:p,pin:pin,service:s};
+  window.__senviaFindFilters={state:state,district:district,block:b,panchayat:p,pin:pin,service:s};
   render(rows);
   recordFindActivity(rows,window.__senviaFindFilters); document.getElementById('searchBusy')?.classList.remove('show');
  }catch(e){
