@@ -93,6 +93,8 @@ async function submitRequest(){
  if(!p||!name||phone.length!==10){note.textContent='Customer registration details missing हैं।';return}
  if(pin && pin.length!==6){note.textContent='कृपया सही 6 अंकों का PIN Code दें।';return}
  try{
+   let debugStatus='';
+   let debugRaw='';
    const r=await fetch(API+'rpc/create_senvia_service_request',{method:'POST',headers:{...H},body:JSON.stringify({
      p_customer_name:name,
      p_customer_mobile:phone,
@@ -107,13 +109,14 @@ async function submitRequest(){
      p_pin_code:pin||'',
      p_note:extra||''
    })});
-   const raw=await r.text();
-   if(!r.ok)throw Error(raw||'Request submit failed');
+   debugStatus=String(r.status);
+   debugRaw=await r.text();
+   if(!r.ok)throw Error(debugRaw||('HTTP '+r.status));
    const key='senvia_contact_unlocked_'+String(p.id||p.mobile||p.name).replace(/[^a-zA-Z0-9_-]/g,'_');
    localStorage.setItem(key,'1');
    closeReq(); render(new URLSearchParams(location.search).get('service')||'');
    alert('✅ Service Request सफलतापूर्वक भेजी गई। अब Call/WhatsApp unlock है।');
- }catch(e){console.error('Senvia Service Request:',e);note.textContent='Request submit नहीं हो सकी। कृपया फिर कोशिश करें।';if(sendBtn)sendBtn.disabled=false}
+ }catch(e){console.error('Senvia Service Request:',e);const msg=(debugRaw||e?.message||'Unknown error').replace(/<[^>]*>/g,'').slice(0,300);note.textContent='Request failed'+(debugStatus?' (HTTP '+debugStatus+')':'')+': '+msg;if(sendBtn)sendBtn.disabled=false}
 }
 (async()=>{try{pros=await load();render(new URLSearchParams(location.search).get('service')||'')}catch(e){document.getElementById('list').innerHTML='<div class="empty">Database से Professionals लोड नहीं हो पाए।</div>'}})();
 </script>
