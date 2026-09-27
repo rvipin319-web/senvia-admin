@@ -427,10 +427,12 @@ async function loadFromSupabase(){
    dbMode=true;
    const note=(serviceRows.length?'':' (services table unavailable; using local service names)')+(links.length?'':' (service links unavailable; existing profile service fields used where available)');
    setDbStatus('🟢 Supabase connected — live professional data loaded.'+note,'ok');
+   senviaBusyCount=0;document.getElementById('senviaBusy')?.classList.remove('show');
  }catch(e){
    console.error('Supabase load failed:',e);
    dbMode=false; pros=[...demoPros]; services=[...demoServices];
    setDbStatus('🟠 Supabase professionals could not be read: '+(e.message||e),'warn');
+   senviaBusyCount=0;document.getElementById('senviaBusy')?.classList.remove('show');
  }
  render();
 }
@@ -457,7 +459,7 @@ document.getElementById('proViewModal')?.addEventListener('click',e=>{if(e.targe
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeProView();closeServiceEdit()}});
 function restoreProfessionalView(){const sec=document.getElementById('pros');const pref=localStorage.getItem('senvia_prof_view')||'card';const on=pref==='card';sec.classList.toggle('card-view',on);sec.classList.toggle('table-view',!on);const b=document.getElementById('viewToggle');if(b)b.textContent=on?'☷ List View':'▦ Grid View'}
 function setLang(l){lang=l;document.querySelectorAll('[data-hi]').forEach(e=>e.textContent=e.dataset[l]);document.getElementById('hi').className=l==='hi'?'on':'';document.getElementById('en').className=l==='en'?'on':''}
-function show(id,el){showBusy();document.querySelectorAll('main section').forEach(s=>s.style.display='none');document.getElementById(id).style.display='block';document.querySelectorAll('.nav').forEach(n=>n.classList.remove('active'));if(el)el.classList.add('active');render();setTimeout(hideBusy,300)}
+function show(id,el){document.querySelectorAll('main section').forEach(s=>s.style.display='none');document.getElementById(id).style.display='block';document.querySelectorAll('.nav').forEach(n=>n.classList.remove('active'));if(el)el.classList.add('active');render()}
 function render(){
  const pendingCount=pros.filter(p=>proStatus(p)==='Pending').length;
  const cp=document.getElementById('countPro'); if(cp) cp.textContent=pros.length;
@@ -499,7 +501,7 @@ function renderServices(){
 }
 function renderCustomers(){
  const grid=localStorage.getItem('senvia_customers_view')==='grid'; const box=document.getElementById('customerList'); if(!box)return; box.className=grid?'collection-grid':'collection-list';
- if(!customerLoadDone){ box.innerHTML='<div class="senvia-inline-loader"><span class="senvia-loader-v">V</span><b>Customers loading...</b></div>'; return; }
+ if(!customerLoadDone){ box.innerHTML='<p class="empty">Customers data is loading…</p>'; return; }
  const q=(document.getElementById('custSearch')?.value||'').toLowerCase();
  const rows=(Array.isArray(customers)?customers:[]).filter(c=>!q||JSON.stringify(c).toLowerCase().includes(q));
  box.innerHTML=rows.map(c=>grid?`<div class="collection-card"><h3>${c.Name||c.name||'Customer'}</h3><span class="code-pill">ID: ${c.customer_code||'—'}</span><p>📱 ${c.Phone||c.phone||'—'}</p><p>📍 ${[c.Block,c.Panchayat,c.Village_Area].filter(Boolean).join(' → ')||'—'}</p><p>Status: <b>${c.Status||'Active'}</b></p><div class="actions"><button class="danger" type="button" onclick="deleteCustomer('${c.id||''}')">Delete</button></div></div>`:`<div class="service-row"><span class="service-row-name">${c.Name||c.name||'Customer'} <span class="code-pill">${c.customer_code||'—'}</span></span><span>${c.Phone||c.phone||'—'}</span><span>${c.Block||'—'}</span><div class="service-row-actions"><button class="danger" type="button" onclick="deleteCustomer('${c.id||''}')">Delete</button></div></div>`).join('')||'<p class="empty">No customers registered yet.</p>';
@@ -633,12 +635,6 @@ async function delService(i){if(!confirm('Delete this service?'))return;showBusy
 
 proSearch.oninput=renderTable;statusFilter.onchange=renderTable;custSearch.oninput=renderCustomers;msgSearch.oninput=renderMessages;msgType.onchange=renderMessages;
 const db=document.createElement('div');db.id='dbStatus';db.style='margin:12px 0 0;padding:10px 12px;border-radius:9px;font-weight:700;background:#fff4d7;color:#8a6500';db.textContent='Connecting to Supabase…';document.querySelector('.content').prepend(db);
-const senviaNativeFetch=window.fetch.bind(window);
-window.fetch=async function(...args){
-  const topLevelBusy=senviaBusyCount===0;
-  if(topLevelBusy)showBusy();
-  try{return await senviaNativeFetch(...args)}finally{if(topLevelBusy)hideBusy()}
-};
 restoreAdminEmail();
 restoreProfessionalView();restoreCollectionViews();
 refreshAdminSession().then(()=>requireAdmin()).then(ok=>{if(ok) loadFromSupabase()});
