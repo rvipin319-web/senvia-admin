@@ -288,7 +288,38 @@ table tbody tr{border-bottom:1px solid #e3edf3;transition:background .15s ease}t
 .pro-view-card,.pro-card,.customer-card,.customer-list,.messages-list,.services-list{border:1px solid #cfe0ee!important;box-shadow:0 8px 24px rgba(8,36,85,.07)}
 .tablewrap{border-radius:15px;overflow:auto;background:#fff}
 #pros .tablewrap, #customers .panel, #services .panel, #areas .panel, #messages .panel{border-color:#c8dceb!important}
-</style></head>
+</style>
+<style id="senvia-blue-green-buttons">
+/* Final Senvia blue-green button treatment */
+.quick-grid button, .quick-grid .qblue, .quick-grid .qgreen, .quick-grid .qorange, .quick-grid .qpurple, .quick-grid .qcyan, .quick-grid .qgray {
+  background: linear-gradient(135deg, #16a65b 0%, #0a86b8 48%, #0879c9 100%) !important;
+  color: #fff !important;
+  border: 1px solid rgba(255,255,255,.22) !important;
+  box-shadow: 0 7px 18px rgba(8,121,201,.16) !important;
+}
+.quick-grid button:hover { filter: brightness(1.04); transform: translateY(-1px); }
+.quick-grid button *, .quick-grid button span, .quick-grid button i { color:#fff !important; }
+
+@media(max-width:700px){
+  .admin-mobile-link,
+  .admin-mobile-link.active {
+    background: linear-gradient(135deg, #16a65b 0%, #0a86b8 48%, #0879c9 100%) !important;
+    color:#fff !important;
+    border:1px solid rgba(255,255,255,.28) !important;
+    box-shadow:0 6px 16px rgba(8,121,201,.15) !important;
+  }
+  .admin-mobile-link *,
+  .admin-mobile-link .mi,
+  .admin-mobile-link .arrow { color:#fff !important; }
+  .admin-mobile-lang button,
+  .admin-mobile-lang button.on {
+    background:linear-gradient(135deg,#16a65b 0%,#0a86b8 48%,#0879c9 100%) !important;
+    color:#fff !important;
+    border:1px solid rgba(255,255,255,.28) !important;
+  }
+}
+</style>
+</head>
 <body>
 <div id="senviaBusy" aria-live="polite" aria-label="System busy">
   <div class="senvia-busy-wrap">
