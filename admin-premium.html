@@ -275,7 +275,7 @@ table tbody tr{border-bottom:1px solid #e3edf3;transition:background .15s ease}t
 <style id="senvia-final-polish">
 /* Senvia final brand polish */
 .logo span,.mobile-brand span{color:#45b51f!important;font-weight:1000;text-shadow:0 0 10px rgba(69,181,31,.18)}
-.logo span{display:inline-block;transform:scale(1.06)}
+.logo span{display:inline-block;transform:scale(1.12);color:#16a65b!important;font-weight:1000;text-shadow:0 0 9px rgba(22,166,91,.20)}
 .blue,.blue *,button.blue,.button.blue,.qblue,.qblue *,
 .pdash-kpi.blue,.pdash-kpi.blue *,
 .lang .on,.admin-mobile-lang .on{color:#fff!important}
@@ -384,7 +384,7 @@ table tbody tr{border-bottom:1px solid #e3edf3;transition:background .15s ease}t
   <div class="pdash-kpi blue"><small>👥 Total Professionals</small><b id="countPro">0</b><span>Live registered professionals</span></div>
   <div class="pdash-kpi green"><small>👤 Total Customers</small><b id="countCust">0</b><span>Live registered customers</span></div>
   <div class="pdash-kpi orange"><small>🛠 Active Services</small><b id="countSvc">0</b><span>Available service categories</span></div>
-  <div class="pdash-kpi purple"><small>📍 Active Blocks</small><b id="countBlocks">4</b><span>Aurai • Bochahan • Gaighat • Katra</span></div>
+  <div class="pdash-kpi purple"><small>📍 Active Blocks</small><b id="countBlocks">0</b><span id="activeBlockNames">Aurai • Bochahan • Gaighat • Katra</span></div>
 </div>
 <div class="pdash-charts">
   <div class="pdash-card wide"><h2>📊 User Growth</h2><div class="sub">Recent registrations from live database</div><div class="growth-chart" id="growthChart"></div><div class="legend"><span><i class="p"></i>Professionals</span><span><i class="c"></i>Customers</span></div></div>
@@ -692,7 +692,30 @@ const SENVIA_TRANSLATIONS={
   "Services":"सेवाएँ",
   "English":"English",
   "हिंदी":"हिंदी",
-  "↪ Logout":"↪ लॉगआउट"
+  "↪ Logout":"↪ लॉगआउट",
+  "Blocks & Areas":"प्रखंड एवं क्षेत्र",
+  "Search name/mobile/block":"नाम/मोबाइल/प्रखंड खोजें",
+  "Search name / mobile / ID / block":"नाम / मोबाइल / ID / प्रखंड खोजें",
+  "New service name":"नई सेवा का नाम",
+  "Search user / mobile / message / ID":"यूज़र / मोबाइल / संदेश / ID खोजें",
+  "Service available on Senvia":"Senvia पर उपलब्ध सेवा",
+  "No services found.":"कोई सेवा नहीं मिली।",
+  "No customers registered yet.":"अभी कोई ग्राहक पंजीकृत नहीं है।",
+  "No messages found.":"कोई संदेश नहीं मिला।",
+  "No available areas.":"कोई उपलब्ध क्षेत्र नहीं है।",
+  "No coming-soon areas.":"कोई कमिंग सून क्षेत्र नहीं है।",
+  "Available":"उपलब्ध",
+  "Coming Soon":"कमिंग सून",
+  "View":"देखें",
+  "Delete":"हटाएँ",
+  "Edit":"संपादित करें",
+  "Save Profile":"प्रोफाइल सेव करें",
+  "User Name":"यूज़र नाम",
+  "User Type":"यूज़र प्रकार",
+  "Message Type":"संदेश प्रकार",
+  "Date / Time":"दिनांक / समय",
+  "Message":"संदेश",
+  "Report module will be added in the next phase.":"रिपोर्ट मॉड्यूल अगले चरण में जोड़ा जाएगा।"
 };
 const SENVIA_TRANSLATIONS_EN=Object.fromEntries(Object.entries(SENVIA_TRANSLATIONS).map(([en,hi])=>[hi,en]));
 function senviaTranslateText(root,map){
@@ -702,13 +725,28 @@ function senviaTranslateText(root,map){
 }
 function setLang(l){
   lang=l;
+  try{localStorage.setItem('senvia_lang',l)}catch(e){}
   document.querySelectorAll('[data-hi]').forEach(e=>e.textContent=e.dataset[l]);
   const map=l==='hi'?SENVIA_TRANSLATIONS:SENVIA_TRANSLATIONS_EN;
   senviaTranslateText(document.body,map);
+  const placeholders={
+    proSearch:{hi:'नाम/मोबाइल/प्रखंड खोजें',en:'Search name/mobile/block'},
+    custSearch:{hi:'नाम / मोबाइल / ID / प्रखंड खोजें',en:'Search name / mobile / ID / block'},
+    newSvc:{hi:'नई सेवा का नाम',en:'New service name'},
+    msgSearch:{hi:'यूज़र / मोबाइल / संदेश / ID खोजें',en:'Search user / mobile / message / ID'},
+    serviceEditInput:{hi:'सेवा का नाम दर्ज करें',en:'Enter service name'}
+  };
+  Object.entries(placeholders).forEach(([id,v])=>{const el=document.getElementById(id);if(el)el.placeholder=v[l]});
+  const optionSets={
+    statusFilter:[['','All Status','सभी स्थिति'],['Verified','Verified','सत्यापित'],['Pending','Pending','लंबित'],['Rejected','Rejected','अस्वीकृत']],
+    msgType:[['','All Types','सभी प्रकार'],['Registration','Registration','पंजीकरण'],['Welcome','Welcome','स्वागत']]
+  };
+  Object.entries(optionSets).forEach(([id,opts])=>{const sel=document.getElementById(id);if(!sel)return;sel.querySelectorAll('option').forEach((o,i)=>{const x=opts[i];if(x)o.textContent=l==='hi'?x[2]:x[1]})});
   document.getElementById('hi').className=l==='hi'?'on':'';
   document.getElementById('en').className=l==='en'?'on':'';
   document.getElementById('mobileHi')?.classList.toggle('on',l==='hi');
   document.getElementById('mobileEn')?.classList.toggle('on',l==='en');
+  document.documentElement.lang=l==='hi'?'hi':'en';
 }
 function syncAdminMobileActive(id){document.querySelectorAll('.admin-mobile-link').forEach(n=>n.classList.toggle('active',n.dataset.mobileTarget===id))}
 function toggleAdminMobileMenu(){document.getElementById('adminMobileMenu')?.classList.toggle('open');document.getElementById('adminMobileOverlay')?.classList.toggle('open')}
@@ -720,7 +758,7 @@ function render(){
  const cp=document.getElementById('countPro'); if(cp) cp.textContent=pros.length;
  const cc=document.getElementById('countCust'); if(cc) cc.textContent=customers.length;
  const cs=document.getElementById('countSvc'); if(cs) cs.textContent=services.length;
- const cb=document.getElementById('countBlocks'); if(cb) cb.textContent=4;
+ const cb=document.getElementById('countBlocks'); if(cb) cb.textContent=blocks.length; const bn=document.getElementById('activeBlockNames'); if(bn) bn.textContent=blocks.join(' • ')||'—';
  renderTable();renderRecent();renderServices();renderCustomers();renderMessages();renderAreas();
  renderPremiumDashboard();
  setLang(lang);
@@ -748,7 +786,7 @@ function renderPremiumDashboard(){
  const ov=document.getElementById('platformOverview');if(ov)ov.innerHTML='<div class="overview-item"><small>✅ Verified Professionals</small><b>'+pros.filter(p=>proStatus(p)==='Verified').length+'</b></div><div class="overview-item"><small>⏳ Pending Professionals</small><b>'+pros.filter(p=>proStatus(p)==='Pending').length+'</b></div><div class="overview-item"><small>👤 Active Customers</small><b>'+customers.length+'</b></div><div class="overview-item"><small>🛠 Service Categories</small><b>'+services.length+'</b></div>';
 }
 function renderTable(){let q=(proSearch?.value||'').toLowerCase(),st=statusFilter?.value||'';proTable.innerHTML=pros.filter(p=>(!q||JSON.stringify(p).toLowerCase().includes(q))&&(!st||proStatus(p)===st)).map((p,i)=>`<tr><td><b>${p.name}</b>${p.professional_code?`<br><span class=\"code-pill\">ID: ${p.professional_code}</span>`:''}</td><td>${p.mobile}</td><td>${p.block} → ${p.panchayat}<br>${p.village}</td><td>${p.services.join(', ')||'—'}</td><td><span class="badge ${proStatus(p).toLowerCase()}">${proStatus(p)}</span></td><td>${proStatus(p)==='Pending'?`<button class="green" onclick="approve(${i})">Approve</button> `:''}<button class="outline" onclick="viewPro(${i})">View</button> <button class="danger" onclick="removePro(${i})">Delete</button></td></tr>`).join('')||'<tr><td colspan="6" class="empty">No professionals found.</td></tr>'}
-function renderRecent(){const recent=document.getElementById('recentProTable');if(!recent)return;recent.innerHTML=pros.slice(-5).reverse().map(p=>`<div style="padding:10px 0;border-bottom:1px solid #edf1f5"><b>${p.name}</b> — ${p.block} — ${(Array.isArray(p.services)?p.services:[]).join(', ')||'—'} <span class="badge ${proStatus(p).toLowerCase()}">${proStatus(p)}</span></div>`).join('')}
+function renderRecent(){const recent=document.getElementById('recentProTable');if(!recent)return;recent.innerHTML=pros.slice(-5).reverse().map(p=>`<tr><td><b>${p.name||'—'}</b></td><td>${(Array.isArray(p.services)?p.services:[]).join(', ')||'—'}</td><td><span class="badge ${proStatus(p).toLowerCase()}">${proStatus(p)}</span></td></tr>`).join('')||'<tr><td colspan="3">No registrations yet.</td></tr>'}
 function renderServices(){
  const grid=localStorage.getItem('senvia_services_view')==='grid';
  const box=document.getElementById('serviceList'); box.className=grid?'collection-grid':'collection-list';
@@ -940,6 +978,8 @@ async function delService(i){if(!confirm('Delete this service?'))return;showBusy
 proSearch.oninput=renderTable;statusFilter.onchange=renderTable;custSearch.oninput=renderCustomers;msgSearch.oninput=renderMessages;msgType.onchange=renderMessages;
 const db=document.createElement('div');db.id='dbStatus';db.style='margin:12px 0 0;padding:10px 12px;border-radius:9px;font-weight:700;background:#fff4d7;color:#8a6500';db.textContent='Connecting to Supabase…';document.querySelector('.content').prepend(db);
 restoreAdminEmail();
+try{lang=localStorage.getItem('senvia_lang')||lang||'hi'}catch(e){}
+setLang(lang);
 restoreProfessionalView();restoreCollectionViews();
 refreshAdminSession().then(()=>requireAdmin()).then(ok=>{if(ok) loadFromSupabase()});
 </script>
