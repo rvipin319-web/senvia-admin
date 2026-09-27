@@ -906,9 +906,17 @@ $('block').addEventListener('change',loadP);$('p').addEventListener('change',loa
     const aboutH=$('about')?.querySelector('h2'); if(aboutH) aboutH.textContent=hi?'Senvia क्या है?':'What is Senvia?';
     if($('aboutHi')) $('aboutHi').style.display=hi?'block':'none';
     if($('aboutEn')) $('aboutEn').style.display=hi?'none':'block';
-    const labels=document.querySelectorAll('.field label'); if(labels[0])labels[0].textContent=hi?'Block':'Block'; if(labels[1])labels[1].textContent=hi?'Panchayat':'Panchayat'; if(labels[2])labels[2].textContent=hi?'Service':'Service';
+    // IMPORTANT: Do not overwrite the live State/District/Block/Panchayat hierarchy here.
+    // Those four selects are populated from Supabase by loadAreaStates/loadDistricts/loadBlocks/loadP.
+    const labels=document.querySelectorAll('.field label');
+    if(labels[0])labels[0].textContent=hi?'State':'State';
+    if(labels[1])labels[1].textContent=hi?'District':'District';
+    if(labels[2])labels[2].textContent=hi?'Block':'Block';
+    if(labels[3])labels[3].textContent=hi?'Panchayat':'Panchayat';
+    if(labels[4])labels[4].textContent=hi?'क्षेत्र पिन कोड':'Area PIN Code';
+    if(labels[5])labels[5].textContent=hi?'Service':'Service';
     const b=$('block'); if(b&&b.options.length) b.options[0].textContent=hi?'-- Block चुनें --':'-- Select Block --';
-    const p=$('p'); if(p){const current=b?.value||''; p.innerHTML='<option value="">'+(hi?'-- Panchayat चुनें --':'-- Select Panchayat --')+'</option>'+(data[current]||[]).sort().map(x=>'<option>'+x+'</option>').join('');}
+    const p=$('p'); if(p&&p.options.length) p.options[0].textContent=hi?'-- Panchayat चुनें --':'-- Select Panchayat --';
     const sv=$('s'); if(sv){sv.innerHTML='<option value="">'+(hi?'-- Service चुनें --':'-- Select Service --')+'</option>'+services.map(x=>'<option value="'+x[0]+'">'+(hi?(svcHi[x[0]]||x[0]):x[0])+'</option>').join('');}
     const ws=$('ws'); if(ws) ws.innerHTML=services.map(x=>'<option value="'+x[0]+'">'+(hi?(svcHi[x[0]]||x[0]):x[0])+'</option>').join('');
     if($('allLink')) $('allLink').textContent=hi?'सभी देखें →':'View All →';
