@@ -272,7 +272,23 @@ table tbody tr{border-bottom:1px solid #e3edf3;transition:background .15s ease}t
 }
 </style>
 
-</head>
+<style id="senvia-final-polish">
+/* Senvia final brand polish */
+.logo span,.mobile-brand span{color:#45b51f!important;font-weight:1000;text-shadow:0 0 10px rgba(69,181,31,.18)}
+.logo span{display:inline-block;transform:scale(1.06)}
+.blue,.blue *,button.blue,.button.blue,.qblue,.qblue *,
+.pdash-kpi.blue,.pdash-kpi.blue *,
+.lang .on,.admin-mobile-lang .on{color:#fff!important}
+.blue,.qblue{font-weight:800}
+.admin-mobile-menu-btn{color:#fff!important}
+.nav.active,.nav:hover{color:#fff!important}
+.nav.active *,.nav:hover *{color:#fff!important}
+/* Premium borders for every major collection */
+.panel,.pdash-card,.stat,.collection-card,.area-card,.message-row,.tablewrap,.service-row,
+.pro-view-card,.pro-card,.customer-card,.customer-list,.messages-list,.services-list{border:1px solid #cfe0ee!important;box-shadow:0 8px 24px rgba(8,36,85,.07)}
+.tablewrap{border-radius:15px;overflow:auto;background:#fff}
+#pros .tablewrap, #customers .panel, #services .panel, #areas .panel, #messages .panel{border-color:#c8dceb!important}
+</style></head>
 <body>
 <div id="senviaBusy" aria-live="polite" aria-label="System busy">
   <div class="senvia-busy-wrap">
@@ -296,11 +312,11 @@ table tbody tr{border-bottom:1px solid #e3edf3;transition:background .15s ease}t
     <div id="loginMsg" class="login-msg"></div>
   </div>
 </div>
-<header><div class="admin-mobile-bar"><button type="button" class="admin-mobile-menu-btn" onclick="toggleAdminMobileMenu()" aria-label="Open menu">☰</button></div><div><div class="logo"><span>S</span>envia</div><div class="tag">हर घर का अपना साथी • Admin Panel</div></div><div class="header-actions"><div class="lang"><button id="hi" class="on" onclick="setLang('hi')">हिंदी</button> <button id="en" onclick="setLang('en')">English</button></div><button type="button" id="logoutBtn" class="logout-btn" onclick="adminLogout()">↪ Logout</button></div></header>
+<header><div class="admin-mobile-bar"><button type="button" class="admin-mobile-menu-btn" onclick="toggleAdminMobileMenu()" aria-label="Open menu">☰</button></div><div><div class="logo">Sen<span>v</span>ia</div><div class="tag">हर घर का अपना साथी • Admin Panel</div></div><div class="header-actions"><div class="lang"><button id="hi" class="on" onclick="setLang('hi')">हिंदी</button> <button id="en" onclick="setLang('en')">English</button></div><button type="button" id="logoutBtn" class="logout-btn" onclick="adminLogout()">↪ Logout</button></div></header>
 <div id="adminMobileOverlay" class="admin-mobile-overlay" onclick="closeAdminMobileMenu()"></div>
 <nav id="adminMobileMenu" class="admin-mobile-menu" aria-label="Mobile navigation">
   <div class="admin-mobile-menu-head">
-    <div class="mobile-brand"><span>S</span>envia</div>
+    <div class="mobile-brand">Sen<span>v</span>ia</div>
     <small>हर घर का अपना साथी • Admin Panel</small>
     <button type="button" class="admin-mobile-close" onclick="closeAdminMobileMenu()" aria-label="Close menu">✕</button>
   </div>
@@ -547,6 +563,7 @@ async function loadFromSupabase(){
    const note=(serviceRows.length?'':' (services table unavailable; using local service names)')+(links.length?'':' (service links unavailable; existing profile service fields used where available)');
    setDbStatus('🟢 Supabase connected — live professional data loaded.'+note,'ok');
    senviaBusyCount=0;document.getElementById('senviaBusy')?.classList.remove('show');
+setTimeout(()=>setLang(lang),0);
  }catch(e){
    console.error('Supabase load failed:',e);
    dbMode=false; pros=[...demoPros]; services=[...demoServices];
@@ -577,7 +594,91 @@ function closeProView(){document.getElementById('proViewModal')?.classList.remov
 document.getElementById('proViewModal')?.addEventListener('click',e=>{if(e.target.id==='proViewModal')closeProView()});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeProView();closeServiceEdit()}});
 function restoreProfessionalView(){const sec=document.getElementById('pros');const pref=localStorage.getItem('senvia_prof_view')||'card';const on=pref==='card';sec.classList.toggle('card-view',on);sec.classList.toggle('table-view',!on);const b=document.getElementById('viewToggle');if(b)b.textContent=on?'☷ List View':'▦ Grid View'}
-function setLang(l){lang=l;document.querySelectorAll('[data-hi]').forEach(e=>e.textContent=e.dataset[l]);document.getElementById('hi').className=l==='hi'?'on':'';document.getElementById('en').className=l==='en'?'on':'';document.getElementById('mobileHi')?.classList.toggle('on',l==='hi');document.getElementById('mobileEn')?.classList.toggle('on',l==='en')}
+const SENVIA_TRANSLATIONS={
+  "Welcome to Senvia Admin Panel 👋":"Senvia Admin Panel में आपका स्वागत है 👋",
+  "Manage your local service platform with real-time insights and controls.":"अपने स्थानीय सेवा प्लेटफॉर्म को रियल-टाइम जानकारी और नियंत्रण के साथ प्रबंधित करें।",
+  "A trusted local service platform for a better community.":"बेहतर समुदाय के लिए एक विश्वसनीय स्थानीय सेवा प्लेटफॉर्म।",
+  "Total Professionals":"कुल प्रोफेशनल",
+  "Total Customers":"कुल ग्राहक",
+  "Active Services":"सक्रिय सेवाएँ",
+  "Active Blocks":"सक्रिय प्रखंड",
+  "Live registered professionals":"पंजीकृत प्रोफेशनल",
+  "Live registered customers":"पंजीकृत ग्राहक",
+  "Available service categories":"उपलब्ध सेवा श्रेणियाँ",
+  "User Growth":"यूज़र वृद्धि",
+  "Recent registrations from live database":"लाइव डेटाबेस से हाल के पंजीकरण",
+  "Professional service mix":"प्रोफेशनल सेवाओं का वितरण",
+  "Services Distribution":"सेवा वितरण",
+  "Area-wise Professionals":"क्षेत्रवार प्रोफेशनल",
+  "Professionals by active block":"सक्रिय प्रखंड के अनुसार प्रोफेशनल",
+  "Recent Professional Registrations":"हाल के प्रोफेशनल पंजीकरण",
+  "Recent Customer Registrations":"हाल के ग्राहक पंजीकरण",
+  "Quick Actions":"त्वरित कार्य",
+  "Platform Overview":"प्लेटफॉर्म अवलोकन",
+  "All Status":"सभी स्थिति",
+  "Verified":"सत्यापित",
+  "Pending":"लंबित",
+  "Rejected":"अस्वीकृत",
+  "Grid View":"ग्रिड व्यू",
+  "List View":"लिस्ट व्यू",
+  "Name":"नाम",
+  "Mobile":"मोबाइल",
+  "Area":"क्षेत्र",
+  "Services":"सेवाएँ",
+  "Service":"सेवा",
+  "Status":"स्थिति",
+  "Action":"कार्य",
+  "Customers":"ग्राहक",
+  "Professionals":"प्रोफेशनल",
+  "Services":"सेवाएँ",
+  "Areas":"क्षेत्र",
+  "Messages":"संदेश",
+  "Dashboard":"डैशबोर्ड",
+  "+ Add Professional":"+ प्रोफेशनल जोड़ें",
+  "＋ Add Professional":"＋ प्रोफेशनल जोड़ें",
+  "＋ Customers":"＋ ग्राहक",
+  "＋ Add Available Area":"＋ उपलब्ध क्षेत्र जोड़ें",
+  "＋ Add Coming Soon":"＋ कमिंग सून जोड़ें",
+  "+ Add Service":"+ सेवा जोड़ें",
+  "🛠 Manage Services":"🛠 सेवाएँ प्रबंधित करें",
+  "📍 Manage Areas":"📍 क्षेत्र प्रबंधित करें",
+  "💬 View Messages":"💬 संदेश देखें",
+  "▣ Generate Report":"▣ रिपोर्ट बनाएँ",
+  "Available Blocks":"उपलब्ध प्रखंड",
+  "Coming Soon Blocks":"कमिंग सून प्रखंड",
+  "Admin can move a block from Coming Soon to Available after onboarding is completed.":"ऑनबोर्डिंग पूरी होने के बाद एडमिन किसी प्रखंड को कमिंग सून से उपलब्ध में ले जा सकता है।",
+  "All Types":"सभी प्रकार",
+  "Registration":"पंजीकरण",
+  "Welcome":"स्वागत",
+  "Professional Details":"प्रोफेशनल विवरण",
+  "Close":"बंद करें",
+  "Add Professional":"प्रोफेशनल जोड़ें",
+  "Save Profile":"प्रोफाइल सेव करें",
+  "Cancel":"रद्द करें",
+  "Edit Service":"सेवा संपादित करें",
+  "Service Name":"सेवा का नाम",
+  "Save Changes":"परिवर्तन सेव करें",
+  "Services":"सेवाएँ",
+  "English":"English",
+  "हिंदी":"हिंदी",
+  "↪ Logout":"↪ लॉगआउट"
+};
+const SENVIA_TRANSLATIONS_EN=Object.fromEntries(Object.entries(SENVIA_TRANSLATIONS).map(([en,hi])=>[hi,en]));
+function senviaTranslateText(root,map){
+  const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);
+  const nodes=[];let n;while(n=walker.nextNode()) nodes.push(n);
+  nodes.forEach(node=>{let t=node.nodeValue;if(!t||!t.trim())return;let out=t;for(const [from,to] of Object.entries(map)){if(out.trim()===from){out=out.replace(from,to);break;}}if(out!==t)node.nodeValue=out;});
+}
+function setLang(l){
+  lang=l;
+  document.querySelectorAll('[data-hi]').forEach(e=>e.textContent=e.dataset[l]);
+  const map=l==='hi'?SENVIA_TRANSLATIONS:SENVIA_TRANSLATIONS_EN;
+  senviaTranslateText(document.body,map);
+  document.getElementById('hi').className=l==='hi'?'on':'';
+  document.getElementById('en').className=l==='en'?'on':'';
+  document.getElementById('mobileHi')?.classList.toggle('on',l==='hi');
+  document.getElementById('mobileEn')?.classList.toggle('on',l==='en');
+}
 function syncAdminMobileActive(id){document.querySelectorAll('.admin-mobile-link').forEach(n=>n.classList.toggle('active',n.dataset.mobileTarget===id))}
 function toggleAdminMobileMenu(){document.getElementById('adminMobileMenu')?.classList.toggle('open');document.getElementById('adminMobileOverlay')?.classList.toggle('open')}
 function closeAdminMobileMenu(){document.getElementById('adminMobileMenu')?.classList.remove('open');document.getElementById('adminMobileOverlay')?.classList.remove('open')}
@@ -591,6 +692,7 @@ function render(){
  const cb=document.getElementById('countBlocks'); if(cb) cb.textContent=4;
  renderTable();renderRecent();renderServices();renderCustomers();renderMessages();renderAreas();
  renderPremiumDashboard();
+ setLang(lang);
 }
 document.getElementById('senviaBusy')?.classList.remove('show');
 function renderPremiumDashboard(){
