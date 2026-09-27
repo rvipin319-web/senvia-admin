@@ -318,6 +318,22 @@ header .logo-img-wrap img{width:150px!important;height:82px!important;object-fit
 @media(min-width:701px){.senvia-mobile-trigger,.senvia-mobile-overlay,.senvia-mobile-drawer{display:none!important}}
 </style>
 <style id="senvia-area-search-final">#search .field select,#search .field input{font-size:14px}#search .field label{font-weight:800}#search{box-shadow:0 15px 35px rgba(0,59,90,.16)}.senvia-copyright{margin-top:18px;padding-top:12px;border-top:1px solid rgba(255,255,255,.18);text-align:center;color:#dceafa;font-size:12px}</style>
+
+<style id="senvia-find-area-mobile-compact">
+/* Compact Find Area on mobile - keeps the hero section shorter */
+@media(max-width:550px){
+  .hero{padding:22px 0 20px!important}
+  .hg{gap:10px!important}
+  #search{padding:10px!important;border-radius:12px!important}
+  #search h2{font-size:19px!important;line-height:1.2!important;margin:0 0 7px!important}
+  #search .field{margin:4px 0!important}
+  #search .field label{font-size:10.5px!important;margin-bottom:2px!important}
+  #search .field select,#search .field input{height:38px!important;min-height:38px!important;padding:6px 9px!important;font-size:12.5px!important;border-radius:6px!important}
+  #search #find{height:40px!important;padding:7px 10px!important;font-size:13px!important;margin-top:4px}
+  #search #searchNote{font-size:10.5px!important;line-height:1.25!important;margin-top:5px!important}
+  #search > div[onclick*="openM('worker')"]{font-size:12px!important;margin-top:6px!important}
+}
+</style>
 </head><body>
 <div id="senviaBusy" aria-live="polite" aria-label="System busy">
   <div class="senvia-v-spinner"><b>V</b></div>
@@ -910,6 +926,36 @@ $('block').addEventListener('change',loadP);$('p').addEventListener('change',loa
     if(typeof loadAreaStates==='function') loadAreaStates();
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true}); else init();
+})();
+</script>
+
+<script id="senvia-mobile-back-loader-fix">
+(function(){
+  function resetSearchBusyState(){
+    // Android Chrome may restore this page from bfcache after Back.
+    // Clear the old loader and restore the Search button/state.
+    senviaBusyCount=0;
+    const busy=document.getElementById('senviaBusy');
+    if(busy) busy.classList.remove('show');
+
+    const btn=document.getElementById('find');
+    if(btn){
+      btn.disabled=false;
+      const hi=(typeof lang!=='undefined' && lang==='hi');
+      btn.innerHTML=hi?'🔍 खोजें':'🔍 Search';
+    }
+    document.body.style.overflow='';
+    document.body.classList.remove('loading');
+  }
+
+  // pageshow fires when a page is restored with the mobile Back button.
+  window.addEventListener('pageshow',function(){
+    resetSearchBusyState();
+  });
+
+  window.addEventListener('popstate',function(){
+    resetSearchBusyState();
+  });
 })();
 </script>
 </body></html>
