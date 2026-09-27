@@ -618,7 +618,7 @@ $('block').addEventListener('change',loadP);$('p').addEventListener('change',loa
     });
   }
 
-  async function refresh(){ try {
+  async function refresh(){ showBusy(lang==='hi'?'डेटा लोड हो रहा है…':'Loading data…'); try {
     // Professionals are the primary source. Service tables are optional so a problem there
     // can never make the whole customer search return zero results.
     let pros=[];
@@ -628,7 +628,7 @@ $('block').addEventListener('change',loadP);$('p').addEventListener('change',loa
     try{ links=await get('professional_services'); }catch(e){ console.warn('professional_services read failed',e); }
     dbPros=normalize(pros,links,services);
     return dbPros;
-  } finally { /* normal page/data refresh does not use the busy overlay */ }
+  } finally { hideBusy(); }
 
   function esc(v){return String(v??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));}
   function verified(p){ return ['verified','approve','approved'].includes(norm(p.status)); }
@@ -896,21 +896,6 @@ $('block').addEventListener('change',loadP);$('p').addEventListener('change',loa
     document.querySelectorAll('[data-page-link]').forEach(a=>a.addEventListener('click',function(){senviaMobileMenu(false);}));
   });
   document.addEventListener('keydown',e=>{if(e.key==='Escape')senviaMobileMenu(false);});
-})();
-</script>
-
-<script>
-(function(){
-  function forceHideSenviaBusy(){
-    try{
-      const el=document.getElementById('senviaBusy');
-      if(el) el.classList.remove('show');
-      if(typeof window.senviaBusyCount!=='undefined') window.senviaBusyCount=0;
-    }catch(e){}
-  }
-  document.addEventListener('DOMContentLoaded',forceHideSenviaBusy);
-  window.addEventListener('pageshow',forceHideSenviaBusy);
-  window.addEventListener('load',forceHideSenviaBusy);
 })();
 </script>
 </body></html>
