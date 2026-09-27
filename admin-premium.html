@@ -319,6 +319,22 @@ table tbody tr{border-bottom:1px solid #e3edf3;transition:background .15s ease}t
   }
 }
 </style>
+
+<style id="senvia-area-management-style">
+#areas .area-shell{border:0!important;background:linear-gradient(145deg,#f7fbff 0%,#eef9f5 48%,#f8fbff 100%)!important;box-shadow:0 14px 36px rgba(8,36,85,.10)!important;padding:0!important;overflow:hidden}
+.area-hero{padding:20px 20px 16px;background:linear-gradient(135deg,#16a65b 0%,#0a86b8 48%,#0879c9 100%);color:#fff;position:relative;overflow:hidden}
+.area-hero:after{content:"";position:absolute;width:190px;height:190px;border-radius:50%;right:-60px;top:-95px;background:rgba(255,255,255,.12)}
+.area-hero h2{margin:0;font-size:24px;position:relative;z-index:1}.area-hero p{margin:6px 0 0;opacity:.92;font-size:13px;position:relative;z-index:1}
+.area-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:14px 16px 4px}.area-kpi{background:rgba(255,255,255,.94);border:1px solid #d5e5ef;border-radius:15px;padding:12px 13px;box-shadow:0 6px 16px rgba(8,36,85,.07)}.area-kpi small{display:block;color:#65758a;font-weight:800;font-size:11px}.area-kpi b{display:block;color:#082455;font-size:25px;margin-top:3px}.area-kpi span{font-size:10px;color:#8290a0}
+.area-toolbar{display:flex;gap:9px;flex-wrap:wrap;align-items:center;padding:14px 16px 10px}.area-toolbar input{flex:1;min-width:190px;padding:12px 14px;border-radius:12px;border:1px solid #cbddea;background:#fff;box-shadow:0 3px 10px rgba(8,36,85,.04)}
+.area-toolbar button{border-radius:12px;padding:11px 14px}.area-add{background:linear-gradient(135deg,#16a65b,#0879c9)!important;color:#fff!important}.area-refresh{background:#fff!important;color:#082455!important;border:1px solid #bdd4e4!important}
+.area-tree{padding:8px 16px 18px;display:flex;flex-direction:column;gap:11px}.area-district{background:#fff;border:1px solid #cfe0ee;border-radius:18px;box-shadow:0 7px 20px rgba(8,36,85,.07);overflow:hidden}.area-district-head{display:flex;align-items:center;gap:10px;padding:14px 15px;background:linear-gradient(135deg,#16a65b 0%,#0a86b8 48%,#0879c9 100%);color:#fff}.area-district-main{flex:1;min-width:0;cursor:pointer}.area-district-name{font-size:17px;font-weight:900}.area-district-meta{font-size:11px;opacity:.9;margin-top:3px}.area-chevron{width:36px;height:36px;border-radius:11px;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.25);color:#fff;font-size:19px;padding:0}.area-head-actions{display:flex;gap:6px;flex-wrap:wrap}.area-head-actions button{padding:8px 10px;border-radius:10px;font-size:11px}.area-white-btn{background:rgba(255,255,255,.16)!important;color:#fff!important;border:1px solid rgba(255,255,255,.28)!important}.area-hidden{background:linear-gradient(135deg,#718096,#4a5568)!important}.area-district-body{display:none;padding:12px;background:linear-gradient(180deg,#f8fcff,#f3f9f6)}.area-district.open .area-district-body{display:block}.area-district.open .area-chevron{transform:rotate(90deg)}
+.area-block{background:#fff;border:1px solid #d5e4ef;border-radius:15px;margin:8px 0;overflow:hidden;box-shadow:0 4px 13px rgba(8,36,85,.05)}.area-block-head{display:flex;align-items:center;gap:9px;padding:12px 13px}.area-block-main{flex:1;min-width:0;cursor:pointer}.area-block-name{font-weight:900;color:#153b61;font-size:15px}.area-block-meta{font-size:10px;color:#77869a;margin-top:2px}.area-block-actions{display:flex;gap:6px;flex-wrap:wrap}.area-block-actions button{padding:7px 9px;border-radius:9px;font-size:10px}.area-panchayats{display:none;padding:0 12px 11px 35px}.area-block.open .area-panchayats{display:block}.area-panchayat{display:flex;align-items:center;gap:8px;justify-content:space-between;padding:9px 10px;margin-top:6px;background:#f8fbfd;border:1px solid #e0eaf1;border-radius:10px}.area-panchayat-name{font-size:13px;font-weight:800;color:#31516c;flex:1}.area-panchayat-actions{display:flex;gap:5px}.area-panchayat-actions button{padding:6px 8px;border-radius:8px;font-size:10px}.area-add-panchayat{width:100%;margin-top:8px;background:#eaf8f1!important;color:#08733b!important;border:1px solid #bfe5cc!important;padding:9px!important;border-radius:10px!important;font-size:11px!important}
+.area-status{display:inline-flex;align-items:center;gap:4px;padding:4px 7px;border-radius:99px;font-size:9px;font-weight:900}.area-status.on{background:#e5f8eb;color:#23753d;border:1px solid #c6e8d0}.area-status.off{background:#edf0f4;color:#68758a;border:1px solid #d8dee5}.area-empty{padding:12px;text-align:center;color:#7a8796;font-size:12px;background:#fff;border:1px dashed #cfdae4;border-radius:11px}
+.area-footnote{padding:0 16px 16px;color:#6d7d90;font-size:11px}.area-countline{padding:0 16px 10px;color:#597087;font-size:11px}
+@media(max-width:700px){.area-kpis{grid-template-columns:1fr 1fr}.area-kpi:last-child{grid-column:1/-1}.area-toolbar{padding:12px}.area-toolbar input{min-width:100%;flex-basis:100%}.area-tree{padding:7px 10px 14px}.area-district-head{align-items:flex-start;flex-wrap:wrap}.area-district-main{width:calc(100% - 48px)}.area-head-actions{width:100%;margin-top:2px}.area-block-head{align-items:flex-start;flex-wrap:wrap}.area-block-actions{width:100%}.area-panchayats{padding-left:15px}.area-panchayat{align-items:flex-start;flex-wrap:wrap}.area-panchayat-actions{width:100%}}
+@media(max-width:420px){.area-kpis{grid-template-columns:1fr}.area-kpi:last-child{grid-column:auto}.area-hero{padding:17px 15px}.area-hero h2{font-size:21px}.area-district-name{font-size:15px}}
+</style>
 </head>
 <body>
 <div id="senviaBusy" aria-live="polite" aria-label="System busy">
@@ -410,8 +426,22 @@ table tbody tr{border-bottom:1px solid #e3edf3;transition:background .15s ease}t
 
 <section id="services" style="display:none"><h1>Services</h1><div class="panel"><div class="toolbar"><input id="newSvc" placeholder="New service name"><button class="green" onclick="addService()">+ Add Service</button><button class="outline view-toggle" id="svcViewToggle" onclick="toggleCollectionView('services')">▦ Grid View</button></div><div id="serviceList" class="collection-list"></div></div></section>
 
-<section id="areas" style="display:none"><h1>Blocks & Areas</h1><div class="panel"><div class="toolbar"><button class="green" type="button" onclick="addArea('available')">＋ Add Available Area</button><button class="outline" type="button" onclick="addArea('coming')">＋ Add Coming Soon</button><button class="outline view-toggle" id="areaViewToggle" onclick="toggleCollectionView('areas')">▦ Grid View</button></div><h3>Available Blocks</h3><div id="availableList" class="area-view"></div><h3 style="margin-top:25px">Coming Soon Blocks</h3><div id="comingList" class="area-view"></div><p style="color:#68758a">Admin can move a block from Coming Soon to Available after onboarding is completed.</p></div></section>
-
+<section id="areas" style="display:none"><h1>📍 क्षेत्र प्रबंधन</h1><div class="panel area-shell">
+  <div class="area-hero"><h2>📍 District → Block → Panchayat</h2><p>क्षेत्र को व्यवस्थित करें, Hide/Show करें और जरूरत के अनुसार Add या Delete करें।</p></div>
+  <div class="area-kpis">
+    <div class="area-kpi"><small>🏛 Districts</small><b id="areaDistrictCount">0</b><span id="areaDistrictSub">Visible / Total</span></div>
+    <div class="area-kpi"><small>📍 Blocks</small><b id="areaBlockCount">0</b><span id="areaBlockSub">Visible / Total</span></div>
+    <div class="area-kpi"><small>🏡 Panchayats</small><b id="areaPanchayatCount">0</b><span id="areaPanchayatSub">Visible / Total</span></div>
+  </div>
+  <div class="area-toolbar">
+    <input id="areaSearch" type="search" placeholder="🔎 District / Block / Panchayat खोजें" autocomplete="off">
+    <button class="area-add" type="button" onclick="addAreaDistrict()">＋ District जोड़ें</button>
+    <button class="area-refresh" type="button" onclick="loadAreaHierarchy(true)">↻ Refresh</button>
+  </div>
+  <div class="area-countline" id="areaResultCount">Database से Area hierarchy लोड हो रही है…</div>
+  <div id="areaTree" class="area-tree"></div>
+  <div class="area-footnote">👁 Show = Customer side के लिए उपलब्ध • 🙈 Hide = Admin में रहेगा लेकिन Customer side पर नहीं दिखेगा • 🗑 Delete = hierarchy से हटेगा</div>
+</div></section>
 <section id="messages" style="display:none"><h1>Messages</h1><div class="panel"><div class="toolbar"><input id="msgSearch" placeholder="Search user / mobile / message / ID"><select id="msgType"><option value="">All Types</option><option>Registration</option><option>Welcome</option></select><button class="outline view-toggle" id="msgViewToggle" onclick="toggleCollectionView('messages')">▦ Grid View</button></div><div id="messageList" class="collection-list"></div></div></section>
 </main></div>
 
@@ -456,6 +486,7 @@ const SUPABASE_URL='https://hxdrvhiowurbwlgmczju.supabase.co';
 const SUPABASE_KEY='sb_publishable_cvh_b0gklN5SOcH5MsGs8g_4JI9-PxT';
 let blocks=['Aurai','Bochahan','Gaighat','Katra','Minapur'];
 let coming=['Bandra','Kanti','Kurhani','Marwan','Motipur','Muraul','Mushahari','Paroo','Sahebganj','Sakra','Saraiya'];
+let areaDistrictRows=[],areaBlockRows=[],areaPanchayatRows=[],areaSearchText='',areaExpandedDistricts=new Set(),areaExpandedBlocks=new Set();
 try{const savedA=JSON.parse(localStorage.getItem('senvia_available_areas')||'null');if(Array.isArray(savedA))blocks=savedA;}catch(e){}
 try{const savedC=JSON.parse(localStorage.getItem('senvia_coming_areas')||'null');if(Array.isArray(savedC))coming=savedC;}catch(e){}
 const demoServices=['TV / LED Repair','AC Repair','Fridge Repair','Mobile Repair','Electronics Repair','Plumber','Electrician','Painter','RO / Water Purifier','Carpenter','CCTV','Computer Repair'];
@@ -591,6 +622,7 @@ async function loadFromSupabase(){
    customers=Array.isArray(customerRows)?customerRows:[];
    customerLoadDone=true;
    dbMode=true;
+   try{await loadAreaHierarchy(false)}catch(e){console.warn('Area hierarchy init failed:',e)}
    const note=(serviceRows.length?'':' (services table unavailable; using local service names)')+(links.length?'':' (service links unavailable; existing profile service fields used where available)');
    setDbStatus('🟢 Supabase connected — live professional data loaded.'+note,'ok');
    senviaBusyCount=0;document.getElementById('senviaBusy')?.classList.remove('show');
@@ -869,30 +901,165 @@ async function saveServiceEdit(){
 }
 document.getElementById('serviceEditModal')?.addEventListener('click',e=>{if(e.target.id==='serviceEditModal')closeServiceEdit()});
 
-function renderAreas(){
- const grid=localStorage.getItem('senvia_areas_view')!=='list';
- availableList.className=grid?'area-view':'collection-list';
- comingList.className=grid?'area-view':'collection-list';
- availableList.innerHTML=blocks.map((b,i)=>grid?`<div class="area-card"><b>📍 ${b}</b><p>Available</p><div class="actions"><button class="danger" type="button" onclick="deleteArea('available',${i})">Delete</button></div></div>`:`<div class="service-row"><span class="service-row-name">📍 ${b}</span><span class="badge verified">Available</span><div class="service-row-actions"><button class="danger" type="button" onclick="deleteArea('available',${i})">Delete</button></div></div>`).join('')||'<p class="empty">No available areas.</p>';
- comingList.innerHTML=coming.map((b,i)=>grid?`<div class="area-card"><b>📍 ${b}</b><p class="soon">Coming Soon</p><div class="actions"><button class="danger" type="button" onclick="deleteArea('coming',${i})">Delete</button></div></div>`:`<div class="service-row"><span class="service-row-name">📍 ${b}</span><span class="badge">Coming Soon</span><div class="service-row-actions"><button class="danger" type="button" onclick="deleteArea('coming',${i})">Delete</button></div></div>`).join('')||'<p class="empty">No coming-soon areas.</p>';
- const bt=document.getElementById('areaViewToggle');if(bt)bt.textContent=grid?'☷ List View':'▦ Grid View';
+function areaEsc(v){return String(v??'').replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));}
+function areaText(hi,en){return lang==='hi'?hi:en}
+function areaId(v){return String(v??'').replace(/[^a-zA-Z0-9_-]/g,'_')}
+function areaVisible(row){return row?.is_visible!==false}
+function areaDistrictName(d){return String(d?.name||'').trim()}
+function areaBlockName(b){return String(b?.name||'').trim()}
+function areaPanchayatName(x){return String(x?.name||'').trim()}
+
+async function loadAreaHierarchy(showLoader=false){
+  const tree=document.getElementById('areaTree');
+  if(showLoader)showBusy();
+  try{
+    const [ds,bs,ps]=await Promise.all([
+      api('senvia_districts?select=*&order=name.asc'),
+      api('senvia_blocks?select=*&order=name.asc'),
+      api('senvia_panchayats?select=*&order=name.asc')
+    ]);
+    areaDistrictRows=Array.isArray(ds)?ds:[];
+    areaBlockRows=Array.isArray(bs)?bs:[];
+    areaPanchayatRows=Array.isArray(ps)?ps:[];
+    const visibleBlocks=areaBlockRows.filter(areaVisible).map(areaBlockName).filter(Boolean);
+    if(visibleBlocks.length) blocks=[...new Set(visibleBlocks)];
+    else if(areaBlockRows.length) blocks=[];
+    renderAreaHierarchy();
+  }catch(e){
+    console.error('Area hierarchy load failed:',e);
+    if(tree)tree.innerHTML='<div class="area-empty">Area data load नहीं हो सका। कृपया Refresh करें।<br><small>'+areaEsc(e.message||e)+'</small></div>';
+    setDbStatus('🟠 Area hierarchy load failed: '+(e.message||e),'warn');
+  }finally{
+    if(showLoader)hideBusy();
+  }
 }
-function saveAreas(){localStorage.setItem('senvia_available_areas',JSON.stringify(blocks));localStorage.setItem('senvia_coming_areas',JSON.stringify(coming));}
-function addArea(type){
- const label=type==='available'?'Available Area / Block':'Coming Soon Area / Block';
- const value=prompt(label+' का नाम दर्ज करें:');
- const name=(value||'').trim();
- if(!name)return;
- const target=type==='available'?blocks:coming;
- if(blocks.includes(name)||coming.includes(name)){alert('यह Area पहले से मौजूद है।');return;}
- target.push(name);saveAreas();showBusy();setTimeout(()=>{renderAreas();hideBusy()},250);
+
+function areaDistrictMatches(d){
+  const q=areaSearchText.toLowerCase();
+  if(!q)return true;
+  const did=String(d.id);
+  const bs=areaBlockRows.filter(b=>String(b.district_id)===did);
+  return areaDistrictName(d).toLowerCase().includes(q) || bs.some(b=>{
+    const ps=areaPanchayatRows.filter(p=>String(p.block_id)===String(b.id));
+    return areaBlockName(b).toLowerCase().includes(q) || ps.some(p=>areaPanchayatName(p).toLowerCase().includes(q));
+  });
 }
-function deleteArea(type,index){
- const target=type==='available'?blocks:coming;
- const name=target[index];if(!name)return;
- if(!confirm('क्या आप '+name+' को Area list से delete करना चाहते हैं?'))return;
- showBusy();setTimeout(()=>{target.splice(index,1);saveAreas();renderAreas();hideBusy()},250);
+function renderAreaHierarchy(){
+  const tree=document.getElementById('areaTree');
+  if(!tree)return;
+  const ds=areaDistrictRows,bs=areaBlockRows,ps=areaPanchayatRows;
+  const totalD=ds.length,visD=ds.filter(areaVisible).length,totalB=bs.length,visB=bs.filter(areaVisible).length,totalP=ps.length,visP=ps.filter(areaVisible).length;
+  const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v};
+  set('areaDistrictCount',totalD);set('areaBlockCount',totalB);set('areaPanchayatCount',totalP);
+  set('areaDistrictSub',visD+' Visible / '+totalD+' Total');set('areaBlockSub',visB+' Visible / '+totalB+' Total');set('areaPanchayatSub',visP+' Visible / '+totalP+' Total');
+  const filtered=ds.filter(areaDistrictMatches);
+  set('areaResultCount',filtered.length+' District • '+filtered.reduce((n,d)=>n+bs.filter(b=>String(b.district_id)===String(d.id)).length,0)+' Block • '+filtered.reduce((n,d)=>n+bs.filter(b=>String(b.district_id)===String(d.id)).reduce((m,b)=>m+ps.filter(p=>String(p.block_id)===String(b.id)).length,0),0)+' Panchayat');
+  if(!filtered.length){tree.innerHTML='<div class="area-empty">कोई District / Block / Panchayat नहीं मिला।</div>';return;}
+  tree.innerHTML=filtered.map(d=>{
+    const did=String(d.id), dbs=bs.filter(b=>String(b.district_id)===did);
+    const open=areaExpandedDistricts.has(did)||!!areaSearchText;
+    const hidden=!areaVisible(d);
+    return `<div class="area-district ${open?'open ':''}${hidden?'area-hidden':''}" data-district-id="${areaEsc(did)}">
+      <div class="area-district-head">
+        <button class="area-chevron" type="button" onclick="toggleAreaDistrict('${areaEsc(did)}')">›</button>
+        <div class="area-district-main" onclick="toggleAreaDistrict('${areaEsc(did)}')">
+          <div class="area-district-name">🏛 ${areaEsc(areaDistrictName(d)||'District')}</div>
+          <div class="area-district-meta">${dbs.length} Block • ${dbs.reduce((n,b)=>n+ps.filter(p=>String(p.block_id)===String(b.id)).length,0)} Panchayat ${hidden?'• 🙈 Hidden':''}</div>
+        </div>
+        <div class="area-head-actions">
+          <button class="area-white-btn" type="button" onclick="addAreaBlock('${areaEsc(did)}')">＋ Block</button>
+          <button class="area-white-btn" type="button" onclick="toggleAreaVisibility('district',${did},${areaVisible(d)?'false':'true'})">${areaVisible(d)?'🙈 Hide':'👁 Show'}</button>
+          <button class="area-white-btn" type="button" onclick="deleteAreaNode('district',${did})">🗑</button>
+        </div>
+      </div>
+      <div class="area-district-body">${dbs.length?dbs.map(b=>renderAreaBlock(b)).join(''):'<div class="area-empty">इस District में अभी कोई Block नहीं है।</div>'}</div>
+    </div>`;
+  }).join('');
 }
+function renderAreaBlock(b){
+  const bid=String(b.id), ps=areaPanchayatRows.filter(p=>String(p.block_id)===bid),open=areaExpandedBlocks.has(bid)||!!areaSearchText,hidden=!areaVisible(b);
+  return `<div class="area-block ${open?'open':''}" data-block-id="${areaEsc(bid)}">
+    <div class="area-block-head">
+      <div class="area-block-main" onclick="toggleAreaBlock('${areaEsc(bid)}')">
+        <div class="area-block-name">📍 ${areaEsc(areaBlockName(b)||'Block')}</div>
+        <div class="area-block-meta">${ps.length} Panchayat ${hidden?'• 🙈 Hidden':''}</div>
+      </div>
+      <span class="area-status ${hidden?'off':'on'}">${hidden?'🙈 Hidden':'👁 Visible'}</span>
+      <div class="area-block-actions">
+        <button class="area-add-panchayat" style="width:auto;margin:0" type="button" onclick="addAreaPanchayat('${areaEsc(bid)}')">＋ Panchayat</button>
+        <button class="outline" type="button" onclick="toggleAreaVisibility('block',${bid},${areaVisible(b)?'false':'true'})">${areaVisible(b)?'🙈 Hide':'👁 Show'}</button>
+        <button class="danger" type="button" onclick="deleteAreaNode('block',${bid})">🗑 Delete</button>
+      </div>
+    </div>
+    <div class="area-panchayats">${ps.length?ps.map(p=>renderAreaPanchayat(p)).join(''):'<div class="area-empty">कोई Panchayat नहीं है।</div>'}</div>
+  </div>`;
+}
+function renderAreaPanchayat(p){
+  const hidden=!areaVisible(p);
+  return `<div class="area-panchayat"><span class="area-panchayat-name">🏡 ${areaEsc(areaPanchayatName(p)||'Panchayat')}</span><span class="area-status ${hidden?'off':'on'}">${hidden?'🙈 Hidden':'👁 Visible'}</span><div class="area-panchayat-actions"><button class="outline" type="button" onclick="toggleAreaVisibility('panchayat',${p.id},${areaVisible(p)?'false':'true'})">${areaVisible(p)?'🙈 Hide':'👁 Show'}</button><button class="danger" type="button" onclick="deleteAreaNode('panchayat',${p.id})">🗑 Delete</button></div></div>`;
+}
+function toggleAreaDistrict(id){id=String(id);areaExpandedDistricts.has(id)?areaExpandedDistricts.delete(id):areaExpandedDistricts.add(id);renderAreaHierarchy()}
+function toggleAreaBlock(id){id=String(id);areaExpandedBlocks.has(id)?areaExpandedBlocks.delete(id):areaExpandedBlocks.add(id);renderAreaHierarchy()}
+async function toggleAreaVisibility(type,id,value){
+  if(!(await requireAdmin()))return;
+  const table=type==='district'?'senvia_districts':type==='block'?'senvia_blocks':'senvia_panchayats';
+  showBusy();
+  try{
+    await api(table+'?id=eq.'+encodeURIComponent(id),{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify({is_visible:value})});
+    await loadAreaHierarchy(false);
+  }catch(e){alert((value?'Show':'Hide')+' failed.\\n\\n'+(e.message||e))}
+  finally{hideBusy()}
+}
+async function deleteAreaNode(type,id){
+  if(!(await requireAdmin()))return;
+  const table=type==='district'?'senvia_districts':type==='block'?'senvia_blocks':'senvia_panchayats';
+  const row=(type==='district'?areaDistrictRows:type==='block'?areaBlockRows:areaPanchayatRows).find(x=>String(x.id)===String(id));
+  const name=row?.name||'this area';
+  const child=type==='district'?'\\nइस District के अंदर Blocks और Panchayats भी delete होंगे।':type==='block'?'\\nइस Block के अंदर Panchayats भी delete होंगे.':'';
+  if(!confirm('क्या आप '+name+' को delete करना चाहते हैं?'+child))return;
+  showBusy();
+  try{
+    await api(table+'?id=eq.'+encodeURIComponent(id),{method:'DELETE'});
+    await loadAreaHierarchy(false);
+  }catch(e){alert('Delete failed.\\n\\n'+(e.message||e))}
+  finally{hideBusy()}
+}
+async function addAreaDistrict(){
+  if(!(await requireAdmin()))return;
+  const name=(prompt('District का नाम दर्ज करें:')||'').trim();
+  if(!name)return;
+  if(areaDistrictRows.some(d=>areaDistrictName(d).toLowerCase()===name.toLowerCase())){alert('यह District पहले से मौजूद है।');return}
+  showBusy();
+  try{await api('senvia_districts',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify({name,is_visible:true})});await loadAreaHierarchy(false)}
+  catch(e){alert('District add नहीं हुआ।\\n\\n'+(e.message||e))}
+  finally{hideBusy()}
+}
+async function addAreaBlock(districtId){
+  if(!(await requireAdmin()))return;
+  const d=areaDistrictRows.find(x=>String(x.id)===String(districtId));if(!d)return;
+  const name=(prompt((d.name||'District')+' के अंदर Block का नाम दर्ज करें:')||'').trim();if(!name)return;
+  if(areaBlockRows.some(b=>String(b.district_id)===String(districtId)&&areaBlockName(b).toLowerCase()===name.toLowerCase())){alert('यह Block पहले से मौजूद है।');return}
+  showBusy();
+  try{await api('senvia_blocks',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify({district_id:Number(districtId),name,is_visible:true})});areaExpandedDistricts.add(String(districtId));await loadAreaHierarchy(false)}
+  catch(e){alert('Block add नहीं हुआ।\\n\\n'+(e.message||e))}
+  finally{hideBusy()}
+}
+async function addAreaPanchayat(blockId){
+  if(!(await requireAdmin()))return;
+  const b=areaBlockRows.find(x=>String(x.id)===String(blockId));if(!b)return;
+  const name=(prompt((b.name||'Block')+' के अंदर Panchayat का नाम दर्ज करें:')||'').trim();if(!name)return;
+  if(areaPanchayatRows.some(p=>String(p.block_id)===String(blockId)&&areaPanchayatName(p).toLowerCase()===name.toLowerCase())){alert('यह Panchayat पहले से मौजूद है।');return}
+  showBusy();
+  try{await api('senvia_panchayats',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify({block_id:Number(blockId),name,is_visible:true})});areaExpandedBlocks.add(String(blockId));await loadAreaHierarchy(false)}
+  catch(e){alert('Panchayat add नहीं हुआ।\\n\\n'+(e.message||e))}
+  finally{hideBusy()}
+}
+function renderAreas(){renderAreaHierarchy()}
+function saveAreas(){}
+function addArea(type){addAreaDistrict()}
+function deleteArea(type,index){loadAreaHierarchy(false)}
+
+document.getElementById('areaSearch')?.addEventListener('input',e=>{areaSearchText=e.target.value.trim();renderAreaHierarchy()});
 
 function openPro(){modal.classList.add('show');pb.innerHTML='<option value="">Select Block</option>'+blocks.map(b=>`<option>${b}</option>`).join('');checks.innerHTML=services.map(s=>`<label><input type="checkbox" value="${s}"> ${s}</label>`).join('')}
 function closePro(){modal.classList.remove('show')}
@@ -982,9 +1149,9 @@ try{lang=localStorage.getItem('senvia_lang')||lang||'hi'}catch(e){}
 setLang(lang);
 restoreProfessionalView();restoreCollectionViews();
 refreshAdminSession().then(()=>requireAdmin()).then(ok=>{if(ok) loadFromSupabase()});
+window.addEventListener('resize',()=>{if(window.innerWidth>700)closeAdminMobileMenu()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeAdminMobileMenu()});
 </script>
 <div class="msg-detail-modal" id="msgViewModal" onclick="if(event.target===this)closeMessageView()"><div class="msg-detail-card"><div class="msg-detail-head"><h2 id="msgViewTitle">Message Details</h2><button class="msg-detail-close" type="button" onclick="closeMessageView()">✕</button></div><div class="msg-detail-body" id="msgViewBody"></div></div></div>
 
-window.addEventListener('resize',()=>{if(window.innerWidth>700)closeAdminMobileMenu()});
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closeAdminMobileMenu()});
 </body></html>
