@@ -593,7 +593,8 @@ async function loadFromSupabase(){
    dbMode=true;
    const note=(serviceRows.length?'':' (services table unavailable; using local service names)')+(links.length?'':' (service links unavailable; existing profile service fields used where available)');
    setDbStatus('🟢 Supabase connected — live professional data loaded.'+note,'ok');
-   senviaBusyCount=0;document.getElementById('senviaBusy')?.classList.remove('show');
+   senviaBusyCount=0;initSenviaBackNavigation();
+document.getElementById('senviaBusy')?.classList.remove('show');
 setTimeout(()=>setLang(lang),0);
  }catch(e){
    console.error('Supabase load failed:',e);
@@ -748,11 +749,57 @@ function setLang(l){
   document.getElementById('mobileEn')?.classList.toggle('on',l==='en');
   document.documentElement.lang=l==='hi'?'hi':'en';
 }
+const SENVIA_ADMIN_SECTIONS=['dashboard','pros','customers','services','areas','messages'];
+let senviaCurrentSection='dashboard';
+let senviaHistoryReady=false;
+
 function syncAdminMobileActive(id){document.querySelectorAll('.admin-mobile-link').forEach(n=>n.classList.toggle('active',n.dataset.mobileTarget===id))}
 function toggleAdminMobileMenu(){document.getElementById('adminMobileMenu')?.classList.toggle('open');document.getElementById('adminMobileOverlay')?.classList.toggle('open')}
 function closeAdminMobileMenu(){document.getElementById('adminMobileMenu')?.classList.remove('open');document.getElementById('adminMobileOverlay')?.classList.remove('open')}
 function mobileAdminShow(id,el){syncAdminMobileActive(id);show(id);closeAdminMobileMenu()}
-function show(id,el){document.querySelectorAll('main section').forEach(s=>s.style.display='none');document.getElementById(id).style.display='block';document.querySelectorAll('.nav').forEach(n=>n.classList.remove('active'));if(el)el.classList.add('active');syncAdminMobileActive(id);render()}
+
+function senviaApplySection(id,el){
+  if(!SENVIA_ADMIN_SECTIONS.includes(id))id='dashboard';
+  document.querySelectorAll('main section').forEach(sec=>sec.style.display='none');
+  const target=document.getElementById(id);
+  if(target)target.style.display='block';
+  document.querySelectorAll('.nav').forEach(n=>n.classList.remove('active'));
+  if(el)el.classList.add('active');
+  else{
+    document.querySelectorAll('.nav').forEach(n=>{
+      const oc=n.getAttribute('onclick')||'';
+      if(oc.includes("show('"+id+"'"))n.classList.add('active');
+    });
+  }
+  senviaCurrentSection=id;
+  syncAdminMobileActive(id);
+  render();
+}
+
+function show(id,el,fromBrowserBack){
+  if(!SENVIA_ADMIN_SECTIONS.includes(id))return;
+  if(!fromBrowserBack && senviaHistoryReady && id!==senviaCurrentSection){
+    history.pushState({senviaAdmin:true,senviaSection:id},'',location.href);
+  }
+  senviaApplySection(id,el);
+}
+
+function initSenviaBackNavigation(){
+  if(senviaHistoryReady)return;
+  const existing=(history.state&&typeof history.state==='object')?history.state:{};
+  const initial=SENVIA_ADMIN_SECTIONS.includes(existing.senviaSection)?existing.senviaSection:'dashboard';
+  senviaCurrentSection=initial;
+  history.replaceState({...existing,senviaAdmin:true,senviaSection:initial},'',location.href);
+  senviaHistoryReady=true;
+  senviaApplySection(initial,null);
+}
+
+window.addEventListener('popstate',function(e){
+  const st=e.state;
+  if(st&&st.senviaAdmin&&SENVIA_ADMIN_SECTIONS.includes(st.senviaSection)){
+    senviaApplySection(st.senviaSection,null);
+  }
+});
 function render(){
  const pendingCount=pros.filter(p=>proStatus(p)==='Pending').length;
  const cp=document.getElementById('countPro'); if(cp) cp.textContent=pros.length;
