@@ -617,20 +617,68 @@ closePro();await loadFromSupabase();alert('Professional added as Pending Verific
 async function approve(i){const p=pros[i];if(!dbMode||!p.id){p.status='Verified';render();return}try{await api('professionals?id=eq.'+encodeURIComponent(p.id),{method:'PATCH',body:JSON.stringify({Status:'Verified'})});await loadFromSupabase()}catch(e){alert('Approve failed. Check Supabase RLS policy.')}}
 async function removePro(i){if(!confirm('Delete this professional?'))return;const p=pros[i];if(!dbMode||!p.id){pros.splice(i,1);render();return}try{await api('professional_services?professional_id=eq.'+encodeURIComponent(p.id),{method:'DELETE'});await api('professionals?id=eq.'+encodeURIComponent(p.id),{method:'DELETE'});await loadFromSupabase()}catch(e){alert('Delete failed. Check Supabase RLS policy.')}}
 async function addService(){
- let s=newSvc.value.trim();if(!s)return;showBusy();
- if(!dbMode){try{if(!services.includes(s))services.push(s);newSvc.value='';render();}finally{hideBusy()}return}
+ const input=document.getElementById('newSvc');
+ const s=(input?.value||'').trim();
+ if(!s){alert('कृपया Service का नाम दर्ज करें।');input?.focus();return}
+ if(services.some(x=>String(x).trim().toLowerCase()===s.toLowerCase())){
+   alert('यह Service पहले से मौजूद है।');
+   input?.select();
+   return;
+ }
+ showBusy();
  try{
-  const sample=serviceRows.find(x=>x&&typeof x==='object')||{};
-  const candidates=['name_en','name','service','service_name','service_name_en','service_name_hi','title','name_hi','label','category','Service Name','Service'];
-  const detected=candidates.find(k=>Object.prototype.hasOwnProperty.call(sample,k));
-  const extra=Object.keys(sample).filter(k=>{const v=sample[k];const lk=k.toLowerCase();return typeof v==='string'&&v.trim()&&!['id','created_at','updated_at','status','description'].includes(lk)&&!lk.includes('created')&&!lk.includes('updated')&&!lk.includes('uuid')});
-  const keys=[...new Set([...(detected?[detected]:[]),...candidates,...extra])];let last='';let done=false;
-  for(const key of keys){try{const payload={};payload[key]=s;await api('services',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify(payload)});done=true;break}catch(e){last=e.message||String(e)}}
-  if(!done)throw new Error(last||'Services table का service-name column नहीं मिला।');
-  newSvc.value='';await loadFromSupabase();
- }catch(e){console.error('Service add failed:',e);alert('Service add failed. '+(e.message||e))}finally{hideBusy()}
-}
+   if(!(await requireAdmin())) return;
+   if(!dbMode){
+     services.push(s);
+     if(input) input.value='';
+     render();
+     alert('Service added successfully.');
+     return;
+   }
 
+   // Detect the actual service-name column from an existing row.
+   // If the table is empty, use the normal Senvia column name first.
+   const sample=serviceRows.find(x=>x&&typeof x==='object')||{};
+   const detected=serviceNameKey(sample);
+   const keys=[...new Set([
+     ...(detected?[detected]:[]),
+     'name','name_en','service','service_name','service_name_en','service_name_hi','title','name_hi','label','category'
+   ])];
+
+   let lastError='';
+   let saved=false;
+   for(const key of keys){
+     try{
+       const payload={};
+       payload[key]=s;
+       await api('services',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify(payload)});
+       saved=true;
+       break;
+     }catch(e){
+       lastError=e.message||String(e);
+     }
+   }
+   if(!saved){
+     throw new Error(lastError||'Services table में service name column या INSERT permission नहीं मिली।');
+   }
+
+   if(input) input.value='';
+   await loadFromSupabase();
+   alert('Service successfully added.');
+ }catch(e){
+   console.error('Service add failed:',e);
+   const msg=e.message||String(e);
+   let help='';
+   if(/42501|row-level security|RLS|permission|not authorized/i.test(msg)){
+     help='\n\nयह Supabase RLS/INSERT permission की समस्या लग रही है।';
+   }else if(/column|schema|does not exist|PGRST/i.test(msg)){
+     help='\n\nServices table के service-name column की समस्या लग रही है।';
+   }
+   alert('Service add failed.\n\n'+msg+help);
+ }finally{
+   hideBusy();
+ }
+}
 async function delService(i){if(!confirm('Delete this service?'))return;showBusy();try{let sv=serviceRows.find(x=>svcLabel(x)===services[i]);if(!dbMode||!sv?.id){services.splice(i,1);render();return}await api('services?id=eq.'+encodeURIComponent(sv.id),{method:'DELETE'});await loadFromSupabase()}catch(e){alert('Service delete failed. Check RLS and linked professional_services records.')}finally{hideBusy()}}
 
 proSearch.oninput=renderTable;statusFilter.onchange=renderTable;custSearch.oninput=renderCustomers;msgSearch.oninput=renderMessages;msgType.onchange=renderMessages;
