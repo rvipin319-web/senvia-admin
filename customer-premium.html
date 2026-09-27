@@ -426,8 +426,18 @@ const areaVisible=v => v===true || v===1 || String(v).toLowerCase()==='true' || 
 const areaEsc=v=>String(v??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 const areaName=v=>String(v??'').trim();
 
+/* Global Supabase client for the customer area hierarchy.
+   The previous version used API/SUPABASE_KEY from inside another script scope,
+   so areaGet() threw a ReferenceError and silently kept the Bihar fallback. */
+const SENVIA_AREA_SUPABASE_URL='https://hxdrvhiowurbwlgmczju.supabase.co';
+const SENVIA_AREA_SUPABASE_KEY='sb_publishable_cvh_b0gklN5SOcH5MsGs8g_4JI9-PxT';
+const SENVIA_AREA_API=SENVIA_AREA_SUPABASE_URL+'/rest/v1/';
+
 async function areaGet(path){
-  const r=await fetch(API+path,{headers:{apikey:SUPABASE_KEY},cache:'no-store'});
+  const r=await fetch(SENVIA_AREA_API+path,{
+    headers:{apikey:SENVIA_AREA_SUPABASE_KEY,Accept:'application/json'},
+    cache:'no-store'
+  });
   if(!r.ok) throw new Error('Area API '+r.status);
   return await r.json();
 }
@@ -906,17 +916,9 @@ $('block').addEventListener('change',loadP);$('p').addEventListener('change',loa
     const aboutH=$('about')?.querySelector('h2'); if(aboutH) aboutH.textContent=hi?'Senvia क्या है?':'What is Senvia?';
     if($('aboutHi')) $('aboutHi').style.display=hi?'block':'none';
     if($('aboutEn')) $('aboutEn').style.display=hi?'none':'block';
-    // IMPORTANT: Do not overwrite the live State/District/Block/Panchayat hierarchy here.
-    // Those four selects are populated from Supabase by loadAreaStates/loadDistricts/loadBlocks/loadP.
-    const labels=document.querySelectorAll('.field label');
-    if(labels[0])labels[0].textContent=hi?'State':'State';
-    if(labels[1])labels[1].textContent=hi?'District':'District';
-    if(labels[2])labels[2].textContent=hi?'Block':'Block';
-    if(labels[3])labels[3].textContent=hi?'Panchayat':'Panchayat';
-    if(labels[4])labels[4].textContent=hi?'क्षेत्र पिन कोड':'Area PIN Code';
-    if(labels[5])labels[5].textContent=hi?'Service':'Service';
+    const labels=document.querySelectorAll('.field label'); if(labels[0])labels[0].textContent=hi?'Block':'Block'; if(labels[1])labels[1].textContent=hi?'Panchayat':'Panchayat'; if(labels[2])labels[2].textContent=hi?'Service':'Service';
     const b=$('block'); if(b&&b.options.length) b.options[0].textContent=hi?'-- Block चुनें --':'-- Select Block --';
-    const p=$('p'); if(p&&p.options.length) p.options[0].textContent=hi?'-- Panchayat चुनें --':'-- Select Panchayat --';
+    const p=$('p'); if(p){const current=b?.value||''; p.innerHTML='<option value="">'+(hi?'-- Panchayat चुनें --':'-- Select Panchayat --')+'</option>'+(data[current]||[]).sort().map(x=>'<option>'+x+'</option>').join('');}
     const sv=$('s'); if(sv){sv.innerHTML='<option value="">'+(hi?'-- Service चुनें --':'-- Select Service --')+'</option>'+services.map(x=>'<option value="'+x[0]+'">'+(hi?(svcHi[x[0]]||x[0]):x[0])+'</option>').join('');}
     const ws=$('ws'); if(ws) ws.innerHTML=services.map(x=>'<option value="'+x[0]+'">'+(hi?(svcHi[x[0]]||x[0]):x[0])+'</option>').join('');
     if($('allLink')) $('allLink').textContent=hi?'सभी देखें →':'View All →';
