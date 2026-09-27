@@ -39,7 +39,7 @@ button,.btn{border:0;border-radius:9px;padding:9px 13px;font-weight:700;text-dec
 <a href="contact.html">✉ संपर्क</a>
 </nav>
 
-<div class="modal" id="regModal"><div class="modalbox"><button class="close" onclick="closeModal('regModal')">×</button><h2>👤 Customer Registration</h2><p>Professional का contact देखने या Request Service भेजने के लिए पहले registration करें।</p><div class="form"><input id="cn" placeholder="नाम / Name"><input id="cm" placeholder="Mobile Number / मोबाइल नंबर" maxlength="10" inputmode="numeric"><input id="cb" placeholder="Block"><input id="cv" placeholder="Village / Area"><div class="note" id="regNote"></div><button class="btn lock" onclick="registerCustomer()">Register & Continue</button></div></div></div><div class="modal" id="reqModal"><div class="modalbox"><button class="close" onclick="closeModal('reqModal')">×</button><h2>🛠 Request Service</h2><div id="reqPro"></div><div class="form"><input id="rn" autocomplete="off" placeholder="नाम / Name"><input id="rm" autocomplete="off" placeholder="Mobile Number / मोबाइल नंबर" maxlength="10" inputmode="numeric"><input id="rv" autocomplete="off" value="" placeholder="Village / Area"><input id="rp" autocomplete="off" value="" placeholder="PIN Code" maxlength="6" inputmode="numeric"><input id="rnote" autocomplete="off" value="" placeholder="काम की जरूरत / Note (optional)"><div class="note" id="reqNote"></div><button class="btn request" onclick="submitRequest()">Send Request</button></div></div></div>
+<div class="modal" id="regModal"><div class="modalbox"><button class="close" onclick="closeModal('regModal')">×</button><h2>👤 Customer Registration</h2><p>Professional का contact देखने या Request Service भेजने के लिए पहले registration करें।</p><div class="form"><input id="cn" placeholder="नाम / Name"><input id="cm" placeholder="Mobile Number / मोबाइल नंबर" maxlength="10" inputmode="numeric"><input id="cb" placeholder="Block"><input id="cv" placeholder="Village / Area"><div class="note" id="regNote"></div><button class="btn lock" onclick="registerCustomer()">Register & Continue</button></div></div></div><div class="modal" id="reqModal"><div class="modalbox"><button class="close" onclick="closeModal('reqModal')">×</button><h2>🛠 Request Service</h2><div id="reqPro"></div><div class="form"><input id="rn" placeholder="नाम / Name"><input id="rm" placeholder="Mobile Number / मोबाइल नंबर" maxlength="10" inputmode="numeric"><input id="rv" placeholder="Village / Area"><input id="rp" placeholder="PIN Code" maxlength="6" inputmode="numeric"><input id="rnote" placeholder="काम की जरूरत / Note (optional)"><div class="note" id="reqNote"></div><button class="btn request" onclick="submitRequest()">Send Request</button></div></div></div>
 <main class="wrap">
 <section class="head">
 <h1>🔎 खोज परिणाम</h1>
@@ -53,7 +53,6 @@ const SUPABASE_URL='https://hxdrvhiowurbwlgmczju.supabase.co';
 const SUPABASE_KEY='sb_publishable_cvh_b0gklN5SOcH5MsGs8g_4JI9-PxT';
 const API=SUPABASE_URL+'/rest/v1/';
 const headers={apikey:SUPABASE_KEY,'Content-Type':'application/json'};
-const H=headers;
 const str=v=>String(v??'').trim();
 const norm=v=>str(v).toLowerCase().normalize('NFKC').replace(/[–—−]/g,'-').replace(/\s+/g,' ');
 const val=(o,keys,def='')=>{for(const k of keys){if(o&&o[k]!==undefined&&o[k]!==null&&str(o[k])!=='')return o[k]}return def};
@@ -106,78 +105,61 @@ function normalize(rows,links,services){
 const CUSTOMER_REG_KEY='senvia_customer_registered_v3';
 function customerRegistered(){return localStorage.getItem(CUSTOMER_REG_KEY)==='1'||localStorage.getItem('senvia_customer_registered')==='1'}
 let selected=null,pendingAction=null;
-function contactHtml(p){
- const service=currentService||'All Services';
- const key='senvia_request_success_'+String(p.id||p.name)+'_'+String(service);
- const unlocked=localStorage.getItem(key)==='1';
- if(unlocked&&p.mobile){
-  const n=p.mobile.replace(/\D/g,'');
-  return `<a class="btn lock" href="tel:${esc(p.mobile)}">📞 Call</a>${n?`<a class="btn request" target="_blank" rel="noopener" href="https://wa.me/91${esc(n)}">💬 WhatsApp</a>`:''}`;
- }
- return `<button class="btn request" onclick='needRegistration("request",${JSON.stringify({p,svc:service}).replace(/</g,'\\u003c')})'>🛠 Request Service</button>`;
+function requestKey(p,svc){
+ const cid=localStorage.getItem('senvia_customer_code')||localStorage.getItem('senvia_customer_mobile')||'';
+ return 'senvia_service_request_'+cid+'_'+String(p.id||p.mobile||p.name||'').replace(/\W+/g,'_')+'_'+String(svc||'All Services').replace(/\W+/g,'_');
+}
+function requestSucceeded(p,svc){return localStorage.getItem(requestKey(p,svc))==='1'}
+function contactHtml(p,svc){
+ if(!customerRegistered()) return `<button class="btn lock" onclick='needRegistration("request",${JSON.stringify({p,svc}).replace(/</g,'\\u003c')})'>🔒 Register & Request Service</button>`;
+ if(!requestSucceeded(p,svc)) return `<button class="btn request" onclick='openRequest(${JSON.stringify(p).replace(/</g,'\\u003c')},${JSON.stringify(svc||'All Services').replace(/</g,'\\u003c')})'>🛠 Request Service</button>`;
+ if(p.mobile){const n=p.mobile.replace(/\D/g,'');return `<a class="btn lock" href="tel:${esc(p.mobile)}">📞 Call</a>${n?`<a class="btn request" target="_blank" href="https://wa.me/91${esc(n)}">💬 WhatsApp</a>`:''}`;}
+ return `<span class="note">Professional mobile उपलब्ध नहीं है।</span>`;
 }
 function requestHtml(p,svc){return `<button class="btn request" onclick='needRegistration("request",${JSON.stringify({p,svc}).replace(/</g,'\\u003c')})'>🛠 Request Service</button>`;}
 function needRegistration(action,data){if(customerRegistered()){if(action==='request')openRequest(data.p,data.svc);return;}pendingAction={action,data};document.getElementById('cn').value=localStorage.getItem('senvia_customer_name')||'';document.getElementById('cm').value=localStorage.getItem('senvia_customer_mobile')||'';document.getElementById('regModal').classList.add('show');}
 function closeModal(id){document.getElementById(id).classList.remove('show');}
-async function registerCustomer(){const name=document.getElementById('cn').value.trim(),phone=document.getElementById('cm').value.replace(/\D/g,''),block=document.getElementById('cb').value.trim(),village=document.getElementById('cv').value.trim(),note=document.getElementById('regNote');note.textContent='';if(!name||phone.length!==10){note.textContent='नाम और सही 10 अंकों का मोबाइल नंबर दें।';return;}try{const r=await fetch(API+'rpc/register_senvia_customer',{method:'POST',headers:headers,body:JSON.stringify({p_name:name,p_phone:phone,p_block:block,p_panchayat:'',p_village_area:village})});const raw=await r.text();if(!r.ok)throw Error(raw||'Registration failed');const d=raw?JSON.parse(raw):null,row=Array.isArray(d)?d[0]:d;localStorage.setItem(CUSTOMER_REG_KEY,'1');localStorage.setItem('senvia_customer_registered','1');localStorage.setItem('senvia_customer_code',row?.customer_code||'');localStorage.setItem('senvia_customer_mobile',phone);localStorage.setItem('senvia_customer_name',name);closeModal('regModal');const a=pendingAction;pendingAction=null;if(a?.action==='request')openRequest(a.data.p,a.data.svc);else render(currentService);alert('Registration successful. अब Professional का contact उपलब्ध है।');}catch(e){note.textContent='Registration failed. कृपया फिर कोशिश करें।';console.error(e);}}
-function openRequest(p,svc){selected={p,svc};document.getElementById('reqPro').innerHTML=`<b>${esc(p.name)}</b> • ${esc(svc)}<br>📍 ${esc([p.block,p.panchayat,p.village].filter(Boolean).join(' → '))}`;document.getElementById('rn').value=localStorage.getItem('senvia_customer_name')||'';document.getElementById('rm').value=localStorage.getItem('senvia_customer_mobile')||'';document.getElementById('rv').value='';document.getElementById('rp').value='';document.getElementById('rnote').value='';document.getElementById('reqNote').textContent='';document.getElementById('reqModal').classList.add('show');}
-async function submitRequest(){
- const p=selected?.p,svc=selected?.svc;
- const name=document.getElementById('rn').value.trim();
- const phone=document.getElementById('rm').value.replace(/\D/g,'');
- const village=document.getElementById('rv').value.trim();
- const pin=document.getElementById('rp').value.replace(/\D/g,'');
- const extra=document.getElementById('rnote').value.trim();
- const note=document.getElementById('reqNote');
- const btn=document.querySelector('#reqModal .btn.request');
- note.textContent='';
- if(!p||!name||phone.length!==10){note.textContent='नाम और सही मोबाइल नंबर जरूरी है।';return;}
- if(btn){btn.disabled=true;btn.textContent='Sending…';}
- try{
-  const code=localStorage.getItem('senvia_customer_code')||'';
-  const detail=`Service Request
-Service: ${svc||'—'}
-Professional: ${p.name||'—'}
-Professional Mobile: ${p.mobile||'—'}
-Customer: ${name}
-Customer Mobile: ${phone}
-Customer ID: ${code||'—'}
-Block: ${p.block||'—'}
-Panchayat: ${p.panchayat||'—'}
-PIN Code: ${pin||p.pin||'—'}
-Village / Area: ${village||p.village||'—'}
-Note: ${extra||'—'}`;
-  const payload={user_name:name,user_type:'Customer',mobile:phone,user_code:code,message_type:'Service Request',message:detail};
-  const r=await fetch(API+'messages',{method:'POST',headers:H,body:JSON.stringify(payload)});
-  const body=await r.text();
-  if(!r.ok)throw Error(body||('HTTP '+r.status));
-
-  // Professional copy is best-effort; Customer/Admin message above is the required success condition.
+async function registerCustomer(){const name=document.getElementById('cn').value.trim(),phone=document.getElementById('cm').value.replace(/\D/g,''),block=document.getElementById('cb').value.trim(),village=document.getElementById('cv').value.trim(),note=document.getElementById('regNote');note.textContent='';if(!name||phone.length!==10){note.textContent='नाम और सही 10 अंकों का मोबाइल नंबर दें।';return;}try{const r=await fetch(API+'rpc/register_senvia_customer',{method:'POST',headers:headers,body:JSON.stringify({p_name:name,p_phone:phone,p_block:block,p_panchayat:'',p_village_area:village})});const raw=await r.text();if(!r.ok)throw Error(raw||'Registration failed');const d=raw?JSON.parse(raw):null,row=Array.isArray(d)?d[0]:d;localStorage.setItem(CUSTOMER_REG_KEY,'1');localStorage.setItem('senvia_customer_registered','1');localStorage.setItem('senvia_customer_code',row?.customer_code||'');localStorage.setItem('senvia_customer_mobile',phone);localStorage.setItem('senvia_customer_name',name);closeModal('regModal');const a=pendingAction;pendingAction=null;if(a?.action==='request')openRequest(a.data.p,a.data.svc);else { render(currentService); recordFindActivity(window.__senviaFoundRows||[], window.__senviaFindFilters||{}); } alert('Registration successful. अब Service Request भेजें। Request सफल होने के बाद Call / WhatsApp unlock होगा।');}catch(e){note.textContent='Registration failed. कृपया फिर कोशिश करें।';console.error(e);}}
+function openRequest(p,svc){selected={p,svc};document.getElementById('reqPro').innerHTML=`<b>${esc(p.name)}</b> • ${esc(svc)}<br>📍 ${esc([p.block,p.panchayat,p.village].filter(Boolean).join(' → '))}`;document.getElementById('rn').value=localStorage.getItem('senvia_customer_name')||'';document.getElementById('rm').value=localStorage.getItem('senvia_customer_mobile')||'';document.getElementById('reqModal').classList.add('show');}
+async function recordFindActivity(rows, filters){
   try{
-   await fetch(API+'messages',{method:'POST',headers:H,body:JSON.stringify({
-    user_name:name,user_type:'Professional',mobile:p.mobile,user_code:p.code||p.id||'',message_type:'Service Request',message:detail
-   })});
-  }catch(e){console.warn('Professional copy failed:',e);}
-
-  // Unlock contact only AFTER the Customer Service Request succeeds.
-  const unlockKey='senvia_request_success_'+String(p.id||p.name)+'_'+String(svc||'All Services');
-  localStorage.setItem(unlockKey,'1');
-  closeModal('reqModal');
-  render(currentService);
-  alert('✅ Service Request सफलतापूर्वक भेजी गई। अब Call / WhatsApp unlock है।');
- }catch(e){
-  console.error('Service Request failed:',e);
-  note.textContent='Request submit नहीं हो सकी। कृपया फिर कोशिश करें।';
- }finally{
-  if(btn){btn.disabled=false;btn.textContent='Send Request';}
- }
+    if(!customerRegistered()) return;
+    const key='senvia_find_logged_'+location.search;
+    if(sessionStorage.getItem(key)==='1') return;
+    const customerId=localStorage.getItem('senvia_customer_code')||'';
+    const customerName=localStorage.getItem('senvia_customer_name')||'';
+    const customerMobile=localStorage.getItem('senvia_customer_mobile')||'';
+    const serviceFilter=filters.service||'';
+    for(const p of (rows||[])){
+      const payload={
+        p_customer_id:customerId,
+        p_customer_name:customerName,
+        p_customer_mobile:customerMobile,
+        p_block:p.block||filters.block||'',
+        p_panchayat:p.panchayat||filters.panchayat||'',
+        p_village_area:p.village||'',
+        p_pin:p.pin||filters.pin||'',
+        p_professional_id:p.id!=null?String(p.id):(p.code||''),
+        p_professional_name:p.name||'',
+        p_professional_mobile:p.mobile||'',
+        p_service_id:'',
+        p_service_name:serviceFilter || (p.services&&p.services.length?p.services.join(', '):'All Services')
+      };
+      const r=await fetch(API+'rpc/log_senvia_find_activity',{method:'POST',headers,body:JSON.stringify(payload)});
+      if(!r.ok) throw Error(await r.text());
+    }
+    if((rows||[]).length) sessionStorage.setItem(key,'1');
+  }catch(e){ console.error('Find Activity save failed:',e); }
 }
+
+async function submitRequest(){const p=selected?.p,svc=selected?.svc,name=document.getElementById('rn').value.trim(),phone=document.getElementById('rm').value.replace(/\D/g,''),village=document.getElementById('rv').value.trim(),pin=document.getElementById('rp').value.replace(/\D/g,''),extra=document.getElementById('rnote').value.trim(),note=document.getElementById('reqNote');note.textContent='';if(!p||!name||phone.length!==10){note.textContent='नाम और सही मोबाइल नंबर जरूरी है।';return;}try{const code=localStorage.getItem('senvia_customer_code')||'';const payload={p_customer_name:name,p_customer_mobile:phone,p_customer_id:code,p_professional_id:p.id!=null?String(p.id):(p.code||''),p_professional_name:p.name||'',p_professional_mobile:p.mobile||'',p_service_name:svc||'All Services',p_block:p.block||'',p_panchayat:p.panchayat||'',p_village_area:village||p.village||'',p_pin_code:pin||p.pin||'',p_note:extra||''};const r=await fetch(API+'rpc/create_senvia_service_request',{method:'POST',headers,body:JSON.stringify(payload)});const raw=await r.text();if(!r.ok)throw Error(raw||'Service Request failed');closeModal('reqModal');localStorage.setItem(requestKey(p,svc),'1');render(window.__senviaFoundRows||[]);alert('✅ Service Request सफलतापूर्वक भेजी गई। अब Call / WhatsApp unlock हो गया है।');}catch(e){note.textContent='Request submit नहीं हो सकी। कृपया फिर कोशिश करें।';console.error(e);}}
 
 let currentService="";
 function render(rows){
+ window.__senviaFoundRows=rows||[];
  const el=document.getElementById('result');
  if(!rows.length){el.innerHTML='<div class="empty"><b>इस चयन में कोई Verified Professional नहीं मिला।</b><br><br><a class="btn lock" href="customer-premium.html">← वापस Home</a></div>';return}
- el.innerHTML='<div class="section-title">Verified Professionals</div><div class="grid">'+rows.map(p=>`<article class="card"><div class="name">✓ ${esc(p.name)}</div><div class="area">📍 Area: ${esc(p.village||'—')}<br>🏘️ Block: ${esc(p.block||'—')}<br>🏡 Panchayat: ${esc(p.panchayat||'—')}<br>📮 PIN Code: ${esc(p.pin||'—')}</div><div class="actions">${contactHtml(p)}</div><div class="note">🔒 Contact number registration के बाद unlock होगा।</div></article>`).join('')+'</div>';
+ el.innerHTML='<div class="section-title">Verified Professionals</div><div class="grid">'+rows.map(p=>`<article class="card"><div class="name">✓ ${esc(p.name)}</div><div class="area">📍 Area: ${esc(p.village||'—')}<br>🏘️ Block: ${esc(p.block||'—')}<br>🏡 Panchayat: ${esc(p.panchayat||'—')}<br>📮 PIN Code: ${esc(p.pin||'—')}</div><div class="actions">${contactHtml(p,currentService)}</div><div class="note">🔒 Service Request सफल होने के बाद Call / WhatsApp unlock होगा।</div></article>`).join('')+'</div>';
 }
 (async()=>{
  try{
@@ -191,7 +173,9 @@ function render(rows){
   let rows=normalize(pros,links,services).filter(verified);
   rows=rows.filter(x=>match(x.block,b)&&match(x.panchayat,p)&&(pin?norm(x.pin)===norm(pin):true)&&serviceMatch(x,s));
   const seen=new Set(); rows=rows.filter(x=>{const k=String(x.id||x.name).toLowerCase();if(seen.has(k))return false;seen.add(k);return true});
-  render(rows); document.getElementById('searchBusy')?.classList.remove('show');
+  window.__senviaFindFilters={block:b,panchayat:p,pin:pin,service:s};
+  render(rows);
+  recordFindActivity(rows,window.__senviaFindFilters); document.getElementById('searchBusy')?.classList.remove('show');
  }catch(e){
   console.error(e);
   document.getElementById('searchBusy')?.classList.remove('show'); document.getElementById('result').innerHTML='<div class="empty"><b>Search results अभी load नहीं हो सके।</b><br><br><a class="btn lock" href="customer-premium.html">← वापस Home</a></div>';
