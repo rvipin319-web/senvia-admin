@@ -109,13 +109,19 @@ table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:11px 8px
 </style>
 
 <style id="senvia-busy-forgot">
-#senviaBusy{position:fixed;inset:0;background:rgba(238,247,255,.62);backdrop-filter:blur(2px);display:none;align-items:center;justify-content:center;z-index:100000}
+#senviaBusy{position:fixed;inset:0;background:rgba(235,246,255,.70);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;z-index:100000;transition:opacity .18s ease}
 #senviaBusy.show{display:flex}
-.senvia-v-spinner{width:76px;height:76px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.96);box-shadow:0 10px 35px rgba(20,70,120,.22);border:3px solid #d9eaf8}
-.senvia-v-spinner b{font-family:Arial,sans-serif;font-size:48px;font-weight:900;font-style:italic;color:#0b74e8;display:block;animation:senviaVSpin 1s linear infinite}
-@keyframes senviaVSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-.senvia-busy-text{position:absolute;margin-top:120px;color:#174a87;font-weight:800;font-size:14px}
-@media(max-width:520px){.senvia-v-spinner{width:64px;height:64px}.senvia-v-spinner b{font-size:40px}.senvia-busy-text{margin-top:104px;font-size:12px}}
+.senvia-busy-wrap{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:150px;min-height:150px}
+.senvia-v-spinner{width:92px;height:92px;border-radius:50%;display:flex;align-items:center;justify-content:center;position:relative;background:#fff;box-shadow:0 14px 42px rgba(18,74,125,.22),0 0 0 7px rgba(255,255,255,.55)}
+.senvia-v-spinner:before{content:"";position:absolute;inset:-7px;border-radius:50%;background:conic-gradient(from 18deg,#0b78d0 0 23%,#fff 23% 30%,#12a866 30% 43%,#fff 43% 51%,#0b78d0 51% 91%,#fff 91% 100%);-webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 8px),#000 calc(100% - 7px));mask:radial-gradient(farthest-side,transparent calc(100% - 8px),#000 calc(100% - 7px));animation:senviaRingSpin 1.8s linear infinite}
+.senvia-v-spinner:after{content:"";position:absolute;inset:10px;border-radius:50%;border:1px solid #e5eef7;background:linear-gradient(145deg,#fff,#f5faff);box-shadow:inset 0 2px 8px rgba(15,80,130,.06)}
+.senvia-v-spinner b{position:relative;z-index:2;font-family:Georgia,serif;font-size:52px;font-weight:900;font-style:italic;color:#07528f;line-height:1;animation:senviaVPulse 1.2s ease-in-out infinite}
+.senvia-busy-text{margin-top:22px;color:#164a7b;font-weight:800;font-size:14px;letter-spacing:.2px;text-shadow:0 1px 0 #fff}
+.senvia-busy-text:after{content:"";display:inline-block;width:18px;text-align:left;animation:senviaDots 1.2s steps(4,end) infinite}
+@keyframes senviaRingSpin{to{transform:rotate(360deg)}}
+@keyframes senviaVPulse{0%,100%{transform:scale(1) rotate(-6deg);opacity:1}50%{transform:scale(1.06) rotate(0deg);opacity:.88}}
+@keyframes senviaDots{0%{content:""}25%{content:"."}50%{content:".."}75%,100%{content:"..."}}
+@media(max-width:520px){.senvia-v-spinner{width:78px;height:78px}.senvia-v-spinner b{font-size:44px}.senvia-busy-text{margin-top:19px;font-size:12px}}
 </style>
 
 <style id="service-edit-style">
@@ -170,8 +176,10 @@ table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:11px 8px
 </head>
 <body>
 <div id="senviaBusy" aria-live="polite" aria-label="System busy">
-  <div class="senvia-v-spinner"><b>V</b></div>
-  <div class="senvia-busy-text">Please wait…</div>
+  <div class="senvia-busy-wrap">
+    <div class="senvia-v-spinner"><b>V</b></div>
+    <div class="senvia-busy-text">Please wait</div>
+  </div>
 </div>
 
 <div id="loginGate" class="login-gate">
