@@ -211,7 +211,15 @@ table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:11px 8px
   .admin-mobile-logout{width:100%;background:#d93636!important;color:#fff!important}
   .admin-mobile-overlay{display:block;position:fixed;inset:0;background:rgba(3,20,38,.55);backdrop-filter:blur(2px);z-index:10002;opacity:0;pointer-events:none;transition:opacity .25s ease}
   .admin-mobile-overlay.open{opacity:1;pointer-events:auto}
-  .content{padding:18px 3%;max-width:none}
+  html,body{width:100%;max-width:100%;overflow-x:hidden!important}
+  .layout{width:100%!important;max-width:100%!important;overflow-x:hidden!important}
+  main.content{display:block!important;width:100vw!important;max-width:100vw!important;margin:0!important;padding:18px 12px!important;box-sizing:border-box!important;overflow-x:hidden!important}
+  #dashboard,#pros,#customers,#services,#areas,#messages{width:100%!important;max-width:none!important;min-width:0!important;box-sizing:border-box!important}
+  .pdash-hero,.pdash-kpis,.pdash-charts,.pdash-tables,.pdash-bottom{width:100%!important;max-width:none!important;min-width:0!important;box-sizing:border-box!important}
+  .pdash-kpi,.pdash-card,.pdash-tag{min-width:0!important;max-width:100%!important;box-sizing:border-box!important}
+  .panel{width:100%!important;max-width:100%!important;box-sizing:border-box!important}
+  .toolbar{width:100%!important;box-sizing:border-box!important}
+  .toolbar input,.toolbar select{max-width:100%;box-sizing:border-box}
 }
 @media(min-width:701px){.admin-mobile-bar,.admin-mobile-menu,.admin-mobile-overlay{display:none!important}}
 </style>
