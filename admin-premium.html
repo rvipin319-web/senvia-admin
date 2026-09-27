@@ -103,6 +103,8 @@ table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:11px 8px
 .overview-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}.overview-item{border:1px solid #e3eaf2;border-radius:13px;padding:13px}.overview-item small{display:block;color:#77869a}.overview-item b{font-size:22px;color:#102e58}
 @media(max-width:1000px){.pdash-kpis{grid-template-columns:1fr 1fr}.pdash-charts{grid-template-columns:1fr 1fr}.pdash-charts .wide{grid-column:1/-1}.pdash-tables,.pdash-bottom{grid-template-columns:1fr}}
 @media(max-width:650px){.pdash-hero{align-items:flex-start;flex-direction:column}.pdash-tag{width:100%;min-width:0}.pdash-kpis{grid-template-columns:1fr 1fr}.pdash-charts{grid-template-columns:1fr}.pdash-tables,.pdash-bottom{grid-template-columns:1fr}.quick-grid{grid-template-columns:1fr 1fr}.donut-wrap{justify-content:center}.donut-list{display:none}}
+
+.senvia-inline-loader{min-height:180px;display:flex;align-items:center;justify-content:center;gap:12px;flex-direction:column;font-size:15px;color:#164a7b}.senvia-loader-v{width:54px;height:54px;border:6px solid #e8eef5;border-top-color:#0878c9;border-right-color:#0878c9;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:24px;color:#07528f;animation:senviaSpin 1s linear infinite}.senvia-inline-loader b{font-weight:800}@keyframes senviaSpin{to{transform:rotate(360deg)}}
 </style>
 </style>
 
@@ -287,7 +289,7 @@ const demoPros=[
 {name:'Santosh Kumar Hazra',mobile:'9905077187',block:'Katra',panchayat:'Barari',village:'Barari',services:['TV / LED Repair','AC Repair','Fridge Repair'],status:'Verified'},
 {name:'Vipin Kumar',mobile:'7992477919',block:'Gaighat',panchayat:'Mahamdpur Sura',village:'Mahamdpur Sura',services:['Mobile Repair','Electronics Repair'],status:'Verified'},
 {name:'Sanjay Kumar',mobile:'7281073721',block:'Bochahan',panchayat:'Jhaphan',village:'Jhaphan',services:['Plumber'],status:'Verified'}];
-let services=[...demoServices],pros=[...demoPros],customers=[],customerRows=[],messageRows=[],lang='hi',dbMode=false,serviceRows=[],proRows=[];
+let services=[...demoServices],pros=[...demoPros],customers=[],customerRows=[],messageRows=[],lang='hi',dbMode=false,serviceRows=[],proRows=[],customerLoadDone=false;
 let accessToken=localStorage.getItem('senvia_admin_token')||sessionStorage.getItem('senvia_admin_token')||'';
 let refreshToken=localStorage.getItem('senvia_admin_refresh_token')||'';
 const authHeaders=()=>accessToken?{apikey:SUPABASE_KEY,Authorization:'Bearer '+accessToken}:{apikey:SUPABASE_KEY};
@@ -413,6 +415,7 @@ async function loadFromSupabase(){
    }
    try{ messageRows=await api('messages?select=*&order=created_at.desc'); }catch(e){ messageRows=[]; console.warn('messages read failed',e); }
    customers=Array.isArray(customerRows)?customerRows:[];
+   customerLoadDone=true;
    dbMode=true;
    const note=(serviceRows.length?'':' (services table unavailable; using local service names)')+(links.length?'':' (service links unavailable; existing profile service fields used where available)');
    setDbStatus('🟢 Supabase connected — live professional data loaded.'+note,'ok');
@@ -488,6 +491,7 @@ function renderServices(){
 }
 function renderCustomers(){
  const grid=localStorage.getItem('senvia_customers_view')==='grid'; const box=document.getElementById('customerList'); if(!box)return; box.className=grid?'collection-grid':'collection-list';
+ if(!customerLoadDone){ box.innerHTML='<div class="senvia-inline-loader"><span class="senvia-loader-v">V</span><b>Customers loading...</b></div>'; return; }
  const q=(document.getElementById('custSearch')?.value||'').toLowerCase();
  const rows=(Array.isArray(customers)?customers:[]).filter(c=>!q||JSON.stringify(c).toLowerCase().includes(q));
  box.innerHTML=rows.map(c=>grid?`<div class="collection-card"><h3>${c.Name||c.name||'Customer'}</h3><span class="code-pill">ID: ${c.customer_code||'—'}</span><p>📱 ${c.Phone||c.phone||'—'}</p><p>📍 ${[c.Block,c.Panchayat,c.Village_Area].filter(Boolean).join(' → ')||'—'}</p><p>Status: <b>${c.Status||'Active'}</b></p><div class="actions"><button class="danger" type="button" onclick="deleteCustomer('${c.id||''}')">Delete</button></div></div>`:`<div class="service-row"><span class="service-row-name">${c.Name||c.name||'Customer'} <span class="code-pill">${c.customer_code||'—'}</span></span><span>${c.Phone||c.phone||'—'}</span><span>${c.Block||'—'}</span><div class="service-row-actions"><button class="danger" type="button" onclick="deleteCustomer('${c.id||''}')">Delete</button></div></div>`).join('')||'<p class="empty">No customers registered yet.</p>';
