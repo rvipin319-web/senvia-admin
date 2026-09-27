@@ -173,6 +173,48 @@ table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:11px 8px
 .logout-btn:hover{filter:brightness(.96)}
 @media(max-width:600px){.header-actions{gap:6px}.logout-btn{padding:8px 11px;font-size:12px}}
 </style>
+
+<style id="admin-mobile-navigation">
+/* Senvia Admin — Customer Panel style mobile navigation */
+.admin-mobile-bar{display:none}
+.admin-mobile-menu{display:none}
+.admin-mobile-overlay{display:none}
+@media(max-width:700px){
+  .layout{display:block;min-height:calc(100vh - 64px)}
+  .layout>aside{display:none}
+  header{min-height:64px;padding:8px 12px;gap:8px;position:sticky;top:0;z-index:10000}
+  header>div:first-child{flex:1;text-align:center;min-width:0}
+  header .logo{font-size:23px}
+  header .tag{font-size:9px;white-space:nowrap}
+  .header-actions{gap:5px;justify-content:flex-end}
+  .header-actions .lang{display:none}
+  .header-actions .logout-btn{display:none}
+  .admin-mobile-bar{display:flex;align-items:center;justify-content:center;position:relative;z-index:10002}
+  .admin-mobile-menu-btn{width:44px;height:44px;border:0;border-radius:12px;background:linear-gradient(135deg,#0879c9,#16a65b);color:#fff;font-size:25px;line-height:1;display:flex;align-items:center;justify-content:center;box-shadow:0 5px 15px rgba(8,121,201,.25);padding:0}
+  .admin-mobile-menu-btn:active{transform:scale(.96)}
+  .admin-mobile-menu{display:flex;position:fixed;top:0;left:0;bottom:0;width:min(82vw,330px);background:#fff;z-index:10003;transform:translateX(-105%);transition:transform .25s ease;box-shadow:14px 0 40px rgba(4,34,70,.22);flex-direction:column;overflow-y:auto}
+  .admin-mobile-menu.open{transform:translateX(0)}
+  .admin-mobile-menu-head{background:linear-gradient(135deg,#082455,#0879c9);color:#fff;padding:20px 16px 18px;position:relative}
+  .admin-mobile-menu-head .mobile-brand{font-size:25px;font-weight:900}
+  .admin-mobile-menu-head .mobile-brand span{color:#59d12d}
+  .admin-mobile-menu-head small{display:block;margin-top:4px;opacity:.86;font-size:11px}
+  .admin-mobile-close{position:absolute;right:12px;top:12px;width:38px;height:38px;border:0!important;border-radius:11px!important;background:rgba(255,255,255,.15)!important;color:#fff!important;font-size:23px!important;padding:0!important}
+  .admin-mobile-links{padding:12px 10px;display:flex;flex-direction:column;gap:7px}
+  .admin-mobile-link{width:100%;display:flex;align-items:center;gap:12px;padding:13px 14px;border:1px solid #e0e8f0;border-radius:13px;background:#fff;color:#153b61;font-weight:800;text-align:left;font-size:14px;cursor:pointer}
+  .admin-mobile-link .mi{width:27px;text-align:center;font-size:19px}
+  .admin-mobile-link .arrow{margin-left:auto;color:#16a65b;font-size:19px;font-weight:900}
+  .admin-mobile-link.active{background:#edf8f1;border-color:#bfe7cb;color:#08733b;box-shadow:0 4px 12px rgba(22,166,91,.08)}
+  .admin-mobile-tools{margin-top:auto;padding:12px 10px 18px;border-top:1px solid #e6edf3}
+  .admin-mobile-lang{display:flex;gap:7px;margin-bottom:9px}
+  .admin-mobile-lang button{flex:1;padding:10px;border:1px solid #cbd5e1;background:#fff;color:#082455;border-radius:10px;font-weight:800}
+  .admin-mobile-lang button.on{background:#0879c9;color:#fff}
+  .admin-mobile-logout{width:100%;background:#d93636!important;color:#fff!important}
+  .admin-mobile-overlay{display:block;position:fixed;inset:0;background:rgba(3,20,38,.55);backdrop-filter:blur(2px);z-index:10002;opacity:0;pointer-events:none;transition:opacity .25s ease}
+  .admin-mobile-overlay.open{opacity:1;pointer-events:auto}
+  .content{padding:18px 3%;max-width:none}
+}
+@media(min-width:701px){.admin-mobile-bar,.admin-mobile-menu,.admin-mobile-overlay{display:none!important}}
+</style>
 </head>
 <body>
 <div id="senviaBusy" aria-live="polite" aria-label="System busy">
@@ -197,7 +239,27 @@ table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:11px 8px
     <div id="loginMsg" class="login-msg"></div>
   </div>
 </div>
-<header><div><div class="logo"><span>S</span>envia</div><div class="tag">हर घर का अपना साथी • Admin Panel</div></div><div class="header-actions"><div class="lang"><button id="hi" class="on" onclick="setLang('hi')">हिंदी</button> <button id="en" onclick="setLang('en')">English</button></div><button type="button" id="logoutBtn" class="logout-btn" onclick="adminLogout()">↪ Logout</button></div></header>
+<header><div class="admin-mobile-bar"><button type="button" class="admin-mobile-menu-btn" onclick="toggleAdminMobileMenu()" aria-label="Open menu">☰</button></div><div><div class="logo"><span>S</span>envia</div><div class="tag">हर घर का अपना साथी • Admin Panel</div></div><div class="header-actions"><div class="lang"><button id="hi" class="on" onclick="setLang('hi')">हिंदी</button> <button id="en" onclick="setLang('en')">English</button></div><button type="button" id="logoutBtn" class="logout-btn" onclick="adminLogout()">↪ Logout</button></div></header>
+<div id="adminMobileOverlay" class="admin-mobile-overlay" onclick="closeAdminMobileMenu()"></div>
+<nav id="adminMobileMenu" class="admin-mobile-menu" aria-label="Mobile navigation">
+  <div class="admin-mobile-menu-head">
+    <div class="mobile-brand"><span>S</span>envia</div>
+    <small>हर घर का अपना साथी • Admin Panel</small>
+    <button type="button" class="admin-mobile-close" onclick="closeAdminMobileMenu()" aria-label="Close menu">✕</button>
+  </div>
+  <div class="admin-mobile-links">
+    <button type="button" class="admin-mobile-link active" data-mobile-target="dashboard" onclick="mobileAdminShow('dashboard',this)"><span class="mi">📊</span><span data-hi="Dashboard" data-en="Dashboard">Dashboard</span><span class="arrow">›</span></button>
+    <button type="button" class="admin-mobile-link" data-mobile-target="pros" onclick="mobileAdminShow('pros',this)"><span class="mi">👥</span><span data-hi="Professionals" data-en="Professionals">Professionals</span><span class="arrow">›</span></button>
+    <button type="button" class="admin-mobile-link" data-mobile-target="customers" onclick="mobileAdminShow('customers',this)"><span class="mi">👤</span><span data-hi="Customers" data-en="Customers">Customers</span><span class="arrow">›</span></button>
+    <button type="button" class="admin-mobile-link" data-mobile-target="services" onclick="mobileAdminShow('services',this)"><span class="mi">🛠</span><span data-hi="Services" data-en="Services">Services</span><span class="arrow">›</span></button>
+    <button type="button" class="admin-mobile-link" data-mobile-target="areas" onclick="mobileAdminShow('areas',this)"><span class="mi">📍</span><span data-hi="Areas" data-en="Areas">Areas</span><span class="arrow">›</span></button>
+    <button type="button" class="admin-mobile-link" data-mobile-target="messages" onclick="mobileAdminShow('messages',this)"><span class="mi">💬</span><span data-hi="Messages" data-en="Messages">Messages</span><span class="arrow">›</span></button>
+  </div>
+  <div class="admin-mobile-tools">
+    <div class="admin-mobile-lang"><button id="mobileHi" class="on" onclick="setLang('hi')">हिंदी</button><button id="mobileEn" onclick="setLang('en')">English</button></div>
+    <button type="button" class="admin-mobile-logout" onclick="adminLogout()">↪ Logout</button>
+  </div>
+</nav>
 <div class="layout">
 <aside>
 <h3>⚙ Senvia Admin</h3>
@@ -458,8 +520,12 @@ function closeProView(){document.getElementById('proViewModal')?.classList.remov
 document.getElementById('proViewModal')?.addEventListener('click',e=>{if(e.target.id==='proViewModal')closeProView()});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeProView();closeServiceEdit()}});
 function restoreProfessionalView(){const sec=document.getElementById('pros');const pref=localStorage.getItem('senvia_prof_view')||'card';const on=pref==='card';sec.classList.toggle('card-view',on);sec.classList.toggle('table-view',!on);const b=document.getElementById('viewToggle');if(b)b.textContent=on?'☷ List View':'▦ Grid View'}
-function setLang(l){lang=l;document.querySelectorAll('[data-hi]').forEach(e=>e.textContent=e.dataset[l]);document.getElementById('hi').className=l==='hi'?'on':'';document.getElementById('en').className=l==='en'?'on':''}
-function show(id,el){document.querySelectorAll('main section').forEach(s=>s.style.display='none');document.getElementById(id).style.display='block';document.querySelectorAll('.nav').forEach(n=>n.classList.remove('active'));if(el)el.classList.add('active');render()}
+function setLang(l){lang=l;document.querySelectorAll('[data-hi]').forEach(e=>e.textContent=e.dataset[l]);document.getElementById('hi').className=l==='hi'?'on':'';document.getElementById('en').className=l==='en'?'on':'';document.getElementById('mobileHi')?.classList.toggle('on',l==='hi');document.getElementById('mobileEn')?.classList.toggle('on',l==='en')}
+function syncAdminMobileActive(id){document.querySelectorAll('.admin-mobile-link').forEach(n=>n.classList.toggle('active',n.dataset.mobileTarget===id))}
+function toggleAdminMobileMenu(){document.getElementById('adminMobileMenu')?.classList.toggle('open');document.getElementById('adminMobileOverlay')?.classList.toggle('open')}
+function closeAdminMobileMenu(){document.getElementById('adminMobileMenu')?.classList.remove('open');document.getElementById('adminMobileOverlay')?.classList.remove('open')}
+function mobileAdminShow(id,el){syncAdminMobileActive(id);show(id);closeAdminMobileMenu()}
+function show(id,el){document.querySelectorAll('main section').forEach(s=>s.style.display='none');document.getElementById(id).style.display='block';document.querySelectorAll('.nav').forEach(n=>n.classList.remove('active'));if(el)el.classList.add('active');syncAdminMobileActive(id);render()}
 function render(){
  const pendingCount=pros.filter(p=>proStatus(p)==='Pending').length;
  const cp=document.getElementById('countPro'); if(cp) cp.textContent=pros.length;
@@ -688,4 +754,7 @@ restoreProfessionalView();restoreCollectionViews();
 refreshAdminSession().then(()=>requireAdmin()).then(ok=>{if(ok) loadFromSupabase()});
 </script>
 <div class="msg-detail-modal" id="msgViewModal" onclick="if(event.target===this)closeMessageView()"><div class="msg-detail-card"><div class="msg-detail-head"><h2 id="msgViewTitle">Message Details</h2><button class="msg-detail-close" type="button" onclick="closeMessageView()">✕</button></div><div class="msg-detail-body" id="msgViewBody"></div></div></div>
+
+window.addEventListener('resize',()=>{if(window.innerWidth>700)closeAdminMobileMenu()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeAdminMobileMenu()});
 </body></html>
