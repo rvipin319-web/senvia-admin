@@ -1083,9 +1083,11 @@ try{lang=localStorage.getItem('senvia_lang')||lang||'hi'}catch(e){}
 setLang(lang);
 restoreProfessionalView();restoreCollectionViews();
 refreshAdminSession().then(()=>requireAdmin()).then(ok=>{if(ok) loadFromSupabase()});
-</script>
-<div class="msg-detail-modal" id="msgViewModal" onclick="if(event.target===this)closeMessageView()"><div class="msg-detail-card"><div class="msg-detail-head"><h2 id="msgViewTitle">Message Details</h2><button class="msg-detail-close" type="button" onclick="closeMessageView()">✕</button></div><div class="msg-detail-body" id="msgViewBody"></div></div></div>
 
 window.addEventListener('resize',()=>{if(window.innerWidth>700)closeAdminMobileMenu()});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeAdminMobileMenu()});
+</script>
+<div class="msg-detail-modal" id="msgViewModal" onclick="if(event.target===this)closeMessageView()"><div class="msg-detail-card"><div class="msg-detail-head"><h2 id="msgViewTitle">Message Details</h2><button class="msg-detail-close" type="button" onclick="closeMessageView()">✕</button></div><div class="msg-detail-body" id="msgViewBody"></div></div></div>
+
+
 </body></html>
