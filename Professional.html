@@ -550,6 +550,7 @@ $('block').addEventListener('change',loadP);$('p').addEventListener('change',loa
     dbPros=normalize(pros,links,services);
     return dbPros;
   } finally { hideBusy(); }
+  }
 
   function esc(v){return String(v??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));}
   function verified(p){ return ['verified','approve','approved'].includes(norm(p.status)); }
@@ -582,7 +583,7 @@ $('block').addEventListener('change',loadP);$('p').addEventListener('change',loa
       return `<div class="card"><div class="pro-head"><div class="avatar">${esc(initials)}</div><div><h3>${esc(p.name)}</h3><small>${esc(p.services.join(' • ')||'Local Service Professional')}</small></div></div><p>📍 ${esc(p.block)}${p.panchayat?' → '+esc(p.panchayat):''}${p.village?' → '+esc(p.village):''}</p><div class="pro-actions"><a href="tel:${esc(p.mobile)}">📞 Call</a>${wa?`<a target="_blank" href="https://wa.me/91${esc(wa)}">💬 WhatsApp</a>`:''}</div></div>`;
     }).join('');
   }
-
+})();
 </script>
 <script>window.addEventListener('pageshow',()=>{if(window.senviaDbConnected){console.log('Senvia Customer Search: live refresh enabled')}});</script>
 
