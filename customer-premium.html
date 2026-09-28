@@ -543,8 +543,12 @@ async function loadP(){
 
   try{
     if(brow && !String(brow.id).startsWith('fallback-')){
-      const rows=await areaGet('senvia_panchayats?select=id,name,block_id,is_visible&is_visible=eq.true&block_id='+encodeURIComponent(brow.id)+'&order=name.asc');
-      list=(Array.isArray(rows)?rows:[]).filter(x=>areaVisible(x.is_visible)&&areaName(x.name)).map(x=>x.name);
+      /* Fetch all customer-visible Panchayats and match block_id locally.
+         This avoids a REST filter mismatch while keeping RLS as the security boundary. */
+      const rows=await areaGet('senvia_panchayats?select=id,name,block_id,is_visible&is_visible=eq.true&order=name.asc');
+      list=(Array.isArray(rows)?rows:[])
+        .filter(x=>areaVisible(x.is_visible)&&areaName(x.name)&&String(x.block_id)===String(brow.id))
+        .map(x=>x.name);
     }
   }catch(e){console.warn('Senvia panchayats load failed',e)}
 
