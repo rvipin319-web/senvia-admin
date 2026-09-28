@@ -620,7 +620,7 @@ function renderStatePicker(rows){
   const box=$('statePickerList');
   const list=Array.isArray(rows)?rows.filter(x=>areaName(x.name)) : [];
   if(btn){btn.textContent=$('state')?.value||'Bihar';btn.disabled=!list.length;}
-  if(box){box.innerHTML=list.length?list.map(x=>`<button type="button" class="senvia-state-option" onclick="chooseState(${JSON.stringify(String(x.name))})"><span>${areaEsc(x.name)}</span><span class="senvia-state-radio">○</span></button>`).join(''):'<div style="padding:22px;text-align:center;color:#60777b">No visible State found.</div>';}
+  if(box){box.innerHTML=list.length?list.map(x=>`<button type="button" class="senvia-state-option" data-value="${areaEsc(String(x.name))}" onclick="chooseState(this.dataset.value)" onpointerup="chooseState(this.dataset.value)"><span>${areaEsc(x.name)}</span><span class="senvia-state-radio">○</span></button>).join(''):'<div style="padding:22px;text-align:center;color:#60777b">No visible State found.</div>';}
 }
 function openStatePicker(){
   const modal=$('statePickerModal');
@@ -628,6 +628,7 @@ function openStatePicker(){
 }
 function closeStatePicker(){$('statePickerModal')?.classList.remove('show');}
 async function chooseState(value){
+  if(window.__senviaPickerLock)return; window.__senviaPickerLock=true; setTimeout(()=>window.__senviaPickerLock=false,250);
   value=String(value??'').trim();
   if(!value)return;
   const st=$('state');
@@ -646,7 +647,7 @@ function renderBlockPicker(rows,placeholder){
   const btn=$('blockPickerBtn');
   const box=$('blockPickerList');
   if(btn){btn.textContent=$('block')?.value||placeholder;btn.disabled=!rows.length;}
-  if(box){box.innerHTML=rows.length?rows.map(x=>`<button type="button" class="senvia-block-option" onclick="chooseBlock(${JSON.stringify(String(x.name))})"><span>${areaEsc(x.name)}</span><span class="senvia-block-radio">○</span></button>`).join(''):'<div style="padding:22px;text-align:center;color:#60777b">'+(lang==='hi'?'इस District में कोई visible Block नहीं है।':'No visible Block found in this District.')+'</div>';}
+  if(box){box.innerHTML=rows.length?rows.map(x=>`<button type="button" class="senvia-block-option" data-value="${areaEsc(String(x.name))}" onclick="chooseBlock(this.dataset.value)" onpointerup="chooseBlock(this.dataset.value)"><span>${areaEsc(x.name)}</span><span class="senvia-block-radio">○</span></button>).join(''):'<div style="padding:22px;text-align:center;color:#60777b">'+(lang==='hi'?'इस District में कोई visible Block नहीं है।':'No visible Block found in this District.')+'</div>';}
 }
 function openBlockPicker(){
   const modal=$('blockPickerModal');
@@ -654,6 +655,7 @@ function openBlockPicker(){
 }
 function closeBlockPicker(){$('blockPickerModal')?.classList.remove('show');}
 async function chooseBlock(value){
+  if(window.__senviaPickerLock)return; window.__senviaPickerLock=true; setTimeout(()=>window.__senviaPickerLock=false,250);
   value=String(value??'').trim();
   if(!value)return;
   const b=$('block');
@@ -712,7 +714,12 @@ function renderPanchayatPicker(list,placeholder){
   const btn=$('panchayatPickerBtn');
   if(btn){btn.textContent=$('p')?.value||placeholder;btn.disabled=!list.length;}
   const box=$('panchayatPickerList');
-  if(box){box.innerHTML=list.length?list.map(x=>`<button type="button" class="senvia-panchayat-option" onclick="choosePanchayat(${JSON.stringify(String(x))})"><span>${areaEsc(x)}</span><span class="senvia-panchayat-radio">○</span></button>`).join(''):'<div style="padding:22px;text-align:center;color:#60777b">'+(lang==='hi'?'इस Block में कोई visible Panchayat नहीं मिली। Admin में Panchayat को Visible करें।':'No visible Panchayat found for this Block. Make sure the Panchayat is visible in Admin.')+'</div>';}
+  if(box){
+    box.innerHTML=list.length?list.map(x=>{
+      const v=String(x);
+      return `<button type="button" class="senvia-panchayat-option" data-value="${areaEsc(v)}" onclick="choosePanchayat(this.dataset.value)" onpointerup="choosePanchayat(this.dataset.value)"><span>${areaEsc(v)}</span><span class="senvia-panchayat-radio">○</span></button>`;
+    }).join(''):'<div style="padding:22px;text-align:center;color:#60777b">'+(lang==='hi'?'इस Block में कोई visible Panchayat नहीं मिली। Admin में Panchayat को Visible करें।':'No visible Panchayat found for this Block. Make sure the Panchayat is visible in Admin.')+'</div>';
+  }
 }
 function openPanchayatPicker(){
   const b=$('block')?.value||'';
@@ -725,10 +732,17 @@ function closePanchayatPicker(){
   document.body.classList.remove('senvia-panchayat-open');
 }
 function choosePanchayat(value){
+  if(window.__senviaPickerLock)return; window.__senviaPickerLock=true; setTimeout(()=>window.__senviaPickerLock=false,250);
+  value=String(value??'').trim();
+  if(!value)return;
   const p=$('p');
-  if(p){p.value=String(value);}
+  if(p){
+    p.value=value;
+    p.dispatchEvent(new Event('input',{bubbles:true}));
+    p.dispatchEvent(new Event('change',{bubbles:true}));
+  }
   const btn=$('panchayatPickerBtn');
-  if(btn)btn.textContent=String(value);
+  if(btn){btn.textContent=value;btn.disabled=false;btn.setAttribute('aria-label','Selected Panchayat: '+value);}
   closePanchayatPicker();
 }
 function filterPanchayatPicker(){
