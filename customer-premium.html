@@ -334,6 +334,26 @@ header .logo-img-wrap img{width:150px!important;height:82px!important;object-fit
   #search > div[onclick*="openM('worker')"]{font-size:12px!important;margin-top:6px!important}
 }
 </style>
+
+<style id="senvia-panchayat-scroll-fix">
+.senvia-panchayat-trigger{width:100%;padding:11px;border:1px solid #ccdbe6;border-radius:7px;background:#fff;color:#17324b;text-align:left;font-size:14px;font-weight:600;cursor:pointer;min-height:42px}
+.senvia-panchayat-trigger:disabled{opacity:.65;cursor:not-allowed}
+.senvia-panchayat-modal{display:none;position:fixed;inset:0;background:rgba(0,27,44,.58);z-index:10020;align-items:center;justify-content:center;padding:16px}
+.senvia-panchayat-modal.show{display:flex}
+.senvia-panchayat-sheet{width:min(560px,100%);max-height:min(82vh,720px);background:#eefbfc;border-radius:24px;box-shadow:0 24px 70px rgba(0,0,0,.35);overflow:hidden;display:flex;flex-direction:column}
+.senvia-panchayat-head{display:flex;align-items:center;justify-content:space-between;padding:18px 20px 12px;border-bottom:1px solid #c9e0e2;flex:0 0 auto}
+.senvia-panchayat-head h3{margin:0;font-size:24px;color:#10242a}
+.senvia-panchayat-head small{display:block;margin-top:4px;color:#557176}
+.senvia-panchayat-head button{width:40px;height:40px;border:0;border-radius:50%;background:#fff;color:#07528f;font-size:20px;cursor:pointer}
+.senvia-panchayat-search-wrap{padding:10px 16px;background:#eefbfc;flex:0 0 auto}
+.senvia-panchayat-search-wrap input{width:100%;padding:11px 13px;border:1px solid #c6d9dd;border-radius:10px;background:#fff;font-size:15px;outline:none}
+.senvia-panchayat-list{overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;touch-action:pan-y;min-height:0;flex:1 1 auto;padding-bottom:8px}
+.senvia-panchayat-option{width:100%;min-height:64px;border:0;border-bottom:1px solid #c9dfe2;background:#eefbfc;color:#10242a;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;text-align:left;font-size:19px;font-weight:700;cursor:pointer}
+.senvia-panchayat-option:active{background:#dff3f4}
+.senvia-panchayat-radio{font-size:32px;font-weight:400;color:#496368;line-height:1}
+body.senvia-panchayat-open{overflow:hidden}
+@media(max-width:550px){.senvia-panchayat-modal{padding:0}.senvia-panchayat-sheet{width:100%;height:86vh;max-height:86vh;border-radius:24px 24px 0 0;align-self:flex-end}.senvia-panchayat-head h3{font-size:22px}.senvia-panchayat-option{min-height:62px;padding:12px 22px;font-size:18px}}
+</style>
 </head><body>
 <div id="senviaBusy" aria-live="polite" aria-label="System busy">
   <div class="senvia-v-spinner"><b>V</b></div>
@@ -364,7 +384,15 @@ header .logo-img-wrap img{width:150px!important;height:82px!important;object-fit
     <div class="senvia-mobile-lang"><button id="mobileHi" type="button" onclick="senviaSetLang('hi')">हिंदी</button><button id="mobileEn" type="button" onclick="senviaSetLang('en')">English</button></div>
   </div>
 </aside>
-<section class="hero" id="home"><div class="c hg"><div><h1 id="heroTitle">Senvia<br>आपकी जरूरत,<br><span>आपके क्षेत्र में</span></h1><p id="hero">मुजफ्फरपुर के Aurai, Bochahan, Gaighat, Katra और Minapur में स्थानीय सेवा और भरोसेमंद professionals खोजें।</p><button class="btn green" onclick="document.getElementById('search').scrollIntoView({behavior:'smooth'})" id="start">सेवा खोजें</button></div><div class="box" id="search"><h2 id="stitle">📍 अपने क्षेत्र में सेवा खोजें</h2><div class="field"><label id="stateLabel">State</label><select id="state" onchange="loadDistricts()"><option value="Bihar" selected>Bihar</option></select></div><div class="field"><label id="districtLabel">District</label><select id="district" onchange="loadBlocks()"><option value="Muzaffarpur" selected>Muzaffarpur</option></select></div><div class="field"><label id="blockLabel">Block</label><select id="block" onchange="loadP()"><option value="">-- Block चुनें --</option></select></div><div class="field"><label id="panchayatLabel">Panchayat</label><select id="p"><option value="">-- Panchayat चुनें --</option></select></div><div class="field"><label id="pinLabel">Area PIN Code / क्षेत्र पिन कोड</label><input id="pin" type="text" inputmode="numeric" maxlength="6" placeholder="Enter Area PIN Code / क्षेत्र पिन कोड"></div><div class="field"><label id="serviceLabel">Service</label><select id="s"></select></div><button class="btn blue full" onclick="find()" id="find">🔍 खोजें</button><div style="text-align:center;color:#666;font-size:12px;margin-top:8px" id="searchNote">State / District / Block / Panchayat / PIN / Service में से चयन करें</div><div onclick="openM('worker')" style="text-align:center;color:#0874c1;font-weight:bold;margin-top:10px;cursor:pointer"><span data-i18n-target="join">Professional के रूप में जुड़ें →</span></div></div></div></section>
+<section class="hero" id="home"><div class="c hg"><div><h1 id="heroTitle">Senvia<br>आपकी जरूरत,<br><span>आपके क्षेत्र में</span></h1><p id="hero">मुजफ्फरपुर के Aurai, Bochahan, Gaighat, Katra और Minapur में स्थानीय सेवा और भरोसेमंद professionals खोजें।</p><button class="btn green" onclick="document.getElementById('search').scrollIntoView({behavior:'smooth'})" id="start">सेवा खोजें</button></div><div class="box" id="search"><h2 id="stitle">📍 अपने क्षेत्र में सेवा खोजें</h2><div class="field"><label id="stateLabel">State</label><select id="state" onchange="loadDistricts()"><option value="Bihar" selected>Bihar</option></select></div><div class="field"><label id="districtLabel">District</label><select id="district" onchange="loadBlocks()"><option value="Muzaffarpur" selected>Muzaffarpur</option></select></div><div class="field"><label id="blockLabel">Block</label><select id="block" onchange="loadP()"><option value="">-- Block चुनें --</option></select></div><div class="field"><label id="panchayatLabel">Panchayat</label><select id="p" aria-hidden="true" tabindex="-1" style="display:none"><option value="">-- Panchayat चुनें --</option></select><button type="button" id="panchayatPickerBtn" class="senvia-panchayat-trigger" onclick="openPanchayatPicker()">-- Panchayat चुनें --</button></div><div class="field"><label id="pinLabel">Area PIN Code / क्षेत्र पिन कोड</label><input id="pin" type="text" inputmode="numeric" maxlength="6" placeholder="Enter Area PIN Code / क्षेत्र पिन कोड"></div><div class="field"><label id="serviceLabel">Service</label><select id="s"></select></div><button class="btn blue full" onclick="find()" id="find">🔍 खोजें</button><div style="text-align:center;color:#666;font-size:12px;margin-top:8px" id="searchNote">State / District / Block / Panchayat / PIN / Service में से चयन करें</div><div onclick="openM('worker')" style="text-align:center;color:#0874c1;font-weight:bold;margin-top:10px;cursor:pointer"><span data-i18n-target="join">Professional के रूप में जुड़ें →</span></div></div></div></section>
+
+<div id="panchayatPickerModal" class="senvia-panchayat-modal" onclick="if(event.target===this)closePanchayatPicker()">
+  <div class="senvia-panchayat-sheet" role="dialog" aria-modal="true" aria-labelledby="panchayatPickerTitle">
+    <div class="senvia-panchayat-head"><div><h3 id="panchayatPickerTitle">Select Panchayat</h3><small>ऊपर–नीचे swipe करके Panchayat चुनें</small></div><button type="button" onclick="closePanchayatPicker()">✕</button></div>
+    <div class="senvia-panchayat-search-wrap"><input id="panchayatPickerSearch" type="search" placeholder="Search Panchayat…" oninput="filterPanchayatPicker()"></div>
+    <div id="panchayatPickerList" class="senvia-panchayat-list"></div>
+  </div>
+</div>
 <div class="stats"><div class="c sg"><div class="stat"><strong>5</strong>Blocks</div><div class="stat"><strong>119+</strong>Panchayats</div><div class="stat"><strong>500+</strong>Local Areas</div><div class="stat"><strong>18+</strong>Services</div><div class="stat"><strong>24×7</strong>Search</div></div></div>
 <section id="services"><div class="c"><div class="title"><h2 id="pop">★ लोकप्रिय सेवाएँ</h2><a id="allLink" href="services.html">सभी देखें →</a></div><div class="cards" id="cards"></div></div></section>
 <section id="professionals"><div class="c"><div class="title"><h2 id="near">आपके आसपास के Professionals</h2></div><div class="grid"><div class="panel"><div class="ph">📍 Blocks / Areas</div><div id="blocks"></div></div><div class="panel"><div class="ph">⚡ Quick Services</div><div id="quick"></div></div><div><div class="panel"><div class="ph">🔧 Service Provider</div><div style="padding:15px"><p data-i18n-target="proText">अपने क्षेत्र के ग्राहकों तक पहुँचने के लिए professional profile बनाइए।</p><button class="btn blue full" onclick="openM('worker')"><span data-i18n-target="proBtn">Professional Registration</span></button></div></div><div class="panel" style="margin-top:15px"><div class="ph">👤 Customer</div><div style="padding:15px"><p data-i18n-target="custText">अपनी जरूरत के अनुसार local professional खोजिए।</p><button class="btn green full" onclick="openM('customer')"><span data-i18n-target="custBtn">Customer Registration</span></button></div></div></div></div><div class="cta"><div><h2 data-i18n-target="reach">हर घर तक स्थानीय सेवा</h2>Senvia — हर घर का अपना साथी</div><button class="btn green" onclick="openM('customer')" data-i18n-target="reachBtn">शुरू करें</button></div></div></section>
@@ -526,9 +554,38 @@ async function loadP(){
   list=[...new Set(list.map(areaName).filter(Boolean))].sort((a,z)=>a.localeCompare(z));
 
   const p=$('p');
-  if(p)p.innerHTML='<option value="">'+(lang==='hi'?'-- Panchayat चुनें --':'-- Select Panchayat --')+'</option>'+list.map(x=>`<option value="${areaEsc(x)}">${areaEsc(x)}</option>`).join('');
+  const placeholder=lang==='hi'?'-- Panchayat चुनें --':'-- Select Panchayat --';
+  if(p)p.innerHTML='<option value="">'+placeholder+'</option>'+list.map(x=>`<option value="${areaEsc(x)}">${areaEsc(x)}</option>`).join('');
+  renderPanchayatPicker(list,placeholder);
 }
 
+function renderPanchayatPicker(list,placeholder){
+  const btn=$('panchayatPickerBtn');
+  if(btn){btn.textContent=$('p')?.value||placeholder;btn.disabled=!list.length;}
+  const box=$('panchayatPickerList');
+  if(box){box.innerHTML=list.map(x=>`<button type="button" class="senvia-panchayat-option" onclick="choosePanchayat(${JSON.stringify(String(x))})"><span>${areaEsc(x)}</span><span class="senvia-panchayat-radio">○</span></button>`).join('');}
+}
+function openPanchayatPicker(){
+  const b=$('block')?.value||'';
+  if(!b)return;
+  const modal=$('panchayatPickerModal');
+  if(modal){modal.classList.add('show');document.body.classList.add('senvia-panchayat-open');setTimeout(()=>$('panchayatPickerSearch')?.focus(),50);}
+}
+function closePanchayatPicker(){
+  $('panchayatPickerModal')?.classList.remove('show');
+  document.body.classList.remove('senvia-panchayat-open');
+}
+function choosePanchayat(value){
+  const p=$('p');
+  if(p){p.value=String(value);}
+  const btn=$('panchayatPickerBtn');
+  if(btn)btn.textContent=String(value);
+  closePanchayatPicker();
+}
+function filterPanchayatPicker(){
+  const q=String($('panchayatPickerSearch')?.value||'').trim().toLowerCase();
+  document.querySelectorAll('#panchayatPickerList .senvia-panchayat-option').forEach(el=>{el.style.display=el.textContent.toLowerCase().includes(q)?'flex':'none';});
+}
 function loadV(){}
 function selectB(b){$('block').value=b;loadP();$('search').scrollIntoView({behavior:'smooth'})}
 function quick(x){$('s').value=x;$('search').scrollIntoView({behavior:'smooth'});toast(serviceName(x)+' '+T[lang].selected)}
