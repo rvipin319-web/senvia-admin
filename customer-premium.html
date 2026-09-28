@@ -618,9 +618,14 @@ async function loadP(){
 function renderStatePicker(rows){
   const btn=$('statePickerBtn');
   const box=$('statePickerList');
-  const list=Array.isArray(rows)?rows.filter(x=>areaName(x.name)) : [];
+  const list=Array.isArray(rows)?rows.filter(x=>areaName(x.name)):[];
   if(btn){btn.textContent=$('state')?.value||'Bihar';btn.disabled=!list.length;}
-  if(box){box.innerHTML=list.length?list.map(x=>`<button type="button" class="senvia-state-option" data-value="${areaEsc(String(x.name))}" onclick="chooseState(this.dataset.value)" onpointerup="chooseState(this.dataset.value)"><span>${areaEsc(x.name)}</span><span class="senvia-state-radio">○</span></button>).join(''):'<div style="padding:22px;text-align:center;color:#60777b">No visible State found.</div>';}
+  if(box){
+    box.innerHTML=list.length?list.map(x=>{
+      const v=String(x.name);
+      return `<button type="button" class="senvia-state-option" data-value="${areaEsc(v)}"><span>${areaEsc(v)}</span><span class="senvia-state-radio">○</span></button>`;
+    }).join(''):'<div style="padding:22px;text-align:center;color:#60777b">No visible State found.</div>';
+  }
 }
 function openStatePicker(){
   const modal=$('statePickerModal');
@@ -628,15 +633,14 @@ function openStatePicker(){
 }
 function closeStatePicker(){$('statePickerModal')?.classList.remove('show');}
 async function chooseState(value){
-  if(window.__senviaPickerLock)return; window.__senviaPickerLock=true; setTimeout(()=>window.__senviaPickerLock=false,250);
   value=String(value??'').trim();
   if(!value)return;
   const st=$('state');
-  if(st){st.value=value;st.dispatchEvent(new Event('change',{bubbles:true}));}
-  const btn=$('statePickerBtn'); if(btn){btn.textContent=value;btn.disabled=false;}
+  if(st)st.value=value;
+  const btn=$('statePickerBtn');
+  if(btn){btn.textContent=value;btn.disabled=false;}
   closeStatePicker();
-  // onchange above handles District/Block/Panchayat refresh.
-  if(st) await loadDistricts(false);
+  await loadDistricts(false);
 }
 function filterStatePicker(){
   const q=String($('statePickerSearch')?.value||'').trim().toLowerCase();
@@ -647,7 +651,12 @@ function renderBlockPicker(rows,placeholder){
   const btn=$('blockPickerBtn');
   const box=$('blockPickerList');
   if(btn){btn.textContent=$('block')?.value||placeholder;btn.disabled=!rows.length;}
-  if(box){box.innerHTML=rows.length?rows.map(x=>`<button type="button" class="senvia-block-option" data-value="${areaEsc(String(x.name))}" onclick="chooseBlock(this.dataset.value)" onpointerup="chooseBlock(this.dataset.value)"><span>${areaEsc(x.name)}</span><span class="senvia-block-radio">○</span></button>).join(''):'<div style="padding:22px;text-align:center;color:#60777b">'+(lang==='hi'?'इस District में कोई visible Block नहीं है।':'No visible Block found in this District.')+'</div>';}
+  if(box){
+    box.innerHTML=rows.length?rows.map(x=>{
+      const v=String(x.name);
+      return `<button type="button" class="senvia-block-option" data-value="${areaEsc(v)}"><span>${areaEsc(v)}</span><span class="senvia-block-radio">○</span></button>`;
+    }).join(''):'<div style="padding:22px;text-align:center;color:#60777b">'+(lang==='hi'?'इस District में कोई visible Block नहीं है।':'No visible Block found in this District.')+'</div>';
+  }
 }
 function openBlockPicker(){
   const modal=$('blockPickerModal');
@@ -655,14 +664,13 @@ function openBlockPicker(){
 }
 function closeBlockPicker(){$('blockPickerModal')?.classList.remove('show');}
 async function chooseBlock(value){
-  if(window.__senviaPickerLock)return; window.__senviaPickerLock=true; setTimeout(()=>window.__senviaPickerLock=false,250);
   value=String(value??'').trim();
   if(!value)return;
   const b=$('block');
-  if(b){b.value=value;}
-  const btn=$('blockPickerBtn'); if(btn){btn.textContent=value;btn.disabled=false;}
+  if(b)b.value=value;
+  const btn=$('blockPickerBtn');
+  if(btn){btn.textContent=value;btn.disabled=false;}
   closeBlockPicker();
-  // Load Panchayat exactly once after selecting the Block.
   await loadP();
 }
 function filterBlockPicker(){
@@ -670,44 +678,18 @@ function filterBlockPicker(){
   document.querySelectorAll('#blockPickerList .senvia-block-option').forEach(el=>{el.style.display=el.textContent.toLowerCase().includes(q)?'flex':'none';});
 }
 
-/* Mobile-safe picker selection: handle taps at the list container as well as inline buttons. */
+/* One reliable delegated tap handler for all three mobile pickers. */
 (function installAreaPickerTapHandlers(){
-  function bind(){
-    const stateList=$('statePickerList');
-    const blockList=$('blockPickerList');
-    const panchayatList=$('panchayatPickerList');
-    if(stateList && !stateList.dataset.tapBound){
-      stateList.dataset.tapBound='1';
-      stateList.addEventListener('click',function(e){
-        const btn=e.target.closest('.senvia-state-option');
-        if(!btn)return;
-        e.preventDefault();e.stopPropagation();
-        const value=btn.querySelector('span')?.textContent?.trim()||'';
-        if(value) window.chooseState(value);
-      },true);
-    }
-    if(blockList && !blockList.dataset.tapBound){
-      blockList.dataset.tapBound='1';
-      blockList.addEventListener('click',function(e){
-        const btn=e.target.closest('.senvia-block-option');
-        if(!btn)return;
-        e.preventDefault();e.stopPropagation();
-        const value=btn.querySelector('span')?.textContent?.trim()||'';
-        if(value) window.chooseBlock(value);
-      },true);
-    }
-    if(panchayatList && !panchayatList.dataset.tapBound){
-      panchayatList.dataset.tapBound='1';
-      panchayatList.addEventListener('click',function(e){
-        const btn=e.target.closest('.senvia-panchayat-option');
-        if(!btn)return;
-        e.preventDefault();e.stopPropagation();
-        const value=btn.querySelector('span')?.textContent?.trim()||'';
-        if(value) window.choosePanchayat(value);
-      },true);
-    }
-  }
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',bind,{once:true}); else bind();
+  if(window.__senviaPickerHandlersInstalled)return;
+  window.__senviaPickerHandlersInstalled=true;
+  document.addEventListener('click',function(e){
+    const state=e.target.closest?.('#statePickerList .senvia-state-option');
+    if(state){e.preventDefault();chooseState(state.getAttribute('data-value')||state.textContent.trim());return;}
+    const block=e.target.closest?.('#blockPickerList .senvia-block-option');
+    if(block){e.preventDefault();chooseBlock(block.getAttribute('data-value')||block.textContent.trim());return;}
+    const pan=e.target.closest?.('#panchayatPickerList .senvia-panchayat-option');
+    if(pan){e.preventDefault();choosePanchayat(pan.getAttribute('data-value')||pan.textContent.trim());return;}
+  },true);
 })();
 
 function renderPanchayatPicker(list,placeholder){
@@ -717,7 +699,7 @@ function renderPanchayatPicker(list,placeholder){
   if(box){
     box.innerHTML=list.length?list.map(x=>{
       const v=String(x);
-      return `<button type="button" class="senvia-panchayat-option" data-value="${areaEsc(v)}" onclick="choosePanchayat(this.dataset.value)" onpointerup="choosePanchayat(this.dataset.value)"><span>${areaEsc(v)}</span><span class="senvia-panchayat-radio">○</span></button>`;
+      return `<button type="button" class="senvia-panchayat-option" data-value="${areaEsc(v)}"><span>${areaEsc(v)}</span><span class="senvia-panchayat-radio">○</span></button>`;
     }).join(''):'<div style="padding:22px;text-align:center;color:#60777b">'+(lang==='hi'?'इस Block में कोई visible Panchayat नहीं मिली। Admin में Panchayat को Visible करें।':'No visible Panchayat found for this Block. Make sure the Panchayat is visible in Admin.')+'</div>';
   }
 }
@@ -732,15 +714,10 @@ function closePanchayatPicker(){
   document.body.classList.remove('senvia-panchayat-open');
 }
 function choosePanchayat(value){
-  if(window.__senviaPickerLock)return; window.__senviaPickerLock=true; setTimeout(()=>window.__senviaPickerLock=false,250);
   value=String(value??'').trim();
   if(!value)return;
   const p=$('p');
-  if(p){
-    p.value=value;
-    p.dispatchEvent(new Event('input',{bubbles:true}));
-    p.dispatchEvent(new Event('change',{bubbles:true}));
-  }
+  if(p)p.value=value;
   const btn=$('panchayatPickerBtn');
   if(btn){btn.textContent=value;btn.disabled=false;btn.setAttribute('aria-label','Selected Panchayat: '+value);}
   closePanchayatPicker();
@@ -1009,6 +986,9 @@ $('block').addEventListener('change',()=>loadP());$('p').addEventListener('chang
       return `<div class="card"><div class="pro-head"><div class="avatar">${esc(initials)}</div><div><h3>${esc(p.name)}</h3><small>${esc(p.services.join(' • ')||'Local Service Professional')}</small></div></div><p>📍 ${esc(p.block)}${p.panchayat?' → '+esc(p.panchayat):''}${p.village?' → '+esc(p.village):''}</p><div class="pro-actions"><a href="tel:${esc(p.mobile)}">📞 Call</a>${wa?`<a target="_blank" href="https://wa.me/91${esc(wa)}">💬 WhatsApp</a>`:''}</div></div>`;
     }).join('');
   }
+}
+
+})();
 
 </script>
 <script>window.addEventListener('pageshow',()=>{if(window.senviaDbConnected){console.log('Senvia Customer Search: live refresh enabled')}});</script>
