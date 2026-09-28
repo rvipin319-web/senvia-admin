@@ -461,7 +461,31 @@ header .logo-img-wrap img{width:150px!important;height:82px!important;object-fit
 .senvia-unified-more-menu a{display:block!important;padding:10px 12px!important;color:#12344d!important;text-decoration:none!important;white-space:nowrap!important;font:600 14px/1.2 inherit!important;}
 .senvia-unified-more-menu a:hover{background:#eef6fb!important;color:#07528f!important;}
 @media(max-width:700px){.senvia-unified-nav{display:none!important;}}
-</style></head><body>
+</style><style id="senvia-mobile-more-fix">
+@media(max-width:700px){
+.senvia-mobile-more-btn{width:100%;display:flex;align-items:center;gap:12px;min-height:54px;padding:10px 12px;margin:5px 0;border:1px solid rgba(7,82,143,.10);border-radius:13px;background:rgba(255,255,255,.72);color:#06375f;font-weight:800;box-shadow:0 3px 10px rgba(7,82,143,.05);cursor:pointer;font-size:inherit;text-align:left;box-sizing:border-box}
+.senvia-mobile-more-btn .mi{width:30px;text-align:center;font-size:21px;color:#0874c1}
+.senvia-mobile-more-btn .mt{flex:1}
+.senvia-mobile-more-btn .arr{font-size:22px;color:#0aa451;transition:transform .2s ease}
+.senvia-mobile-more-btn.open .arr{transform:rotate(90deg)}
+.senvia-mobile-more-list{display:none;padding:3px 0 2px 42px}
+.senvia-mobile-more-list.open{display:block}
+.senvia-mobile-more-list a{display:block;padding:9px 10px;color:#07528f;text-decoration:none;font-weight:700;border-bottom:1px solid rgba(7,82,143,.08)}
+}
+</style>
+<script id="senvia-mobile-more-fix-js">
+(function(){
+window.senviaMoreToggle=window.senviaMoreToggle||function(which){
+const box=document.getElementById(which==='mobile'?'senviaMoreMobile':'senviaMoreDesktop');if(!box)return;
+const open=!box.classList.contains('open');
+document.querySelectorAll('.senvia-mobile-more-list.open,.senvia-more-menu.open,.senvia-desktop-more-menu.open').forEach(x=>x.classList.remove('open'));
+document.querySelectorAll('.senvia-mobile-more-btn.open').forEach(x=>x.classList.remove('open'));
+box.classList.toggle('open',open);
+if(which==='mobile'){document.querySelector('.senvia-mobile-more-btn')?.classList.toggle('open',open);}
+};
+})();
+</script>
+</head><body>
 <div id="senviaBusy" aria-live="polite" aria-label="System busy">
   <div class="senvia-v-spinner"><b>V</b></div>
   <div class="senvia-busy-text" id="senviaBusyText">Please wait…</div>
@@ -498,7 +522,16 @@ header .logo-img-wrap img{width:150px!important;height:82px!important;object-fit
     <a class="senvia-mobile-link" href="professional-directory.html" data-page-link><span class="mi">👥</span><span class="mt" data-mobile-key="pros">Professionals</span><span class="arr">›</span></a>
     <a class="senvia-mobile-link" href="about.html" data-page-link><span class="mi">ⓘ</span><span class="mt" data-mobile-key="about">हमारे बारे में</span><span class="arr">›</span></a>
     <a class="senvia-mobile-link" href="contact.html" data-page-link><span class="mi">✉</span><span class="mt" data-mobile-key="contact">संपर्क</span><span class="arr">›</span></a>
-    <div class="senvia-mobile-lang"><button id="mobileHi" type="button" onclick="senviaSetLang('hi')">हिंदी</button><button id="mobileEn" type="button" onclick="senviaSetLang('en')">English</button></div>
+    <div class="senvia-mobile-more">
+<button class="senvia-mobile-more-btn" type="button" onclick="senviaMoreToggle('mobile')">
+<span class="mi">⋯</span><span class="mt" data-mobile-key="more">More</span><span class="arr">›</span>
+</button>
+<div class="senvia-mobile-more-list" id="senviaMoreMobile">
+<a href="about.html" data-page-link>ⓘ <span>About Us</span></a>
+<a href="contact.html" data-page-link>✉ <span>Contact</span></a>
+<a href="#privacy" onclick="event.preventDefault();senviaMoreToggle('mobile')">🔒 <span>Privacy Policy</span></a>
+<a href="#terms" onclick="event.preventDefault();senviaMoreToggle('mobile')">📄 <span>Terms</span></a>
+</div></div> <div class="senvia-mobile-lang"><button id="mobileHi" type="button" onclick="senviaSetLang('hi')">हिंदी</button><button id="mobileEn" type="button" onclick="senviaSetLang('en')">English</button></div>
   </div>
 </aside>
 <section class="hero" id="home"><div class="c hg"><div><h1 id="heroTitle">Senvia<br>आपकी जरूरत,<br><span>आपके क्षेत्र में</span></h1><p id="hero">मुजफ्फरपुर के Aurai, Bochahan, Gaighat, Katra और Minapur में स्थानीय सेवा और भरोसेमंद professionals खोजें।</p><button class="btn green" onclick="document.getElementById('search').scrollIntoView({behavior:'smooth'})" id="start">सेवा खोजें</button></div><div class="box" id="search"><h2 id="stitle">📍 अपने क्षेत्र में सेवा खोजें</h2><div class="field"><label id="stateLabel">State</label><select id="state" onchange="loadDistricts()"><option value="Bihar" selected>Bihar</option></select></div><div class="field"><label id="districtLabel">District</label><select id="district" onchange="loadBlocks()"><option value="Muzaffarpur" selected>Muzaffarpur</option></select></div><div class="field"><label id="blockLabel">Block</label><select id="block" onchange="loadP()"><option value="">-- Block चुनें --</option></select></div><div class="field"><label id="panchayatLabel">Panchayat</label><select id="p" onchange="loadV()"><option value="">-- Panchayat चुनें --</option></select></div><div class="field"><label id="pinLabel">Area PIN Code / क्षेत्र पिन कोड</label><input id="pin" type="text" inputmode="numeric" maxlength="6" placeholder="Enter Area PIN Code / क्षेत्र पिन कोड"></div><div class="field"><label id="serviceLabel">Service</label><select id="s"></select></div><button class="btn blue full" onclick="find()" id="find">🔍 खोजें</button><div style="text-align:center;color:#666;font-size:12px;margin-top:8px" id="searchNote">State / District / Block / Panchayat / PIN / Service में से चयन करें</div><div onclick="openM('worker')" style="text-align:center;color:#0874c1;font-weight:bold;margin-top:10px;cursor:pointer"><span data-i18n-target="join">Professional के रूप में जुड़ें →</span></div></div></div></section>
