@@ -708,9 +708,16 @@ function choosePanchayat(value){
   value=String(value??'').trim();
   if(!value)return;
   const p=$('p');
-  if(p)p.value=value;
+  if(p){
+    p.value=value;
+    p.dispatchEvent(new Event('change',{bubbles:true}));
+  }
   const btn=$('panchayatPickerBtn');
-  if(btn){btn.textContent=value;btn.disabled=false;btn.setAttribute('aria-label','Selected Panchayat: '+value);}
+  if(btn){
+    btn.textContent=value;
+    btn.disabled=false;
+    btn.setAttribute('aria-label','Selected Panchayat: '+value);
+  }
   closePanchayatPicker();
 }
 function filterPanchayatPicker(){
@@ -718,14 +725,14 @@ function filterPanchayatPicker(){
   document.querySelectorAll('#panchayatPickerList .senvia-panchayat-option').forEach(el=>{el.style.display=el.textContent.toLowerCase().includes(q)?'flex':'none';});
 }
 
-// Extra mobile-safe handler: selecting the whole Panchayat row works even if the inline tap is interrupted.
-document.addEventListener('pointerup',function(e){
+// Mobile-safe handler: use CLICK only. Do not cancel pointerup/touch events because
+// doing so can suppress the browser's click event on Android.
+document.addEventListener('click',function(e){
   const row=e.target.closest && e.target.closest('#panchayatPickerList .senvia-panchayat-option');
   if(!row)return;
-  e.preventDefault();
-  e.stopPropagation();
+  if(e.defaultPrevented)return;
   choosePanchayat(row.getAttribute('data-value')||row.textContent.trim());
-},{passive:false});
+});
 function loadV(){}
 function selectB(b){$('block').value=b;loadP();$('search').scrollIntoView({behavior:'smooth'})}
 function quick(x){$('s').value=x;$('search').scrollIntoView({behavior:'smooth'});toast(serviceName(x)+' '+T[lang].selected)}
