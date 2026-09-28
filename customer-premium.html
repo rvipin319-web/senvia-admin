@@ -348,7 +348,7 @@ header .logo-img-wrap img{width:150px!important;height:82px!important;object-fit
 .senvia-block-search-wrap{padding:10px 16px;background:#eefbfc;flex:0 0 auto}
 .senvia-block-search-wrap input{width:100%;padding:11px 13px;border:1px solid #c6d9dd;border-radius:10px;background:#fff;font-size:15px;outline:none}
 .senvia-block-list{overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;touch-action:pan-y;min-height:0;flex:1 1 auto;padding-bottom:8px}
-.senvia-block-option{width:100%;min-height:64px;border:0;border-bottom:1px solid #c9dfe2;background:#eefbfc;color:#10242a;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;text-align:left;font-size:19px;font-weight:700;cursor:pointer}
+.senvia-block-option{width:100%;min-height:64px;pointer-events:auto;touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,.08);border:0;border-bottom:1px solid #c9dfe2;background:#eefbfc;color:#10242a;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;text-align:left;font-size:19px;font-weight:700;cursor:pointer}
 .senvia-block-option:active{background:#dff3f4}
 .senvia-block-radio{font-size:32px;font-weight:400;color:#496368;line-height:1}
 @media(max-width:550px){.senvia-block-modal{padding:0}.senvia-block-sheet{width:100%;height:86vh;max-height:86vh;border-radius:24px 24px 0 0;align-self:flex-end}.senvia-block-head h3{font-size:22px}.senvia-block-option{min-height:62px;padding:12px 22px;font-size:18px}}
@@ -385,7 +385,7 @@ body.senvia-panchayat-open{overflow:hidden}
 .senvia-state-search-wrap{padding:10px 16px;background:#eefbfc;flex:0 0 auto}
 .senvia-state-search-wrap input{width:100%;padding:11px 13px;border:1px solid #c6d9dd;border-radius:10px;background:#fff;font-size:15px;outline:none}
 .senvia-state-list{overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;touch-action:pan-y;min-height:0;flex:1 1 auto;padding-bottom:8px}
-.senvia-state-option{width:100%;min-height:64px;border:0;border-bottom:1px solid #c9dfe2;background:#eefbfc;color:#10242a;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;text-align:left;font-size:19px;font-weight:700;cursor:pointer}
+.senvia-state-option{width:100%;min-height:64px;pointer-events:auto;touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,.08);border:0;border-bottom:1px solid #c9dfe2;background:#eefbfc;color:#10242a;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;text-align:left;font-size:19px;font-weight:700;cursor:pointer}
 .senvia-state-option:active{background:#dff3f4}
 .senvia-state-radio{font-size:32px;font-weight:400;color:#496368;line-height:1}
 @media(max-width:550px){.senvia-state-modal{padding:0}.senvia-state-sheet{width:100%;height:86vh;max-height:86vh;border-radius:24px 24px 0 0;align-self:flex-end}.senvia-state-head h3{font-size:22px}.senvia-state-option{min-height:62px;padding:12px 22px;font-size:18px}}
@@ -628,11 +628,14 @@ function openStatePicker(){
 }
 function closeStatePicker(){$('statePickerModal')?.classList.remove('show');}
 async function chooseState(value){
+  value=String(value??'').trim();
+  if(!value)return;
   const st=$('state');
-  if(st){st.value=String(value);}
-  const btn=$('statePickerBtn'); if(btn)btn.textContent=String(value);
+  if(st){st.value=value;st.dispatchEvent(new Event('change',{bubbles:true}));}
+  const btn=$('statePickerBtn'); if(btn){btn.textContent=value;btn.disabled=false;}
   closeStatePicker();
-  await loadDistricts(false);
+  // onchange above handles District/Block/Panchayat refresh.
+  if(st) await loadDistricts(false);
 }
 function filterStatePicker(){
   const q=String($('statePickerSearch')?.value||'').trim().toLowerCase();
@@ -651,16 +654,48 @@ function openBlockPicker(){
 }
 function closeBlockPicker(){$('blockPickerModal')?.classList.remove('show');}
 async function chooseBlock(value){
+  value=String(value??'').trim();
+  if(!value)return;
   const b=$('block');
-  if(b){b.value=String(value);b.dispatchEvent(new Event('change',{bubbles:true}));}
-  const btn=$('blockPickerBtn'); if(btn)btn.textContent=String(value);
+  if(b){b.value=value;}
+  const btn=$('blockPickerBtn'); if(btn){btn.textContent=value;btn.disabled=false;}
   closeBlockPicker();
+  // Load Panchayat exactly once after selecting the Block.
   await loadP();
 }
 function filterBlockPicker(){
   const q=String($('blockPickerSearch')?.value||'').trim().toLowerCase();
   document.querySelectorAll('#blockPickerList .senvia-block-option').forEach(el=>{el.style.display=el.textContent.toLowerCase().includes(q)?'flex':'none';});
 }
+
+/* Mobile-safe picker selection: handle taps at the list container as well as inline buttons. */
+(function installAreaPickerTapHandlers(){
+  function bind(){
+    const stateList=$('statePickerList');
+    const blockList=$('blockPickerList');
+    if(stateList && !stateList.dataset.tapBound){
+      stateList.dataset.tapBound='1';
+      stateList.addEventListener('click',function(e){
+        const btn=e.target.closest('.senvia-state-option');
+        if(!btn)return;
+        e.preventDefault();e.stopPropagation();
+        const value=btn.querySelector('span')?.textContent?.trim()||'';
+        if(value) window.chooseState(value);
+      },true);
+    }
+    if(blockList && !blockList.dataset.tapBound){
+      blockList.dataset.tapBound='1';
+      blockList.addEventListener('click',function(e){
+        const btn=e.target.closest('.senvia-block-option');
+        if(!btn)return;
+        e.preventDefault();e.stopPropagation();
+        const value=btn.querySelector('span')?.textContent?.trim()||'';
+        if(value) window.chooseBlock(value);
+      },true);
+    }
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',bind,{once:true}); else bind();
+})();
 
 function renderPanchayatPicker(list,placeholder){
   const btn=$('panchayatPickerBtn');
