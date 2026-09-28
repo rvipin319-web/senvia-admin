@@ -288,15 +288,16 @@ header .logo-img-wrap img{width:150px!important;height:82px!important;object-fit
 
 <style id="senvia-mobile-navigation-final">
 /* Final responsive navigation: desktop and mobile are intentionally separate */
-.senvia-mobile-trigger{display:none}
+.senvia-mobile-trigger{display:none;position:fixed;top:14px;right:14px;z-index:99999}
 .senvia-mobile-overlay{display:none}
 .senvia-mobile-drawer{display:none}
 @media(max-width:700px){
   .senvia-nav{display:none!important}
   header{background:linear-gradient(135deg,#eaf6ff 0%,#f4fff9 55%,#eef9ff 100%)!important}
   header .head{gap:8px}
-  .senvia-mobile-trigger{display:grid;place-items:center;width:42px;height:42px;margin-left:6px;border:0;border-radius:12px;background:linear-gradient(135deg,#07528f,#0aa451);color:#fff;font-size:24px;font-weight:900;cursor:pointer;box-shadow:0 6px 16px rgba(7,82,143,.22)}
+  .senvia-mobile-trigger{display:grid;place-items:center;width:48px;height:48px;margin-left:6px;border:0;border-radius:14px;background:linear-gradient(135deg,#0794d1,#12b76a);color:#fff;font-size:27px;font-weight:900;cursor:pointer;box-shadow:0 8px 22px rgba(7,82,143,.28);position:fixed;top:14px;right:14px;z-index:99999}
   .senvia-mobile-trigger:active{transform:scale(.96)}
+  .senvia-mobile-trigger{top:max(14px,env(safe-area-inset-top));right:max(14px,env(safe-area-inset-right))}
   .senvia-mobile-overlay{position:fixed;inset:0;background:rgba(3,30,50,.48);backdrop-filter:blur(1px);z-index:99998;opacity:0;pointer-events:none;transition:opacity .22s ease;display:block}
   .senvia-mobile-overlay.open{opacity:1;pointer-events:auto}
   .senvia-mobile-drawer{position:fixed;top:0;left:0;bottom:0;width:min(82vw,360px);display:flex;flex-direction:column;z-index:99999;transform:translateX(-105%);transition:transform .25s ease;background:linear-gradient(180deg,#e9f7ff 0%,#f7fffb 52%,#eaf8ff 100%);box-shadow:12px 0 35px rgba(0,43,72,.25);overflow-y:auto}
