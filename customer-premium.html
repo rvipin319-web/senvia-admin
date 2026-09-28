@@ -366,7 +366,7 @@ header .logo-img-wrap img{width:150px!important;height:82px!important;object-fit
 .senvia-panchayat-search-wrap{padding:10px 16px;background:#eefbfc;flex:0 0 auto}
 .senvia-panchayat-search-wrap input{width:100%;padding:11px 13px;border:1px solid #c6d9dd;border-radius:10px;background:#fff;font-size:15px;outline:none}
 .senvia-panchayat-list{overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;touch-action:pan-y;min-height:0;flex:1 1 auto;padding-bottom:8px}
-.senvia-panchayat-option{width:100%;min-height:64px;border:0;border-bottom:1px solid #c9dfe2;background:#eefbfc;color:#10242a;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;text-align:left;font-size:19px;font-weight:700;cursor:pointer}
+.senvia-panchayat-option{width:100%;min-height:64px;pointer-events:auto;touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,.08);border:0;border-bottom:1px solid #c9dfe2;background:#eefbfc;color:#10242a;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;text-align:left;font-size:19px;font-weight:700;cursor:pointer}
 .senvia-panchayat-option:active{background:#dff3f4}
 .senvia-panchayat-radio{font-size:32px;font-weight:400;color:#496368;line-height:1}
 body.senvia-panchayat-open{overflow:hidden}
@@ -673,6 +673,7 @@ function filterBlockPicker(){
   function bind(){
     const stateList=$('statePickerList');
     const blockList=$('blockPickerList');
+    const panchayatList=$('panchayatPickerList');
     if(stateList && !stateList.dataset.tapBound){
       stateList.dataset.tapBound='1';
       stateList.addEventListener('click',function(e){
@@ -691,6 +692,16 @@ function filterBlockPicker(){
         e.preventDefault();e.stopPropagation();
         const value=btn.querySelector('span')?.textContent?.trim()||'';
         if(value) window.chooseBlock(value);
+      },true);
+    }
+    if(panchayatList && !panchayatList.dataset.tapBound){
+      panchayatList.dataset.tapBound='1';
+      panchayatList.addEventListener('click',function(e){
+        const btn=e.target.closest('.senvia-panchayat-option');
+        if(!btn)return;
+        e.preventDefault();e.stopPropagation();
+        const value=btn.querySelector('span')?.textContent?.trim()||'';
+        if(value) window.choosePanchayat(value);
       },true);
     }
   }
