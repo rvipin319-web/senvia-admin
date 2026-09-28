@@ -122,6 +122,20 @@ table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:11px 8px
 .area-card-panchayat .area-card-head{background:linear-gradient(135deg,#ef1717 0%,#c51f2c 48%,#12ad58 100%)}.area-card-panchayat .area-card-add{background:linear-gradient(135deg,#ef1717,#10a95b)}
 @media(min-width:900px){.area-management-grid{grid-template-columns:1fr 1fr}}
 @media(max-width:600px){.area-card-head{gap:10px;padding:13px}.area-card-icon{width:48px;height:48px;font-size:23px}.area-card-title b{font-size:21px}.area-card-title span{font-size:11px}.area-card-count{min-width:68px;padding:8px 7px}.area-card-count b{font-size:19px}.area-card-count span{font-size:10px}.area-card-actions{grid-template-columns:1.15fr 1fr 1fr 1fr;gap:7px;padding:8px}.area-card-actions button{min-height:40px;font-size:11px;padding:4px}.area-management-grid{padding:12px 10px 5px;gap:13px}}
+
+/* === Senvia unified pastel dashboard background === */
+body{background:linear-gradient(135deg,#eef8ff 0%,#eafcff 38%,#f4efff 72%,#eefaff 100%)!important;background-attachment:fixed;}
+.content{background:linear-gradient(135deg,rgba(215,245,255,.58) 0%,rgba(235,249,255,.50) 42%,rgba(242,231,255,.48) 72%,rgba(224,250,247,.42) 100%);border-radius:0 0 28px 28px;}
+.panel,.pdash-card{background:rgba(255,255,255,.88)!important;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);}
+.pdash-hero{background:linear-gradient(135deg,rgba(197,238,255,.92) 0%,rgba(225,220,255,.90) 52%,rgba(213,250,242,.88) 100%)!important;border:1px solid rgba(117,194,232,.35);box-shadow:0 12px 32px rgba(64,119,166,.10);}
+/* Platform Overview: four clearly different soft colors */
+.overview-item{color:#18324f;box-shadow:0 6px 18px rgba(28,66,105,.07);}
+.overview-item:nth-child(1){background:linear-gradient(135deg,#dff7e8,#b9efd0);border-color:#a7dfbd;}
+.overview-item:nth-child(2){background:linear-gradient(135deg,#fff3cf,#ffe19a);border-color:#f3d37b;}
+.overview-item:nth-child(3){background:linear-gradient(135deg,#dff1ff,#b9dcff);border-color:#a7caee;}
+.overview-item:nth-child(4){background:linear-gradient(135deg,#f0e3ff,#ddc5ff);border-color:#cbb0ee;}
+.overview-item small{color:#294766!important;font-weight:800;}
+.overview-item b{color:#0b2d57!important;}
 </style>
 </style>
 
@@ -193,9 +207,9 @@ table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:11px 8px
 
 <style id="admin-mobile-navigation">
 /* Senvia Admin — Customer Panel style mobile navigation */
-.admin-mobile-bar{display:none}
-.admin-mobile-menu{display:none}
-.admin-mobile-overlay{display:none}
+.admin-mobile-bar{display:flex;align-items:center;justify-content:flex-start;position:fixed;top:18px;left:18px;z-index:10004;pointer-events:auto}
+.admin-mobile-menu{display:flex;position:fixed;top:0;left:0;bottom:0;width:min(82vw,330px);background:#fff;z-index:10003;transform:translateX(-105%);transition:transform .25s ease;box-shadow:14px 0 40px rgba(4,34,70,.22);flex-direction:column;overflow-y:auto}
+.admin-mobile-overlay{display:block;position:fixed;inset:0;background:rgba(3,20,38,.55);backdrop-filter:blur(2px);z-index:10002;opacity:0;pointer-events:none;transition:opacity .25s ease}
 @media(max-width:700px){
   .layout{display:block;min-height:calc(100vh - 64px)}
   .layout>aside{display:none}
@@ -238,7 +252,7 @@ table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:11px 8px
   .toolbar{width:100%!important;box-sizing:border-box!important}
   .toolbar input,.toolbar select{max-width:100%;box-sizing:border-box}
 }
-@media(min-width:701px){.admin-mobile-bar,.admin-mobile-menu,.admin-mobile-overlay{display:none!important}}
+
 </style>
 
 <style id="senvia-premium-theme">
@@ -388,6 +402,13 @@ table tbody tr{border-bottom:1px solid #e3edf3;transition:background .15s ease}t
   </div>
 </div>
 <header><div class="admin-mobile-bar"><button type="button" class="admin-mobile-menu-btn" onclick="toggleAdminMobileMenu()" aria-label="Open menu">☰</button></div><div><div class="logo">Sen<span>v</span>ia</div><div class="tag">हर घर का अपना साथी • Admin Panel</div></div><div class="header-actions"><div class="lang"><button id="hi" class="on" onclick="setLang('hi')">हिंदी</button> <button id="en" onclick="setLang('en')">English</button></div><button type="button" id="logoutBtn" class="logout-btn" onclick="adminLogout()">↪ Logout</button></div></header>
+
+<style id="senvia-global-menu-button">
+/* Global menu button: available on every Admin section/page */
+.admin-mobile-menu-btn{width:52px!important;height:52px!important;border:0!important;border-radius:15px!important;background:linear-gradient(135deg,#0879c9,#16a65b)!important;color:#fff!important;font-size:28px!important;line-height:1!important;display:flex!important;align-items:center!important;justify-content:center!important;box-shadow:0 8px 24px rgba(8,121,201,.28)!important;padding:0!important;cursor:pointer!important}
+.admin-mobile-menu-btn:hover{filter:brightness(1.06);transform:translateY(-1px)}
+@media(max-width:700px){.admin-mobile-bar{top:10px;left:10px}.admin-mobile-menu-btn{width:44px!important;height:44px!important;font-size:25px!important;border-radius:12px!important}}
+</style>
 <div id="adminMobileOverlay" class="admin-mobile-overlay" onclick="closeAdminMobileMenu()"></div>
 <nav id="adminMobileMenu" class="admin-mobile-menu" aria-label="Mobile navigation">
   <div class="admin-mobile-menu-head">
