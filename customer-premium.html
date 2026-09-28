@@ -352,6 +352,9 @@ header .logo-img-wrap img{width:150px!important;height:82px!important;object-fit
 .senvia-block-option:active{background:#dff3f4}
 .senvia-block-radio{font-size:32px;font-weight:400;color:#496368;line-height:1}
 @media(max-width:550px){.senvia-block-modal{padding:0}.senvia-block-sheet{width:100%;height:86vh;max-height:86vh;border-radius:24px 24px 0 0;align-self:flex-end}.senvia-block-head h3{font-size:22px}.senvia-block-option{min-height:62px;padding:12px 22px;font-size:18px}}
+
+.senvia-native-panchayat-select{width:100%;min-height:42px;padding:11px 40px 11px 14px;border:1px solid #ccdbe6;border-radius:7px;background:#fff;color:#17324b;font-size:14px;font-weight:600;cursor:pointer;appearance:auto;-webkit-appearance:auto;touch-action:manipulation;pointer-events:auto;}
+.senvia-native-panchayat-select:focus{outline:2px solid rgba(8,116,193,.25);border-color:#0874c1;}
 </style>
 <style id="senvia-panchayat-scroll-fix">
 .senvia-panchayat-trigger{width:100%;padding:11px;border:1px solid #ccdbe6;border-radius:7px;background:#fff;color:#17324b;text-align:left;font-size:14px;font-weight:600;cursor:pointer;min-height:42px}
@@ -623,7 +626,7 @@ function renderStatePicker(rows){
   if(box){
     box.innerHTML=list.length?list.map(x=>{
       const v=String(x.name);
-      return `<button type="button" class="senvia-state-option" data-value="${areaEsc(v)}"><span>${areaEsc(v)}</span><span class="senvia-state-radio">○</span></button>`;
+      return `<button type="button" class="senvia-state-option" data-value="${areaEsc(v)}" onclick="chooseState(this.getAttribute(\'data-value\'))"><span>${areaEsc(v)}</span><span class="senvia-state-radio">○</span></button>`;
     }).join(''):'<div style="padding:22px;text-align:center;color:#60777b">No visible State found.</div>';
   }
 }
@@ -654,7 +657,7 @@ function renderBlockPicker(rows,placeholder){
   if(box){
     box.innerHTML=rows.length?rows.map(x=>{
       const v=String(x.name);
-      return `<button type="button" class="senvia-block-option" data-value="${areaEsc(v)}"><span>${areaEsc(v)}</span><span class="senvia-block-radio">○</span></button>`;
+      return `<button type="button" class="senvia-block-option" data-value="${areaEsc(v)}" onclick="chooseBlock(this.getAttribute(\'data-value\'))"><span>${areaEsc(v)}</span><span class="senvia-block-radio">○</span></button>`;
     }).join(''):'<div style="padding:22px;text-align:center;color:#60777b">'+(lang==='hi'?'इस District में कोई visible Block नहीं है।':'No visible Block found in this District.')+'</div>';
   }
 }
@@ -678,28 +681,16 @@ function filterBlockPicker(){
   document.querySelectorAll('#blockPickerList .senvia-block-option').forEach(el=>{el.style.display=el.textContent.toLowerCase().includes(q)?'flex':'none';});
 }
 
-/* One reliable delegated tap handler for all three mobile pickers. */
-(function installAreaPickerTapHandlers(){
-  if(window.__senviaPickerHandlersInstalled)return;
-  window.__senviaPickerHandlersInstalled=true;
-  document.addEventListener('click',function(e){
-    const state=e.target.closest?.('#statePickerList .senvia-state-option');
-    if(state){e.preventDefault();chooseState(state.getAttribute('data-value')||state.textContent.trim());return;}
-    const block=e.target.closest?.('#blockPickerList .senvia-block-option');
-    if(block){e.preventDefault();chooseBlock(block.getAttribute('data-value')||block.textContent.trim());return;}
-    const pan=e.target.closest?.('#panchayatPickerList .senvia-panchayat-option');
-    if(pan){e.preventDefault();choosePanchayat(pan.getAttribute('data-value')||pan.textContent.trim());return;}
-  },true);
-})();
+/* Picker options use direct inline tap handlers. This avoids mobile event interception by overlays/listeners. */
 
 function renderPanchayatPicker(list,placeholder){
   const btn=$('panchayatPickerBtn');
-  if(btn){btn.textContent=$('p')?.value||placeholder;btn.disabled=!list.length;}
+  if(btn){btn.textContent=$('p')?.value||placeholder;btn.disabled=!list.length;btn.style.display='block';btn.setAttribute('aria-hidden','false');}
   const box=$('panchayatPickerList');
   if(box){
     box.innerHTML=list.length?list.map(x=>{
       const v=String(x);
-      return `<button type="button" class="senvia-panchayat-option" data-value="${areaEsc(v)}"><span>${areaEsc(v)}</span><span class="senvia-panchayat-radio">○</span></button>`;
+      return `<button type="button" class="senvia-panchayat-option" data-value="${areaEsc(v)}" onclick="choosePanchayat(this.getAttribute(\'data-value\'))"><span>${areaEsc(v)}</span><span class="senvia-panchayat-radio">○</span></button>`;
     }).join(''):'<div style="padding:22px;text-align:center;color:#60777b">'+(lang==='hi'?'इस Block में कोई visible Panchayat नहीं मिली। Admin में Panchayat को Visible करें।':'No visible Panchayat found for this Block. Make sure the Panchayat is visible in Admin.')+'</div>';
   }
 }
@@ -726,6 +717,15 @@ function filterPanchayatPicker(){
   const q=String($('panchayatPickerSearch')?.value||'').trim().toLowerCase();
   document.querySelectorAll('#panchayatPickerList .senvia-panchayat-option').forEach(el=>{el.style.display=el.textContent.toLowerCase().includes(q)?'flex':'none';});
 }
+
+// Extra mobile-safe handler: selecting the whole Panchayat row works even if the inline tap is interrupted.
+document.addEventListener('pointerup',function(e){
+  const row=e.target.closest && e.target.closest('#panchayatPickerList .senvia-panchayat-option');
+  if(!row)return;
+  e.preventDefault();
+  e.stopPropagation();
+  choosePanchayat(row.getAttribute('data-value')||row.textContent.trim());
+},{passive:false});
 function loadV(){}
 function selectB(b){$('block').value=b;loadP();$('search').scrollIntoView({behavior:'smooth'})}
 function quick(x){$('s').value=x;$('search').scrollIntoView({behavior:'smooth'});toast(serviceName(x)+' '+T[lang].selected)}
