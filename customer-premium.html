@@ -286,6 +286,28 @@ header .logo-img-wrap img{width:150px!important;height:82px!important;object-fit
 @media(max-width:700px){.senvia-nav-inner{padding:4px 3px;gap:2px}.senvia-nav a{flex-direction:column;gap:2px;padding:7px 2px;font-size:11px}.senvia-nav a span{font-size:10px;overflow:hidden;text-overflow:ellipsis;max-width:100%;white-space:nowrap}}
 </style>
 
+<style id="senvia-more-navigation">
+.senvia-more-wrap{position:relative;display:flex;align-items:center;justify-content:center;min-width:0}
+.senvia-more-btn{display:flex;align-items:center;justify-content:center;gap:5px;width:100%;border:0;background:transparent;color:#fff!important;font:inherit;font-weight:800;padding:10px 8px;border-radius:7px;cursor:pointer;white-space:nowrap}
+.senvia-more-btn:hover,.senvia-more-btn:focus{background:rgba(255,255,255,.16)}
+.senvia-more-menu{display:none;position:absolute;top:calc(100% + 4px);right:0;min-width:190px;padding:7px;background:#fff;border:1px solid #dce6ed;border-radius:12px;box-shadow:0 12px 30px rgba(0,43,72,.22);z-index:10010}
+.senvia-more-menu.open{display:block}
+.senvia-more-menu a{display:block!important;color:#06375f!important;text-decoration:none!important;padding:10px 12px!important;border-radius:8px;font-weight:800!important;white-space:nowrap!important}
+.senvia-more-menu a:hover{background:#eef8ff!important}
+.senvia-mobile-more{display:none}
+@media(max-width:700px){
+  .senvia-more-wrap{display:none!important}
+  .senvia-mobile-more{display:block;margin-top:6px}
+  .senvia-mobile-more-btn{width:100%;display:flex;align-items:center;gap:12px;min-height:54px;padding:10px 12px;border:1px solid rgba(7,82,143,.10);border-radius:13px;background:rgba(255,255,255,.72);color:#06375f;font-weight:800;box-shadow:0 3px 10px rgba(7,82,143,.05);cursor:pointer;font-size:inherit;text-align:left}
+  .senvia-mobile-more-btn .mi{width:30px;text-align:center;font-size:21px;color:#0874c1}
+  .senvia-mobile-more-btn .mt{flex:1}
+  .senvia-mobile-more-btn .arr{font-size:22px;color:#0aa451;transition:transform .2s ease}
+  .senvia-mobile-more-btn.open .arr{transform:rotate(90deg)}
+  .senvia-mobile-more-list{display:none;padding:3px 0 2px 42px}
+  .senvia-mobile-more-list.open{display:block}
+  .senvia-mobile-more-list a{display:block;padding:9px 10px;color:#07528f;text-decoration:none;font-weight:700;border-bottom:1px solid rgba(7,82,143,.08)}
+}
+</style>
 <style id="senvia-mobile-navigation-final">
 /* Final responsive navigation: desktop and mobile are intentionally separate */
 .senvia-mobile-trigger{display:none}
@@ -366,6 +388,15 @@ header .logo-img-wrap img{width:150px!important;height:82px!important;object-fit
     <a id="navPros" href="professional-directory.html">👥 <span>Professionals</span></a>
     <a id="navAbout" href="about.html">ⓘ <span>हमारे बारे में</span></a>
     <a id="navContact" href="contact.html">✉ <span>संपर्क</span></a>
+    <div class="senvia-more-wrap">
+      <button class="senvia-more-btn" type="button" onclick="senviaMoreToggle('desktop')">⋯ <span data-more-text>More</span> ▾</button>
+      <div class="senvia-more-menu" id="senviaMoreDesktop">
+        <a href="about.html">ⓘ <span data-more-about>About Us</span></a>
+        <a href="contact.html">✉ <span data-more-contact>Contact</span></a>
+        <a href="#privacy" onclick="event.preventDefault();senviaMoreToggle('desktop');toast(lang==='hi'?'Privacy Policy जल्द उपलब्ध होगी।':'Privacy Policy will be available soon.')">🔒 <span data-more-privacy>Privacy Policy</span></a>
+        <a href="#terms" onclick="event.preventDefault();senviaMoreToggle('desktop');toast(lang==='hi'?'Terms जल्द उपलब्ध होंगे।':'Terms will be available soon.')">📄 <span data-more-terms>Terms</span></a>
+      </div>
+    </div>
   </div>
 </nav>
 <div class="senvia-mobile-overlay" id="senviaMobileOverlay" onclick="senviaMobileMenu(false)"></div>
@@ -380,6 +411,17 @@ header .logo-img-wrap img{width:150px!important;height:82px!important;object-fit
     <a class="senvia-mobile-link" href="professional-directory.html" data-page-link><span class="mi">👥</span><span class="mt" data-mobile-key="pros">Professionals</span><span class="arr">›</span></a>
     <a class="senvia-mobile-link" href="about.html" data-page-link><span class="mi">ⓘ</span><span class="mt" data-mobile-key="about">हमारे बारे में</span><span class="arr">›</span></a>
     <a class="senvia-mobile-link" href="contact.html" data-page-link><span class="mi">✉</span><span class="mt" data-mobile-key="contact">संपर्क</span><span class="arr">›</span></a>
+    <div class="senvia-mobile-more">
+      <button class="senvia-mobile-more-btn" type="button" onclick="senviaMoreToggle('mobile')">
+        <span class="mi">⋯</span><span class="mt" data-mobile-key="more">More</span><span class="arr">›</span>
+      </button>
+      <div class="senvia-mobile-more-list" id="senviaMoreMobile">
+        <a href="about.html" data-page-link>ⓘ <span data-more-about>About Us</span></a>
+        <a href="contact.html" data-page-link>✉ <span data-more-contact>Contact</span></a>
+        <a href="#privacy" onclick="event.preventDefault();senviaMoreToggle('mobile');toast(lang==='hi'?'Privacy Policy जल्द उपलब्ध होगी।':'Privacy Policy will be available soon.')">🔒 <span data-more-privacy>Privacy Policy</span></a>
+        <a href="#terms" onclick="event.preventDefault();senviaMoreToggle('mobile');toast(lang==='hi'?'Terms जल्द उपलब्ध होंगे।':'Terms will be available soon.')">📄 <span data-more-terms>Terms</span></a>
+      </div>
+    </div>
     <div class="senvia-mobile-lang"><button id="mobileHi" type="button" onclick="senviaSetLang('hi')">हिंदी</button><button id="mobileEn" type="button" onclick="senviaSetLang('en')">English</button></div>
   </div>
 </aside>
@@ -1042,17 +1084,35 @@ try{fill();}catch(e){console.error('Senvia initial fill failed',e);}
 <script id="senvia-mobile-navigation-script">
 (function(){
   const langText={
-    hi:{home:'होम',services:'सेवाएँ',pros:'Professionals',about:'हमारे बारे में',contact:'संपर्क'},
-    en:{home:'Home',services:'Services',pros:'Professionals',about:'About Us',contact:'Contact'}
+    hi:{home:'होम',services:'सेवाएँ',pros:'Professionals',about:'हमारे बारे में',contact:'संपर्क',more:'और'},
+    en:{home:'Home',services:'Services',pros:'Professionals',about:'About Us',contact:'Contact',more:'More'}
   };
   window.senviaMobileMenu=function(open){
     const d=document.getElementById('senviaMobileDrawer'),o=document.getElementById('senviaMobileOverlay');
     if(!d||!o)return;
     d.classList.toggle('open',!!open);o.classList.toggle('open',!!open);d.setAttribute('aria-hidden',open?'false':'true');document.body.classList.toggle('senvia-menu-open',!!open);
   };
+  window.senviaMoreToggle=function(which){
+    const id=which==='desktop'?'senviaMoreDesktop':'senviaMoreMobile';
+    const box=document.getElementById(id);
+    if(!box)return;
+    const open=!box.classList.contains('open');
+    document.querySelectorAll('.senvia-more-menu.open,.senvia-mobile-more-list.open').forEach(x=>x.classList.remove('open'));
+    document.querySelectorAll('.senvia-mobile-more-btn.open').forEach(x=>x.classList.remove('open'));
+    box.classList.toggle('open',open);
+    if(which==='mobile'){document.querySelector('.senvia-mobile-more-btn')?.classList.toggle('open',open);}
+  };
+  document.addEventListener('click',function(e){
+    if(!e.target.closest('.senvia-more-wrap')) document.getElementById('senviaMoreDesktop')?.classList.remove('open');
+  });
   function applyNavLang(l){
     const lang=l==='hi'?'hi':'en';
     document.querySelectorAll('[data-mobile-key]').forEach(e=>{const k=e.getAttribute('data-mobile-key');if(langText[lang][k])e.textContent=langText[lang][k];});
+    document.querySelectorAll('[data-more-about]').forEach(e=>e.textContent=lang==='hi'?'हमारे बारे में':'About Us');
+    document.querySelectorAll('[data-more-contact]').forEach(e=>e.textContent=lang==='hi'?'संपर्क':'Contact');
+    document.querySelectorAll('[data-more-privacy]').forEach(e=>e.textContent=lang==='hi'?'Privacy Policy':'Privacy Policy');
+    document.querySelectorAll('[data-more-terms]').forEach(e=>e.textContent=lang==='hi'?'Terms':'Terms');
+    document.querySelectorAll('[data-more-text]').forEach(e=>e.textContent=lang==='hi'?'और':'More');
     const mh=document.getElementById('mobileHi'),me=document.getElementById('mobileEn');
     if(mh)mh.classList.toggle('on',lang==='hi'); if(me)me.classList.toggle('on',lang==='en');
   }
