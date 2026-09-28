@@ -594,23 +594,41 @@ async function loadBlocks(initial=false){
   await loadP();
 }
 
+let senviaPanchayatCache={};
+try{ senviaPanchayatCache=JSON.parse(localStorage.getItem('senvia_panchayat_cache_v2')||'{}')||{}; }catch(e){ senviaPanchayatCache={}; }
+
 async function loadP(){
   const b=areaName($('block')?.value||'');
   let list=[];
   const brow=areaBlocks.find(x=>areaName(x.name).toLowerCase()===b.toLowerCase());
+  const cacheKey=brow ? String(brow.id) : '';
 
-  // Fresh Panchayat loader: use the selected Block ID directly.
-  // First load Admin-visible Panchayats; if none are marked visible, load the
-  // existing Panchayats for that Block so the customer picker never gets stuck
-  // on "No visible Panchayat" because of an is_visible flag mismatch.
+  // Load Panchayats directly for the selected Block. A temporary API/network
+  // failure must NOT erase a list that was already loaded once.
   try{
     if(brow && !String(brow.id).startsWith('fallback-')){
       let rows=await areaGet('senvia_panchayats?select=id,name,block_id,is_visible&block_id='+encodeURIComponent(brow.id)+'&order=name.asc');
       rows=Array.isArray(rows)?rows:[];
-      const visible=rows.filter(x=>areaVisible(x.is_visible)&&areaName(x.name));
-      list=(visible.length?visible:rows.filter(x=>areaName(x.name))).map(x=>x.name);
+      const named=rows.filter(x=>areaName(x.name));
+      const visible=named.filter(x=>areaVisible(x.is_visible));
+      list=(visible.length?visible:named).map(x=>areaName(x.name));
+      if(list.length){
+        list=[...new Set(list)].sort((a,z)=>a.localeCompare(z,undefined,{numeric:true,sensitivity:'base'}));
+        if(cacheKey){
+          senviaPanchayatCache[cacheKey]=list;
+          try{localStorage.setItem('senvia_panchayat_cache_v2',JSON.stringify(senviaPanchayatCache));}catch(e){}
+        }
+      }
     }
-  }catch(e){console.warn('Fresh Senvia Panchayat load failed',e)}
+  }catch(e){
+    console.warn('Senvia Panchayat API temporarily unavailable',e);
+    if(cacheKey && Array.isArray(senviaPanchayatCache[cacheKey])) list=senviaPanchayatCache[cacheKey];
+  }
+
+  // If the request returned no rows, use the last successful cache before
+  // showing an empty Panchayat picker. This prevents "appeared once, then
+  // disappeared" when a later refresh/language render races the API.
+  if(!list.length && cacheKey && Array.isArray(senviaPanchayatCache[cacheKey])) list=senviaPanchayatCache[cacheKey];
 
   // Demo fallback remains only for the original Bihar demo blocks.
   if(!list.length && brow && String(brow.id).startsWith('fallback-') && b) list=data[b]||[];
@@ -623,6 +641,8 @@ async function loadP(){
 
   const picker=$('panchayatPickerBtn');
   if(picker){picker.disabled=!list.length;picker.textContent=p?.value||placeholder;}
+  // Keep the custom picker usable after every refresh.
+  if(picker && list.length) picker.setAttribute('aria-disabled','false');
 }
 
 function renderStatePicker(rows){
@@ -1140,7 +1160,17 @@ $('block').addEventListener('change',()=>loadP());$('p').addEventListener('chang
     const aboutH=$('about')?.querySelector('h2'); if(aboutH) aboutH.textContent=hi?'Senvia क्या है?':'What is Senvia?';
     if($('aboutHi')) $('aboutHi').style.display=hi?'block':'none';
     if($('aboutEn')) $('aboutEn').style.display=hi?'none':'block';
-    const labels=document.querySelectorAll('.field label'); if(labels[0])labels[0].textContent=hi?'Block':'Block'; if(labels[1])labels[1].textContent=hi?'Panchayat':'Panchayat'; if(labels[2])labels[2].textContent=hi?'Service':'Service';
+    // Keep the customer-area labels tied to their actual fields. Do not use
+    // document.querySelectorAll('.field label') here because the form has
+    // State, District, Block, Panchayat, PIN and Service in that exact order.
+    // The old positional code shifted the labels and made the UI look as if
+    // State/District/Block values had moved into the wrong fields.
+    const stateLabel=$('stateLabel'); if(stateLabel) stateLabel.textContent='State';
+    const districtLabel=$('districtLabel'); if(districtLabel) districtLabel.textContent='District';
+    const blockLabel=$('blockLabel'); if(blockLabel) blockLabel.textContent=hi?'Block':'Block';
+    const panchayatLabel=$('panchayatLabel'); if(panchayatLabel) panchayatLabel.textContent='Panchayat';
+    const pinLabel=$('pinLabel'); if(pinLabel) pinLabel.textContent=hi?'क्षेत्र पिन कोड':'Area PIN Code';
+    const serviceLabel=$('serviceLabel'); if(serviceLabel) serviceLabel.textContent='Service';
     const b=$('block'); if(b&&b.options.length) b.options[0].textContent=hi?'-- Block चुनें --':'-- Select Block --';
     const p=$('p'); if(p){
       const currentP=p.value||'';
