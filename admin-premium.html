@@ -985,17 +985,32 @@ async function saveServiceEdit(){
  const input=document.getElementById('serviceEditInput'),msg=document.getElementById('serviceEditMsg');
  const value=input.value.trim(); if(!value){msg.textContent='Service name खाली नहीं हो सकता।';return}
  if(editingServiceIndex<0)return;
- const old=services[editingServiceIndex]; if(value===old){closeServiceEdit();return}
+ const old=services[editingServiceIndex];
+ const oldRow=serviceRows.find(x=>svcLabel(x)===old);
+ const currentIcon=serviceIconFor(oldRow);
+ const iconChanged=String(editServiceIcon||'').trim()!==String(currentIcon||'').trim();
+ if(value===old && !iconChanged){closeServiceEdit();return}
  if(services.some((x,i)=>i!==editingServiceIndex && String(x).trim().toLowerCase()===value.toLowerCase())){msg.textContent='यह service पहले से मौजूद है।';return}
  try{
   showBusy();
-  if(!dbMode){services[editingServiceIndex]=value;closeServiceEdit();render();return}
-  const row=serviceRows.find(x=>svcLabel(x)===old);
+  if(!dbMode){
+   services[editingServiceIndex]=value;
+   localStorage.setItem('senvia_service_icon_'+value,editServiceIcon);
+   if(old!==value)localStorage.removeItem('senvia_service_icon_'+old);
+   closeServiceEdit();render();return
+  }
+  const row=oldRow;
   if(!row?.id)throw new Error('Service record नहीं मिला।');
   const key=serviceNameKey(row);
   if(!key)throw new Error('Service name column नहीं मिला।');
-  const payload={}; payload[key]=value; const ikey=serviceIconKey(row); if(ikey)payload[ikey]=editServiceIcon;
-  await api('services?id=eq.'+encodeURIComponent(row.id),{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify(payload)});
+  const payload={};
+  if(value!==old)payload[key]=value;
+  const ikey=serviceIconKey(row);
+  if(ikey)payload[ikey]=editServiceIcon;
+  if(Object.keys(payload).length){
+   await api('services?id=eq.'+encodeURIComponent(row.id),{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify(payload)});
+  }
+  if(!ikey)localStorage.setItem('senvia_service_icon_'+value,editServiceIcon);
   closeServiceEdit(); await loadFromSupabase();
  }catch(e){console.error('Service edit failed:',e);msg.textContent='Service edit failed. '+(e.message||e)}finally{hideBusy()}
 }
