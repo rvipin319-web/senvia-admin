@@ -395,6 +395,34 @@ body.senvia-panchayat-open{overflow:hidden}
 #worker #wrState,#worker #wrDistrict{width:100%;padding:11px;border:1px solid #ccdbe6;border-radius:7px;background:#fff;color:#17324b;box-sizing:border-box}
 @media(max-width:550px){#worker #wrState,#worker #wrDistrict{min-height:42px;padding:9px 10px;font-size:14px}}
 </style>
+
+<style id="senvia-search-box-width-only">
+/* केवल Find a Service box की desktop width थोड़ी कम */
+@media (min-width:851px){
+  .hg{
+    grid-template-columns:minmax(0,1fr) 330px !important;
+  }
+}
+</style>
+
+
+<style id="senvia-more-button-fix">
+.nav-more{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:10px 16px;
+  margin-left:8px;
+  color:inherit;
+  text-decoration:none;
+  font-weight:600;
+  white-space:nowrap;
+}
+@media (max-width:700px){
+  .nav-more{padding:8px 10px;font-size:12px;margin-left:4px;}
+}
+</style>
+
 </head><body>
 <div id="senviaBusy" aria-live="polite" aria-label="System busy">
   <div class="senvia-v-spinner"><b>V</b></div>
@@ -409,6 +437,8 @@ body.senvia-panchayat-open{overflow:hidden}
     <a id="navAbout" href="about.html">ⓘ <span>हमारे बारे में</span></a>
     <a id="navContact" href="contact.html">✉ <span>संपर्क</span></a>
   </div>
+
+<a href="#" class="nav-more" onclick="return false;">⋯ More ▼</a>
 </nav>
 <div class="senvia-mobile-overlay" id="senviaMobileOverlay" onclick="senviaMobileMenu(false)"></div>
 <aside class="senvia-mobile-drawer" id="senviaMobileDrawer" aria-label="Mobile navigation" aria-hidden="true">
@@ -1348,4 +1378,18 @@ $('block').addEventListener('change',()=>loadP());$('p').addEventListener('chang
   });
 })();
 </script>
+
+<script id="senvia-professional-panchayat-safety">
+document.addEventListener('DOMContentLoaded', function(){
+  const b = document.getElementById('wrBlock');
+  const p = document.getElementById('wrPanchayat');
+  if (!b || !p) return;
+  function ensurePanchayat(){
+    if (typeof fillRegPanchayats === 'function') fillRegPanchayats();
+  }
+  b.addEventListener('change', ensurePanchayat);
+  if (b.value) ensurePanchayat();
+});
+</script>
+
 </body></html>
