@@ -320,7 +320,7 @@ async function load(){
     for(const row of (rows||[])){
       const name=String(row.Name??row.name??row.service_name??row.title??'').trim();
       if(!name) continue;
-      const icon=String(row.Icon??row.icon??row.emoji??'').trim()||iconFor(name);
+      const icon=String(row.Icon??row.icon??row.emoji??'').trim()||localStorage.getItem('senvia_service_icon_'+name)||iconFor(name);
       if(!all.some(x=>key(x[0])===key(name))) all.push([name,icon]);
     }
     all.sort((a,b)=>key(a[0]).localeCompare(key(b[0])));
