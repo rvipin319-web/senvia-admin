@@ -385,6 +385,13 @@ table tbody tr{border-bottom:1px solid #e3edf3;transition:background .15s ease}t
 <style id="senvia-visitor-analytics-css">
 .visitor-kpis{margin-top:14px}.analytics-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:18px}.visitor-page-list,.visitor-daily-list{display:flex;flex-direction:column;gap:9px;margin-top:14px}.visitor-page-row,.visitor-day-row{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;padding:12px 14px;border:1px solid #e6edf3;border-radius:12px;background:#fbfdff}.visitor-page-row b,.visitor-day-row b{color:#12385c}.visitor-page-row span,.visitor-day-row span{color:#63748a;font-size:12px}.visitor-page-row strong,.visitor-day-row strong{color:#0879c9}.analytics-note{margin-top:18px;padding:14px 16px;border-radius:12px;background:#fff7e6;border:1px solid #f2d28b;color:#704d00}@media(max-width:800px){.analytics-grid{grid-template-columns:1fr}}
 </style>
+
+<style id="senvia-professional-locations-css">
+#professionalLocations .tablewrap{overflow-x:auto}
+#professionalLocations table{min-width:760px;width:100%}
+#professionalLocations th,#professionalLocations td{padding:11px 12px;white-space:nowrap}
+@media(max-width:700px){#professionalLocations .panel{padding:12px}#professionalLocations h1{font-size:24px}}
+</style>
 </head>
 <body>
 <div id="senviaBusy" aria-live="polite" aria-label="System busy">
@@ -430,6 +437,7 @@ table tbody tr{border-bottom:1px solid #e3edf3;transition:background .15s ease}t
     <button type="button" class="admin-mobile-link" data-mobile-target="customers" onclick="mobileAdminShow('customers',this)"><span class="mi">👤</span><span data-hi="Customers" data-en="Customers">Customers</span><span class="arrow">›</span></button>
     <button type="button" class="admin-mobile-link" data-mobile-target="services" onclick="mobileAdminShow('services',this)"><span class="mi">🛠</span><span data-hi="Services" data-en="Services">Services</span><span class="arrow">›</span></button>
     <button type="button" class="admin-mobile-link" data-mobile-target="areas" onclick="mobileAdminShow('areas',this)"><span class="mi">📍</span><span data-hi="Areas" data-en="Areas">Areas</span><span class="arrow">›</span></button>
+    <button type="button" class="admin-mobile-link" data-mobile-target="professionalLocations" onclick="mobileAdminShow('professionalLocations',this)"><span class="mi">📌</span><span data-hi="Professional Locations" data-en="Professional Locations">Professional Locations</span><span class="arrow">›</span></button>
     <button type="button" class="admin-mobile-link" data-mobile-target="messages" onclick="mobileAdminShow('messages',this)"><span class="mi">💬</span><span data-hi="Messages" data-en="Messages">Messages</span><span class="arrow">›</span></button>
     <button type="button" class="admin-mobile-link" data-mobile-target="analytics" onclick="mobileAdminShow('analytics',this)"><span class="mi">📈</span><span data-hi="Visitors" data-en="Visitors">Visitors</span><span class="arrow">›</span></button>
   </div>
@@ -446,6 +454,7 @@ table tbody tr{border-bottom:1px solid #e3edf3;transition:background .15s ease}t
 <div class="nav" onclick="show('customers',this)">👤 <span data-hi="Customers" data-en="Customers">Customers</span></div>
 <div class="nav" onclick="show('services',this)">🛠 <span data-hi="Services" data-en="Services">Services</span></div>
 <div class="nav" onclick="show('areas',this)">📍 <span data-hi="Areas" data-en="Areas">Areas</span></div>
+<div class="nav" onclick="show('professionalLocations',this)">📌 <span data-hi="Professional Locations" data-en="Professional Locations">Professional Locations</span></div>
 <div class="nav" onclick="show('messages',this)">💬 <span data-hi="Messages" data-en="Messages">Messages</span></div>
 <div class="nav" onclick="show('analytics',this)">📈 <span data-hi="Visitors" data-en="Visitors">Visitors</span></div>
 </aside>
@@ -551,6 +560,24 @@ table tbody tr{border-bottom:1px solid #e3edf3;transition:background .15s ease}t
   <div id="areaTree" class="area-tree"></div>
   <div class="area-footnote">👁 Show = Customer side के लिए उपलब्ध • 🙈 Hide = Admin में रहेगा लेकिन Customer side पर नहीं दिखेगा • 🗑 Delete = hierarchy से हटेगा</div>
 </div></section>
+
+<section id="professionalLocations" style="display:none">
+  <h1>📌 Professional Locations</h1>
+  <div class="panel">
+    <div style="background:linear-gradient(135deg,#082455,#0879c9 60%,#16a65b);color:#fff;border-radius:14px;padding:20px;margin-bottom:18px">
+      <h2 style="margin:0 0 7px">Professional Location Management</h2>
+      <p style="margin:0;line-height:1.6">यहाँ Professionals की location देखी जाएगी। मौजूदा State → District → Block → Panchayat वाले Area records इसी system से जुड़े रहेंगे। इस page से Area records delete या replace नहीं किए जाते।</p>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px">
+      <button class="green" type="button" onclick="show('areas',document.querySelector('.nav[onclick*=\"show(\'areas\'\"]'))">📍 क्षेत्र प्रबंधन खोलें</button>
+      <button class="outline" type="button" onclick="show('pros',document.querySelector('.nav[onclick*=\"show(\'pros\'\"]'))">👥 Professionals खोलें</button>
+    </div>
+    <div class="tablewrap">
+      <table><thead><tr><th>Professional</th><th>Mobile</th><th>State</th><th>District</th><th>Block</th><th>Panchayat / Village</th><th>Status</th></tr></thead>
+      <tbody id="professionalLocationTable"><tr><td colspan="7" style="text-align:center;color:#68758a">Professional locations loading…</td></tr></tbody></table>
+    </div>
+  </div>
+</section>
 <section id="messages" style="display:none"><h1>Messages</h1><div class="panel"><div class="toolbar"><input id="msgSearch" placeholder="Search user / mobile / message / ID"><select id="msgType"><option value="">All Types</option><option>Registration</option><option>Welcome</option></select><button class="outline view-toggle" id="msgViewToggle" onclick="toggleCollectionView('messages')">▦ Grid View</button></div><div id="messageList" class="collection-list"></div></div></section>
 </main></div>
 
@@ -924,6 +951,22 @@ function setLang(l){
 function syncAdminMobileActive(id){document.querySelectorAll('.admin-mobile-link').forEach(n=>n.classList.toggle('active',n.dataset.mobileTarget===id))}
 function toggleAdminMobileMenu(){document.getElementById('adminMobileMenu')?.classList.toggle('open');document.getElementById('adminMobileOverlay')?.classList.toggle('open')}
 function closeAdminMobileMenu(){document.getElementById('adminMobileMenu')?.classList.remove('open');document.getElementById('adminMobileOverlay')?.classList.remove('open')}
+function renderProfessionalLocations(){
+  const el=document.getElementById('professionalLocationTable');
+  if(!el)return;
+  const list=Array.isArray(pros)?pros:[];
+  if(!list.length){el.innerHTML='<tr><td colspan="7" style="text-align:center;color:#68758a">अभी कोई Professional location उपलब्ध नहीं है।</td></tr>';return;}
+  el.innerHTML=list.map(p=>{
+    const name=areaEsc(p.name||'—');
+    const mobile=areaEsc(p.mobile||'—');
+    const state=areaEsc(p.state||'Bihar');
+    const district=areaEsc(p.district||'Muzaffarpur');
+    const block=areaEsc(p.block||'—');
+    const pv=areaEsc([p.panchayat,p.village].filter(Boolean).join(' / ')||'—');
+    const status=areaEsc(proStatus(p)||p.status||'—');
+    return `<tr><td><b>${name}</b></td><td>${mobile}</td><td>${state}</td><td>${district}</td><td>${block}</td><td>${pv}</td><td>${status}</td></tr>`;
+  }).join('');
+}
 function mobileAdminShow(id,el){syncAdminMobileActive(id);show(id);closeAdminMobileMenu()}
 function show(id,el){
   const target=document.getElementById(id);
@@ -951,7 +994,7 @@ function render(){
  const cc=document.getElementById('countCust'); if(cc) cc.textContent=customers.length;
  const cs=document.getElementById('countSvc'); if(cs) cs.textContent=services.length;
  const cb=document.getElementById('countBlocks'); if(cb) cb.textContent=blocks.length; const bn=document.getElementById('activeBlockNames'); if(bn) bn.textContent=blocks.join(' • ')||'—';
- renderTable();renderRecent();renderServices();renderCustomers();renderMessages();renderAreas();
+ renderTable();renderRecent();renderServices();renderCustomers();renderMessages();renderAreas();renderProfessionalLocations();
  renderPremiumDashboard();
  setLang(lang);
 }
