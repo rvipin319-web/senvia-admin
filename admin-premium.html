@@ -539,7 +539,7 @@ table tbody tr{border-bottom:1px solid #e3edf3;transition:background .15s ease}t
         <div class="pro-edit-field"><label>Block</label><select id="editPb"></select></div>
         <div class="pro-edit-field"><label>Panchayat</label><input id="editPp" type="text"></div>
         <div class="pro-edit-field"><label>Village / Area</label><input id="editPv" type="text"></div>
-        <div class="pro-edit-field"><label>Experience</label><input id="editPe" type="text"></div>
+        <div class="pro-edit-field"><label>Experience <small style="font-weight:400;color:#718096">(display only)</small></label><input id="editPe" type="text"></div>
       </div>
       <div class="pro-edit-services"><h3>Services</h3><div class="pro-edit-checks" id="editChecks"></div></div>
       <div class="pro-edit-msg" id="proEditMsg"></div>
@@ -1290,7 +1290,7 @@ async function saveProEdit(){
  if(!dbMode||!p.id){p.name=name;p.mobile=mobile;p.block=block;p.panchayat=panchayat;p.village=village;p.experience=experience;p.services=ss;render();closeProEdit();alert('Professional updated in demo mode.');return}
  try{
   showBusy();
-  await api('professionals?id=eq.'+encodeURIComponent(p.id),{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify({Name:name,Phone:mobile,Block:block,Panchayat:panchayat,Village_Area:village,Experience:experience})});
+  await api('professionals?id=eq.'+encodeURIComponent(p.id),{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify({Name:name,Phone:mobile,Block:block,Panchayat:panchayat,Village_Area:village})});
   await api('professional_services?professional_id=eq.'+encodeURIComponent(p.id),{method:'DELETE'});
   const ids=serviceRows.filter(s=>ss.includes(svcLabel(s))).map(s=>s.id).filter(Boolean);
   if(ids.length)await api('professional_services',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify(ids.map(id=>({professional_id:p.id,service_id:id}))) });
