@@ -165,6 +165,7 @@ body{background:linear-gradient(135deg,#eef8ff 0%,#eafcff 38%,#f4efff 72%,#eefaf
 .service-edit-footer{padding:0 20px 20px;display:flex;justify-content:flex-end;gap:9px}.service-edit-footer button{min-width:100px}
 .service-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 4px;border-bottom:1px solid #edf1f5}.service-row-name{font-weight:800;color:#153b61;flex:1}.service-row-actions{display:flex;gap:7px;flex-shrink:0}.service-edit-btn{background:#eaf5ff!important;color:#0879c9!important;border:1px solid #cfe5f7!important}
 @media(max-width:520px){.service-row{align-items:flex-start}.service-row-actions{flex-direction:column}.service-edit-footer{padding:0 16px 16px}.service-edit-body{padding:16px}}
+.icon-picker-wrap{display:flex;align-items:center;gap:10px;margin-top:6px}.selected-service-icon{width:52px;height:52px;border:1px solid #cfe0ee;border-radius:14px;background:#fff;font-size:28px;display:grid;place-items:center;cursor:pointer}.icon-picker-modal{position:fixed;inset:0;background:rgba(5,24,45,.58);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:18px;z-index:100002}.icon-picker-modal.show{display:flex}.icon-picker-card{width:min(560px,100%);max-height:min(720px,92vh);overflow:auto;background:#fff;border:1px solid #dce8f4;border-radius:22px;box-shadow:0 24px 70px rgba(5,34,65,.28)}.icon-picker-head{position:sticky;top:0;z-index:2;background:linear-gradient(135deg,#073d70,#087c86);color:#fff;padding:16px 18px;display:flex;align-items:center}.icon-picker-head h2{margin:0;color:#fff;font-size:20px}.icon-picker-close{margin-left:auto;border:0;background:rgba(255,255,255,.14);color:#fff;width:38px;height:38px;border-radius:11px;font-size:21px}.icon-picker-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:9px;padding:18px}.service-icon-option{border:1px solid #d8e5ef;background:#f8fbfe;border-radius:14px;min-height:66px;display:grid;place-items:center;cursor:pointer;font-size:29px}.service-icon-option:hover{border-color:#1592a4;background:#eefaf9;transform:translateY(-1px)}.service-icon-option.active{border:2px solid #0a9b59;background:#eaf8f0;box-shadow:0 0 0 2px rgba(10,155,89,.10)}.service-icon-option span{font-size:11px;color:#607286;margin-top:-2px}@media(max-width:520px){.icon-picker-grid{grid-template-columns:repeat(5,1fr);padding:13px;gap:7px}.service-icon-option{min-height:60px;font-size:26px}}
 </style>
 
 
@@ -473,7 +474,7 @@ table tbody tr{border-bottom:1px solid #e3edf3;transition:background .15s ease}t
 
 <section id="customers" style="display:none"><h1>Customers</h1><div class="panel"><div class="toolbar"><input id="custSearch" placeholder="Search name / mobile / ID / block"><button class="outline view-toggle" id="custViewToggle" onclick="toggleCollectionView('customers')">▦ Grid View</button></div><div id="customerList" class="collection-list"></div></div></section>
 
-<section id="services" style="display:none"><h1>Services</h1><div class="panel"><div class="toolbar"><input id="newSvc" placeholder="New service name"><button class="green" onclick="addService()">+ Add Service</button><button class="outline view-toggle" id="svcViewToggle" onclick="toggleCollectionView('services')">▦ Grid View</button></div><div id="serviceList" class="collection-list"></div></div></section>
+<section id="services" style="display:none"><h1>Services</h1><div class="panel"><div class="toolbar"><input id="newSvc" placeholder="New service name"><button class="outline" type="button" id="newSvcIconBtn" onclick="openServiceIconPicker('add')">🛠️ Icon चुनें</button><button class="green" onclick="addService()">+ Add Service</button><button class="outline view-toggle" id="svcViewToggle" onclick="toggleCollectionView('services')">▦ Grid View</button></div><div id="serviceList" class="collection-list"></div></div></section>
 
 <section id="areas" style="display:none"><h1>📍 क्षेत्र प्रबंधन</h1><div class="panel area-shell">
   <div class="area-hero"><h2>📍 State → District → Block → Panchayat</h2><p>सभी भारतीय States को पहले से तैयार रखें। जरूरत के अनुसार District, Block और Panchayat बाद में जोड़ें, Hide/Show करें या Delete करें।</p></div>
@@ -533,12 +534,21 @@ table tbody tr{border-bottom:1px solid #e3edf3;transition:background .15s ease}t
     <div class="service-edit-body">
       <label for="serviceEditInput">Service Name</label>
       <input id="serviceEditInput" type="text" autocomplete="off" placeholder="Enter service name">
+      <label style="margin-top:14px">Service Icon</label>
+      <div class="icon-picker-wrap"><button type="button" class="selected-service-icon" id="editSvcIconBtn" onclick="openServiceIconPicker('edit')">🛠️</button><span style="font-size:12px;color:#718096">Icon बदलने के लिए यहाँ टैप करें</span></div>
       <div id="serviceEditMsg" style="margin-top:9px;font-size:13px;color:#b42318"></div>
     </div>
     <div class="service-edit-footer">
       <button class="outline" type="button" onclick="closeServiceEdit()">Cancel</button>
       <button class="green" type="button" onclick="saveServiceEdit()">Save Changes</button>
     </div>
+  </div>
+</div>
+
+<div class="icon-picker-modal" id="serviceIconPicker" role="dialog" aria-modal="true" aria-label="Service icon picker">
+  <div class="icon-picker-card">
+    <div class="icon-picker-head"><h2>Service Icon चुनें</h2><button class="icon-picker-close" type="button" onclick="closeServiceIconPicker()">×</button></div>
+    <div class="icon-picker-grid" id="serviceIconGrid"></div>
   </div>
 </div>
 
@@ -887,7 +897,7 @@ function renderRecent(){const recent=document.getElementById('recentProTable');i
 function renderServices(){
  const grid=localStorage.getItem('senvia_services_view')==='grid';
  const box=document.getElementById('serviceList'); box.className=grid?'collection-grid':'collection-list';
- box.innerHTML=services.map((s,i)=>grid?`<div class="collection-card"><h3>🛠 ${s}</h3><p>Service available on Senvia</p><div class="actions"><button class="service-edit-btn" type="button" onclick="openServiceEdit(${i})">✎ Edit</button><button class="danger" type="button" onclick="delService(${i})">Delete</button></div></div>`:`<div class="service-row"><span class="service-row-name">${s}</span><div class="service-row-actions"><button class="service-edit-btn" type="button" onclick="openServiceEdit(${i})">✎ Edit</button><button class="danger" type="button" onclick="delService(${i})">Delete</button></div></div>`).join('')||'<p class="empty">No services found.</p>';
+ box.innerHTML=services.map((s,i)=>{const row=serviceRows.find(x=>svcLabel(x)===s);const icon=serviceIconFor(row)||localStorage.getItem('senvia_service_icon_'+s)||'🛠️';return grid?`<div class="collection-card"><h3>${icon} ${s}</h3><p>Service available on Senvia</p><div class="actions"><button class="service-edit-btn" type="button" onclick="openServiceEdit(${i})">✎ Edit</button><button class="danger" type="button" onclick="delService(${i})">Delete</button></div></div>`:`<div class="service-row"><span class="service-row-name">${icon} ${s}</span><div class="service-row-actions"><button class="service-edit-btn" type="button" onclick="openServiceEdit(${i})">✎ Edit</button><button class="danger" type="button" onclick="delService(${i})">Delete</button></div></div>`}).join('')||'<p class="empty">No services found.</p>';
  const b=document.getElementById('svcViewToggle');if(b)b.textContent=grid?'☷ List View':'▦ Grid View';
 }
 function renderCustomers(){
@@ -929,6 +939,30 @@ function toggleCollectionView(type){showBusy();const key='senvia_'+type+'_view';
 function restoreCollectionViews(){renderServices();renderCustomers();renderMessages();}
 async function deleteMessage(id){if(!confirm('Delete this message?'))return;try{await api('messages?id=eq.'+encodeURIComponent(id),{method:'DELETE'});messageRows=messageRows.filter(x=>String(x.id)!==String(id));renderMessages()}catch(e){alert('Message delete failed. Check RLS policy.')}}
 
+const SERVICE_ICONS=[
+ ['🛠️','General'],['🔧','Tools'],['🔨','Carpenter'],['⚡','Electric'],['💡','Electric'],['❄️','AC'],['🧊','Fridge'],['📺','TV / LED'],['📱','Mobile'],['💻','Computer'],['🖨️','Printer'],['📷','Camera'],['📡','CCTV'],['🚰','Plumber'],['💧','Water / RO'],['🚿','Plumbing'],['🧱','Masonry'],['🎨','Painter'],['🪚','Woodwork'],['🏠','Home'],['🧹','Cleaning'],['🛋️','Furniture'],['🚗','Car'],['🏍️','Bike'],['🚲','Cycle'],['🔑','Locksmith'],['🧯','Safety'],['🌿','Gardener'],['✂️','Tailor / Salon'],['💄','Beauty'],['🍳','Food'],['📦','Courier'],['🚚','Transport'],['📚','Education'],['🩺','Health'],['💇','Salon'],['🐄','Animal'],['📱','Phone'],['🔌','Electronics'],['⚙️','Mechanic'],['🛵','Delivery'],['🧼','Laundry'],['🪟','Glass / Window'],['🧰','Repair']
+];
+let newServiceIcon='🛠️',editServiceIcon='🛠️',iconPickerTarget='add';
+function serviceIconKey(row){
+ if(!row||typeof row!=='object')return null;
+ return keyCI(row,['icon','Icon','emoji','Emoji','service_icon','serviceIcon','icon_emoji']);
+}
+function serviceIconFor(rowOrName){
+ if(rowOrName&&typeof rowOrName==='object'){const k=serviceIconKey(rowOrName);if(k&&String(rowOrName[k]??'').trim())return String(rowOrName[k]).trim()}
+ const name=typeof rowOrName==='string'?rowOrName:svcLabel(rowOrName);
+ const n=String(name||'').toLowerCase();
+ const hit=[['ac','❄️'],['tv','📺'],['led','📺'],['mobile','📱'],['computer','💻'],['laptop','💻'],['electric','⚡'],['plumb','🚰'],['fridge','🧊'],['carpenter','🔨'],['painter','🎨'],['raj mistri','🧱'],['bike','🏍️'],['ro','💧'],['water','💧'],['cctv','📷']].find(([k])=>n.includes(k));
+ return hit?hit[1]:'🛠️';
+}
+function renderServiceIconPicker(){
+ const box=document.getElementById('serviceIconGrid');if(!box)return;
+ const selected=iconPickerTarget==='edit'?editServiceIcon:newServiceIcon;
+ box.innerHTML=SERVICE_ICONS.map(([icon,label])=>`<button type="button" class="service-icon-option ${icon===selected?'active':''}" onclick="selectServiceIcon(${JSON.stringify(icon)})"><div>${icon}</div><span>${label}</span></button>`).join('');
+}
+function openServiceIconPicker(target){iconPickerTarget=target;renderServiceIconPicker();document.getElementById('serviceIconPicker')?.classList.add('show')}
+function closeServiceIconPicker(){document.getElementById('serviceIconPicker')?.classList.remove('show')}
+function selectServiceIcon(icon){if(iconPickerTarget==='edit'){editServiceIcon=icon;const b=document.getElementById('editSvcIconBtn');if(b)b.textContent=icon}else{newServiceIcon=icon;const b=document.getElementById('newSvcIconBtn');if(b)b.textContent=icon+' Icon'}closeServiceIconPicker()}
+document.getElementById('serviceIconPicker')?.addEventListener('click',e=>{if(e.target.id==='serviceIconPicker')closeServiceIconPicker()});
 let editingServiceIndex=-1;
 function serviceNameKey(row){
  if(!row||typeof row!=='object')return null;
@@ -942,7 +976,7 @@ function serviceNameKey(row){
 function openServiceEdit(i){
  const current=services[i]; if(current==null)return; editingServiceIndex=i;
  const input=document.getElementById('serviceEditInput'); const msg=document.getElementById('serviceEditMsg');
- input.value=current; msg.textContent=''; document.getElementById('serviceEditModal').classList.add('show');
+ input.value=current; editServiceIcon=serviceIconFor(serviceRows.find(x=>svcLabel(x)===current)); const ib=document.getElementById('editSvcIconBtn'); if(ib)ib.textContent=editServiceIcon; msg.textContent=''; document.getElementById('serviceEditModal').classList.add('show');
  setTimeout(()=>{input.focus();input.select()},50);
 }
 function closeServiceEdit(){editingServiceIndex=-1;document.getElementById('serviceEditModal')?.classList.remove('show')}
@@ -959,7 +993,7 @@ async function saveServiceEdit(){
   if(!row?.id)throw new Error('Service record नहीं मिला।');
   const key=serviceNameKey(row);
   if(!key)throw new Error('Service name column नहीं मिला।');
-  const payload={}; payload[key]=value;
+  const payload={}; payload[key]=value; const ikey=serviceIconKey(row); if(ikey)payload[ikey]=editServiceIcon;
   await api('services?id=eq.'+encodeURIComponent(row.id),{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify(payload)});
   closeServiceEdit(); await loadFromSupabase();
  }catch(e){console.error('Service edit failed:',e);msg.textContent='Service edit failed. '+(e.message||e)}finally{hideBusy()}
@@ -1229,20 +1263,21 @@ async function addService(){
    let saved=false;
    for(const key of keys){
      try{
-       const payload={};
-       payload[key]=s;
+       const payload={}; payload[key]=s;
+       const iconColumn=serviceIconKey(sample)||'Icon'; payload[iconColumn]=newServiceIcon;
        await api('services',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify(payload)});
-       saved=true;
-       break;
+       saved=true; break;
      }catch(e){
        lastError=e.message||String(e);
+       // If the database has no icon column, keep the service add working and save the selected icon locally as a fallback.
+       try{ const payload={}; payload[key]=s; await api('services',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify(payload)}); saved=true; localStorage.setItem('senvia_service_icon_'+s,newServiceIcon); break; }catch(e2){ lastError=e2.message||lastError; }
      }
    }
    if(!saved){
      throw new Error(lastError||'Services table में service name column या INSERT permission नहीं मिली।');
    }
 
-   if(input) input.value='';
+   if(input) input.value=''; newServiceIcon='🛠️'; const ib=document.getElementById('newSvcIconBtn'); if(ib)ib.textContent='🛠️ Icon चुनें';
    await loadFromSupabase();
    alert('Service successfully added.');
  }catch(e){
