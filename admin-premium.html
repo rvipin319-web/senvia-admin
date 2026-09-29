@@ -103,62 +103,19 @@ table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:11px 8px
 .overview-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}.overview-item{border:1px solid #e3eaf2;border-radius:13px;padding:13px}.overview-item small{display:block;color:#77869a}.overview-item b{font-size:22px;color:#102e58}
 @media(max-width:1000px){.pdash-kpis{grid-template-columns:1fr 1fr}.pdash-charts{grid-template-columns:1fr 1fr}.pdash-charts .wide{grid-column:1/-1}.pdash-tables,.pdash-bottom{grid-template-columns:1fr}}
 @media(max-width:650px){.pdash-hero{align-items:flex-start;flex-direction:column}.pdash-tag{width:100%;min-width:0}.pdash-kpis{grid-template-columns:1fr 1fr}.pdash-charts{grid-template-columns:1fr}.pdash-tables,.pdash-bottom{grid-template-columns:1fr}.quick-grid{grid-template-columns:1fr 1fr}.donut-wrap{justify-content:center}.donut-list{display:none}}
-
-.senvia-inline-loader{min-height:180px;display:flex;align-items:center;justify-content:center;gap:12px;flex-direction:column;font-size:15px;color:#164a7b}.senvia-loader-v{width:54px;height:54px;border:6px solid #e8eef5;border-top-color:#0878c9;border-right-color:#0878c9;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:24px;color:#07528f;animation:senviaSpin 1s linear infinite}.senvia-inline-loader b{font-weight:800}@keyframes senviaSpin{to{transform:rotate(360deg)}}
-
-/* Senvia Area Management Panel - screenshot style */
-.area-management-grid{display:grid;grid-template-columns:1fr;gap:18px;padding:16px 18px 8px}
-.area-management-card{border-radius:20px;background:#fff;border:1px solid #dbe6ef;box-shadow:0 7px 20px rgba(8,36,85,.08);overflow:hidden}
-.area-card-head{display:flex;align-items:center;gap:14px;padding:16px 18px;color:#fff;min-height:86px}
-.area-card-icon{width:58px;height:58px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.20);border:1px solid rgba(255,255,255,.28);font-size:29px;flex:none}
-.area-card-title{flex:1;min-width:0}.area-card-title b{display:block;font-size:25px;font-weight:900;line-height:1.1}.area-card-title span{display:block;margin-top:5px;font-size:14px;font-weight:600;opacity:.96}
-.area-card-count{min-width:84px;padding:9px 13px;border-radius:15px;background:rgba(255,255,255,.82);color:#18212b;text-align:center}.area-card-count b{display:block;font-size:23px;line-height:1.05}.area-card-count span{font-size:12px;font-weight:800}
-.area-card-actions{display:grid;grid-template-columns:1.25fr 1fr 1fr 1fr;gap:10px;padding:10px 12px 12px;background:#fff}
-.area-card-actions button{min-height:45px;border-radius:12px;border:1px solid #d5e0ea;background:#fff;color:#10233a;font-size:14px;font-weight:800;box-shadow:0 2px 5px rgba(8,36,85,.04);cursor:pointer}
-.area-card-actions .area-card-add{color:#fff;border:0}.area-card-actions .area-card-delete{color:#e53935;background:#fff5f5;border-color:#ffd0d0}
-.area-card-state .area-card-head{background:linear-gradient(135deg,#1565c0 0%,#00a8c8 50%,#20e65b 100%)}.area-card-state .area-card-add{background:linear-gradient(135deg,#1565c0,#20d95c)}
-.area-card-district .area-card-head{background:linear-gradient(135deg,#159447 0%,#6dbb00 52%,#ffe000 100%)}.area-card-district .area-card-add{background:linear-gradient(135deg,#159447,#ffe000)}
-.area-card-block .area-card-head{background:linear-gradient(135deg,#ffe000 0%,#ff9800 50%,#f11c2b 100%)}.area-card-block .area-card-add{background:linear-gradient(135deg,#654ea3,#eaafc8)}
-.area-card-panchayat .area-card-head{background:linear-gradient(135deg,#ef1717 0%,#c51f2c 48%,#12ad58 100%)}.area-card-panchayat .area-card-add{background:linear-gradient(135deg,#ef1717,#10a95b)}
-@media(min-width:900px){.area-management-grid{grid-template-columns:1fr 1fr}}
-@media(max-width:600px){.area-card-head{gap:10px;padding:13px}.area-card-icon{width:48px;height:48px;font-size:23px}.area-card-title b{font-size:21px}.area-card-title span{font-size:11px}.area-card-count{min-width:68px;padding:8px 7px}.area-card-count b{font-size:19px}.area-card-count span{font-size:10px}.area-card-actions{grid-template-columns:1.15fr 1fr 1fr 1fr;gap:7px;padding:8px}.area-card-actions button{min-height:40px;font-size:11px;padding:4px}.area-management-grid{padding:12px 10px 5px;gap:13px}}
-
-/* === Senvia unified pastel dashboard background === */
-body{background:linear-gradient(135deg,#eef8ff 0%,#eafcff 38%,#f4efff 72%,#eefaff 100%)!important;background-attachment:fixed;}
-.content{background:linear-gradient(135deg,rgba(215,245,255,.58) 0%,rgba(235,249,255,.50) 42%,rgba(242,231,255,.48) 72%,rgba(224,250,247,.42) 100%);border-radius:0 0 28px 28px;}
-.panel,.pdash-card{background:rgba(255,255,255,.88)!important;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);}
-.pdash-hero{background:linear-gradient(135deg,rgba(197,238,255,.92) 0%,rgba(225,220,255,.90) 52%,rgba(213,250,242,.88) 100%)!important;border:1px solid rgba(117,194,232,.35);box-shadow:0 12px 32px rgba(64,119,166,.10);}
-/* Platform Overview: four clearly different soft colors */
-.overview-item{color:#18324f;box-shadow:0 6px 18px rgba(28,66,105,.07);}
-.overview-item:nth-child(1){background:linear-gradient(135deg,#dff7e8,#b9efd0);border-color:#a7dfbd;}
-.overview-item:nth-child(2){background:linear-gradient(135deg,#fff3cf,#ffe19a);border-color:#f3d37b;}
-.overview-item:nth-child(3){background:linear-gradient(135deg,#dff1ff,#b9dcff);border-color:#a7caee;}
-.overview-item:nth-child(4){background:linear-gradient(135deg,#f0e3ff,#ddc5ff);border-color:#cbb0ee;}
-.overview-item small{color:#294766!important;font-weight:800;}
-.overview-item b{color:#0b2d57!important;}
 </style>
 </style>
 
 <style id="senvia-busy-forgot">
-#senviaBusy{position:fixed;inset:0;background:rgba(235,246,255,.70);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;z-index:100000;transition:opacity .18s ease}
+#senviaBusy{position:fixed;inset:0;background:rgba(238,247,255,.62);backdrop-filter:blur(2px);display:none;align-items:center;justify-content:center;z-index:100000}
 #senviaBusy.show{display:flex}
-.senvia-busy-wrap{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:150px;min-height:150px}
-.senvia-v-spinner{width:92px;height:92px;border-radius:50%;display:flex;align-items:center;justify-content:center;position:relative;background:#fff;box-shadow:0 14px 42px rgba(18,74,125,.22),0 0 0 7px rgba(255,255,255,.55)}
-.senvia-v-spinner:before{content:"";position:absolute;inset:-7px;border-radius:50%;background:conic-gradient(from 18deg,#0b78d0 0 23%,#fff 23% 30%,#12a866 30% 43%,#fff 43% 51%,#0b78d0 51% 91%,#fff 91% 100%);-webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 8px),#000 calc(100% - 7px));mask:radial-gradient(farthest-side,transparent calc(100% - 8px),#000 calc(100% - 7px));animation:senviaRingSpin 1.8s linear infinite}
-.senvia-v-spinner:after{content:"";position:absolute;inset:10px;border-radius:50%;border:1px solid #e5eef7;background:linear-gradient(145deg,#fff,#f5faff);box-shadow:inset 0 2px 8px rgba(15,80,130,.06)}
-.senvia-v-spinner b{position:relative;z-index:2;font-family:Georgia,serif;font-size:52px;font-weight:900;font-style:italic;color:#07528f;line-height:1;animation:senviaVPulse 1.2s ease-in-out infinite}
-.senvia-busy-text{margin-top:22px;color:#164a7b;font-weight:800;font-size:14px;letter-spacing:.2px;text-shadow:0 1px 0 #fff}
-.senvia-busy-text:after{content:"";display:inline-block;width:18px;text-align:left;animation:senviaDots 1.2s steps(4,end) infinite}
-@keyframes senviaRingSpin{to{transform:rotate(360deg)}}
-@keyframes senviaVPulse{0%,100%{transform:scale(1) rotate(-6deg);opacity:1}50%{transform:scale(1.06) rotate(0deg);opacity:.88}}
-@keyframes senviaDots{0%{content:""}25%{content:"."}50%{content:".."}75%,100%{content:"..."}}
-@media(max-width:520px){.senvia-v-spinner{width:78px;height:78px}.senvia-v-spinner b{font-size:44px}.senvia-busy-text{margin-top:19px;font-size:12px}}
+.senvia-v-spinner{width:76px;height:76px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.96);box-shadow:0 10px 35px rgba(20,70,120,.22);border:3px solid #d9eaf8}
+.senvia-v-spinner b{font-family:Arial,sans-serif;font-size:48px;font-weight:900;font-style:italic;color:#0b74e8;display:block;animation:senviaVSpin 1s linear infinite}
+@keyframes senviaVSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+.senvia-busy-text{position:absolute;margin-top:120px;color:#174a87;font-weight:800;font-size:14px}
+@media(max-width:520px){.senvia-v-spinner{width:64px;height:64px}.senvia-v-spinner b{font-size:40px}.senvia-busy-text{margin-top:104px;font-size:12px}}
 </style>
 
-<style id="professional-edit-style">
-.pro-edit-modal{position:fixed;inset:0;background:rgba(5,24,45,.58);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:18px;z-index:100002}
-.pro-edit-modal.show{display:flex}.pro-edit-card{width:min(620px,100%);max-height:92vh;overflow:auto;background:#fff;border-radius:22px;box-shadow:0 24px 70px rgba(5,34,65,.28);border:1px solid #dce8f4}.pro-edit-head{background:linear-gradient(135deg,#073d70,#087c86);color:#fff;padding:18px 20px;display:flex;align-items:center;gap:12px}.pro-edit-head h2{margin:0;font-size:21px}.pro-edit-close{margin-left:auto;border:0;background:rgba(255,255,255,.14);color:#fff;width:38px;height:38px;border-radius:11px;font-size:21px}.pro-edit-body{padding:20px}.pro-edit-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}.pro-edit-field label{display:block;font-size:13px;font-weight:800;color:#5f7186;margin-bottom:7px}.pro-edit-field input,.pro-edit-field select{width:100%;box-sizing:border-box;padding:12px 13px;border:1px solid #d8e3ee;border-radius:12px;font-size:15px;outline:none;background:#fff}.pro-edit-field input:focus,.pro-edit-field select:focus{border-color:#1592a4;box-shadow:0 0 0 3px rgba(21,146,164,.12)}.pro-edit-services{margin-top:18px}.pro-edit-services h3{margin:0 0 10px;color:#153b61}.pro-edit-checks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.pro-edit-checks label{display:flex;gap:8px;align-items:center;padding:10px 11px;border:1px solid #e1e9f0;border-radius:11px;background:#f8fbfd;font-size:14px}.pro-edit-footer{padding:0 20px 20px;display:flex;justify-content:flex-end;gap:9px}.pro-edit-msg{margin:10px 0 0;color:#b42318;font-size:13px}@media(max-width:560px){.pro-edit-grid,.pro-edit-checks{grid-template-columns:1fr}.pro-edit-body{padding:16px}.pro-edit-footer{padding:0 16px 16px}}
-</style>
 <style id="service-edit-style">
 .service-edit-modal{position:fixed;inset:0;background:rgba(5,24,45,.58);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:18px;z-index:100001}
 .service-edit-modal.show{display:flex}
@@ -169,7 +126,6 @@ body{background:linear-gradient(135deg,#eef8ff 0%,#eafcff 38%,#f4efff 72%,#eefaf
 .service-edit-footer{padding:0 20px 20px;display:flex;justify-content:flex-end;gap:9px}.service-edit-footer button{min-width:100px}
 .service-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 4px;border-bottom:1px solid #edf1f5}.service-row-name{font-weight:800;color:#153b61;flex:1}.service-row-actions{display:flex;gap:7px;flex-shrink:0}.service-edit-btn{background:#eaf5ff!important;color:#0879c9!important;border:1px solid #cfe5f7!important}
 @media(max-width:520px){.service-row{align-items:flex-start}.service-row-actions{flex-direction:column}.service-edit-footer{padding:0 16px 16px}.service-edit-body{padding:16px}}
-.icon-picker-wrap{display:flex;align-items:center;gap:10px;margin-top:6px}.selected-service-icon{width:52px;height:52px;border:1px solid #cfe0ee;border-radius:14px;background:#fff;font-size:28px;display:grid;place-items:center;cursor:pointer}.icon-picker-modal{position:fixed;inset:0;background:rgba(5,24,45,.58);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:18px;z-index:100002}.icon-picker-modal.show{display:flex}.icon-picker-card{width:min(560px,100%);max-height:min(720px,92vh);overflow:auto;background:#fff;border:1px solid #dce8f4;border-radius:22px;box-shadow:0 24px 70px rgba(5,34,65,.28)}.icon-picker-head{position:sticky;top:0;z-index:2;background:linear-gradient(135deg,#073d70,#087c86);color:#fff;padding:16px 18px;display:flex;align-items:center}.icon-picker-head h2{margin:0;color:#fff;font-size:20px}.icon-picker-close{margin-left:auto;border:0;background:rgba(255,255,255,.14);color:#fff;width:38px;height:38px;border-radius:11px;font-size:21px}.icon-picker-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:9px;padding:18px}.service-icon-option{border:1px solid #d8e5ef;background:#f8fbfe;border-radius:14px;min-height:66px;display:grid;place-items:center;cursor:pointer;font-size:29px}.service-icon-option:hover{border-color:#1592a4;background:#eefaf9;transform:translateY(-1px)}.service-icon-option.active{border:2px solid #0a9b59;background:#eaf8f0;box-shadow:0 0 0 2px rgba(10,155,89,.10)}.service-icon-option span{font-size:11px;color:#607286;margin-top:-2px}@media(max-width:520px){.icon-picker-grid{grid-template-columns:repeat(5,1fr);padding:13px;gap:7px}.service-icon-option{min-height:60px;font-size:26px}}
 </style>
 
 
@@ -209,189 +165,11 @@ body{background:linear-gradient(135deg,#eef8ff 0%,#eafcff 38%,#f4efff 72%,#eefaf
 .logout-btn:hover{filter:brightness(.96)}
 @media(max-width:600px){.header-actions{gap:6px}.logout-btn{padding:8px 11px;font-size:12px}}
 </style>
-
-<style id="admin-mobile-navigation">
-/* Senvia Admin — Customer Panel style mobile navigation */
-.admin-mobile-bar{display:flex;align-items:center;justify-content:flex-start;position:fixed;top:18px;left:18px;z-index:10004;pointer-events:auto}
-.admin-mobile-menu{display:flex;position:fixed;top:0;left:0;bottom:0;width:min(82vw,330px);background:#fff;z-index:10003;transform:translateX(-105%);transition:transform .25s ease;box-shadow:14px 0 40px rgba(4,34,70,.22);flex-direction:column;overflow-y:auto}
-.admin-mobile-overlay{display:block;position:fixed;inset:0;background:rgba(3,20,38,.55);backdrop-filter:blur(2px);z-index:10002;opacity:0;pointer-events:none;transition:opacity .25s ease}
-@media(max-width:700px){
-  .layout{display:block;min-height:calc(100vh - 64px)}
-  .layout>aside{display:none}
-  header{min-height:64px;padding:8px 12px;gap:8px;position:sticky;top:0;z-index:10000}
-  header>div:first-child{flex:1;text-align:center;min-width:0}
-  header .logo{font-size:23px}
-  header .tag{font-size:9px;white-space:nowrap}
-  .header-actions{gap:5px;justify-content:flex-end}
-  .header-actions .lang{display:none}
-  .header-actions .logout-btn{display:none}
-  .admin-mobile-bar{display:flex;align-items:center;justify-content:flex-start;position:relative;z-index:10002;flex:0 0 44px;margin-left:-4px}
-  .admin-mobile-menu-btn{width:44px;height:44px;border:0;border-radius:12px;background:linear-gradient(135deg,#0879c9,#16a65b);color:#fff;font-size:25px;line-height:1;display:flex;align-items:center;justify-content:center;box-shadow:0 5px 15px rgba(8,121,201,.25);padding:0}
-  .admin-mobile-menu-btn:active{transform:scale(.96)}
-  .admin-mobile-menu{display:flex;position:fixed;top:0;left:0;bottom:0;width:min(82vw,330px);background:#fff;z-index:10003;transform:translateX(-105%);transition:transform .25s ease;box-shadow:14px 0 40px rgba(4,34,70,.22);flex-direction:column;overflow-y:auto}
-  .admin-mobile-menu.open{transform:translateX(0)}
-  .admin-mobile-menu-head{background:linear-gradient(135deg,#082455,#0879c9);color:#fff;padding:20px 16px 18px;position:relative}
-  .admin-mobile-menu-head .mobile-brand{font-size:25px;font-weight:900}
-  .admin-mobile-menu-head .mobile-brand span{color:#59d12d}
-  .admin-mobile-menu-head small{display:block;margin-top:4px;opacity:.86;font-size:11px}
-  .admin-mobile-close{position:absolute;right:12px;top:12px;width:38px;height:38px;border:0!important;border-radius:11px!important;background:rgba(255,255,255,.15)!important;color:#fff!important;font-size:23px!important;padding:0!important}
-  .admin-mobile-links{padding:12px 10px;display:flex;flex-direction:column;gap:7px}
-  .admin-mobile-link{width:100%;display:flex;align-items:center;gap:12px;padding:13px 14px;border:1px solid #e0e8f0;border-radius:13px;background:#fff;color:#153b61;font-weight:800;text-align:left;font-size:14px;cursor:pointer}
-  .admin-mobile-link .mi{width:27px;text-align:center;font-size:19px}
-  .admin-mobile-link .arrow{margin-left:auto;color:#16a65b;font-size:19px;font-weight:900}
-  .admin-mobile-link.active{background:#edf8f1;border-color:#bfe7cb;color:#08733b;box-shadow:0 4px 12px rgba(22,166,91,.08)}
-  .admin-mobile-tools{margin-top:auto;padding:12px 10px 18px;border-top:1px solid #e6edf3}
-  .admin-mobile-lang{display:flex;gap:7px;margin-bottom:9px}
-  .admin-mobile-lang button{flex:1;padding:10px;border:1px solid #cbd5e1;background:#fff;color:#082455;border-radius:10px;font-weight:800}
-  .admin-mobile-lang button.on{background:#0879c9;color:#fff}
-  .admin-mobile-logout{width:100%;background:#d93636!important;color:#fff!important}
-  .admin-mobile-overlay{display:block;position:fixed;inset:0;background:rgba(3,20,38,.55);backdrop-filter:blur(2px);z-index:10002;opacity:0;pointer-events:none;transition:opacity .25s ease}
-  .admin-mobile-overlay.open{opacity:1;pointer-events:auto}
-  html,body{width:100%;max-width:100%;overflow-x:hidden!important}
-  .layout{width:100%!important;max-width:100%!important;overflow-x:hidden!important}
-  main.content{display:block!important;width:100vw!important;max-width:100vw!important;margin:0!important;padding:18px 12px!important;box-sizing:border-box!important;overflow-x:hidden!important}
-  #dashboard,#pros,#customers,#services,#areas,#messages{width:100%!important;max-width:none!important;min-width:0!important;box-sizing:border-box!important}
-  .pdash-hero,.pdash-kpis,.pdash-charts,.pdash-tables,.pdash-bottom{width:100%!important;max-width:none!important;min-width:0!important;box-sizing:border-box!important}
-  .pdash-kpi,.pdash-card,.pdash-tag{min-width:0!important;max-width:100%!important;box-sizing:border-box!important}
-  .panel{width:100%!important;max-width:100%!important;box-sizing:border-box!important}
-  .toolbar{width:100%!important;box-sizing:border-box!important}
-  .toolbar input,.toolbar select{max-width:100%;box-sizing:border-box}
-}
-
-</style>
-
-<style id="senvia-premium-theme">
-/* Senvia premium brand finish — blue/green logo colours */
-:root{
-  --senvia-blue:#0879c9;
-  --senvia-deep:#082455;
-  --senvia-green:#16a65b;
-  --senvia-light:#eaf7f1;
-  --senvia-border:#d5e4ef;
-  --senvia-shadow:0 8px 24px rgba(8,36,85,.08);
-}
-body{background:linear-gradient(180deg,#f4f8fc 0%,#eef5fa 100%)}
-header{background:linear-gradient(90deg,#fff 0%,#f8fcff 70%,#effaf5 100%);box-shadow:0 2px 14px rgba(8,36,85,.06)}
-.logo{color:var(--senvia-deep)!important;letter-spacing:-.3px}.logo span{color:var(--senvia-green)!important}
-.tag{color:#4d6882!important}
-.lang button.on{background:linear-gradient(135deg,var(--senvia-blue),var(--senvia-green))!important;border-color:transparent!important}
-aside{background:linear-gradient(180deg,#082455 0%,#073d70 58%,#075d58 100%)!important}
-.nav{border:1px solid transparent;transition:.18s ease}.nav:hover{background:rgba(22,166,91,.16)!important;border-color:rgba(255,255,255,.12)}.nav.active{background:linear-gradient(135deg,#0879c9,#16a65b)!important;box-shadow:0 6px 16px rgba(8,121,201,.18)}
-.content{max-width:1450px}
-.content h1{color:var(--senvia-deep);letter-spacing:-.3px}.content h1:after{content:"";display:block;width:58px;height:4px;border-radius:99px;background:linear-gradient(90deg,var(--senvia-blue),var(--senvia-green));margin-top:7px}
-.panel{border:1px solid var(--senvia-border)!important;box-shadow:var(--senvia-shadow);background:rgba(255,255,255,.96)!important}
-.stat{border:1px solid #d7e6ef!important;box-shadow:0 7px 20px rgba(8,36,85,.06);position:relative;overflow:hidden}.stat:after{content:"";position:absolute;right:-22px;top:-22px;width:70px;height:70px;border-radius:50%;background:linear-gradient(135deg,rgba(8,121,201,.12),rgba(22,166,91,.12))}
-.toolbar input,.toolbar select{border:1px solid #cbddea!important;box-shadow:0 2px 8px rgba(8,36,85,.035)}.toolbar input:focus,.toolbar select:focus{border-color:var(--senvia-blue)!important;box-shadow:0 0 0 3px rgba(8,121,201,.10)!important;outline:none}
-button.green{background:linear-gradient(135deg,#16a65b,#45b51f)!important;box-shadow:0 5px 13px rgba(22,166,91,.16)}button.blue,button:not(.green):not(.danger):not(.outline):not(.view-toggle):not(.pro-view-toggle){background:linear-gradient(135deg,#0879c9,#1459b8)}
-.outline,.view-toggle,.pro-view-toggle{border-color:#bcd2e3!important;box-shadow:0 2px 8px rgba(8,36,85,.04)}
-.tablewrap{border:1px solid var(--senvia-border);border-radius:14px;overflow:auto;background:#fff}
-table thead th{background:linear-gradient(180deg,#f2f8fc,#eaf4f8);color:#153b61;border-bottom:2px solid #c9ddea}
-table tbody tr{border-bottom:1px solid #e3edf3;transition:background .15s ease}table tbody tr:hover{background:#f6fbfd}table td{border-bottom:1px solid #e6eef4}
-.collection-list{border:1px solid var(--senvia-border);border-radius:15px;padding:8px;background:linear-gradient(180deg,#fbfdff,#f7fbfd)}
-.collection-list .collection-card{border:1px solid #cfe0eb!important;box-shadow:0 6px 18px rgba(8,36,85,.065);transition:transform .15s ease,box-shadow .15s ease}.collection-list .collection-card:hover{transform:translateY(-1px);box-shadow:0 10px 24px rgba(8,36,85,.10)}
-.area-view{border:1px solid var(--senvia-border);border-radius:15px;padding:10px;background:#fbfdff}.area-card{border:1px solid #cfe0eb!important;box-shadow:0 6px 18px rgba(8,36,85,.055)!important}.area-card:hover{border-color:#9fcfe0!important}
-.message-row{border:1px solid #d5e4ef!important;border-radius:13px!important;margin:8px 0;background:#fff!important;box-shadow:0 4px 14px rgba(8,36,85,.045);padding:13px 14px!important}.message-row:hover{border-color:#9fcfe0!important;background:#fbfeff!important}
-#services .panel,#customers .panel,#areas .panel,#messages .panel,#pros .panel{border-top:3px solid transparent!important;border-image:linear-gradient(90deg,var(--senvia-blue),var(--senvia-green)) 1}
-#servicesList,.service-list{border:1px solid var(--senvia-border);border-radius:14px;padding:8px;background:#fbfdff}
-.service-row{border:1px solid #d5e4ef!important;border-radius:12px!important;margin:7px 0;padding:12px 13px!important;background:#fff;box-shadow:0 4px 12px rgba(8,36,85,.04)}
-.badge.verified{border:1px solid #bce6c8}.badge.pending{border:1px solid #f0d58d}.badge.rejected{border:1px solid #efb9b9}
-.code-pill{border-color:#bcdff2!important;background:#eef8ff!important;color:#0879c9!important}
-.admin-mobile-menu-head{background:linear-gradient(135deg,#082455,#0879c9 60%,#16a65b)!important}
-.admin-mobile-link{border-color:#d2e2ec!important;box-shadow:0 3px 10px rgba(8,36,85,.035)}.admin-mobile-link.active{background:linear-gradient(135deg,#eaf7f1,#eff9ff)!important;border-color:#a9ddc0!important;color:#08733b!important}
-.admin-mobile-menu-btn{background:linear-gradient(135deg,#0879c9,#16a65b)!important}
-@media(max-width:700px){
-  .content{padding:16px 3%!important}
-  .panel{border-radius:15px!important;padding:13px!important}
-  .collection-list{padding:7px!important}
-  .area-view{padding:7px!important}
-  .tablewrap{border-radius:12px!important}
-}
-</style>
-
-<style id="senvia-final-polish">
-/* Senvia final brand polish */
-.logo span,.mobile-brand span{color:#45b51f!important;font-weight:1000;text-shadow:0 0 10px rgba(69,181,31,.18)}
-.logo span{display:inline-block;transform:scale(1.12);color:#16a65b!important;font-weight:1000;text-shadow:0 0 9px rgba(22,166,91,.20)}
-.blue,.blue *,button.blue,.button.blue,.qblue,.qblue *,
-.pdash-kpi.blue,.pdash-kpi.blue *,
-.lang .on,.admin-mobile-lang .on{color:#fff!important}
-.blue,.qblue{font-weight:800}
-.admin-mobile-menu-btn{color:#fff!important}
-.nav.active,.nav:hover{color:#fff!important}
-.nav.active *,.nav:hover *{color:#fff!important}
-/* Premium borders for every major collection */
-.panel,.pdash-card,.stat,.collection-card,.area-card,.message-row,.tablewrap,.service-row,
-.pro-view-card,.pro-card,.customer-card,.customer-list,.messages-list,.services-list{border:1px solid #cfe0ee!important;box-shadow:0 8px 24px rgba(8,36,85,.07)}
-.tablewrap{border-radius:15px;overflow:auto;background:#fff}
-#pros .tablewrap, #customers .panel, #services .panel, #areas .panel, #messages .panel{border-color:#c8dceb!important}
-</style>
-<style id="senvia-blue-green-buttons">
-/* Final Senvia blue-green button treatment */
-.quick-grid button, .quick-grid .qblue, .quick-grid .qgreen, .quick-grid .qorange, .quick-grid .qpurple, .quick-grid .qcyan, .quick-grid .qgray {
-  background: linear-gradient(135deg, #16a65b 0%, #0a86b8 48%, #0879c9 100%) !important;
-  color: #fff !important;
-  border: 1px solid rgba(255,255,255,.22) !important;
-  box-shadow: 0 7px 18px rgba(8,121,201,.16) !important;
-}
-.quick-grid button:hover { filter: brightness(1.04); transform: translateY(-1px); }
-.quick-grid button *, .quick-grid button span, .quick-grid button i { color:#fff !important; }
-
-@media(max-width:700px){
-  .admin-mobile-link,
-  .admin-mobile-link.active {
-    background: linear-gradient(135deg, #16a65b 0%, #0a86b8 48%, #0879c9 100%) !important;
-    color:#fff !important;
-    border:1px solid rgba(255,255,255,.28) !important;
-    box-shadow:0 6px 16px rgba(8,121,201,.15) !important;
-  }
-  .admin-mobile-link *,
-  .admin-mobile-link .mi,
-  .admin-mobile-link .arrow { color:#fff !important; }
-  .admin-mobile-lang button,
-  .admin-mobile-lang button.on {
-    background:linear-gradient(135deg,#16a65b 0%,#0a86b8 48%,#0879c9 100%) !important;
-    color:#fff !important;
-    border:1px solid rgba(255,255,255,.28) !important;
-  }
-}
-</style>
-
-<style id="senvia-area-management-style">
-#areas .area-shell{border:0!important;background:linear-gradient(145deg,#f7fbff 0%,#eef9f5 48%,#f8fbff 100%)!important;box-shadow:0 14px 36px rgba(8,36,85,.10)!important;padding:0!important;overflow:hidden}
-.area-hero{padding:20px 20px 16px;background:linear-gradient(135deg,#16a65b 0%,#0a86b8 48%,#0879c9 100%);color:#fff;position:relative;overflow:hidden}
-.area-hero:after{content:"";position:absolute;width:190px;height:190px;border-radius:50%;right:-60px;top:-95px;background:rgba(255,255,255,.12)}
-.area-hero h2{margin:0;font-size:24px;position:relative;z-index:1}.area-hero p{margin:6px 0 0;opacity:.92;font-size:13px;position:relative;z-index:1}
-.area-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:14px 16px 4px}.area-kpi{background:rgba(255,255,255,.94);border:1px solid #d5e5ef;border-radius:15px;padding:12px 13px;box-shadow:0 6px 16px rgba(8,36,85,.07)}.area-kpi small{display:block;color:#65758a;font-weight:800;font-size:11px}.area-kpi b{display:block;color:#082455;font-size:25px;margin-top:3px}.area-kpi span{font-size:10px;color:#8290a0}
-.area-toolbar{display:flex;gap:9px;flex-wrap:wrap;align-items:center;padding:14px 16px 10px}.area-toolbar input{flex:1;min-width:190px;padding:12px 14px;border-radius:12px;border:1px solid #cbddea;background:#fff;box-shadow:0 3px 10px rgba(8,36,85,.04)}
-.area-toolbar button{border-radius:12px;padding:11px 14px}.area-add{background:linear-gradient(135deg,#16a65b,#0879c9)!important;color:#fff!important}.area-refresh{background:#fff!important;color:#082455!important;border:1px solid #bdd4e4!important}
-.area-state{background:#fff;border:1px solid #bcd8e8;border-radius:20px;box-shadow:0 9px 24px rgba(8,36,85,.08);overflow:hidden}.area-state-head{display:flex;align-items:center;gap:10px;padding:15px;background:linear-gradient(135deg,#12a85b 0%,#0b8bb5 52%,#0879c9 100%);color:#fff}.area-state-main{flex:1;min-width:0;cursor:pointer}.area-state-name{font-size:19px;font-weight:900}.area-state-meta{font-size:11px;opacity:.92;margin-top:3px}.area-state-body{display:none;padding:12px;background:linear-gradient(180deg,#f9fdff,#f2faf6)}.area-state.open .area-state-body{display:block}.area-state.open .area-chevron{transform:rotate(90deg)}.area-state-actions{display:flex;gap:6px;flex-wrap:wrap}.area-state-actions button{padding:8px 10px;border-radius:10px;font-size:11px}.area-state-hidden{background:linear-gradient(135deg,#718096,#4a5568)!important}.area-state-empty{padding:16px;border:1px dashed #cbd9e5;border-radius:14px;background:#fff;color:#68758a;text-align:center;margin-bottom:8px}.area-state-add{background:#fff!important;color:#0879c9!important;border:1px solid #b9d8ea!important}.area-tree{padding:8px 16px 18px;display:flex;flex-direction:column;gap:11px}.area-district{background:#fff;border:1px solid #cfe0ee;border-radius:18px;box-shadow:0 7px 20px rgba(8,36,85,.07);overflow:hidden}.area-district-head{display:flex;align-items:center;gap:10px;padding:14px 15px;background:linear-gradient(135deg,#16a65b 0%,#0a86b8 48%,#0879c9 100%);color:#fff}.area-district-main{flex:1;min-width:0;cursor:pointer}.area-district-name{font-size:17px;font-weight:900}.area-district-meta{font-size:11px;opacity:.9;margin-top:3px}.area-chevron{width:36px;height:36px;border-radius:11px;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.25);color:#fff;font-size:19px;padding:0}.area-head-actions{display:flex;gap:6px;flex-wrap:wrap}.area-head-actions button{padding:8px 10px;border-radius:10px;font-size:11px}.area-white-btn{background:rgba(255,255,255,.16)!important;color:#fff!important;border:1px solid rgba(255,255,255,.28)!important}.area-hidden{background:linear-gradient(135deg,#718096,#4a5568)!important}.area-district-body{display:none;padding:12px;background:linear-gradient(180deg,#f8fcff,#f3f9f6)}.area-district.open .area-district-body{display:block}.area-district.open .area-chevron{transform:rotate(90deg)}
-.area-block{background:#fff;border:1px solid #d5e4ef;border-radius:15px;margin:8px 0;overflow:hidden;box-shadow:0 4px 13px rgba(8,36,85,.05)}.area-block-head{display:flex;align-items:center;gap:9px;padding:12px 13px}.area-block-main{flex:1;min-width:0;cursor:pointer}.area-block-name{font-weight:900;color:#153b61;font-size:15px}.area-block-meta{font-size:10px;color:#77869a;margin-top:2px}.area-block-actions{display:flex;gap:6px;flex-wrap:wrap}.area-block-actions button{padding:7px 9px;border-radius:9px;font-size:10px}.area-panchayats{display:none;padding:0 12px 11px 35px}.area-block.open .area-panchayats{display:block}.area-panchayat{display:flex;align-items:center;gap:8px;justify-content:space-between;padding:9px 10px;margin-top:6px;background:#f8fbfd;border:1px solid #e0eaf1;border-radius:10px}.area-panchayat-name{font-size:13px;font-weight:800;color:#31516c;flex:1}.area-panchayat-actions{display:flex;gap:5px}.area-panchayat-actions button{padding:6px 8px;border-radius:8px;font-size:10px}.area-add-panchayat{width:100%;margin-top:8px;background:#eaf8f1!important;color:#08733b!important;border:1px solid #bfe5cc!important;padding:9px!important;border-radius:10px!important;font-size:11px!important}
-.area-status{display:inline-flex;align-items:center;gap:4px;padding:4px 7px;border-radius:99px;font-size:9px;font-weight:900}.area-status.on{background:#e5f8eb;color:#23753d;border:1px solid #c6e8d0}.area-status.off{background:#edf0f4;color:#68758a;border:1px solid #d8dee5}.area-empty{padding:12px;text-align:center;color:#7a8796;font-size:12px;background:#fff;border:1px dashed #cfdae4;border-radius:11px}
-.area-footnote{padding:0 16px 16px;color:#6d7d90;font-size:11px}.area-countline{padding:0 16px 10px;color:#597087;font-size:11px}
-@media(max-width:700px){.area-kpis{grid-template-columns:1fr 1fr}.area-kpi:last-child{grid-column:1/-1}.area-toolbar{padding:12px}.area-toolbar input{min-width:100%;flex-basis:100%}.area-tree{padding:7px 10px 14px}.area-district-head{align-items:flex-start;flex-wrap:wrap}.area-district-main{width:calc(100% - 48px)}.area-head-actions{width:100%;margin-top:2px}.area-block-head{align-items:flex-start;flex-wrap:wrap}.area-block-actions{width:100%}.area-panchayats{padding-left:15px}.area-panchayat{align-items:flex-start;flex-wrap:wrap}.area-panchayat-actions{width:100%}}
-@media(max-width:420px){.area-kpis{grid-template-columns:1fr}.area-kpi:last-child{grid-column:auto}.area-hero{padding:17px 15px}.area-hero h2{font-size:21px}.area-district-name{font-size:15px}}
-
-/* Senvia Area Hierarchy - requested gradients with white text */
-.area-state-head{background:linear-gradient(135deg,#134e5e 0%,#71b280 48%,#43a047 100%)!important;color:#fff!important;}
-.area-state-name,.area-state-meta{color:#fff!important;}
-.area-district-head{background:linear-gradient(135deg,#5f2c82 0%,#49a09d 48%,#f9a825 100%)!important;color:#fff!important;}
-.area-district-name,.area-district-meta{color:#fff!important;}
-.area-block{background:linear-gradient(135deg,#141e30 0%,#243b55 48%,#e53935 100%)!important;border-color:#ef6c00!important;}
-.area-block-name,.area-block-meta{color:#fff!important;}
-.area-panchayat{background:linear-gradient(135deg,#134e5e 0%,#71b280 48%,#43a047 100%)!important;border-color:#d32f2f!important;}
-.area-panchayat-name{color:#fff!important;}
-.area-block .area-status,.area-panchayat .area-status{color:#fff!important;}
-</style>
-<style id="senvia-visitor-analytics-css">
-.visitor-kpis{margin-top:14px}.analytics-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:18px}.visitor-page-list,.visitor-daily-list{display:flex;flex-direction:column;gap:9px;margin-top:14px}.visitor-page-row,.visitor-day-row{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;padding:12px 14px;border:1px solid #e6edf3;border-radius:12px;background:#fbfdff}.visitor-page-row b,.visitor-day-row b{color:#12385c}.visitor-page-row span,.visitor-day-row span{color:#63748a;font-size:12px}.visitor-page-row strong,.visitor-day-row strong{color:#0879c9}.analytics-note{margin-top:18px;padding:14px 16px;border-radius:12px;background:#fff7e6;border:1px solid #f2d28b;color:#704d00}@media(max-width:800px){.analytics-grid{grid-template-columns:1fr}}
-</style>
 </head>
 <body>
 <div id="senviaBusy" aria-live="polite" aria-label="System busy">
-  <div class="senvia-busy-wrap">
-    <div class="senvia-v-spinner"><b>V</b></div>
-    <div class="senvia-busy-text">Please wait</div>
-  </div>
+  <div class="senvia-v-spinner"><b>V</b></div>
+  <div class="senvia-busy-text">Please wait…</div>
 </div>
 
 <div id="loginGate" class="login-gate">
@@ -409,35 +187,7 @@ table tbody tr{border-bottom:1px solid #e3edf3;transition:background .15s ease}t
     <div id="loginMsg" class="login-msg"></div>
   </div>
 </div>
-<header><div class="admin-mobile-bar"><button type="button" class="admin-mobile-menu-btn" onclick="toggleAdminMobileMenu()" aria-label="Open menu">☰</button></div><div><div class="logo">Sen<span>v</span>ia</div><div class="tag">हर घर का अपना साथी • Admin Panel</div></div><div class="header-actions"><div class="lang"><button id="hi" class="on" onclick="setLang('hi')">हिंदी</button> <button id="en" onclick="setLang('en')">English</button></div><button type="button" id="logoutBtn" class="logout-btn" onclick="adminLogout()">↪ Logout</button></div></header>
-
-<style id="senvia-global-menu-button">
-/* Global menu button: available on every Admin section/page */
-.admin-mobile-menu-btn{width:52px!important;height:52px!important;border:0!important;border-radius:15px!important;background:linear-gradient(135deg,#0879c9,#16a65b)!important;color:#fff!important;font-size:28px!important;line-height:1!important;display:flex!important;align-items:center!important;justify-content:center!important;box-shadow:0 8px 24px rgba(8,121,201,.28)!important;padding:0!important;cursor:pointer!important}
-.admin-mobile-menu-btn:hover{filter:brightness(1.06);transform:translateY(-1px)}
-@media(max-width:700px){.admin-mobile-bar{top:10px;left:10px}.admin-mobile-menu-btn{width:44px!important;height:44px!important;font-size:25px!important;border-radius:12px!important}}
-</style>
-<div id="adminMobileOverlay" class="admin-mobile-overlay" onclick="closeAdminMobileMenu()"></div>
-<nav id="adminMobileMenu" class="admin-mobile-menu" aria-label="Mobile navigation">
-  <div class="admin-mobile-menu-head">
-    <div class="mobile-brand">Sen<span>v</span>ia</div>
-    <small>हर घर का अपना साथी • Admin Panel</small>
-    <button type="button" class="admin-mobile-close" onclick="closeAdminMobileMenu()" aria-label="Close menu">✕</button>
-  </div>
-  <div class="admin-mobile-links">
-    <button type="button" class="admin-mobile-link active" data-mobile-target="dashboard" onclick="mobileAdminShow('dashboard',this)"><span class="mi">📊</span><span data-hi="Dashboard" data-en="Dashboard">Dashboard</span><span class="arrow">›</span></button>
-    <button type="button" class="admin-mobile-link" data-mobile-target="pros" onclick="mobileAdminShow('pros',this)"><span class="mi">👥</span><span data-hi="Professionals" data-en="Professionals">Professionals</span><span class="arrow">›</span></button>
-    <button type="button" class="admin-mobile-link" data-mobile-target="customers" onclick="mobileAdminShow('customers',this)"><span class="mi">👤</span><span data-hi="Customers" data-en="Customers">Customers</span><span class="arrow">›</span></button>
-    <button type="button" class="admin-mobile-link" data-mobile-target="services" onclick="mobileAdminShow('services',this)"><span class="mi">🛠</span><span data-hi="Services" data-en="Services">Services</span><span class="arrow">›</span></button>
-    <button type="button" class="admin-mobile-link" data-mobile-target="areas" onclick="mobileAdminShow('areas',this)"><span class="mi">📍</span><span data-hi="Areas" data-en="Areas">Areas</span><span class="arrow">›</span></button>
-    <button type="button" class="admin-mobile-link" data-mobile-target="messages" onclick="mobileAdminShow('messages',this)"><span class="mi">💬</span><span data-hi="Messages" data-en="Messages">Messages</span><span class="arrow">›</span></button>
-    <button type="button" class="admin-mobile-link" data-mobile-target="analytics" onclick="mobileAdminShow('analytics',this)"><span class="mi">📈</span><span data-hi="Visitors" data-en="Visitors">Visitors</span><span class="arrow">›</span></button>
-  </div>
-  <div class="admin-mobile-tools">
-    <div class="admin-mobile-lang"><button id="mobileHi" class="on" onclick="setLang('hi')">हिंदी</button><button id="mobileEn" onclick="setLang('en')">English</button></div>
-    <button type="button" class="admin-mobile-logout" onclick="adminLogout()">↪ Logout</button>
-  </div>
-</nav>
+<header><div><div class="logo"><span>S</span>envia</div><div class="tag">हर घर का अपना साथी • Admin Panel</div></div><div class="header-actions"><div class="lang"><button id="hi" class="on" onclick="setLang('hi')">हिंदी</button> <button id="en" onclick="setLang('en')">English</button></div><button type="button" id="logoutBtn" class="logout-btn" onclick="adminLogout()">↪ Logout</button></div></header>
 <div class="layout">
 <aside>
 <h3>⚙ Senvia Admin</h3>
@@ -446,8 +196,7 @@ table tbody tr{border-bottom:1px solid #e3edf3;transition:background .15s ease}t
 <div class="nav" onclick="show('customers',this)">👤 <span data-hi="Customers" data-en="Customers">Customers</span></div>
 <div class="nav" onclick="show('services',this)">🛠 <span data-hi="Services" data-en="Services">Services</span></div>
 <div class="nav" onclick="show('areas',this)">📍 <span data-hi="Areas" data-en="Areas">Areas</span></div>
-<div class="nav" onclick="show('messages',this)">💬 <span data-hi="Messages" data-en="Messages">Messages</span></div>
-<div class="nav" onclick="show('analytics',this)">📈 <span data-hi="Visitors" data-en="Visitors">Visitors</span></div>
+<div class="nav" onclick="location.href='admin-messages.html?v=20260925'">💬 <span data-hi="Messages" data-en="Messages">Messages</span></div>
 </aside>
 <main class="content">
 <section id="dashboard">
@@ -459,7 +208,7 @@ table tbody tr{border-bottom:1px solid #e3edf3;transition:background .15s ease}t
   <div class="pdash-kpi blue"><small>👥 Total Professionals</small><b id="countPro">0</b><span>Live registered professionals</span></div>
   <div class="pdash-kpi green"><small>👤 Total Customers</small><b id="countCust">0</b><span>Live registered customers</span></div>
   <div class="pdash-kpi orange"><small>🛠 Active Services</small><b id="countSvc">0</b><span>Available service categories</span></div>
-  <div class="pdash-kpi purple"><small>📍 Active Blocks</small><b id="countBlocks">0</b><span id="activeBlockNames">Aurai • Bochahan • Gaighat • Katra</span></div>
+  <div class="pdash-kpi purple"><small>📍 Active Blocks</small><b id="countBlocks">4</b><span>Aurai • Bochahan • Gaighat • Katra</span></div>
 </div>
 <div class="pdash-charts">
   <div class="pdash-card wide"><h2>📊 User Growth</h2><div class="sub">Recent registrations from live database</div><div class="growth-chart" id="growthChart"></div><div class="legend"><span><i class="p"></i>Professionals</span><span><i class="c"></i>Customers</span></div></div>
@@ -479,78 +228,14 @@ table tbody tr{border-bottom:1px solid #e3edf3;transition:background .15s ease}t
 </div>
 </section>
 
-<section id="analytics" style="display:none">
-  <div class="pdash-hero">
-    <div><h1>📈 Website Visitors</h1><p>Live visitor statistics from the Senvia website.</p></div>
-    <div class="pdash-tag">🔒 Privacy-friendly tracking<br><small style="font-weight:500">No IP address is stored.</small></div>
-  </div>
-  <div class="pdash-kpis visitor-kpis">
-    <div class="pdash-kpi blue"><small>👥 Total Visitors</small><b id="visitorTotal">—</b><span>Unique browsers recorded</span></div>
-    <div class="pdash-kpi green"><small>🟢 Live Now</small><b id="visitorLive">—</b><span>Active in last 5 minutes</span></div>
-    <div class="pdash-kpi orange"><small>📅 Today</small><b id="visitorToday">—</b><span>Unique visitors today</span></div>
-    <div class="pdash-kpi purple"><small>👀 Page Views</small><b id="visitorViews">—</b><span>Total pages viewed</span></div>
-  </div>
-  <div class="pdash-kpis visitor-kpis">
-    <div class="pdash-kpi blue"><small>🗓️ Last 7 Days</small><b id="visitorWeek">—</b><span>Unique visitors</span></div>
-    <div class="pdash-kpi green"><small>📆 This Month</small><b id="visitorMonth">—</b><span>Unique visitors</span></div>
-  </div>
-  <div class="pdash-tables analytics-grid">
-    <div class="pdash-card"><h2>📄 Most Visited Pages</h2><div class="sub">Page views by URL</div><div id="visitorTopPages" class="visitor-page-list"><div class="empty">Loading…</div></div></div>
-    <div class="pdash-card"><h2>📊 Last 7 Days</h2><div class="sub">Visitors and page views</div><div id="visitorDaily" class="visitor-daily-list"><div class="empty">Loading…</div></div></div>
-  </div>
-  <div id="visitorSetupNote" class="analytics-note" style="display:none">⚠️ Visitor tracking database setup अभी पूरा नहीं हुआ है। <b>senvia-visitor-analytics.sql</b> को Supabase SQL Editor में एक बार run करें।</div>
-</section>
-
-<section id="pros" style="display:none"><h1>Professionals</h1><div class="panel"><div class="toolbar"><input id="proSearch" placeholder="Search name/mobile/block"><select id="statusFilter"><option value="">All Status</option><option>Verified</option><option>Pending</option><option>Rejected</option></select><button class="green" onclick="openPro()">+ Add Professional</button><button class="outline pro-view-toggle" type="button" id="viewToggle" onclick="toggleCardView()">▦ Grid View</button></div><div class="tablewrap"><table><thead><tr><th>Name</th><th>Mobile</th><th>Area</th><th>Services</th><th>Status</th><th>Action</th></tr></thead><tbody id="proTable"></tbody></table></div></div></section>
+<section id="pros" style="display:none"><h1>Professionals</h1><div class="panel"><div class="toolbar"><input id="proSearch" placeholder="Search name/mobile/block"><select id="statusFilter"><option value="">All Status</option><option>Verified</option><option>Pending</option><option>Rejected</option></select><button class="green" onclick="openPro()">+ Add Professional</button><button class="outline pro-view-toggle" type="button" id="viewToggle" onclick="toggleCardView()">▦ Card View</button></div><div class="tablewrap"><table><thead><tr><th>Name</th><th>Mobile</th><th>Area</th><th>Services</th><th>Status</th><th>Action</th></tr></thead><tbody id="proTable"></tbody></table></div></div></section>
 
 <section id="customers" style="display:none"><h1>Customers</h1><div class="panel"><div class="toolbar"><input id="custSearch" placeholder="Search name / mobile / ID / block"><button class="outline view-toggle" id="custViewToggle" onclick="toggleCollectionView('customers')">▦ Grid View</button></div><div id="customerList" class="collection-list"></div></div></section>
 
-<div class="service-edit-modal" id="customerEditModal" role="dialog" aria-modal="true" aria-labelledby="customerEditTitle">
-  <div class="service-edit-card">
-    <div class="service-edit-head"><div><h2 id="customerEditTitle">Edit Customer</h2><p>Customer details बदलें</p></div><button type="button" onclick="closeCustomerEdit()">×</button></div>
-    <div class="service-edit-body">
-      <input type="hidden" id="editCustomerId">
-      <label>Name / नाम</label><input id="editCustomerName" type="text">
-      <label>Mobile / मोबाइल</label><input id="editCustomerPhone" type="tel" maxlength="10">
-      <label>Block</label><input id="editCustomerBlock" type="text">
-      <label>Panchayat</label><input id="editCustomerPanchayat" type="text">
-      <label>Village / Area</label><input id="editCustomerVillage" type="text">
-      <div id="customerEditMsg" style="margin-top:9px;font-size:13px;color:#b42318"></div>
-    </div>
-    <div class="service-edit-footer"><button class="outline" type="button" onclick="closeCustomerEdit()">Cancel</button><button class="green" type="button" onclick="saveCustomerEdit()">Save Changes</button></div>
-  </div>
-</div>
+<section id="services" style="display:none"><h1>Services</h1><div class="panel"><div class="toolbar"><input id="newSvc" placeholder="New service name"><button class="green" onclick="addService()">+ Add Service</button><button class="outline view-toggle" id="svcViewToggle" onclick="toggleCollectionView('services')">▦ Grid View</button></div><div id="serviceList" class="collection-list"></div></div></section>
 
-<section id="services" style="display:none"><h1>Services</h1><div class="panel"><div class="toolbar"><input id="newSvc" placeholder="New service name"><button class="outline" type="button" id="newSvcIconBtn" onclick="openServiceIconPicker('add')">🛠️ Icon चुनें</button><button class="green" onclick="addService()">+ Add Service</button><button class="outline view-toggle" id="svcViewToggle" onclick="toggleCollectionView('services')">▦ Grid View</button></div><div id="serviceList" class="collection-list"></div></div></section>
+<section id="areas" style="display:none"><h1>Blocks & Areas</h1><div class="panel"><div class="toolbar"><button class="outline view-toggle" id="areaViewToggle" onclick="toggleCollectionView('areas')">▦ Grid View</button></div><h3>Available Blocks</h3><div id="availableList" class="area-view"></div><h3 style="margin-top:25px">Coming Soon Blocks</h3><div id="comingList" class="area-view"></div><p style="color:#68758a">Admin can move a block from Coming Soon to Available after onboarding is completed.</p></div></section>
 
-<section id="areas" style="display:none"><h1>📍 क्षेत्र प्रबंधन</h1><div class="panel area-shell">
-  <div class="area-hero"><h2>📍 State → District → Block → Panchayat</h2><p>सभी भारतीय States को पहले से तैयार रखें। जरूरत के अनुसार District, Block और Panchayat बाद में जोड़ें, Hide/Show करें या Delete करें।</p></div>
-  <div class="area-management-grid">
-    <div class="area-management-card area-card-state">
-      <div class="area-card-head"><div class="area-card-icon">🇮🇳</div><div class="area-card-title"><b>State</b><span>Manage all states</span></div><div class="area-card-count"><b id="areaStateCount">0</b><span>States</span></div></div>
-      <div class="area-card-actions"><button class="area-card-add" onclick="addAreaState()">＋ &nbsp;Add State</button><button onclick="bulkAreaVisibility('state',true)">◉ &nbsp;Show</button><button onclick="bulkAreaVisibility('state',false)">◉̸ &nbsp;Hide</button><button class="area-card-delete" onclick="bulkDeleteArea('state')">▣ &nbsp;Delete</button></div>
-    </div>
-    <div class="area-management-card area-card-district">
-      <div class="area-card-head"><div class="area-card-icon">🏛</div><div class="area-card-title"><b>District</b><span>Manage districts under state</span></div><div class="area-card-count"><b id="areaDistrictCount">0</b><span>Districts</span></div></div>
-      <div class="area-card-actions"><button class="area-card-add" onclick="addAreaDistrict()">＋ &nbsp;Add District</button><button onclick="bulkAreaVisibility('district',true)">◉ &nbsp;Show</button><button onclick="bulkAreaVisibility('district',false)">◉̸ &nbsp;Hide</button><button class="area-card-delete" onclick="bulkDeleteArea('district')">▣ &nbsp;Delete</button></div>
-    </div>
-    <div class="area-management-card area-card-block">
-      <div class="area-card-head"><div class="area-card-icon">⌘</div><div class="area-card-title"><b>Block</b><span>Manage blocks under district</span></div><div class="area-card-count"><b id="areaBlockCount">0</b><span>Blocks</span></div></div>
-      <div class="area-card-actions"><button class="area-card-add" onclick="addAreaBlockFromPanel()">＋ &nbsp;Add Block</button><button onclick="bulkAreaVisibility('block',true)">◉ &nbsp;Show</button><button onclick="bulkAreaVisibility('block',false)">◉̸ &nbsp;Hide</button><button class="area-card-delete" onclick="bulkDeleteArea('block')">▣ &nbsp;Delete</button></div>
-    </div>
-    <div class="area-management-card area-card-panchayat">
-      <div class="area-card-head"><div class="area-card-icon">👥</div><div class="area-card-title"><b>Panchayat</b><span>Manage panchayats under block</span></div><div class="area-card-count"><b id="areaPanchayatCount">0</b><span>Panchayats</span></div></div>
-      <div class="area-card-actions"><button class="area-card-add" onclick="addAreaPanchayatFromPanel()">＋ &nbsp;Add Panchayat</button><button onclick="bulkAreaVisibility('panchayat',true)">◉ &nbsp;Show</button><button onclick="bulkAreaVisibility('panchayat',false)">◉̸ &nbsp;Hide</button><button class="area-card-delete" onclick="bulkDeleteArea('panchayat')">▣ &nbsp;Delete</button></div>
-    </div>
-  </div>
-  <div class="area-toolbar">
-    <input id="areaSearch" type="search" placeholder="🔎 State / District / Block / Panchayat खोजें" autocomplete="off">
-    <button class="area-refresh" type="button" onclick="loadAreaHierarchy(true)">↻ Refresh</button>
-  </div>
-  <div class="area-countline" id="areaResultCount">Database से Area hierarchy लोड हो रही है…</div>
-  <div id="areaTree" class="area-tree"></div>
-  <div class="area-footnote">👁 Show = Customer side के लिए उपलब्ध • 🙈 Hide = Admin में रहेगा लेकिन Customer side पर नहीं दिखेगा • 🗑 Delete = hierarchy से हटेगा</div>
-</div></section>
 <section id="messages" style="display:none"><h1>Messages</h1><div class="panel"><div class="toolbar"><input id="msgSearch" placeholder="Search user / mobile / message / ID"><select id="msgType"><option value="">All Types</option><option>Registration</option><option>Welcome</option></select><button class="outline view-toggle" id="msgViewToggle" onclick="toggleCollectionView('messages')">▦ Grid View</button></div><div id="messageList" class="collection-list"></div></div></section>
 </main></div>
 
@@ -572,25 +257,6 @@ table tbody tr{border-bottom:1px solid #e3edf3;transition:background .15s ease}t
 <h3>Services</h3><div class="checks" id="checks"></div><p><button class="green" onclick="savePro()">Save Profile</button> <button class="outline" onclick="closePro()">Cancel</button></p></div></div>
 
 
-<div class="pro-edit-modal" id="proEditModal" role="dialog" aria-modal="true" aria-labelledby="proEditTitle">
-  <div class="pro-edit-card">
-    <div class="pro-edit-head"><div><h2 id="proEditTitle">Edit Professional</h2></div><button class="pro-edit-close" type="button" onclick="closeProEdit()">×</button></div>
-    <div class="pro-edit-body">
-      <div class="pro-edit-grid">
-        <div class="pro-edit-field"><label>Full Name</label><input id="editPn" type="text"></div>
-        <div class="pro-edit-field"><label>Mobile Number</label><input id="editPm" type="tel"></div>
-        <div class="pro-edit-field"><label>Block</label><select id="editPb"></select></div>
-        <div class="pro-edit-field"><label>Panchayat</label><input id="editPp" type="text"></div>
-        <div class="pro-edit-field"><label>Village / Area</label><input id="editPv" type="text"></div>
-        <div class="pro-edit-field"><label>Experience <small style="font-weight:400;color:#718096">(display only)</small></label><input id="editPe" type="text"></div>
-      </div>
-      <div class="pro-edit-services"><h3>Services</h3><div class="pro-edit-checks" id="editChecks"></div></div>
-      <div class="pro-edit-msg" id="proEditMsg"></div>
-    </div>
-    <div class="pro-edit-footer"><button class="outline" type="button" onclick="closeProEdit()">Cancel</button><button class="green" type="button" onclick="saveProEdit()">Save Changes</button></div>
-  </div>
-</div>
-
 <div class="service-edit-modal" id="serviceEditModal" role="dialog" aria-modal="true" aria-labelledby="serviceEditTitle">
   <div class="service-edit-card">
     <div class="service-edit-head">
@@ -600,8 +266,6 @@ table tbody tr{border-bottom:1px solid #e3edf3;transition:background .15s ease}t
     <div class="service-edit-body">
       <label for="serviceEditInput">Service Name</label>
       <input id="serviceEditInput" type="text" autocomplete="off" placeholder="Enter service name">
-      <label style="margin-top:14px">Service Icon</label>
-      <div class="icon-picker-wrap"><button type="button" class="selected-service-icon" id="editSvcIconBtn" onclick="openServiceIconPicker('edit')">🛠️</button><span style="font-size:12px;color:#718096">Icon बदलने के लिए यहाँ टैप करें</span></div>
       <div id="serviceEditMsg" style="margin-top:9px;font-size:13px;color:#b42318"></div>
     </div>
     <div class="service-edit-footer">
@@ -611,27 +275,17 @@ table tbody tr{border-bottom:1px solid #e3edf3;transition:background .15s ease}t
   </div>
 </div>
 
-<div class="icon-picker-modal" id="serviceIconPicker" role="dialog" aria-modal="true" aria-label="Service icon picker">
-  <div class="icon-picker-card">
-    <div class="icon-picker-head"><h2>Service Icon चुनें</h2><button class="icon-picker-close" type="button" onclick="closeServiceIconPicker()">×</button></div>
-    <div class="icon-picker-grid" id="serviceIconGrid"></div>
-  </div>
-</div>
-
 <script>
 const SUPABASE_URL='https://hxdrvhiowurbwlgmczju.supabase.co';
 const SUPABASE_KEY='sb_publishable_cvh_b0gklN5SOcH5MsGs8g_4JI9-PxT';
-let blocks=['Aurai','Bochahan','Gaighat','Katra','Minapur'];
-let coming=['Bandra','Kanti','Kurhani','Marwan','Motipur','Muraul','Mushahari','Paroo','Sahebganj','Sakra','Saraiya'];
-let areaStateRows=[],areaDistrictRows=[],areaBlockRows=[],areaPanchayatRows=[],areaSearchText='',areaExpandedStates=new Set(),areaExpandedDistricts=new Set(),areaExpandedBlocks=new Set();
-try{const savedA=JSON.parse(localStorage.getItem('senvia_available_areas')||'null');if(Array.isArray(savedA))blocks=savedA;}catch(e){}
-try{const savedC=JSON.parse(localStorage.getItem('senvia_coming_areas')||'null');if(Array.isArray(savedC))coming=savedC;}catch(e){}
+const blocks=['Aurai','Bochahan','Gaighat','Katra','Minapur'];
+const coming=['Bandra','Kanti','Kurhani','Marwan','Motipur','Muraul','Mushahari','Paroo','Sahebganj','Sakra','Saraiya'];
 const demoServices=['TV / LED Repair','AC Repair','Fridge Repair','Mobile Repair','Electronics Repair','Plumber','Electrician','Painter','RO / Water Purifier','Carpenter','CCTV','Computer Repair'];
 const demoPros=[
 {name:'Santosh Kumar Hazra',mobile:'9905077187',block:'Katra',panchayat:'Barari',village:'Barari',services:['TV / LED Repair','AC Repair','Fridge Repair'],status:'Verified'},
 {name:'Vipin Kumar',mobile:'7992477919',block:'Gaighat',panchayat:'Mahamdpur Sura',village:'Mahamdpur Sura',services:['Mobile Repair','Electronics Repair'],status:'Verified'},
 {name:'Sanjay Kumar',mobile:'7281073721',block:'Bochahan',panchayat:'Jhaphan',village:'Jhaphan',services:['Plumber'],status:'Verified'}];
-let services=[...demoServices],pros=[...demoPros],customers=[],customerRows=[],messageRows=[],lang='hi',dbMode=false,serviceRows=[],proRows=[],customerLoadDone=false;
+let services=[...demoServices],pros=[...demoPros],customers=[],customerRows=[],messageRows=[],lang='hi',dbMode=false,serviceRows=[],proRows=[];
 let accessToken=localStorage.getItem('senvia_admin_token')||sessionStorage.getItem('senvia_admin_token')||'';
 let refreshToken=localStorage.getItem('senvia_admin_refresh_token')||'';
 const authHeaders=()=>accessToken?{apikey:SUPABASE_KEY,Authorization:'Bearer '+accessToken}:{apikey:SUPABASE_KEY};
@@ -746,34 +400,21 @@ async function loadFromSupabase(){
    }));
    services=serviceRows.map(s=>svcLabel(s)).filter(Boolean);
    if(!services.length) services=[...demoServices];
-   try{
-     customerRows=await api('rpc/get_senvia_admin_customers',{
-       method:'POST',
-       body:'{}'
-     });
-   }catch(e){
-     console.warn('admin customer RPC failed, trying direct customers read',e);
-     try{ customerRows=await api('customers?select=*&order=created_at.desc'); }catch(e2){ customerRows=[]; console.warn('customers read failed',e2); }
-   }
+   try{ customerRows=await api('customers?select=*&order=created_at.desc'); }catch(e){ customerRows=[]; console.warn('customers read failed',e); }
    try{ messageRows=await api('messages?select=*&order=created_at.desc'); }catch(e){ messageRows=[]; console.warn('messages read failed',e); }
    customers=Array.isArray(customerRows)?customerRows:[];
-   customerLoadDone=true;
    dbMode=true;
-   try{await loadAreaHierarchy(false)}catch(e){console.warn('Area hierarchy init failed:',e)}
    const note=(serviceRows.length?'':' (services table unavailable; using local service names)')+(links.length?'':' (service links unavailable; existing profile service fields used where available)');
    setDbStatus('🟢 Supabase connected — live professional data loaded.'+note,'ok');
-   senviaBusyCount=0;document.getElementById('senviaBusy')?.classList.remove('show');
-setTimeout(()=>setLang(lang),0);
  }catch(e){
    console.error('Supabase load failed:',e);
    dbMode=false; pros=[...demoPros]; services=[...demoServices];
    setDbStatus('🟠 Supabase professionals could not be read: '+(e.message||e),'warn');
-   senviaBusyCount=0;document.getElementById('senviaBusy')?.classList.remove('show');
  }
  render();
 }
 function setDbStatus(t,c){let el=document.getElementById('dbStatus');if(el){el.textContent=t;el.style.background=c==='ok'?'#e7f7e4':'#fff4d7';el.style.color=c==='ok'?'#23751c':'#8a6500'}}
-function toggleCardView(){const sec=document.getElementById('pros');const on=!sec.classList.contains('card-view');sec.classList.toggle('card-view',on);sec.classList.toggle('table-view',!on);localStorage.setItem('senvia_prof_view',on?'card':'table');const b=document.getElementById('viewToggle');if(b)b.textContent=on?'☷ List View':'▦ Grid View'}
+function toggleCardView(){const sec=document.getElementById('pros');const on=!sec.classList.contains('card-view');sec.classList.toggle('card-view',on);sec.classList.toggle('table-view',!on);localStorage.setItem('senvia_prof_view',on?'card':'table');const b=document.getElementById('viewToggle');if(b)b.textContent=on?'☷ Table View':'▦ Card View'}
 function viewPro(i){const p=pros[i];if(!p)return;
  const name=p.name||'Professional';
  document.getElementById('proViewTitle').textContent=name;
@@ -792,168 +433,18 @@ function viewPro(i){const p=pros[i];if(!p)return;
 }
 function closeProView(){document.getElementById('proViewModal')?.classList.remove('show')}
 document.getElementById('proViewModal')?.addEventListener('click',e=>{if(e.target.id==='proViewModal')closeProView()});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeProView();closeProEdit();closeServiceEdit()}});
-function restoreProfessionalView(){const sec=document.getElementById('pros');const pref=localStorage.getItem('senvia_prof_view')||'card';const on=pref==='card';sec.classList.toggle('card-view',on);sec.classList.toggle('table-view',!on);const b=document.getElementById('viewToggle');if(b)b.textContent=on?'☷ List View':'▦ Grid View'}
-const SENVIA_TRANSLATIONS={
-  "Welcome to Senvia Admin Panel 👋":"Senvia Admin Panel में आपका स्वागत है 👋",
-  "Manage your local service platform with real-time insights and controls.":"अपने स्थानीय सेवा प्लेटफॉर्म को रियल-टाइम जानकारी और नियंत्रण के साथ प्रबंधित करें।",
-  "A trusted local service platform for a better community.":"बेहतर सेवा के लिए एक विश्वसनीय स्थानीय सेवा प्लेटफॉर्म।",
-  "Total Professionals":"कुल प्रोफेशनल",
-  "Total Customers":"कुल ग्राहक",
-  "Active Services":"सक्रिय सेवाएँ",
-  "Active Blocks":"सक्रिय प्रखंड",
-  "Pending Professionals":"प्रोफेशनल लंबित",
-  "Service Categories":"सेवा श्रेणी",
-  "Live registered professionals":"पंजीकृत प्रोफेशनल",
-  "Live registered customers":"पंजीकृत ग्राहक",
-  "Available service categories":"उपलब्ध सेवा श्रेणियाँ",
-  "User Growth":"यूज़र वृद्धि",
-  "Recent registrations from live database":"लाइव डेटाबेस से हाल के पंजीकरण",
-  "Professional service mix":"प्रोफेशनल सेवाओं का वितरण",
-  "Services Distribution":"सेवा वितरण",
-  "Area-wise Professionals":"क्षेत्रवार प्रोफेशनल",
-  "Professionals by active block":"सक्रिय प्रखंड के अनुसार प्रोफेशनल",
-  "Recent Professional Registrations":"हाल के प्रोफेशनल पंजीकरण",
-  "Recent Customer Registrations":"हाल के ग्राहक पंजीकरण",
-  "Quick Actions":"त्वरित कार्य",
-  "Platform Overview":"प्लेटफॉर्म अवलोकन",
-  "All Status":"सभी स्थिति",
-  "Verified":"सत्यापित",
-  "Pending":"लंबित",
-  "Rejected":"अस्वीकृत",
-  "Grid View":"ग्रिड व्यू",
-  "List View":"लिस्ट व्यू",
-  "Name":"नाम",
-  "Mobile":"मोबाइल",
-  "Area":"क्षेत्र",
-  "Services":"सेवाएँ",
-  "Service":"सेवा",
-  "Status":"स्थिति",
-  "Action":"कार्य",
-  "Customers":"ग्राहक",
-  "Professionals":"प्रोफेशनल",
-  "Services":"सेवाएँ",
-  "Areas":"क्षेत्र",
-  "Messages":"संदेश",
-  "Dashboard":"डैशबोर्ड",
-  "+ Add Professional":"+ प्रोफेशनल जोड़ें",
-  "＋ Add Professional":"＋ प्रोफेशनल जोड़ें",
-  "＋ Customers":"＋ ग्राहक",
-  "＋ Add Available Area":"＋ उपलब्ध क्षेत्र जोड़ें",
-  "＋ Add Coming Soon":"＋ कमिंग सून जोड़ें",
-  "+ Add Service":"+ सेवा जोड़ें",
-  "🛠 Manage Services":"🛠 सेवाएँ प्रबंधित करें",
-  "📍 Manage Areas":"📍 क्षेत्र प्रबंधित करें",
-  "💬 View Messages":"💬 संदेश देखें",
-  "▣ Generate Report":"▣ रिपोर्ट बनाएँ",
-  "Available Blocks":"उपलब्ध प्रखंड",
-  "Coming Soon Blocks":"कमिंग सून प्रखंड",
-  "Admin can move a block from Coming Soon to Available after onboarding is completed.":"ऑनबोर्डिंग पूरी होने के बाद एडमिन किसी प्रखंड को कमिंग सून से उपलब्ध में ले जा सकता है।",
-  "All Types":"सभी प्रकार",
-  "Registration":"पंजीकरण",
-  "Welcome":"स्वागत",
-  "Professional Details":"प्रोफेशनल विवरण",
-  "Close":"बंद करें",
-  "Add Professional":"प्रोफेशनल जोड़ें",
-  "Save Profile":"प्रोफाइल सेव करें",
-  "Cancel":"रद्द करें",
-  "Edit Service":"सेवा संपादित करें",
-  "Service Name":"सेवा का नाम",
-  "Save Changes":"परिवर्तन सेव करें",
-  "Services":"सेवाएँ",
-  "English":"English",
-  "हिंदी":"हिंदी",
-  "↪ Logout":"↪ लॉगआउट",
-  "Blocks & Areas":"प्रखंड एवं क्षेत्र",
-  "Search name/mobile/block":"नाम/मोबाइल/प्रखंड खोजें",
-  "Search name / mobile / ID / block":"नाम / मोबाइल / ID / प्रखंड खोजें",
-  "New service name":"नई सेवा का नाम",
-  "Search user / mobile / message / ID":"यूज़र / मोबाइल / संदेश / ID खोजें",
-  "Service available on Senvia":"Senvia पर उपलब्ध सेवा",
-  "No services found.":"कोई सेवा नहीं मिली।",
-  "No customers registered yet.":"अभी कोई ग्राहक पंजीकृत नहीं है।",
-  "No messages found.":"कोई संदेश नहीं मिला।",
-  "No available areas.":"कोई उपलब्ध क्षेत्र नहीं है।",
-  "No coming-soon areas.":"कोई कमिंग सून क्षेत्र नहीं है।",
-  "Available":"उपलब्ध",
-  "Coming Soon":"कमिंग सून",
-  "View":"देखें",
-  "Delete":"हटाएँ",
-  "Edit":"संपादित करें",
-  "Save Profile":"प्रोफाइल सेव करें",
-  "User Name":"यूज़र नाम",
-  "User Type":"यूज़र प्रकार",
-  "Message Type":"संदेश प्रकार",
-  "Date / Time":"दिनांक / समय",
-  "Message":"संदेश",
-   "pending":"लंबित",
-   "Categories":"श्रेणी",
-  "Report module will be added in the next phase.":"रिपोर्ट मॉड्यूल अगले चरण में जोड़ा जाएगा।"
-};
-const SENVIA_TRANSLATIONS_EN=Object.fromEntries(Object.entries(SENVIA_TRANSLATIONS).map(([en,hi])=>[hi,en]));
-function senviaTranslateText(root,map){
-  const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);
-  const nodes=[];let n;while(n=walker.nextNode()) nodes.push(n);
-  nodes.forEach(node=>{let t=node.nodeValue;if(!t||!t.trim())return;let out=t;for(const [from,to] of Object.entries(map)){if(out.trim()===from){out=out.replace(from,to);break;}}if(out!==t)node.nodeValue=out;});
-}
-function setLang(l){
-  lang=l;
-  try{localStorage.setItem('senvia_lang',l)}catch(e){}
-  document.querySelectorAll('[data-hi]').forEach(e=>e.textContent=e.dataset[l]);
-  const map=l==='hi'?SENVIA_TRANSLATIONS:SENVIA_TRANSLATIONS_EN;
-  senviaTranslateText(document.body,map);
-  const placeholders={
-    proSearch:{hi:'नाम/मोबाइल/प्रखंड खोजें',en:'Search name/mobile/block'},
-    custSearch:{hi:'नाम / मोबाइल / ID / प्रखंड खोजें',en:'Search name / mobile / ID / block'},
-    newSvc:{hi:'नई सेवा का नाम',en:'New service name'},
-    msgSearch:{hi:'यूज़र / मोबाइल / संदेश / ID खोजें',en:'Search user / mobile / message / ID'},
-    serviceEditInput:{hi:'सेवा का नाम दर्ज करें',en:'Enter service name'}
-  };
-  Object.entries(placeholders).forEach(([id,v])=>{const el=document.getElementById(id);if(el)el.placeholder=v[l]});
-  const optionSets={
-    statusFilter:[['','All Status','सभी स्थिति'],['Verified','Verified','सत्यापित'],['Pending','Pending','लंबित'],['Rejected','Rejected','अस्वीकृत']],
-    msgType:[['','All Types','सभी प्रकार'],['Registration','Registration','पंजीकरण'],['Welcome','Welcome','स्वागत']]
-  };
-  Object.entries(optionSets).forEach(([id,opts])=>{const sel=document.getElementById(id);if(!sel)return;sel.querySelectorAll('option').forEach((o,i)=>{const x=opts[i];if(x)o.textContent=l==='hi'?x[2]:x[1]})});
-  document.getElementById('hi').className=l==='hi'?'on':'';
-  document.getElementById('en').className=l==='en'?'on':'';
-  document.getElementById('mobileHi')?.classList.toggle('on',l==='hi');
-  document.getElementById('mobileEn')?.classList.toggle('on',l==='en');
-  document.documentElement.lang=l==='hi'?'hi':'en';
-}
-function syncAdminMobileActive(id){document.querySelectorAll('.admin-mobile-link').forEach(n=>n.classList.toggle('active',n.dataset.mobileTarget===id))}
-function toggleAdminMobileMenu(){document.getElementById('adminMobileMenu')?.classList.toggle('open');document.getElementById('adminMobileOverlay')?.classList.toggle('open')}
-function closeAdminMobileMenu(){document.getElementById('adminMobileMenu')?.classList.remove('open');document.getElementById('adminMobileOverlay')?.classList.remove('open')}
-function mobileAdminShow(id,el){syncAdminMobileActive(id);show(id);closeAdminMobileMenu()}
-function show(id,el){
-  const target=document.getElementById(id);
-  if(!target)return;
-  document.querySelectorAll('main section').forEach(s=>s.style.display='none');
-  target.style.display='block';
-  document.querySelectorAll('.nav').forEach(n=>n.classList.remove('active'));
-  if(el)el.classList.add('active');
-  syncAdminMobileActive(id);
-  try{sessionStorage.setItem('senvia_admin_section',id)}catch(e){}
-  render();
-  if(id==='analytics' || id==='dashboard') loadVisitorAnalytics();
-}
-function restoreAdminSection(){
-  let id='dashboard';
-  try{id=sessionStorage.getItem('senvia_admin_section')||'dashboard'}catch(e){}
-  if(!document.getElementById(id))id='dashboard';
-  const nav=document.querySelector('.nav[onclick*="show(\''+id+'\'"]');
-  const mobile=document.querySelector('.admin-mobile-link[data-mobile-target="'+id+'"]');
-  show(id,nav||mobile||null);
-}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeProView();closeServiceEdit()}});
+function restoreProfessionalView(){const sec=document.getElementById('pros');const pref=localStorage.getItem('senvia_prof_view')||'card';const on=pref==='card';sec.classList.toggle('card-view',on);sec.classList.toggle('table-view',!on);const b=document.getElementById('viewToggle');if(b)b.textContent=on?'☷ Table View':'▦ Card View'}
+function setLang(l){lang=l;document.querySelectorAll('[data-hi]').forEach(e=>e.textContent=e.dataset[l]);document.getElementById('hi').className=l==='hi'?'on':'';document.getElementById('en').className=l==='en'?'on':''}
+function show(id,el){if(id==='messages'){location.href='admin-messages.html?v=20260925';return;}document.querySelectorAll('main section').forEach(s=>s.style.display='none');document.getElementById(id).style.display='block';document.querySelectorAll('.nav').forEach(n=>n.classList.remove('active'));if(el)el.classList.add('active');render()}
 function render(){
  const pendingCount=pros.filter(p=>proStatus(p)==='Pending').length;
  const cp=document.getElementById('countPro'); if(cp) cp.textContent=pros.length;
  const cc=document.getElementById('countCust'); if(cc) cc.textContent=customers.length;
  const cs=document.getElementById('countSvc'); if(cs) cs.textContent=services.length;
- const cb=document.getElementById('countBlocks'); if(cb) cb.textContent=blocks.length; const bn=document.getElementById('activeBlockNames'); if(bn) bn.textContent=blocks.join(' • ')||'—';
- renderTable();renderRecent();renderServices();renderCustomers();renderMessages();renderAreas();
+ const cb=document.getElementById('countBlocks'); if(cb) cb.textContent=4;
+ renderTable();renderServices();renderCustomers();renderAreas();
  renderPremiumDashboard();
- setLang(lang);
 }
 document.getElementById('senviaBusy')?.classList.remove('show');
 function renderPremiumDashboard(){
@@ -977,72 +468,19 @@ function renderPremiumDashboard(){
  const rc=document.getElementById('recentCustTable');if(rc)rc.innerHTML=customers.slice(0,5).map(c=>'<tr><td><b>'+(c.Name||c.name||'Customer')+'</b></td><td>'+(c.Phone||c.phone||'—')+'</td><td>'+(c.Block||'—')+'</td></tr>').join('')||'<tr><td colspan="3">No registrations yet.</td></tr>';
  const ov=document.getElementById('platformOverview');if(ov)ov.innerHTML='<div class="overview-item"><small>✅ Verified Professionals</small><b>'+pros.filter(p=>proStatus(p)==='Verified').length+'</b></div><div class="overview-item"><small>⏳ Pending Professionals</small><b>'+pros.filter(p=>proStatus(p)==='Pending').length+'</b></div><div class="overview-item"><small>👤 Active Customers</small><b>'+customers.length+'</b></div><div class="overview-item"><small>🛠 Service Categories</small><b>'+services.length+'</b></div>';
 }
-let visitorStats=null;
-async function loadVisitorAnalytics(){
-  const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=(v??0).toLocaleString?Number(v??0).toLocaleString('en-IN'):String(v??0)};
-  try{
-    const r=await api('rpc/get_senvia_visitor_stats',{method:'POST',body:'{}'});
-    visitorStats=Array.isArray(r)?r[0]:r;
-    if(typeof visitorStats==='string')visitorStats=JSON.parse(visitorStats);
-    document.getElementById('visitorSetupNote')?.style.setProperty('display','none');
-    set('visitorTotal',visitorStats.total_visitors);set('visitorLive',visitorStats.live_visitors);set('visitorToday',visitorStats.today_visitors);set('visitorViews',visitorStats.total_pageviews);set('visitorWeek',visitorStats.week_visitors);set('visitorMonth',visitorStats.month_visitors);
-    const tp=document.getElementById('visitorTopPages');
-    if(tp){const rows=Array.isArray(visitorStats.top_pages)?visitorStats.top_pages:[];tp.innerHTML=rows.map(x=>`<div class="visitor-page-row"><div><b>${x.page_path||'/'}</b><br><span>${x.page_path==='/'?'Home page':'Senvia page'}</span></div><strong>${Number(x.views||0).toLocaleString('en-IN')} views</strong></div>`).join('')||'<div class="empty">No visits recorded yet.</div>'}
-    const vd=document.getElementById('visitorDaily');
-    if(vd){const rows=Array.isArray(visitorStats.daily)?visitorStats.daily:[];vd.innerHTML=rows.map(x=>`<div class="visitor-day-row"><div><b>${new Date(x.day+'T00:00:00').toLocaleDateString('en-IN',{day:'2-digit',month:'short'})}</b><br><span>${Number(x.visitors||0).toLocaleString('en-IN')} visitors</span></div><strong>${Number(x.pageviews||0).toLocaleString('en-IN')} views</strong></div>`).join('')||'<div class="empty">No daily data yet.</div>'}
-  }catch(e){
-    console.warn('Visitor analytics not ready:',e);
-    ['visitorTotal','visitorLive','visitorToday','visitorViews','visitorWeek','visitorMonth'].forEach(id=>set(id,'—'));
-    const note=document.getElementById('visitorSetupNote');if(note)note.style.display='block';
-  }
-}
-
-function renderTable(){let q=(proSearch?.value||'').toLowerCase(),st=statusFilter?.value||'';proTable.innerHTML=pros.filter(p=>(!q||JSON.stringify(p).toLowerCase().includes(q))&&(!st||proStatus(p)===st)).map((p,i)=>`<tr><td><b>${p.name}</b>${p.professional_code?`<br><span class=\"code-pill\">ID: ${p.professional_code}</span>`:''}</td><td>${p.mobile}</td><td>${p.block} → ${p.panchayat}<br>${p.village}</td><td>${p.services.join(', ')||'—'}</td><td><span class="badge ${proStatus(p).toLowerCase()}">${proStatus(p)}</span></td><td>${proStatus(p)==='Pending'?`<button class="green" onclick="approve(${i})">Approve</button> `:''}<button class="outline" onclick="viewPro(${i})">View</button> <button class="service-edit-btn" onclick="openProEdit(${i})">✎ Edit</button> <button class="danger" onclick="removePro(${i})">Delete</button></td></tr>`).join('')||'<tr><td colspan="6" class="empty">No professionals found.</td></tr>'}
-function renderRecent(){const recent=document.getElementById('recentProTable');if(!recent)return;recent.innerHTML=pros.slice(-5).reverse().map(p=>`<tr><td><b>${p.name||'—'}</b></td><td>${(Array.isArray(p.services)?p.services:[]).join(', ')||'—'}</td><td><span class="badge ${proStatus(p).toLowerCase()}">${proStatus(p)}</span></td></tr>`).join('')||'<tr><td colspan="3">No registrations yet.</td></tr>'}
+function renderTable(){let q=(proSearch?.value||'').toLowerCase(),st=statusFilter?.value||'';proTable.innerHTML=pros.filter(p=>(!q||JSON.stringify(p).toLowerCase().includes(q))&&(!st||proStatus(p)===st)).map((p,i)=>`<tr><td><b>${p.name}</b>${p.professional_code?`<br><span class=\"code-pill\">ID: ${p.professional_code}</span>`:''}</td><td>${p.mobile}</td><td>${p.block} → ${p.panchayat}<br>${p.village}</td><td>${p.services.join(', ')||'—'}</td><td><span class="badge ${proStatus(p).toLowerCase()}">${proStatus(p)}</span></td><td>${proStatus(p)==='Pending'?`<button class="green" onclick="approve(${i})">Approve</button> `:''}<button class="outline" onclick="viewPro(${i})">View</button> <button class="danger" onclick="removePro(${i})">Delete</button></td></tr>`).join('')||'<tr><td colspan="6" class="empty">No professionals found.</td></tr>'}
 function renderServices(){
  const grid=localStorage.getItem('senvia_services_view')==='grid';
  const box=document.getElementById('serviceList'); box.className=grid?'collection-grid':'collection-list';
- box.innerHTML=services.map((s,i)=>{const row=serviceRows.find(x=>svcLabel(x)===s);const icon=serviceIconFor(row)||localStorage.getItem('senvia_service_icon_'+s)||'🛠️';return grid?`<div class="collection-card"><h3>${icon} ${s}</h3><p>Service available on Senvia</p><div class="actions"><button class="service-edit-btn" type="button" onclick="openServiceEdit(${i})">✎ Edit</button><button class="danger" type="button" onclick="delService(${i})">Delete</button></div></div>`:`<div class="service-row"><span class="service-row-name">${icon} ${s}</span><div class="service-row-actions"><button class="service-edit-btn" type="button" onclick="openServiceEdit(${i})">✎ Edit</button><button class="danger" type="button" onclick="delService(${i})">Delete</button></div></div>`}).join('')||'<p class="empty">No services found.</p>';
+ box.innerHTML=services.map((s,i)=>grid?`<div class="collection-card"><h3>🛠 ${s}</h3><p>Service available on Senvia</p><div class="actions"><button class="service-edit-btn" type="button" onclick="openServiceEdit(${i})">✎ Edit</button><button class="danger" type="button" onclick="delService(${i})">Delete</button></div></div>`:`<div class="service-row"><span class="service-row-name">${s}</span><div class="service-row-actions"><button class="service-edit-btn" type="button" onclick="openServiceEdit(${i})">✎ Edit</button><button class="danger" type="button" onclick="delService(${i})">Delete</button></div></div>`).join('')||'<p class="empty">No services found.</p>';
  const b=document.getElementById('svcViewToggle');if(b)b.textContent=grid?'☷ List View':'▦ Grid View';
 }
 function renderCustomers(){
  const grid=localStorage.getItem('senvia_customers_view')==='grid'; const box=document.getElementById('customerList'); if(!box)return; box.className=grid?'collection-grid':'collection-list';
- if(!customerLoadDone){ box.innerHTML='<p class="empty">Customers data is loading…</p>'; return; }
  const q=(document.getElementById('custSearch')?.value||'').toLowerCase();
  const rows=(Array.isArray(customers)?customers:[]).filter(c=>!q||JSON.stringify(c).toLowerCase().includes(q));
- box.innerHTML=rows.map(c=>grid?`<div class="collection-card"><h3>${c.Name||c.name||'Customer'}</h3><span class="code-pill">ID: ${c.customer_code||'—'}</span><p>📱 ${c.Phone||c.phone||'—'}</p><p>📍 ${[c.Block,c.Panchayat,c.Village_Area].filter(Boolean).join(' → ')||'—'}</p><p>Status: <b>${c.Status||'Active'}</b></p><div class="actions"><button class="outline" type="button" onclick="openCustomerEdit('${c.id||''}')">✎ Edit</button><button class="danger" type="button" onclick="deleteCustomer('${c.id||''}')">Delete</button></div></div>`:`<div class="service-row"><span class="service-row-name">${c.Name||c.name||'Customer'} <span class="code-pill">${c.customer_code||'—'}</span></span><span>${c.Phone||c.phone||'—'}</span><span>${c.Block||'—'}</span><div class="service-row-actions"><button class="service-edit-btn" type="button" onclick="openCustomerEdit('${c.id||''}')">✎ Edit</button><button class="danger" type="button" onclick="deleteCustomer('${c.id||''}')">Delete</button></div></div>`).join('')||'<p class="empty">No customers registered yet.</p>';
+ box.innerHTML=rows.map(c=>grid?`<div class="collection-card"><h3>${c.Name||c.name||'Customer'}</h3><span class="code-pill">ID: ${c.customer_code||'—'}</span><p>📱 ${c.Phone||c.phone||'—'}</p><p>📍 ${[c.Block,c.Panchayat,c.Village_Area].filter(Boolean).join(' → ')||'—'}</p><p>Status: <b>${c.Status||'Active'}</b></p><div class="actions"><button class="danger" type="button" onclick="deleteCustomer('${c.id||''}')">Delete</button></div></div>`:`<div class="service-row"><span class="service-row-name">${c.Name||c.name||'Customer'} <span class="code-pill">${c.customer_code||'—'}</span></span><span>${c.Phone||c.phone||'—'}</span><span>${c.Block||'—'}</span><div class="service-row-actions"><button class="danger" type="button" onclick="deleteCustomer('${c.id||''}')">Delete</button></div></div>`).join('')||'<p class="empty">No customers registered yet.</p>';
  const b=document.getElementById('custViewToggle');if(b)b.textContent=grid?'☷ List View':'▦ Grid View';
-}
-function openCustomerEdit(id){
- const c=(Array.isArray(customers)?customers:[]).find(x=>String(x.id||'')===String(id));
- if(!c)return;
- document.getElementById('editCustomerId').value=c.id||'';
- document.getElementById('editCustomerName').value=c.Name||c.name||'';
- document.getElementById('editCustomerPhone').value=c.Phone||c.phone||'';
- document.getElementById('editCustomerBlock').value=c.Block||c.block||'';
- document.getElementById('editCustomerPanchayat').value=c.Panchayat||c.panchayat||'';
- document.getElementById('editCustomerVillage').value=c.Village_Area||c.village_area||c.Village||c.village||'';
- document.getElementById('customerEditMsg').textContent='';
- document.getElementById('customerEditModal').classList.add('show');
-}
-function closeCustomerEdit(){document.getElementById('customerEditModal')?.classList.remove('show')}
-async function saveCustomerEdit(){
- const id=document.getElementById('editCustomerId').value;
- const name=document.getElementById('editCustomerName').value.trim();
- const phone=document.getElementById('editCustomerPhone').value.trim();
- const block=document.getElementById('editCustomerBlock').value.trim();
- const panchayat=document.getElementById('editCustomerPanchayat').value.trim();
- const village=document.getElementById('editCustomerVillage').value.trim();
- const msg=document.getElementById('customerEditMsg');
- if(!id||!name||!phone){msg.textContent='Name और Mobile भरना जरूरी है।';return}
- try{
-  showBusy(); msg.textContent='Saving…';
-  await api('customers?id=eq.'+encodeURIComponent(id),{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify({Name:name,Phone:phone,Block:block,Panchayat:panchayat,Village_Area:village})});
-  const i=customers.findIndex(x=>String(x.id||'')===String(id));
-  if(i>=0)customers[i]={...customers[i],Name:name,Phone:phone,Block:block,Panchayat:panchayat,Village_Area:village};
-  closeCustomerEdit(); renderCustomers(); renderPremiumDashboard();
-  toast(lang==='hi'?'Customer details अपडेट हो गईं।':'Customer details updated.');
- }catch(e){console.error('Customer edit failed:',e);msg.textContent='Save failed: '+(e.message||e)}finally{hideBusy()}
 }
 async function deleteCustomer(id){
  if(!id){alert('Customer ID उपलब्ध नहीं है।');return}
@@ -1071,40 +509,10 @@ function renderMessages(){
  box.innerHTML=rows.map(m=>grid?`<div class="collection-card message-card"><div class="msg-head"><h3>💬 ${m.message_type||'Message'}</h3><span class="msg-status">${messageStatus(m)}</span></div><div class="msg-meta"><span><b>User Name:</b> ${m.user_name||'—'}</span><span><b>User Type:</b> ${m.user_type||'—'}</span><span><b>Mobile:</b> ${m.mobile||'—'}</span><span><b>Senvia ID:</b> ${m.user_code||'—'}</span></div><p class="msg-text">${m.message||'—'}</p><small class="msg-date">🕐 ${messageDate(m)}</small><div class="actions"><button class="outline" onclick="viewMessage(${m.id})">View</button><button class="danger" onclick="deleteMessage(${m.id})">Delete</button></div></div>`:`<div class="message-row"><div class="message-row-main"><strong>${m.message_type||'Message'}</strong><span class="code-pill">${m.user_code||'—'}</span><b>${m.user_name||'—'}</b></div><div class="message-row-info"><span><b>User Type:</b> ${m.user_type||'—'}</span><span><b>Mobile:</b> ${m.mobile||'—'}</span><span><b>Status:</b> ${messageStatus(m)}</span><span><b>Date:</b> ${messageDate(m)}</span></div><div class="message-row-text">${m.message||'—'}</div><div class="message-row-actions"><button class="outline" onclick="viewMessage(${m.id})">View</button><button class="danger" onclick="deleteMessage(${m.id})">Delete</button></div></div>`).join('')||'<p class="empty">No messages found.</p>';
  const b=document.getElementById('msgViewToggle');if(b)b.textContent=grid?'☷ List View':'▦ Grid View';
 }
-function toggleCollectionView(type){showBusy();const key='senvia_'+type+'_view';const now=localStorage.getItem(key)==='grid'?'list':'grid';localStorage.setItem(key,now);render();setTimeout(hideBusy,250)}
-function restoreCollectionViews(){renderServices();renderCustomers();renderMessages();}
+function toggleCollectionView(type){const key='senvia_'+type+'_view';const now=localStorage.getItem(key)==='grid'?'list':'grid';localStorage.setItem(key,now);render();}
+function restoreCollectionViews(){renderServices();renderCustomers();}
 async function deleteMessage(id){if(!confirm('Delete this message?'))return;try{await api('messages?id=eq.'+encodeURIComponent(id),{method:'DELETE'});messageRows=messageRows.filter(x=>String(x.id)!==String(id));renderMessages()}catch(e){alert('Message delete failed. Check RLS policy.')}}
 
-const SERVICE_ICONS=[
- ['🛠️','General'],['🔧','Tools'],['🔨','Carpenter'],['⚡','Electric'],['💡','Electric'],['❄️','AC'],['🧊','Fridge'],['📺','TV / LED'],['📱','Mobile'],['💻','Computer'],['🖨️','Printer'],['📷','Camera'],['📡','CCTV'],['🚰','Plumber'],['💧','Water / RO'],['🚿','Plumbing'],['🧱','Masonry'],['🎨','Painter'],['🪚','Woodwork'],['🏠','Home'],['🧹','Cleaning'],['🛋️','Furniture'],['🚗','Car'],['🏍️','Bike'],['🚲','Cycle'],['🔑','Locksmith'],['🧯','Safety'],['🌿','Gardener'],['✂️','Tailor / Salon'],['💄','Beauty'],['🍳','Food'],['📦','Courier'],['🚚','Transport'],['📚','Education'],['🩺','Health'],['💇','Salon'],['🐄','Animal'],['📱','Phone'],['🔌','Electronics'],['⚙️','Mechanic'],['🛵','Delivery'],['🧼','Laundry'],['🪟','Glass / Window'],['🧰','Repair']
-];
-let newServiceIcon='🛠️',editServiceIcon='🛠️',iconPickerTarget='add';
-function serviceIconKey(row){
- if(!row||typeof row!=='object')return null;
- return keyCI(row,['icon','Icon','emoji','Emoji','service_icon','serviceIcon','icon_emoji']);
-}
-function serviceIconFor(rowOrName){
- if(rowOrName&&typeof rowOrName==='object'){
-   const k=serviceIconKey(rowOrName);
-   if(k&&String(rowOrName[k]??'').trim())return String(rowOrName[k]).trim();
- }
- const name=typeof rowOrName==='string'?rowOrName:svcLabel(rowOrName);
- const local=localStorage.getItem('senvia_service_icon_'+String(name||''));
- if(local&&local.trim())return local.trim();
- const n=String(name||'').toLowerCase();
- const hit=[['ac','❄️'],['tv','📺'],['led','📺'],['mobile','📱'],['computer','💻'],['laptop','💻'],['electric','⚡'],['plumb','🚰'],['fridge','🧊'],['carpenter','🔨'],['painter','🎨'],['raj mistri','🧱'],['bike','🏍️'],['ro','💧'],['water','💧'],['cctv','📷']].find(([k])=>n.includes(k));
- return hit?hit[1]:'🛠️';
-}
-function renderServiceIconPicker(){
- const box=document.getElementById('serviceIconGrid');if(!box)return;
- const selected=iconPickerTarget==='edit'?editServiceIcon:newServiceIcon;
- box.innerHTML=SERVICE_ICONS.map(([icon,label])=>`<button type="button" class="service-icon-option ${icon===selected?'active':''}" data-service-icon="${icon}"><div>${icon}</div><span>${label}</span></button>`).join('');
-}
-function openServiceIconPicker(target){iconPickerTarget=target;renderServiceIconPicker();document.getElementById('serviceIconPicker')?.classList.add('show')}
-document.getElementById('serviceIconGrid')?.addEventListener('click',e=>{const btn=e.target.closest('.service-icon-option');if(!btn)return;selectServiceIcon(btn.dataset.serviceIcon||'🛠️')});
-function closeServiceIconPicker(){document.getElementById('serviceIconPicker')?.classList.remove('show')}
-function selectServiceIcon(icon){if(iconPickerTarget==='edit'){editServiceIcon=icon;const b=document.getElementById('editSvcIconBtn');if(b)b.textContent=icon}else{newServiceIcon=icon;const b=document.getElementById('newSvcIconBtn');if(b)b.textContent=icon+' Icon'}closeServiceIconPicker()}
-document.getElementById('serviceIconPicker')?.addEventListener('click',e=>{if(e.target.id==='serviceIconPicker')closeServiceIconPicker()});
 let editingServiceIndex=-1;
 function serviceNameKey(row){
  if(!row||typeof row!=='object')return null;
@@ -1118,7 +526,7 @@ function serviceNameKey(row){
 function openServiceEdit(i){
  const current=services[i]; if(current==null)return; editingServiceIndex=i;
  const input=document.getElementById('serviceEditInput'); const msg=document.getElementById('serviceEditMsg');
- input.value=current; editServiceIcon=serviceIconFor(serviceRows.find(x=>svcLabel(x)===current)); const ib=document.getElementById('editSvcIconBtn'); if(ib)ib.textContent=editServiceIcon; msg.textContent=''; document.getElementById('serviceEditModal').classList.add('show');
+ input.value=current; msg.textContent=''; document.getElementById('serviceEditModal').classList.add('show');
  setTimeout(()=>{input.focus();input.select()},50);
 }
 function closeServiceEdit(){editingServiceIndex=-1;document.getElementById('serviceEditModal')?.classList.remove('show')}
@@ -1126,380 +534,68 @@ async function saveServiceEdit(){
  const input=document.getElementById('serviceEditInput'),msg=document.getElementById('serviceEditMsg');
  const value=input.value.trim(); if(!value){msg.textContent='Service name खाली नहीं हो सकता।';return}
  if(editingServiceIndex<0)return;
- const old=services[editingServiceIndex];
- const oldRow=serviceRows.find(x=>svcLabel(x)===old);
- const currentIcon=serviceIconFor(oldRow);
- const iconChanged=String(editServiceIcon||'').trim()!==String(currentIcon||'').trim();
- if(value===old && !iconChanged){closeServiceEdit();return}
+ const old=services[editingServiceIndex]; if(value===old){closeServiceEdit();return}
  if(services.some((x,i)=>i!==editingServiceIndex && String(x).trim().toLowerCase()===value.toLowerCase())){msg.textContent='यह service पहले से मौजूद है।';return}
  try{
   showBusy();
-  if(!dbMode){
-   services[editingServiceIndex]=value;
-   localStorage.setItem('senvia_service_icon_'+value,editServiceIcon);
-   if(old!==value)localStorage.removeItem('senvia_service_icon_'+old);
-   closeServiceEdit();render();return
-  }
-  const row=oldRow;
+  if(!dbMode){services[editingServiceIndex]=value;closeServiceEdit();render();return}
+  const row=serviceRows.find(x=>svcLabel(x)===old);
   if(!row?.id)throw new Error('Service record नहीं मिला।');
   const key=serviceNameKey(row);
   if(!key)throw new Error('Service name column नहीं मिला।');
-  const payload={};
-  if(value!==old)payload[key]=value;
-  const ikey=serviceIconKey(row);
-  if(ikey)payload[ikey]=editServiceIcon;
-  // Always keep a local fallback so an icon is not lost when the table has no icon column.
-  localStorage.setItem('senvia_service_icon_'+value,editServiceIcon);
-  if(old!==value)localStorage.removeItem('senvia_service_icon_'+old);
-  if(Object.keys(payload).length){
-   try{
-    await api('services?id=eq.'+encodeURIComponent(row.id),{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify(payload)});
-   }catch(dbErr){
-    if(ikey)throw dbErr;
-    console.warn('Service icon column unavailable; using local fallback.',dbErr);
-   }
-  }
+  const payload={}; payload[key]=value;
+  await api('services?id=eq.'+encodeURIComponent(row.id),{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify(payload)});
   closeServiceEdit(); await loadFromSupabase();
  }catch(e){console.error('Service edit failed:',e);msg.textContent='Service edit failed. '+(e.message||e)}finally{hideBusy()}
 }
 document.getElementById('serviceEditModal')?.addEventListener('click',e=>{if(e.target.id==='serviceEditModal')closeServiceEdit()});
 
-function areaEsc(v){return String(v??'').replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));}
-function areaText(hi,en){return lang==='hi'?hi:en}
-function areaId(v){return String(v??'').replace(/[^a-zA-Z0-9_-]/g,'_')}
-function areaVisible(row){return row?.is_visible!==false}
-function areaDistrictName(d){return String(d?.name||'').trim()}
-function areaBlockName(b){return String(b?.name||'').trim()}
-function areaPanchayatName(x){return String(x?.name||'').trim()}
-
-async function loadAreaHierarchy(showLoader=false){
-  const tree=document.getElementById('areaTree');
-  if(showLoader)showBusy();
-  try{
-    const [ds,bs,ps]=await Promise.all([
-      api('senvia_districts?select=*&order=name.asc'),
-      api('senvia_blocks?select=*&order=name.asc'),
-      api('senvia_panchayats?select=*&order=name.asc')
-    ]);
-    areaDistrictRows=Array.isArray(ds)?ds:[];
-    areaBlockRows=Array.isArray(bs)?bs:[];
-    areaPanchayatRows=Array.isArray(ps)?ps:[];
-    const visibleBlocks=areaBlockRows.filter(areaVisible).map(areaBlockName).filter(Boolean);
-    if(visibleBlocks.length) blocks=[...new Set(visibleBlocks)];
-    else if(areaBlockRows.length) blocks=[];
-    renderAreaHierarchy();
-  }catch(e){
-    console.error('Area hierarchy load failed:',e);
-    if(tree)tree.innerHTML='<div class="area-empty">Area data load नहीं हो सका। कृपया Refresh करें।<br><small>'+areaEsc(e.message||e)+'</small></div>';
-    setDbStatus('🟠 Area hierarchy load failed: '+(e.message||e),'warn');
-  }finally{
-    if(showLoader)hideBusy();
-  }
-}
-
-function areaDistrictMatches(d){
-  const q=areaSearchText.toLowerCase();
-  if(!q)return true;
-  const did=String(d.id);
-  const bs=areaBlockRows.filter(b=>String(b.district_id)===did);
-  return areaDistrictName(d).toLowerCase().includes(q) || bs.some(b=>{
-    const ps=areaPanchayatRows.filter(p=>String(p.block_id)===String(b.id));
-    return areaBlockName(b).toLowerCase().includes(q) || ps.some(p=>areaPanchayatName(p).toLowerCase().includes(q));
-  });
-}
-function renderAreaHierarchy(){
-  const tree=document.getElementById('areaTree');
-  if(!tree)return;
-  const ds=areaDistrictRows,bs=areaBlockRows,ps=areaPanchayatRows;
-  const totalD=ds.length,visD=ds.filter(areaVisible).length,totalB=bs.length,visB=bs.filter(areaVisible).length,totalP=ps.length,visP=ps.filter(areaVisible).length;
-  const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v};
-  set('areaDistrictCount',totalD);set('areaBlockCount',totalB);set('areaPanchayatCount',totalP);
-  set('areaDistrictSub',visD+' Visible / '+totalD+' Total');set('areaBlockSub',visB+' Visible / '+totalB+' Total');set('areaPanchayatSub',visP+' Visible / '+totalP+' Total');
-  const filtered=ds.filter(areaDistrictMatches);
-  set('areaResultCount',filtered.length+' District • '+filtered.reduce((n,d)=>n+bs.filter(b=>String(b.district_id)===String(d.id)).length,0)+' Block • '+filtered.reduce((n,d)=>n+bs.filter(b=>String(b.district_id)===String(d.id)).reduce((m,b)=>m+ps.filter(p=>String(p.block_id)===String(b.id)).length,0),0)+' Panchayat');
-  if(!filtered.length){tree.innerHTML='<div class="area-empty">कोई District / Block / Panchayat नहीं मिला।</div>';return;}
-  tree.innerHTML=filtered.map(d=>{
-    const did=String(d.id), dbs=bs.filter(b=>String(b.district_id)===did);
-    const open=areaExpandedDistricts.has(did)||!!areaSearchText;
-    const hidden=!areaVisible(d);
-    return `<div class="area-district ${open?'open ':''}${hidden?'area-hidden':''}" data-district-id="${areaEsc(did)}">
-      <div class="area-district-head">
-        <button class="area-chevron" type="button" onclick="toggleAreaDistrict('${areaEsc(did)}')">›</button>
-        <div class="area-district-main" onclick="toggleAreaDistrict('${areaEsc(did)}')">
-          <div class="area-district-name">🏛 ${areaEsc(areaDistrictName(d)||'District')}</div>
-          <div class="area-district-meta">${dbs.length} Block • ${dbs.reduce((n,b)=>n+ps.filter(p=>String(p.block_id)===String(b.id)).length,0)} Panchayat ${hidden?'• 🙈 Hidden':''}</div>
-        </div>
-        <div class="area-head-actions">
-          <button class="area-white-btn" type="button" onclick="addAreaBlock('${areaEsc(did)}')">＋ Block</button>
-          <button class="area-white-btn" type="button" onclick="toggleAreaVisibility('district',${did},${areaVisible(d)?'false':'true'})">${areaVisible(d)?'🙈 Hide':'👁 Show'}</button>
-          <button class="area-white-btn" type="button" onclick="deleteAreaNode('district',${did})">🗑</button>
-        </div>
-      </div>
-      <div class="area-district-body">${dbs.length?dbs.map(b=>renderAreaBlock(b)).join(''):'<div class="area-empty">इस District में अभी कोई Block नहीं है।</div>'}</div>
-    </div>`;
-  }).join('');
-}
-function renderAreaBlock(b){
-  const bid=String(b.id), ps=areaPanchayatRows.filter(p=>String(p.block_id)===bid),open=areaExpandedBlocks.has(bid)||!!areaSearchText,hidden=!areaVisible(b);
-  return `<div class="area-block ${open?'open':''}" data-block-id="${areaEsc(bid)}">
-    <div class="area-block-head">
-      <div class="area-block-main" onclick="toggleAreaBlock('${areaEsc(bid)}')">
-        <div class="area-block-name">📍 ${areaEsc(areaBlockName(b)||'Block')}</div>
-        <div class="area-block-meta">${ps.length} Panchayat ${hidden?'• 🙈 Hidden':''}</div>
-      </div>
-      <span class="area-status ${hidden?'off':'on'}">${hidden?'🙈 Hidden':'👁 Visible'}</span>
-      <div class="area-block-actions">
-        <button class="area-add-panchayat" style="width:auto;margin:0" type="button" onclick="addAreaPanchayat('${areaEsc(bid)}')">＋ Panchayat</button>
-        <button class="outline" type="button" onclick="toggleAreaVisibility('block',${bid},${areaVisible(b)?'false':'true'})">${areaVisible(b)?'🙈 Hide':'👁 Show'}</button>
-        <button class="danger" type="button" onclick="deleteAreaNode('block',${bid})">🗑 Delete</button>
-      </div>
-    </div>
-    <div class="area-panchayats">${ps.length?ps.map(p=>renderAreaPanchayat(p)).join(''):'<div class="area-empty">कोई Panchayat नहीं है।</div>'}</div>
-  </div>`;
-}
-function renderAreaPanchayat(p){
-  const hidden=!areaVisible(p);
-  return `<div class="area-panchayat"><span class="area-panchayat-name">🏡 ${areaEsc(areaPanchayatName(p)||'Panchayat')}</span><span class="area-status ${hidden?'off':'on'}">${hidden?'🙈 Hidden':'👁 Visible'}</span><div class="area-panchayat-actions"><button class="outline" type="button" onclick="toggleAreaVisibility('panchayat',${p.id},${areaVisible(p)?'false':'true'})">${areaVisible(p)?'🙈 Hide':'👁 Show'}</button><button class="danger" type="button" onclick="deleteAreaNode('panchayat',${p.id})">🗑 Delete</button></div></div>`;
-}
-function toggleAreaState(id){id=String(id);areaExpandedStates.has(id)?areaExpandedStates.delete(id):areaExpandedStates.add(id);renderAreaHierarchy()}
-function toggleAreaDistrict(id){id=String(id);areaExpandedDistricts.has(id)?areaExpandedDistricts.delete(id):areaExpandedDistricts.add(id);renderAreaHierarchy()}
-function toggleAreaBlock(id){id=String(id);areaExpandedBlocks.has(id)?areaExpandedBlocks.delete(id):areaExpandedBlocks.add(id);renderAreaHierarchy()}
-async function toggleAreaVisibility(type,id,value){
-  if(!(await requireAdmin()))return;
-  const table=type==='state'?'senvia_states':type==='district'?'senvia_districts':type==='block'?'senvia_blocks':'senvia_panchayats';
-  showBusy();
-  try{await api(table+'?id=eq.'+encodeURIComponent(id),{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify({is_visible:value})});await loadAreaHierarchy(false)}
-  catch(e){alert((value?'Show':'Hide')+' failed.\n\n'+(e.message||e))}finally{hideBusy()}
-}
-async function deleteAreaNode(type,id){
-  if(!(await requireAdmin()))return;
-  const table=type==='state'?'senvia_states':type==='district'?'senvia_districts':type==='block'?'senvia_blocks':'senvia_panchayats';
-  const rows=type==='state'?areaStateRows:type==='district'?areaDistrictRows:type==='block'?areaBlockRows:areaPanchayatRows;
-  const row=rows.find(x=>String(x.id)===String(id)); const name=row?.name||'this area';
-  const child=type==='state'?'\nइस State के अंदर District, Block और Panchayat भी delete होंगे।':type==='district'?'\nइस District के अंदर Blocks और Panchayats भी delete होंगे।':type==='block'?'\nइस Block के अंदर Panchayats भी delete होंगे।':'';
-  if(!confirm('क्या आप '+name+' को delete करना चाहते हैं?'+child))return;
-  showBusy();try{await api(table+'?id=eq.'+encodeURIComponent(id),{method:'DELETE'});await loadAreaHierarchy(false)}catch(e){alert('Delete failed.\n\n'+(e.message||e))}finally{hideBusy()}
-}
-async function bulkAreaVisibility(type,value){
-  if(!(await requireAdmin()))return;
-  const map={state:['senvia_states',areaStateRows],district:['senvia_districts',areaDistrictRows],block:['senvia_blocks',areaBlockRows],panchayat:['senvia_panchayats',areaPanchayatRows]};
-  const [table,rows]=map[type]; if(!rows.length){alert('इस level में कोई record नहीं है।');return}
-  showBusy(); try{for(const row of rows){await api(table+'?id=eq.'+encodeURIComponent(row.id),{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify({is_visible:value})})} await loadAreaHierarchy(false)}catch(e){alert((value?'Show':'Hide')+' failed.\n\n'+(e.message||e))}finally{hideBusy()}
-}
-async function bulkDeleteArea(type){
-  if(!(await requireAdmin()))return;
-  const map={state:['senvia_states',areaStateRows,'States'],district:['senvia_districts',areaDistrictRows,'Districts'],block:['senvia_blocks',areaBlockRows,'Blocks'],panchayat:['senvia_panchayats',areaPanchayatRows,'Panchayats']};
-  const [table,rows,label]=map[type]; if(!rows.length){alert('इस level में कोई record नहीं है।');return}
-  if(!confirm('क्या आप सभी '+label+' को delete करना चाहते हैं? यह action वापस नहीं किया जा सकता।'))return;
-  showBusy(); try{for(const row of rows){await api(table+'?id=eq.'+encodeURIComponent(row.id),{method:'DELETE'})} await loadAreaHierarchy(false)}catch(e){alert('Delete failed.\n\n'+(e.message||e))}finally{hideBusy()}
-}
-async function addAreaBlockFromPanel(){
-  const ds=areaDistrictRows.filter(areaVisible); if(!ds.length){alert('पहले District जोड़ें।');return}
-  const names=ds.map(x=>x.name).join('\n'); const entered=(prompt('किस District में Block जोड़ना है?\n\n'+names+'\n\nDistrict का exact नाम लिखें:')||'').trim(); if(!entered)return; const d=ds.find(x=>String(x.name).toLowerCase()===entered.toLowerCase()); if(!d){alert('District नहीं मिला।');return} await addAreaBlock(d.id);
-}
-async function addAreaPanchayatFromPanel(){
-  const bs=areaBlockRows.filter(areaVisible); if(!bs.length){alert('पहले Block जोड़ें।');return}
-  const names=bs.map(x=>x.name).join('\n'); const entered=(prompt('किस Block में Panchayat जोड़ना है?\n\n'+names+'\n\nBlock का exact नाम लिखें:')||'').trim(); if(!entered)return; const b=bs.find(x=>String(x.name).toLowerCase()===entered.toLowerCase()); if(!b){alert('Block नहीं मिला।');return} await addAreaPanchayat(b.id);
-}
-async function addAreaState(){
-  if(!(await requireAdmin()))return;
-  const name=(prompt('State का नाम दर्ज करें:')||'').trim();if(!name)return;
-  if(areaStateRows.some(x=>String(x.name||'').toLowerCase()===name.toLowerCase())){alert('यह State पहले से मौजूद है।');return}
-  showBusy();try{await api('senvia_states',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify({name,is_visible:true})});await loadAreaHierarchy(false)}catch(e){alert('State add नहीं हुआ।\n\n'+(e.message||e))}finally{hideBusy()}
-}
-async function addAreaDistrict(stateId){
-  if(!(await requireAdmin()))return;
-  let sid=stateId;
-  if(sid==null){
-    const visibleStates=areaStateRows.filter(areaVisible); if(!visibleStates.length){alert('पहले State जोड़ें।');return}
-    const options=visibleStates.map(x=>x.name).join('\n'); const entered=(prompt('किस State में District जोड़ना है?\n\n'+options+'\n\nState का exact नाम लिखें:')||'').trim(); if(!entered)return;
-    const st=visibleStates.find(x=>String(x.name).toLowerCase()===entered.toLowerCase()); if(!st){alert('State नहीं मिला।');return} sid=st.id;
-  }
-  const st=areaStateRows.find(x=>String(x.id)===String(sid));if(!st)return;
-  const name=(prompt((st.name||'State')+' के अंदर District का नाम दर्ज करें:')||'').trim();if(!name)return;
-  if(areaDistrictRows.some(d=>String(d.state_id)===String(sid)&&areaDistrictName(d).toLowerCase()===name.toLowerCase())){alert('यह District पहले से मौजूद है।');return}
-  showBusy();try{await api('senvia_districts',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify({state_id:Number(sid),name,is_visible:true})});areaExpandedStates.add(String(sid));await loadAreaHierarchy(false)}catch(e){alert('District add नहीं हुआ।\n\n'+(e.message||e))}finally{hideBusy()}
-}
-async function addAreaBlock(districtId){
-  if(!(await requireAdmin()))return;const d=areaDistrictRows.find(x=>String(x.id)===String(districtId));if(!d)return;
-  const name=(prompt((d.name||'District')+' के अंदर Block का नाम दर्ज करें:')||'').trim();if(!name)return;
-  if(areaBlockRows.some(b=>String(b.district_id)===String(districtId)&&areaBlockName(b).toLowerCase()===name.toLowerCase())){alert('यह Block पहले से मौजूद है।');return}
-  showBusy();try{await api('senvia_blocks',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify({district_id:Number(districtId),name,is_visible:true})});areaExpandedDistricts.add(String(districtId));await loadAreaHierarchy(false)}catch(e){alert('Block add नहीं हुआ।\n\n'+(e.message||e))}finally{hideBusy()}
-}
-async function addAreaPanchayat(blockId){
-  if(!(await requireAdmin()))return;const b=areaBlockRows.find(x=>String(x.id)===String(blockId));if(!b)return;
-  const name=(prompt((b.name||'Block')+' के अंदर Panchayat का नाम दर्ज करें:')||'').trim();if(!name)return;
-  if(areaPanchayatRows.some(p=>String(p.block_id)===String(blockId)&&areaPanchayatName(p).toLowerCase()===name.toLowerCase())){alert('यह Panchayat पहले से मौजूद है।');return}
-  showBusy();try{await api('senvia_panchayats',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify({block_id:Number(blockId),name,is_visible:true})});areaExpandedBlocks.add(String(blockId));await loadAreaHierarchy(false)}catch(e){alert('Panchayat add नहीं हुआ।\n\n'+(e.message||e))}finally{hideBusy()}
-}
-function renderAreas(){renderAreaHierarchy()}
-function saveAreas(){}
-function addArea(type){addAreaState()}
-function deleteArea(type,index){loadAreaHierarchy(false)}
-
-function areaStateMatches(st){
- const q=areaSearchText.toLowerCase();if(!q)return true;const sid=String(st.id);const ds=areaDistrictRows.filter(d=>String(d.state_id)===sid);
- return String(st.name||'').toLowerCase().includes(q)||ds.some(d=>areaDistrictMatches(d));
-}
-function areaDistrictMatches(d){
- const q=areaSearchText.toLowerCase();if(!q)return true;const did=String(d.id);const bs=areaBlockRows.filter(b=>String(b.district_id)===did);
- return areaDistrictName(d).toLowerCase().includes(q)||bs.some(b=>{const ps=areaPanchayatRows.filter(p=>String(p.block_id)===String(b.id));return areaBlockName(b).toLowerCase().includes(q)||ps.some(p=>areaPanchayatName(p).toLowerCase().includes(q));});
-}
-function renderAreaHierarchy(){
- const tree=document.getElementById('areaTree');if(!tree)return;const ss=areaStateRows,ds=areaDistrictRows,bs=areaBlockRows,ps=areaPanchayatRows;
- const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v};
- const counts={st: [ss.length,ss.filter(areaVisible).length],d:[ds.length,ds.filter(areaVisible).length],b:[bs.length,bs.filter(areaVisible).length],p:[ps.length,ps.filter(areaVisible).length]};
- set('areaStateCount',counts.st[0]);set('areaStateSub',counts.st[1]+' Visible / '+counts.st[0]+' Total');set('areaDistrictCount',counts.d[0]);set('areaDistrictSub',counts.d[1]+' Visible / '+counts.d[0]+' Total');set('areaBlockCount',counts.b[0]);set('areaBlockSub',counts.b[1]+' Visible / '+counts.b[0]+' Total');set('areaPanchayatCount',counts.p[0]);set('areaPanchayatSub',counts.p[1]+' Visible / '+counts.p[0]+' Total');
- const filtered=ss.filter(areaStateMatches);
- const totalD=filtered.reduce((n,st)=>n+ds.filter(d=>String(d.state_id)===String(st.id)).length,0),totalB=filtered.reduce((n,st)=>n+bs.filter(b=>ds.some(d=>String(d.state_id)===String(st.id)&&String(d.id)===String(b.district_id))).length,0),totalP=filtered.reduce((n,st)=>n+ps.filter(p=>bs.some(b=>ds.some(d=>String(d.state_id)===String(st.id)&&String(d.id)===String(b.district_id))&&String(b.id)===String(p.block_id))).length,0);
- set('areaResultCount',filtered.length+' State • '+totalD+' District • '+totalB+' Block • '+totalP+' Panchayat');
- if(!filtered.length){tree.innerHTML='<div class="area-empty">कोई State / District / Block / Panchayat नहीं मिला।</div>';return}
- tree.innerHTML=filtered.map(st=>{const sid=String(st.id),sds=ds.filter(d=>String(d.state_id)===sid),open=areaExpandedStates.has(sid)||!!areaSearchText,hidden=!areaVisible(st);return `<div class="area-state ${open?'open ':''}${hidden?'area-state-hidden':''}"><div class="area-state-head"><button class="area-chevron" type="button" onclick="toggleAreaState('${areaEsc(sid)}')">›</button><div class="area-state-main" onclick="toggleAreaState('${areaEsc(sid)}')"><div class="area-state-name">🇮🇳 ${areaEsc(st.name||'State')}</div><div class="area-state-meta">${sds.length} District • ${sds.reduce((n,d)=>n+bs.filter(b=>String(b.district_id)===String(d.id)).length,0)} Block • ${sds.reduce((n,d)=>n+bs.filter(b=>String(b.district_id)===String(d.id)).reduce((m,b)=>m+ps.filter(p=>String(p.block_id)===String(b.id)).length,0),0)} Panchayat ${hidden?'• 🙈 Hidden':''}</div></div><div class="area-state-actions"><button class="area-state-add" type="button" onclick="addAreaDistrict('${areaEsc(sid)}')">＋ District</button><button class="area-white-btn" type="button" onclick="toggleAreaVisibility('state',${sid},${areaVisible(st)?'false':'true'})">${areaVisible(st)?'🙈 Hide':'👁 Show'}</button><button class="area-white-btn" type="button" onclick="deleteAreaNode('state',${sid})">🗑</button></div></div><div class="area-state-body">${sds.length?sds.map(d=>renderAreaDistrict(d)).join(''):'<div class="area-state-empty">इस State में अभी कोई District नहीं है।<br><br><button class="blue" type="button" onclick="addAreaDistrict(\''+areaEsc(sid)+'\')">＋ पहला District जोड़ें</button></div>'}</div></div>`}).join('');
-}
-function renderAreaDistrict(d){
- const did=String(d.id),dbs=areaBlockRows.filter(b=>String(b.district_id)===did),open=areaExpandedDistricts.has(did)||!!areaSearchText,hidden=!areaVisible(d);
- return `<div class="area-district ${open?'open ':''}${hidden?'area-hidden':''}"><div class="area-district-head"><button class="area-chevron" type="button" onclick="toggleAreaDistrict('${areaEsc(did)}')">›</button><div class="area-district-main" onclick="toggleAreaDistrict('${areaEsc(did)}')"><div class="area-district-name">🏛 ${areaEsc(areaDistrictName(d)||'District')}</div><div class="area-district-meta">${dbs.length} Block • ${dbs.reduce((n,b)=>n+areaPanchayatRows.filter(p=>String(p.block_id)===String(b.id)).length,0)} Panchayat ${hidden?'• 🙈 Hidden':''}</div></div><div class="area-head-actions"><button class="area-white-btn" type="button" onclick="addAreaBlock('${areaEsc(did)}')">＋ Block</button><button class="area-white-btn" type="button" onclick="toggleAreaVisibility('district',${did},${areaVisible(d)?'false':'true'})">${areaVisible(d)?'🙈 Hide':'👁 Show'}</button><button class="area-white-btn" type="button" onclick="deleteAreaNode('district',${did})">🗑</button></div></div><div class="area-district-body">${dbs.length?dbs.map(b=>renderAreaBlock(b)).join(''):'<div class="area-empty">इस District में अभी कोई Block नहीं है।</div>'}</div></div>`;
-}
-function renderAreaBlock(b){
- const bid=String(b.id),ps=areaPanchayatRows.filter(p=>String(p.block_id)===bid),open=areaExpandedBlocks.has(bid)||!!areaSearchText,hidden=!areaVisible(b);
- return `<div class="area-block ${open?'open':''}"><div class="area-block-head"><div class="area-block-main" onclick="toggleAreaBlock('${areaEsc(bid)}')"><div class="area-block-name">📍 ${areaEsc(areaBlockName(b)||'Block')}</div><div class="area-block-meta">${ps.length} Panchayat ${hidden?'• 🙈 Hidden':''}</div></div><span class="area-status ${hidden?'off':'on'}">${hidden?'🙈 Hidden':'👁 Visible'}</span><div class="area-block-actions"><button class="area-add-panchayat" style="width:auto;margin:0" type="button" onclick="addAreaPanchayat('${areaEsc(bid)}')">＋ Panchayat</button><button class="outline" type="button" onclick="toggleAreaVisibility('block',${bid},${areaVisible(b)?'false':'true'})">${areaVisible(b)?'🙈 Hide':'👁 Show'}</button><button class="danger" type="button" onclick="deleteAreaNode('block',${bid})">🗑 Delete</button></div></div><div class="area-panchayats">${ps.length?ps.map(p=>renderAreaPanchayat(p)).join(''):'<div class="area-empty">कोई Panchayat नहीं है।</div>'}</div></div>`;
-}
-function renderAreaPanchayat(p){const hidden=!areaVisible(p);return `<div class="area-panchayat"><span class="area-panchayat-name">🏡 ${areaEsc(areaPanchayatName(p)||'Panchayat')}</span><span class="area-status ${hidden?'off':'on'}">${hidden?'🙈 Hidden':'👁 Visible'}</span><div class="area-panchayat-actions"><button class="outline" type="button" onclick="toggleAreaVisibility('panchayat',${p.id},${areaVisible(p)?'false':'true'})">${areaVisible(p)?'🙈 Hide':'👁 Show'}</button><button class="danger" type="button" onclick="deleteAreaNode('panchayat',${p.id})">🗑 Delete</button></div></div>`}
-
-async function loadAreaHierarchy(showLoader=false){
- const tree=document.getElementById('areaTree');if(showLoader)showBusy();
- try{
-  const [ss,ds,bs,ps]=await Promise.all([api('senvia_states?select=*&order=name.asc'),api('senvia_districts?select=*&order=name.asc'),api('senvia_blocks?select=*&order=name.asc'),api('senvia_panchayats?select=*&order=name.asc')]);
-  areaStateRows=Array.isArray(ss)?ss:[];areaDistrictRows=Array.isArray(ds)?ds:[];areaBlockRows=Array.isArray(bs)?bs:[];areaPanchayatRows=Array.isArray(ps)?ps:[];
-  const visibleBlocks=areaBlockRows.filter(areaVisible).map(areaBlockName).filter(Boolean);if(visibleBlocks.length)blocks=[...new Set(visibleBlocks)];else if(areaBlockRows.length)blocks=[];
-  renderAreaHierarchy();
- }catch(e){console.error('Area hierarchy load failed:',e);if(tree)tree.innerHTML='<div class="area-empty">Area data load नहीं हो सका। कृपया Refresh करें।<br><small>'+areaEsc(e.message||e)+'</small></div>';setDbStatus('🟠 Area hierarchy load failed: '+(e.message||e),'warn')}finally{if(showLoader)hideBusy()}
-}
-
-document.getElementById('areaSearch')?.addEventListener('input',e=>{areaSearchText=e.target.value.trim();renderAreaHierarchy()});
-
-function openPro(){modal.classList.add('show');pn.value='';pm.value='';pp.value='';pv.value='';pe.value='';pb.innerHTML='<option value="">Select Block</option>'+blocks.map(b=>`<option>${b}</option>`).join('');checks.innerHTML=services.map(s=>`<label><input type="checkbox" value="${s}"> ${s}</label>`).join('')}
+function renderAreas(){const grid=localStorage.getItem('senvia_areas_view')!=='list'; availableList.className=grid?'area-view':'collection-list'; comingList.className=grid?'area-view':'collection-list'; availableList.innerHTML=blocks.map(b=>grid?`<div class="area-card"><b>📍 ${b}</b><p>Available</p></div>`:`<div class="service-row"><span class="service-row-name">📍 ${b}</span><span class="badge verified">Available</span></div>`).join(''); comingList.innerHTML=coming.map(b=>grid?`<div class="area-card"><b>📍 ${b}</b><p class="soon">Coming Soon</p></div>`:`<div class="service-row"><span class="service-row-name">📍 ${b}</span><span class="badge">Coming Soon</span></div>`).join(''); const bt=document.getElementById('areaViewToggle');if(bt)bt.textContent=grid?'☷ List View':'▦ Grid View'}
+function openPro(){modal.classList.add('show');pb.innerHTML='<option value="">Select Block</option>'+blocks.map(b=>`<option>${b}</option>`).join('');checks.innerHTML=services.map(s=>`<label><input type="checkbox" value="${s}"> ${s}</label>`).join('')}
 function closePro(){modal.classList.remove('show')}
-async function savePro(){let ss=[...document.querySelectorAll('#checks input:checked')].map(x=>x.value),name=pn.value.trim(),mobile=pm.value.trim(),block=pb.value,panchayat=pp.value.trim(),village=pv.value.trim(),experience=pe.value.trim();if(!name||!mobile||!block||!panchayat||!village||!ss.length){alert('Please fill all required fields and select at least one service.');return}let p={Name:name,Phone:mobile,Block:block,Panchayat:panchayat,Village_Area:village,Experience:experience,Status:'Pending'};if(!dbMode){pros.push({name,mobile,block,panchayat,village,experience,status:'Pending',services:ss});closePro();render();alert('Professional added in demo mode.');return}try{const rows=await api('professionals',{method:'POST',headers:{Prefer:'return=representation'},body:JSON.stringify(p)});
+async function savePro(){let ss=[...document.querySelectorAll('#checks input:checked')].map(x=>x.value),name=pn.value.trim(),mobile=pm.value.trim(),block=pb.value,panchayat=pp.value.trim(),village=pv.value.trim(),experience=pe.value.trim();if(!name||!mobile||!block||!panchayat||!village||!ss.length){alert('Please fill all required fields and select at least one service.');return}let p={Name:name,Phone:mobile,Block:block,Panchayat:panchayat,Village_Area:village,Status:'Pending'};if(!dbMode){pros.push({name,mobile,block,panchayat,village,experience,status:'Pending',services:ss});closePro();render();alert('Professional added in demo mode.');return}try{const rows=await api('professionals',{method:'POST',headers:{Prefer:'return=representation'},body:JSON.stringify(p)});
 let created=Array.isArray(rows)?rows[0]:rows;
-if(!created?.id){const found=await api('professionals?select=*&Phone=eq.'+encodeURIComponent(mobile)+'&order=created_at.desc&limit=1');created=Array.isArray(found)?found[0]:found}
+if(!created?.id){
+  const found=await api('professionals?select=*&Phone=eq.'+encodeURIComponent(mobile)+'&order=created_at.desc&limit=1');
+  created=Array.isArray(found)?found[0]:found;
+}
 const pid=created?.id;
-if(pid){const ids=serviceRows.filter(s=>ss.includes(svcLabel(s))).map(s=>s.id).filter(Boolean);if(ids.length) await api('professional_services',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify(ids.map(id=>({professional_id:pid,service_id:id})))})}
-closePro();await loadFromSupabase();alert('Professional added as Pending Verification.')}catch(e){console.error('Supabase save failed:',e);alert('Supabase save failed. Please check the table columns/RLS policies.\n\n'+(e.message||e));}}
-let editingProIndex=-1;
-function openProEdit(i){
- const p=pros[i]; if(!p)return; editingProIndex=i;
- document.getElementById('editPn').value=p.name||''; document.getElementById('editPm').value=p.mobile||''; document.getElementById('editPp').value=p.panchayat||''; document.getElementById('editPv').value=p.village||''; document.getElementById('editPe').value=p.experience||'';
- const bs=document.getElementById('editPb'); bs.innerHTML='<option value="">Select Block</option>'+blocks.map(b=>`<option>${b}</option>`).join(''); bs.value=p.block||'';
- document.getElementById('editChecks').innerHTML=services.map(s=>`<label><input type="checkbox" value="${s}" ${Array.isArray(p.services)&&p.services.includes(s)?'checked':''}> ${s}</label>`).join('');
- document.getElementById('proEditMsg').textContent=''; document.getElementById('proEditModal').classList.add('show');
-}
-function closeProEdit(){editingProIndex=-1;document.getElementById('proEditModal')?.classList.remove('show')}
-async function saveProEdit(){
- if(editingProIndex<0)return; const p=pros[editingProIndex];
- const name=document.getElementById('editPn').value.trim(),mobile=document.getElementById('editPm').value.trim(),block=document.getElementById('editPb').value,panchayat=document.getElementById('editPp').value.trim(),village=document.getElementById('editPv').value.trim(),experience=document.getElementById('editPe').value.trim();
- const ss=[...document.querySelectorAll('#editChecks input:checked')].map(x=>x.value),msg=document.getElementById('proEditMsg');
- if(!name||!mobile||!block||!panchayat||!village||!ss.length){msg.textContent='सभी जरूरी जानकारी भरें और कम-से-कम एक service चुनें।';return}
- if(!dbMode||!p.id){p.name=name;p.mobile=mobile;p.block=block;p.panchayat=panchayat;p.village=village;p.experience=experience;p.services=ss;render();closeProEdit();alert('Professional updated in demo mode.');return}
- try{
-  showBusy();
-  await api('professionals?id=eq.'+encodeURIComponent(p.id),{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify({Name:name,Phone:mobile,Block:block,Panchayat:panchayat,Village_Area:village})});
-  await api('professional_services?professional_id=eq.'+encodeURIComponent(p.id),{method:'DELETE'});
+if(pid){
   const ids=serviceRows.filter(s=>ss.includes(svcLabel(s))).map(s=>s.id).filter(Boolean);
-  if(ids.length)await api('professional_services',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify(ids.map(id=>({professional_id:p.id,service_id:id}))) });
-  closeProEdit(); await loadFromSupabase(); alert('Professional updated successfully.');
- }catch(e){console.error('Professional edit failed:',e);msg.textContent='Save failed: '+(e.message||e)}finally{hideBusy()}
+  if(ids.length) await api('professional_services',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify(ids.map(id=>({professional_id:pid,service_id:id}))) });
 }
-document.getElementById('proEditModal')?.addEventListener('click',e=>{if(e.target.id==='proEditModal')closeProEdit()});
-
+closePro();await loadFromSupabase();alert('Professional added as Pending Verification.')}catch(e){console.error('Supabase save failed:',e);alert('Supabase save failed. Please check the table columns/RLS policies.\n\n'+(e.message||e));} }
 async function approve(i){const p=pros[i];if(!dbMode||!p.id){p.status='Verified';render();return}try{await api('professionals?id=eq.'+encodeURIComponent(p.id),{method:'PATCH',body:JSON.stringify({Status:'Verified'})});await loadFromSupabase()}catch(e){alert('Approve failed. Check Supabase RLS policy.')}}
 async function removePro(i){if(!confirm('Delete this professional?'))return;const p=pros[i];if(!dbMode||!p.id){pros.splice(i,1);render();return}try{await api('professional_services?professional_id=eq.'+encodeURIComponent(p.id),{method:'DELETE'});await api('professionals?id=eq.'+encodeURIComponent(p.id),{method:'DELETE'});await loadFromSupabase()}catch(e){alert('Delete failed. Check Supabase RLS policy.')}}
-async function addService(){
- const input=document.getElementById('newSvc');
- const s=(input?.value||'').trim();
- if(!s){alert('कृपया Service का नाम दर्ज करें।');input?.focus();return}
- if(services.some(x=>String(x).trim().toLowerCase()===s.toLowerCase())){
-   alert('यह Service पहले से मौजूद है।');
-   input?.select();
-   return;
- }
- showBusy();
- try{
-   if(!(await requireAdmin())) return;
-   if(!dbMode){
-     services.push(s);
-     if(input) input.value='';
-     render();
-     alert('Service added successfully.');
-     return;
-   }
-
-   // Detect the actual service-name column from an existing row.
-   // If the table is empty, use the normal Senvia column name first.
-   const sample=serviceRows.find(x=>x&&typeof x==='object')||{};
-   const detected=serviceNameKey(sample);
-   const keys=[...new Set([
-     ...(detected?[detected]:[]),
-     'name','name_en','service','service_name','service_name_en','service_name_hi','title','name_hi','label','category'
-   ])];
-
-   let lastError='';
-   let saved=false;
-   for(const key of keys){
-     try{
-       const payload={}; payload[key]=s;
-       const iconColumn=serviceIconKey(sample)||'Icon'; payload[iconColumn]=newServiceIcon;
-       await api('services',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify(payload)});
-       saved=true; break;
-     }catch(e){
-       lastError=e.message||String(e);
-       // If the database has no icon column, keep the service add working and save the selected icon locally as a fallback.
-       try{ const payload={}; payload[key]=s; await api('services',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify(payload)}); saved=true; localStorage.setItem('senvia_service_icon_'+s,newServiceIcon); break; }catch(e2){ lastError=e2.message||lastError; }
-     }
-   }
-   if(!saved){
-     throw new Error(lastError||'Services table में service name column या INSERT permission नहीं मिली।');
-   }
-
-   if(input) input.value=''; newServiceIcon='🛠️'; const ib=document.getElementById('newSvcIconBtn'); if(ib)ib.textContent='🛠️ Icon चुनें';
-   await loadFromSupabase();
-   alert('Service successfully added.');
- }catch(e){
-   console.error('Service add failed:',e);
-   const msg=e.message||String(e);
-   let help='';
-   if(/42501|row-level security|RLS|permission|not authorized/i.test(msg)){
-     help='\n\nयह Supabase RLS/INSERT permission की समस्या लग रही है।';
-   }else if(/column|schema|does not exist|PGRST/i.test(msg)){
-     help='\n\nServices table के service-name column की समस्या लग रही है।';
-   }
-   alert('Service add failed.\n\n'+msg+help);
- }finally{
-   hideBusy();
- }
-}
-async function delService(i){if(!confirm('Delete this service?'))return;showBusy();try{let sv=serviceRows.find(x=>svcLabel(x)===services[i]);if(!dbMode||!sv?.id){services.splice(i,1);render();return}await api('services?id=eq.'+encodeURIComponent(sv.id),{method:'DELETE'});await loadFromSupabase()}catch(e){alert('Service delete failed. Check RLS and linked professional_services records.')}finally{hideBusy()}}
-
+async function addService(){let s=newSvc.value.trim();if(!s)return;if(!dbMode){if(!services.includes(s))services.push(s);newSvc.value='';render();return}try{const sample=serviceRows.find(x=>x&&typeof x==='object')||{};const candidates=['name_en','name','service','service_name','service_name_en','service_name_hi','title','name_hi','label','category','Service Name','Service'];const detected=candidates.find(k=>Object.prototype.hasOwnProperty.call(sample,k));const extra=Object.keys(sample).filter(k=>{const v=sample[k];const lk=k.toLowerCase();return typeof v==='string'&&v.trim()&& !['id','created_at','updated_at','status','description'].includes(lk)&&!lk.includes('created')&&!lk.includes('updated')&&!lk.includes('uuid')});const keys=[...new Set([...(detected?[detected]:[]),...candidates,...extra])];let last='';let done=false;for(const key of keys){try{const payload={};payload[key]=s;await api('services',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify(payload)});done=true;break}catch(e){last=e.message||String(e)}}if(!done)throw new Error(last||'Services table का service-name column नहीं मिला।');newSvc.value='';await loadFromSupabase()}catch(e){console.error('Service add failed:',e);alert('Service add failed. '+(e.message||e))}}
+async function delService(i){if(!confirm('Delete this service?'))return;let s=serviceRows.find(x=>svcLabel(x)===services[i]);if(!dbMode||!s?.id){services.splice(i,1);render();return}try{await api('services?id=eq.'+encodeURIComponent(s.id),{method:'DELETE'});await loadFromSupabase()}catch(e){alert('Service delete failed. Check RLS and linked professional_services records.')}}
 proSearch.oninput=renderTable;statusFilter.onchange=renderTable;custSearch.oninput=renderCustomers;msgSearch.oninput=renderMessages;msgType.onchange=renderMessages;
 const db=document.createElement('div');db.id='dbStatus';db.style='margin:12px 0 0;padding:10px 12px;border-radius:9px;font-weight:700;background:#fff4d7;color:#8a6500';db.textContent='Connecting to Supabase…';document.querySelector('.content').prepend(db);
+const senviaNativeFetch=window.fetch.bind(window);
+window.fetch=async function(...args){
+  const topLevelBusy=senviaBusyCount===0;
+  if(topLevelBusy)showBusy();
+  try{return await senviaNativeFetch(...args)}finally{if(topLevelBusy)hideBusy()}
+};
 restoreAdminEmail();
-try{lang=localStorage.getItem('senvia_lang')||lang||'hi'}catch(e){}
-setLang(lang);
 restoreProfessionalView();restoreCollectionViews();
-refreshAdminSession().then(()=>requireAdmin()).then(ok=>{if(ok){restoreAdminSection();loadFromSupabase()}});
-window.addEventListener('resize',()=>{if(window.innerWidth>700)closeAdminMobileMenu()});
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closeAdminMobileMenu()});
+
+refreshAdminSession()
+  .then(()=>requireAdmin())
+  .then(ok=>{if(ok) return loadFromSupabase();})
+  .catch(e=>{
+    console.error('Admin startup failed:',e);
+    const db=document.getElementById('dbStatus');
+    if(db){
+      db.textContent='⚠️ Admin data loading failed. Please refresh once.';
+      db.style.background='#fff4d7';
+      db.style.color='#8a6500';
+    }
+  })
+  .finally(()=>{
+    senviaBusyCount=0;
+    document.getElementById('senviaBusy')?.classList.remove('show');
+  });
 </script>
 <div class="msg-detail-modal" id="msgViewModal" onclick="if(event.target===this)closeMessageView()"><div class="msg-detail-card"><div class="msg-detail-head"><h2 id="msgViewTitle">Message Details</h2><button class="msg-detail-close" type="button" onclick="closeMessageView()">✕</button></div><div class="msg-detail-body" id="msgViewBody"></div></div></div>
-
-
-<div id="senvia-back-page" style="display:flex;justify-content:center;margin:24px 12px 18px;">
-  <button type="button" onclick="if(history.length>1){history.back()}else{location.href='index.html'}"
-    style="border:1px solid #0b7f78;background:#ffffff;color:#075f5a;border-radius:10px;
-           padding:10px 22px;font-weight:700;font-size:15px;cursor:pointer;
-           box-shadow:0 2px 8px rgba(0,0,0,.08);">
-    ← पिछला पेज
-  </button>
-</div>
-
 </body></html>
