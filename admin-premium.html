@@ -391,6 +391,7 @@ table tbody tr{border-bottom:1px solid #e3edf3;transition:background .15s ease}t
 #professionalLocations table{min-width:760px;width:100%}
 #professionalLocations th,#professionalLocations td{padding:11px 12px;white-space:nowrap}
 @media(max-width:700px){#professionalLocations .panel{padding:12px}#professionalLocations h1{font-size:24px}}
+@media(max-width:900px){#professionalLocations div[style*="repeat(5"]{grid-template-columns:1fr 1fr!important}}@media(max-width:520px){#professionalLocations div[style*="repeat(5"]{grid-template-columns:1fr!important}}
 </style>
 </head>
 <body>
@@ -571,6 +572,17 @@ table tbody tr{border-bottom:1px solid #e3edf3;transition:background .15s ease}t
     <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px">
       <button class="green" type="button" onclick="show('areas',document.querySelector('.nav[onclick*=\"show(\'areas\'\"]'))">📍 क्षेत्र प्रबंधन खोलें</button>
       <button class="outline" type="button" onclick="show('pros',document.querySelector('.nav[onclick*=\"show(\'pros\'\"]'))">👥 Professionals खोलें</button>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(5,minmax(130px,1fr));gap:9px;margin-bottom:12px">
+      <input id="plSearch" type="search" placeholder="🔎 Professional खोजें" oninput="renderProfessionalLocations()">
+      <select id="plState" onchange="renderProfessionalLocations()"><option value="">State</option></select>
+      <select id="plDistrict" onchange="renderProfessionalLocations()"><option value="">District</option></select>
+      <select id="plBlock" onchange="renderProfessionalLocations()"><option value="">Block</option></select>
+      <select id="plPanchayat" onchange="renderProfessionalLocations()"><option value="">Panchayat / Village</option></select>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px;color:#5d7185;font-size:12px">
+      <span id="plCount">0 Professionals</span>
+      <button class="outline" type="button" onclick="resetProfessionalLocationFilters()">↺ Reset</button>
     </div>
     <div class="tablewrap">
       <table><thead><tr><th>Professional</th><th>Mobile</th><th>State</th><th>District</th><th>Block</th><th>Panchayat / Village</th><th>Status</th></tr></thead>
@@ -951,19 +963,35 @@ function setLang(l){
 function syncAdminMobileActive(id){document.querySelectorAll('.admin-mobile-link').forEach(n=>n.classList.toggle('active',n.dataset.mobileTarget===id))}
 function toggleAdminMobileMenu(){document.getElementById('adminMobileMenu')?.classList.toggle('open');document.getElementById('adminMobileOverlay')?.classList.toggle('open')}
 function closeAdminMobileMenu(){document.getElementById('adminMobileMenu')?.classList.remove('open');document.getElementById('adminMobileOverlay')?.classList.remove('open')}
+function plVal(p,key,def=''){return String(p?.[key]??def).trim()}
+function plLocationText(p){return [plVal(p,'state','Bihar'),plVal(p,'district','Muzaffarpur'),plVal(p,'block'),plVal(p,'panchayat'),plVal(p,'village')].filter(Boolean).join(' / ')}
+function plUnique(key){return [...new Set((Array.isArray(pros)?pros:[]).map(p=>plVal(p,key)).filter(Boolean))].sort((a,b)=>a.localeCompare(b));}
+function fillPLSelect(id,items,placeholder,current=''){const el=document.getElementById(id);if(!el)return;el.innerHTML='<option value="">'+placeholder+'</option>'+items.map(x=>'<option value="'+areaEsc(x)+'">'+areaEsc(x)+'</option>').join('');if(items.includes(current))el.value=current;}
+function renderProfessionalLocationFilters(){
+  const state=document.getElementById('plState')?.value||'',district=document.getElementById('plDistrict')?.value||'',block=document.getElementById('plBlock')?.value||'',panchayat=document.getElementById('plPanchayat')?.value||'';
+  fillPLSelect('plState',plUnique('state'),'State',state);
+  const ds=plUnique('district');fillPLSelect('plDistrict',ds,'District',district);
+  const bs=plUnique('block');fillPLSelect('plBlock',bs,'Block',block);
+  const ps=[...new Set((Array.isArray(pros)?pros:[]).flatMap(p=>[plVal(p,'panchayat'),plVal(p,'village')]).filter(Boolean))].sort((a,b)=>a.localeCompare(b));
+  fillPLSelect('plPanchayat',ps,'Panchayat / Village',panchayat);
+}
+function resetProfessionalLocationFilters(){['plSearch','plState','plDistrict','plBlock','plPanchayat'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});renderProfessionalLocations();}
 function renderProfessionalLocations(){
   const el=document.getElementById('professionalLocationTable');
   if(!el)return;
-  const list=Array.isArray(pros)?pros:[];
-  if(!list.length){el.innerHTML='<tr><td colspan="7" style="text-align:center;color:#68758a">अभी कोई Professional location उपलब्ध नहीं है।</td></tr>';return;}
+  const all=Array.isArray(pros)?pros:[];
+  renderProfessionalLocationFilters();
+  const q=(document.getElementById('plSearch')?.value||'').trim().toLowerCase();
+  const state=document.getElementById('plState')?.value||'',district=document.getElementById('plDistrict')?.value||'',block=document.getElementById('plBlock')?.value||'',panchayat=document.getElementById('plPanchayat')?.value||'';
+  const list=all.filter(p=>{
+    const name=plVal(p,'name'),mobile=plVal(p,'mobile'),st=plVal(p,'state','Bihar'),di=plVal(p,'district','Muzaffarpur'),bl=plVal(p,'block'),pa=plVal(p,'panchayat'),vi=plVal(p,'village');
+    const text=[name,mobile,st,di,bl,pa,vi].join(' ').toLowerCase();
+    return (!q||text.includes(q))&&(!state||st===state)&&(!district||di===district)&&(!block||bl===block)&&(!panchayat||pa===panchayat||vi===panchayat);
+  });
+  const count=document.getElementById('plCount');if(count)count.textContent=list.length+' Professional'+(list.length===1?'':'s');
+  if(!list.length){el.innerHTML='<tr><td colspan="7" style="text-align:center;color:#68758a;padding:22px">इस चयन के अनुसार कोई Professional नहीं मिला।</td></tr>';return;}
   el.innerHTML=list.map(p=>{
-    const name=areaEsc(p.name||'—');
-    const mobile=areaEsc(p.mobile||'—');
-    const state=areaEsc(p.state||'Bihar');
-    const district=areaEsc(p.district||'Muzaffarpur');
-    const block=areaEsc(p.block||'—');
-    const pv=areaEsc([p.panchayat,p.village].filter(Boolean).join(' / ')||'—');
-    const status=areaEsc(proStatus(p)||p.status||'—');
+    const name=areaEsc(p.name||'—');const mobile=areaEsc(p.mobile||'—');const state=areaEsc(p.state||'Bihar');const district=areaEsc(p.district||'Muzaffarpur');const block=areaEsc(p.block||'—');const pv=areaEsc([p.panchayat,p.village].filter(Boolean).join(' / ')||'—');const status=areaEsc(proStatus(p)||p.status||'—');
     return `<tr><td><b>${name}</b></td><td>${mobile}</td><td>${state}</td><td>${district}</td><td>${block}</td><td>${pv}</td><td>${status}</td></tr>`;
   }).join('');
 }
