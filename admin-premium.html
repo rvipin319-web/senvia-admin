@@ -478,6 +478,22 @@ table tbody tr{border-bottom:1px solid #e3edf3;transition:background .15s ease}t
 
 <section id="customers" style="display:none"><h1>Customers</h1><div class="panel"><div class="toolbar"><input id="custSearch" placeholder="Search name / mobile / ID / block"><button class="outline view-toggle" id="custViewToggle" onclick="toggleCollectionView('customers')">▦ Grid View</button></div><div id="customerList" class="collection-list"></div></div></section>
 
+<div class="service-edit-modal" id="customerEditModal" role="dialog" aria-modal="true" aria-labelledby="customerEditTitle">
+  <div class="service-edit-card">
+    <div class="service-edit-head"><div><h2 id="customerEditTitle">Edit Customer</h2><p>Customer details बदलें</p></div><button type="button" onclick="closeCustomerEdit()">×</button></div>
+    <div class="service-edit-body">
+      <input type="hidden" id="editCustomerId">
+      <label>Name / नाम</label><input id="editCustomerName" type="text">
+      <label>Mobile / मोबाइल</label><input id="editCustomerPhone" type="tel" maxlength="10">
+      <label>Block</label><input id="editCustomerBlock" type="text">
+      <label>Panchayat</label><input id="editCustomerPanchayat" type="text">
+      <label>Village / Area</label><input id="editCustomerVillage" type="text">
+      <div id="customerEditMsg" style="margin-top:9px;font-size:13px;color:#b42318"></div>
+    </div>
+    <div class="service-edit-footer"><button class="outline" type="button" onclick="closeCustomerEdit()">Cancel</button><button class="green" type="button" onclick="saveCustomerEdit()">Save Changes</button></div>
+  </div>
+</div>
+
 <section id="services" style="display:none"><h1>Services</h1><div class="panel"><div class="toolbar"><input id="newSvc" placeholder="New service name"><button class="outline" type="button" id="newSvcIconBtn" onclick="openServiceIconPicker('add')">🛠️ Icon चुनें</button><button class="green" onclick="addService()">+ Add Service</button><button class="outline view-toggle" id="svcViewToggle" onclick="toggleCollectionView('services')">▦ Grid View</button></div><div id="serviceList" class="collection-list"></div></div></section>
 
 <section id="areas" style="display:none"><h1>📍 क्षेत्र प्रबंधन</h1><div class="panel area-shell">
@@ -946,8 +962,39 @@ function renderCustomers(){
  if(!customerLoadDone){ box.innerHTML='<p class="empty">Customers data is loading…</p>'; return; }
  const q=(document.getElementById('custSearch')?.value||'').toLowerCase();
  const rows=(Array.isArray(customers)?customers:[]).filter(c=>!q||JSON.stringify(c).toLowerCase().includes(q));
- box.innerHTML=rows.map(c=>grid?`<div class="collection-card"><h3>${c.Name||c.name||'Customer'}</h3><span class="code-pill">ID: ${c.customer_code||'—'}</span><p>📱 ${c.Phone||c.phone||'—'}</p><p>📍 ${[c.Block,c.Panchayat,c.Village_Area].filter(Boolean).join(' → ')||'—'}</p><p>Status: <b>${c.Status||'Active'}</b></p><div class="actions"><button class="danger" type="button" onclick="deleteCustomer('${c.id||''}')">Delete</button></div></div>`:`<div class="service-row"><span class="service-row-name">${c.Name||c.name||'Customer'} <span class="code-pill">${c.customer_code||'—'}</span></span><span>${c.Phone||c.phone||'—'}</span><span>${c.Block||'—'}</span><div class="service-row-actions"><button class="danger" type="button" onclick="deleteCustomer('${c.id||''}')">Delete</button></div></div>`).join('')||'<p class="empty">No customers registered yet.</p>';
+ box.innerHTML=rows.map(c=>grid?`<div class="collection-card"><h3>${c.Name||c.name||'Customer'}</h3><span class="code-pill">ID: ${c.customer_code||'—'}</span><p>📱 ${c.Phone||c.phone||'—'}</p><p>📍 ${[c.Block,c.Panchayat,c.Village_Area].filter(Boolean).join(' → ')||'—'}</p><p>Status: <b>${c.Status||'Active'}</b></p><div class="actions"><button class="outline" type="button" onclick="openCustomerEdit('${c.id||''}')">✎ Edit</button><button class="danger" type="button" onclick="deleteCustomer('${c.id||''}')">Delete</button></div></div>`:`<div class="service-row"><span class="service-row-name">${c.Name||c.name||'Customer'} <span class="code-pill">${c.customer_code||'—'}</span></span><span>${c.Phone||c.phone||'—'}</span><span>${c.Block||'—'}</span><div class="service-row-actions"><button class="service-edit-btn" type="button" onclick="openCustomerEdit('${c.id||''}')">✎ Edit</button><button class="danger" type="button" onclick="deleteCustomer('${c.id||''}')">Delete</button></div></div>`).join('')||'<p class="empty">No customers registered yet.</p>';
  const b=document.getElementById('custViewToggle');if(b)b.textContent=grid?'☷ List View':'▦ Grid View';
+}
+function openCustomerEdit(id){
+ const c=(Array.isArray(customers)?customers:[]).find(x=>String(x.id||'')===String(id));
+ if(!c)return;
+ document.getElementById('editCustomerId').value=c.id||'';
+ document.getElementById('editCustomerName').value=c.Name||c.name||'';
+ document.getElementById('editCustomerPhone').value=c.Phone||c.phone||'';
+ document.getElementById('editCustomerBlock').value=c.Block||c.block||'';
+ document.getElementById('editCustomerPanchayat').value=c.Panchayat||c.panchayat||'';
+ document.getElementById('editCustomerVillage').value=c.Village_Area||c.village_area||c.Village||c.village||'';
+ document.getElementById('customerEditMsg').textContent='';
+ document.getElementById('customerEditModal').classList.add('show');
+}
+function closeCustomerEdit(){document.getElementById('customerEditModal')?.classList.remove('show')}
+async function saveCustomerEdit(){
+ const id=document.getElementById('editCustomerId').value;
+ const name=document.getElementById('editCustomerName').value.trim();
+ const phone=document.getElementById('editCustomerPhone').value.trim();
+ const block=document.getElementById('editCustomerBlock').value.trim();
+ const panchayat=document.getElementById('editCustomerPanchayat').value.trim();
+ const village=document.getElementById('editCustomerVillage').value.trim();
+ const msg=document.getElementById('customerEditMsg');
+ if(!id||!name||!phone){msg.textContent='Name और Mobile भरना जरूरी है।';return}
+ try{
+  showBusy(); msg.textContent='Saving…';
+  await api('customers?id=eq.'+encodeURIComponent(id),{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify({Name:name,Phone:phone,Block:block,Panchayat:panchayat,Village_Area:village})});
+  const i=customers.findIndex(x=>String(x.id||'')===String(id));
+  if(i>=0)customers[i]={...customers[i],Name:name,Phone:phone,Block:block,Panchayat:panchayat,Village_Area:village};
+  closeCustomerEdit(); renderCustomers(); renderPremiumDashboard();
+  toast(lang==='hi'?'Customer details अपडेट हो गईं।':'Customer details updated.');
+ }catch(e){console.error('Customer edit failed:',e);msg.textContent='Save failed: '+(e.message||e)}finally{hideBusy()}
 }
 async function deleteCustomer(id){
  if(!id){alert('Customer ID उपलब्ध नहीं है।');return}
