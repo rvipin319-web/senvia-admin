@@ -43,11 +43,12 @@ async function forgotPassword(){const email=loginEmail.value.trim();if(!email){l
 function adminLogout(){clearAuth();location.reload()}
 function esc(x){return String(x??'—').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
 function date(x){return x?.created_at?new Date(x.created_at).toLocaleString():x?.date_time||x?.date||'—'}
-function status(x){return x?.status||x?.message_status||x?.read_status||(x?.is_read===true?'Read':'New')}
-let currentFolder='requests';
+function getMessageStatus(x){return x?.status||x?.message_status||x?.read_status||(x?.is_read===true?'Read':'New')}
+let currentFolder=localStorage.getItem('senvia_messages_folder')||'requests';
 
 function setFolder(folder){
   currentFolder=folder;
+  try{localStorage.setItem('senvia_messages_folder',folder)}catch(e){}
   document.querySelectorAll('.folder').forEach(b=>b.classList.remove('active'));
   const el=document.getElementById('folder'+folder.charAt(0).toUpperCase()+folder.slice(1));
   if(el)el.classList.add('active');
@@ -80,7 +81,7 @@ function render(){
   const base=folderRows();
   const data=base.filter(m=>(!q||JSON.stringify(m).toLowerCase().includes(q))&&(!t||m.message_type===t));
   messages.className='messages '+(localStorage.getItem('senvia_messages_view')==='grid'?'grid':'');
-  messages.innerHTML=data.map(m=>{const resolved=!!m._resolved; return `<article class="msg"><div class="msg-head"><h3>💬 ${esc(m.message_type||'Message')}</h3><span class="pill">${esc(resolved?'Resolved':status(m))}</span></div><div class="meta"><span><b>User:</b> ${esc(m.user_name)}</span><span><b>Type:</b> ${esc(m.user_type)}</span><span><b>Mobile:</b> ${esc(m.mobile)}</span><span><b>Senvia ID:</b> ${esc(m.user_code)}</span></div><div class="text">${esc(m.message)}</div><span class="date">🕐 ${esc(date(m))}</span><div class="actions"><button class="outline" onclick="view(${JSON.stringify(m.id)})">View</button>${currentFolder==='requests' && !resolved ? `<button class="green" onclick="resolveRequest(${JSON.stringify(m.id)})">✅ Problem Solved</button>`:''}<button class="danger" onclick="del(${JSON.stringify(m.id)})">Delete</button></div></article>`}).join('')||'<div class="empty">इस folder में अभी कोई message नहीं है।</div>';
+  messages.innerHTML=data.map(m=>{const resolved=!!m._resolved; return `<article class="msg"><div class="msg-head"><h3>💬 ${esc(m.message_type||'Message')}</h3><span class="pill">${esc(resolved?'Resolved':getMessageStatus(m))}</span></div><div class="meta"><span><b>User:</b> ${esc(m.user_name)}</span><span><b>Type:</b> ${esc(m.user_type)}</span><span><b>Mobile:</b> ${esc(m.mobile)}</span><span><b>Senvia ID:</b> ${esc(m.user_code)}</span></div><div class="text">${esc(m.message)}</div><span class="date">🕐 ${esc(date(m))}</span><div class="actions"><button class="outline" onclick="view(${JSON.stringify(m.id)})">View</button>${currentFolder==='requests' && !resolved ? `<button class="green" onclick="resolveRequest(${JSON.stringify(m.id)})">✅ Problem Solved</button>`:''}<button class="danger" onclick="del(${JSON.stringify(m.id)})">Delete</button></div></article>`}).join('')||'<div class="empty">इस folder में अभी कोई message नहीं है।</div>';
   viewBtn.textContent=localStorage.getItem('senvia_messages_view')==='grid'?'☷ List View':'▦ Grid View';
   updateFolderCounts();
 }
@@ -122,7 +123,7 @@ async function resolveRequest(id){
   }catch(e){alert('Problem Solved नहीं किया जा सका: '+e.message)}
 }
 async function del(id){if(!confirm('Delete this message?'))return;try{const r=await fetch(SUPABASE_URL+'/rest/v1/messages?id=eq.'+encodeURIComponent(id),{method:'DELETE',headers:{...authHeaders(),'Content-Type':'application/json'}});if(!r.ok)throw Error(await r.text());rows=rows.filter(x=>String(x.id)!==String(id));render()}catch(e){alert('Delete failed: '+e.message)}}
-search.oninput=render;type.onchange=render;async function start(){if(await requireAdmin())await loadMessages()}start();
+search.oninput=render;type.onchange=render;async function start(){document.querySelectorAll('.folder').forEach(b=>b.classList.remove('active'));const initial=document.getElementById('folder'+currentFolder.charAt(0).toUpperCase()+currentFolder.slice(1));if(initial)initial.classList.add('active');else currentFolder='requests';if(await requireAdmin())await loadMessages()}start();
 </script>
 <div id="senvia-back-page" style="display:flex;justify-content:center;margin:24px 12px 18px;">
   <button type="button" onclick="if(history.length>1){history.back()}else{location.href='index.html'}"
