@@ -882,7 +882,25 @@ function syncAdminMobileActive(id){document.querySelectorAll('.admin-mobile-link
 function toggleAdminMobileMenu(){document.getElementById('adminMobileMenu')?.classList.toggle('open');document.getElementById('adminMobileOverlay')?.classList.toggle('open')}
 function closeAdminMobileMenu(){document.getElementById('adminMobileMenu')?.classList.remove('open');document.getElementById('adminMobileOverlay')?.classList.remove('open')}
 function mobileAdminShow(id,el){syncAdminMobileActive(id);show(id);closeAdminMobileMenu()}
-function show(id,el){document.querySelectorAll('main section').forEach(s=>s.style.display='none');document.getElementById(id).style.display='block';document.querySelectorAll('.nav').forEach(n=>n.classList.remove('active'));if(el)el.classList.add('active');syncAdminMobileActive(id);render()}
+function show(id,el){
+  const target=document.getElementById(id);
+  if(!target)return;
+  document.querySelectorAll('main section').forEach(s=>s.style.display='none');
+  target.style.display='block';
+  document.querySelectorAll('.nav').forEach(n=>n.classList.remove('active'));
+  if(el)el.classList.add('active');
+  syncAdminMobileActive(id);
+  try{sessionStorage.setItem('senvia_admin_section',id)}catch(e){}
+  render();
+}
+function restoreAdminSection(){
+  let id='dashboard';
+  try{id=sessionStorage.getItem('senvia_admin_section')||'dashboard'}catch(e){}
+  if(!document.getElementById(id))id='dashboard';
+  const nav=document.querySelector('.nav[onclick*="show(\''+id+'\'"]');
+  const mobile=document.querySelector('.admin-mobile-link[data-mobile-target="'+id+'"]');
+  show(id,nav||mobile||null);
+}
 function render(){
  const pendingCount=pros.filter(p=>proStatus(p)==='Pending').length;
  const cp=document.getElementById('countPro'); if(cp) cp.textContent=pros.length;
@@ -1373,7 +1391,7 @@ restoreAdminEmail();
 try{lang=localStorage.getItem('senvia_lang')||lang||'hi'}catch(e){}
 setLang(lang);
 restoreProfessionalView();restoreCollectionViews();
-refreshAdminSession().then(()=>requireAdmin()).then(ok=>{if(ok) loadFromSupabase()});
+refreshAdminSession().then(()=>requireAdmin()).then(ok=>{if(ok){restoreAdminSection();loadFromSupabase()}});
 window.addEventListener('resize',()=>{if(window.innerWidth>700)closeAdminMobileMenu()});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeAdminMobileMenu()});
 </script>
