@@ -98,7 +98,9 @@ function normalize(rows,links,services){
     village:str(val(x,['Village_Area','Village','village','village_area','village_name'],'')),
     pin:str(val(x,['PIN_Code','pin','pincode','pin_code'],'')),
     services:[...new Set(sv.map(v=>str(typeof v==='object'?val(v,['Name','name','service_name','title'],''):v)).filter(Boolean))],
-    status:str(val(x,['Status','status','verification_status'],''))
+    status:str(val(x,['Status','status','verification_status'],'')),
+    state:str(val(x,['State','state','state_name'],'')),
+    district:str(val(x,['District','district','district_name'],''))
    };
  });
 }
@@ -173,7 +175,9 @@ function render(rows){
   try{services=await get('services')}catch(e){}
   try{links=await get('professional_services')}catch(e){}
   let rows=normalize(pros,links,services).filter(verified);
-  rows=rows.filter(x=>match(x.block,b)&&match(x.panchayat,p)&&(pin?norm(x.pin)===norm(pin):true)&&serviceMatch(x,s));
+  rows=rows.filter(x=>match(x.block,b)&&match(x.panchayat,p)&&(pin?norm(x.pin)===norm(pin):true)&&serviceMatch(x,s)
+    &&(!state || !x.state || match(x.state,state))
+    &&(!district || !x.district || match(x.district,district)));
   const seen=new Set(); rows=rows.filter(x=>{const k=String(x.id||x.name).toLowerCase();if(seen.has(k))return false;seen.add(k);return true});
   window.__senviaFindFilters={state:state,district:district,block:b,panchayat:p,pin:pin,service:s};
   render(rows);
