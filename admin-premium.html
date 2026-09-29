@@ -382,6 +382,9 @@ table tbody tr{border-bottom:1px solid #e3edf3;transition:background .15s ease}t
 .area-panchayat-name{color:#fff!important;}
 .area-block .area-status,.area-panchayat .area-status{color:#fff!important;}
 </style>
+<style id="senvia-visitor-analytics-css">
+.visitor-kpis{margin-top:14px}.analytics-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:18px}.visitor-page-list,.visitor-daily-list{display:flex;flex-direction:column;gap:9px;margin-top:14px}.visitor-page-row,.visitor-day-row{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;padding:12px 14px;border:1px solid #e6edf3;border-radius:12px;background:#fbfdff}.visitor-page-row b,.visitor-day-row b{color:#12385c}.visitor-page-row span,.visitor-day-row span{color:#63748a;font-size:12px}.visitor-page-row strong,.visitor-day-row strong{color:#0879c9}.analytics-note{margin-top:18px;padding:14px 16px;border-radius:12px;background:#fff7e6;border:1px solid #f2d28b;color:#704d00}@media(max-width:800px){.analytics-grid{grid-template-columns:1fr}}
+</style>
 </head>
 <body>
 <div id="senviaBusy" aria-live="polite" aria-label="System busy">
@@ -428,6 +431,7 @@ table tbody tr{border-bottom:1px solid #e3edf3;transition:background .15s ease}t
     <button type="button" class="admin-mobile-link" data-mobile-target="services" onclick="mobileAdminShow('services',this)"><span class="mi">🛠</span><span data-hi="Services" data-en="Services">Services</span><span class="arrow">›</span></button>
     <button type="button" class="admin-mobile-link" data-mobile-target="areas" onclick="mobileAdminShow('areas',this)"><span class="mi">📍</span><span data-hi="Areas" data-en="Areas">Areas</span><span class="arrow">›</span></button>
     <button type="button" class="admin-mobile-link" data-mobile-target="messages" onclick="mobileAdminShow('messages',this)"><span class="mi">💬</span><span data-hi="Messages" data-en="Messages">Messages</span><span class="arrow">›</span></button>
+    <button type="button" class="admin-mobile-link" data-mobile-target="analytics" onclick="mobileAdminShow('analytics',this)"><span class="mi">📈</span><span data-hi="Visitors" data-en="Visitors">Visitors</span><span class="arrow">›</span></button>
   </div>
   <div class="admin-mobile-tools">
     <div class="admin-mobile-lang"><button id="mobileHi" class="on" onclick="setLang('hi')">हिंदी</button><button id="mobileEn" onclick="setLang('en')">English</button></div>
@@ -443,6 +447,7 @@ table tbody tr{border-bottom:1px solid #e3edf3;transition:background .15s ease}t
 <div class="nav" onclick="show('services',this)">🛠 <span data-hi="Services" data-en="Services">Services</span></div>
 <div class="nav" onclick="show('areas',this)">📍 <span data-hi="Areas" data-en="Areas">Areas</span></div>
 <div class="nav" onclick="show('messages',this)">💬 <span data-hi="Messages" data-en="Messages">Messages</span></div>
+<div class="nav" onclick="show('analytics',this)">📈 <span data-hi="Visitors" data-en="Visitors">Visitors</span></div>
 </aside>
 <main class="content">
 <section id="dashboard">
@@ -472,6 +477,28 @@ table tbody tr{border-bottom:1px solid #e3edf3;transition:background .15s ease}t
   </div></div>
   <div class="pdash-card"><h2>ℹ️ Platform Overview</h2><div class="overview-grid" id="platformOverview"></div></div>
 </div>
+</section>
+
+<section id="analytics" style="display:none">
+  <div class="pdash-hero">
+    <div><h1>📈 Website Visitors</h1><p>Live visitor statistics from the Senvia website.</p></div>
+    <div class="pdash-tag">🔒 Privacy-friendly tracking<br><small style="font-weight:500">No IP address is stored.</small></div>
+  </div>
+  <div class="pdash-kpis visitor-kpis">
+    <div class="pdash-kpi blue"><small>👥 Total Visitors</small><b id="visitorTotal">—</b><span>Unique browsers recorded</span></div>
+    <div class="pdash-kpi green"><small>🟢 Live Now</small><b id="visitorLive">—</b><span>Active in last 5 minutes</span></div>
+    <div class="pdash-kpi orange"><small>📅 Today</small><b id="visitorToday">—</b><span>Unique visitors today</span></div>
+    <div class="pdash-kpi purple"><small>👀 Page Views</small><b id="visitorViews">—</b><span>Total pages viewed</span></div>
+  </div>
+  <div class="pdash-kpis visitor-kpis">
+    <div class="pdash-kpi blue"><small>🗓️ Last 7 Days</small><b id="visitorWeek">—</b><span>Unique visitors</span></div>
+    <div class="pdash-kpi green"><small>📆 This Month</small><b id="visitorMonth">—</b><span>Unique visitors</span></div>
+  </div>
+  <div class="pdash-tables analytics-grid">
+    <div class="pdash-card"><h2>📄 Most Visited Pages</h2><div class="sub">Page views by URL</div><div id="visitorTopPages" class="visitor-page-list"><div class="empty">Loading…</div></div></div>
+    <div class="pdash-card"><h2>📊 Last 7 Days</h2><div class="sub">Visitors and page views</div><div id="visitorDaily" class="visitor-daily-list"><div class="empty">Loading…</div></div></div>
+  </div>
+  <div id="visitorSetupNote" class="analytics-note" style="display:none">⚠️ Visitor tracking database setup अभी पूरा नहीं हुआ है। <b>senvia-visitor-analytics.sql</b> को Supabase SQL Editor में एक बार run करें।</div>
 </section>
 
 <section id="pros" style="display:none"><h1>Professionals</h1><div class="panel"><div class="toolbar"><input id="proSearch" placeholder="Search name/mobile/block"><select id="statusFilter"><option value="">All Status</option><option>Verified</option><option>Pending</option><option>Rejected</option></select><button class="green" onclick="openPro()">+ Add Professional</button><button class="outline pro-view-toggle" type="button" id="viewToggle" onclick="toggleCardView()">▦ Grid View</button></div><div class="tablewrap"><table><thead><tr><th>Name</th><th>Mobile</th><th>Area</th><th>Services</th><th>Status</th><th>Action</th></tr></thead><tbody id="proTable"></tbody></table></div></div></section>
@@ -908,6 +935,7 @@ function show(id,el){
   syncAdminMobileActive(id);
   try{sessionStorage.setItem('senvia_admin_section',id)}catch(e){}
   render();
+  if(id==='analytics' || id==='dashboard') loadVisitorAnalytics();
 }
 function restoreAdminSection(){
   let id='dashboard';
@@ -949,6 +977,26 @@ function renderPremiumDashboard(){
  const rc=document.getElementById('recentCustTable');if(rc)rc.innerHTML=customers.slice(0,5).map(c=>'<tr><td><b>'+(c.Name||c.name||'Customer')+'</b></td><td>'+(c.Phone||c.phone||'—')+'</td><td>'+(c.Block||'—')+'</td></tr>').join('')||'<tr><td colspan="3">No registrations yet.</td></tr>';
  const ov=document.getElementById('platformOverview');if(ov)ov.innerHTML='<div class="overview-item"><small>✅ Verified Professionals</small><b>'+pros.filter(p=>proStatus(p)==='Verified').length+'</b></div><div class="overview-item"><small>⏳ Pending Professionals</small><b>'+pros.filter(p=>proStatus(p)==='Pending').length+'</b></div><div class="overview-item"><small>👤 Active Customers</small><b>'+customers.length+'</b></div><div class="overview-item"><small>🛠 Service Categories</small><b>'+services.length+'</b></div>';
 }
+let visitorStats=null;
+async function loadVisitorAnalytics(){
+  const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=(v??0).toLocaleString?Number(v??0).toLocaleString('en-IN'):String(v??0)};
+  try{
+    const r=await api('rpc/get_senvia_visitor_stats',{method:'POST',body:'{}'});
+    visitorStats=Array.isArray(r)?r[0]:r;
+    if(typeof visitorStats==='string')visitorStats=JSON.parse(visitorStats);
+    document.getElementById('visitorSetupNote')?.style.setProperty('display','none');
+    set('visitorTotal',visitorStats.total_visitors);set('visitorLive',visitorStats.live_visitors);set('visitorToday',visitorStats.today_visitors);set('visitorViews',visitorStats.total_pageviews);set('visitorWeek',visitorStats.week_visitors);set('visitorMonth',visitorStats.month_visitors);
+    const tp=document.getElementById('visitorTopPages');
+    if(tp){const rows=Array.isArray(visitorStats.top_pages)?visitorStats.top_pages:[];tp.innerHTML=rows.map(x=>`<div class="visitor-page-row"><div><b>${x.page_path||'/'}</b><br><span>${x.page_path==='/'?'Home page':'Senvia page'}</span></div><strong>${Number(x.views||0).toLocaleString('en-IN')} views</strong></div>`).join('')||'<div class="empty">No visits recorded yet.</div>'}
+    const vd=document.getElementById('visitorDaily');
+    if(vd){const rows=Array.isArray(visitorStats.daily)?visitorStats.daily:[];vd.innerHTML=rows.map(x=>`<div class="visitor-day-row"><div><b>${new Date(x.day+'T00:00:00').toLocaleDateString('en-IN',{day:'2-digit',month:'short'})}</b><br><span>${Number(x.visitors||0).toLocaleString('en-IN')} visitors</span></div><strong>${Number(x.pageviews||0).toLocaleString('en-IN')} views</strong></div>`).join('')||'<div class="empty">No daily data yet.</div>'}
+  }catch(e){
+    console.warn('Visitor analytics not ready:',e);
+    ['visitorTotal','visitorLive','visitorToday','visitorViews','visitorWeek','visitorMonth'].forEach(id=>set(id,'—'));
+    const note=document.getElementById('visitorSetupNote');if(note)note.style.display='block';
+  }
+}
+
 function renderTable(){let q=(proSearch?.value||'').toLowerCase(),st=statusFilter?.value||'';proTable.innerHTML=pros.filter(p=>(!q||JSON.stringify(p).toLowerCase().includes(q))&&(!st||proStatus(p)===st)).map((p,i)=>`<tr><td><b>${p.name}</b>${p.professional_code?`<br><span class=\"code-pill\">ID: ${p.professional_code}</span>`:''}</td><td>${p.mobile}</td><td>${p.block} → ${p.panchayat}<br>${p.village}</td><td>${p.services.join(', ')||'—'}</td><td><span class="badge ${proStatus(p).toLowerCase()}">${proStatus(p)}</span></td><td>${proStatus(p)==='Pending'?`<button class="green" onclick="approve(${i})">Approve</button> `:''}<button class="outline" onclick="viewPro(${i})">View</button> <button class="service-edit-btn" onclick="openProEdit(${i})">✎ Edit</button> <button class="danger" onclick="removePro(${i})">Delete</button></td></tr>`).join('')||'<tr><td colspan="6" class="empty">No professionals found.</td></tr>'}
 function renderRecent(){const recent=document.getElementById('recentProTable');if(!recent)return;recent.innerHTML=pros.slice(-5).reverse().map(p=>`<tr><td><b>${p.name||'—'}</b></td><td>${(Array.isArray(p.services)?p.services:[]).join(', ')||'—'}</td><td><span class="badge ${proStatus(p).toLowerCase()}">${proStatus(p)}</span></td></tr>`).join('')||'<tr><td colspan="3">No registrations yet.</td></tr>'}
 function renderServices(){
