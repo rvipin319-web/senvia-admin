@@ -948,8 +948,13 @@ function serviceIconKey(row){
  return keyCI(row,['icon','Icon','emoji','Emoji','service_icon','serviceIcon','icon_emoji']);
 }
 function serviceIconFor(rowOrName){
- if(rowOrName&&typeof rowOrName==='object'){const k=serviceIconKey(rowOrName);if(k&&String(rowOrName[k]??'').trim())return String(rowOrName[k]).trim()}
+ if(rowOrName&&typeof rowOrName==='object'){
+   const k=serviceIconKey(rowOrName);
+   if(k&&String(rowOrName[k]??'').trim())return String(rowOrName[k]).trim();
+ }
  const name=typeof rowOrName==='string'?rowOrName:svcLabel(rowOrName);
+ const local=localStorage.getItem('senvia_service_icon_'+String(name||''));
+ if(local&&local.trim())return local.trim();
  const n=String(name||'').toLowerCase();
  const hit=[['ac','❄️'],['tv','📺'],['led','📺'],['mobile','📱'],['computer','💻'],['laptop','💻'],['electric','⚡'],['plumb','🚰'],['fridge','🧊'],['carpenter','🔨'],['painter','🎨'],['raj mistri','🧱'],['bike','🏍️'],['ro','💧'],['water','💧'],['cctv','📷']].find(([k])=>n.includes(k));
  return hit?hit[1]:'🛠️';
@@ -1007,10 +1012,17 @@ async function saveServiceEdit(){
   if(value!==old)payload[key]=value;
   const ikey=serviceIconKey(row);
   if(ikey)payload[ikey]=editServiceIcon;
+  // Always keep a local fallback so an icon is not lost when the table has no icon column.
+  localStorage.setItem('senvia_service_icon_'+value,editServiceIcon);
+  if(old!==value)localStorage.removeItem('senvia_service_icon_'+old);
   if(Object.keys(payload).length){
-   await api('services?id=eq.'+encodeURIComponent(row.id),{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify(payload)});
+   try{
+    await api('services?id=eq.'+encodeURIComponent(row.id),{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify(payload)});
+   }catch(dbErr){
+    if(ikey)throw dbErr;
+    console.warn('Service icon column unavailable; using local fallback.',dbErr);
+   }
   }
-  if(!ikey)localStorage.setItem('senvia_service_icon_'+value,editServiceIcon);
   closeServiceEdit(); await loadFromSupabase();
  }catch(e){console.error('Service edit failed:',e);msg.textContent='Service edit failed. '+(e.message||e)}finally{hideBusy()}
 }
