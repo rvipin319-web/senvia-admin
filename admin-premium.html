@@ -136,6 +136,8 @@ body{background:linear-gradient(135deg,#eef8ff 0%,#eafcff 38%,#f4efff 72%,#eefaf
 .overview-item:nth-child(4){background:linear-gradient(135deg,#f0e3ff,#ddc5ff);border-color:#cbb0ee;}
 .overview-item small{color:#294766!important;font-weight:800;}
 .overview-item b{color:#0b2d57!important;}
+
+.pl-master-toolbar{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:12px}.pl-master-note{padding:11px 13px;border-radius:10px;background:#f4f8fc;color:#526579;font-size:13px;margin-bottom:14px}.pl-master-tree{display:flex;flex-direction:column;gap:10px}.pl-node{border:1px solid #dbe5ef;border-radius:12px;background:#fff;overflow:hidden}.pl-node-head{display:flex;align-items:center;gap:10px;padding:12px 14px}.pl-node-main{flex:1;min-width:0}.pl-node-name{font-weight:800;color:#17324d}.pl-node-meta{font-size:12px;color:#72849a;margin-top:3px}.pl-node-actions{display:flex;align-items:center;gap:7px;flex-wrap:wrap}.pl-children{padding:0 12px 12px 34px;display:flex;flex-direction:column;gap:8px}.pl-child{border:1px solid #e3eaf1;border-radius:10px;background:#f9fbfd;padding:10px}.pl-child-head{display:flex;align-items:center;gap:8px}.pl-child-main{flex:1;min-width:0}.pl-child-name{font-weight:700;color:#29445f}.pl-child-meta{font-size:11px;color:#7a8a9d;margin-top:2px}.pl-toggle{position:relative;width:48px;height:26px;border:0;border-radius:20px;background:#e05252;cursor:pointer;padding:0;flex:0 0 auto}.pl-toggle span{position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 4px #0003;transition:.18s}.pl-toggle.on{background:#18a957}.pl-toggle.on span{left:25px}.pl-small-actions{display:flex;gap:6px}.pl-small-actions button{border:1px solid #d8e2ec;background:#fff;border-radius:7px;padding:5px 8px;cursor:pointer}.pl-small-actions .danger{color:#c0392b;border-color:#efc8c4}.pl-empty{padding:22px;text-align:center;color:#72849a;background:#f8fafc;border-radius:10px}.pl-level-badge{font-size:10px;padding:3px 7px;border-radius:20px;background:#eaf2f9;color:#41617c;font-weight:700}.pl-state{border-left:4px solid #0879c9}.pl-district{border-left:3px solid #8aa9c4}.pl-block{border-left:3px solid #a9b9c8}.pl-panchayat{border-left:3px solid #c4cdd6}
 </style>
 </style>
 
@@ -567,27 +569,17 @@ table tbody tr{border-bottom:1px solid #e3edf3;transition:background .15s ease}t
   <div class="panel">
     <div style="background:linear-gradient(135deg,#082455,#0879c9 60%,#16a65b);color:#fff;border-radius:14px;padding:20px;margin-bottom:18px">
       <h2 style="margin:0 0 7px">Professional Location Management</h2>
-      <p style="margin:0;line-height:1.6">यहाँ Professionals की location देखी जाएगी। मौजूदा State → District → Block → Panchayat वाले Area records इसी system से जुड़े रहेंगे। इस page से Area records delete या replace नहीं किए जाते।</p>
+      <p style="margin:0;line-height:1.6">यहाँ Professional Registration के लिए अलग Location Master रहेगा। मौजूदा 📍 Area Management और उसका data इस section से अलग रहेगा।</p>
     </div>
-    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px">
-      <button class="green" type="button" onclick="show('areas',document.querySelector('.nav[onclick*=\"show(\'areas\'\"]'))">📍 क्षेत्र प्रबंधन खोलें</button>
-      <button class="outline" type="button" onclick="show('pros',document.querySelector('.nav[onclick*=\"show(\'pros\'\"]'))">👥 Professionals खोलें</button>
+    <div class="pl-master-toolbar">
+      <button class="green" type="button" onclick="plAddState()">＋ Add State</button>
+      <button class="outline" type="button" onclick="plAddDistrict()">＋ Add District</button>
+      <button class="outline" type="button" onclick="plAddBlock()">＋ Add Block</button>
+      <button class="outline" type="button" onclick="plAddPanchayat()">＋ Add Panchayat</button>
+      <button class="outline" type="button" onclick="plRender()">↻ Refresh</button>
     </div>
-    <div style="display:grid;grid-template-columns:repeat(5,minmax(130px,1fr));gap:9px;margin-bottom:12px">
-      <input id="plSearch" type="search" placeholder="🔎 Professional खोजें" oninput="renderProfessionalLocations()">
-      <select id="plState" onchange="renderProfessionalLocations()"><option value="">State</option></select>
-      <select id="plDistrict" onchange="renderProfessionalLocations()"><option value="">District</option></select>
-      <select id="plBlock" onchange="renderProfessionalLocations()"><option value="">Block</option></select>
-      <select id="plPanchayat" onchange="renderProfessionalLocations()"><option value="">Panchayat / Village</option></select>
-    </div>
-    <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px;color:#5d7185;font-size:12px">
-      <span id="plCount">0 Professionals</span>
-      <button class="outline" type="button" onclick="resetProfessionalLocationFilters()">↺ Reset</button>
-    </div>
-    <div class="tablewrap">
-      <table><thead><tr><th>Professional</th><th>Mobile</th><th>State</th><th>District</th><th>Block</th><th>Panchayat / Village</th><th>Status</th></tr></thead>
-      <tbody id="professionalLocationTable"><tr><td colspan="7" style="text-align:center;color:#68758a">Professional locations loading…</td></tr></tbody></table>
-    </div>
+    <div class="pl-master-note">🟢 ON = Professional Registration में उपलब्ध &nbsp; • &nbsp; 🔴 OFF = Registration में नहीं दिखेगा &nbsp; • &nbsp; 🗑 Delete = केवल Professional Location Master से हटेगा</div>
+    <div id="plMasterTree" class="pl-master-tree"></div>
   </div>
 </section>
 <section id="messages" style="display:none"><h1>Messages</h1><div class="panel"><div class="toolbar"><input id="msgSearch" placeholder="Search user / mobile / message / ID"><select id="msgType"><option value="">All Types</option><option>Registration</option><option>Welcome</option></select><button class="outline view-toggle" id="msgViewToggle" onclick="toggleCollectionView('messages')">▦ Grid View</button></div><div id="messageList" class="collection-list"></div></div></section>
@@ -963,38 +955,43 @@ function setLang(l){
 function syncAdminMobileActive(id){document.querySelectorAll('.admin-mobile-link').forEach(n=>n.classList.toggle('active',n.dataset.mobileTarget===id))}
 function toggleAdminMobileMenu(){document.getElementById('adminMobileMenu')?.classList.toggle('open');document.getElementById('adminMobileOverlay')?.classList.toggle('open')}
 function closeAdminMobileMenu(){document.getElementById('adminMobileMenu')?.classList.remove('open');document.getElementById('adminMobileOverlay')?.classList.remove('open')}
-function plVal(p,key,def=''){return String(p?.[key]??def).trim()}
-function plLocationText(p){return [plVal(p,'state','Bihar'),plVal(p,'district','Muzaffarpur'),plVal(p,'block'),plVal(p,'panchayat'),plVal(p,'village')].filter(Boolean).join(' / ')}
-function plUnique(key){return [...new Set((Array.isArray(pros)?pros:[]).map(p=>plVal(p,key)).filter(Boolean))].sort((a,b)=>a.localeCompare(b));}
-function fillPLSelect(id,items,placeholder,current=''){const el=document.getElementById(id);if(!el)return;el.innerHTML='<option value="">'+placeholder+'</option>'+items.map(x=>'<option value="'+areaEsc(x)+'">'+areaEsc(x)+'</option>').join('');if(items.includes(current))el.value=current;}
-function renderProfessionalLocationFilters(){
-  const state=document.getElementById('plState')?.value||'',district=document.getElementById('plDistrict')?.value||'',block=document.getElementById('plBlock')?.value||'',panchayat=document.getElementById('plPanchayat')?.value||'';
-  fillPLSelect('plState',plUnique('state'),'State',state);
-  const ds=plUnique('district');fillPLSelect('plDistrict',ds,'District',district);
-  const bs=plUnique('block');fillPLSelect('plBlock',bs,'Block',block);
-  const ps=[...new Set((Array.isArray(pros)?pros:[]).flatMap(p=>[plVal(p,'panchayat'),plVal(p,'village')]).filter(Boolean))].sort((a,b)=>a.localeCompare(b));
-  fillPLSelect('plPanchayat',ps,'Panchayat / Village',panchayat);
+const PL_STORAGE_KEY='senvia_prof_location_master_v1';
+const PL_SEED_STATES=['Bihar','Jharkhand','Uttar Pradesh','West Bengal','Uttarakhand','Delhi','Madhya Pradesh','Odisha'];
+function plEsc(v){return areaEsc(String(v??''));}
+function plLoad(){
+  try{
+    const raw=localStorage.getItem(PL_STORAGE_KEY); if(raw){const data=JSON.parse(raw); if(Array.isArray(data)&&data.length)return data;}
+  }catch(e){}
+  const data=PL_SEED_STATES.map((name,i)=>({id:'s'+(i+1),name,active:true,districts:[]})); plSave(data); return data;
 }
-function resetProfessionalLocationFilters(){['plSearch','plState','plDistrict','plBlock','plPanchayat'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});renderProfessionalLocations();}
-function renderProfessionalLocations(){
-  const el=document.getElementById('professionalLocationTable');
-  if(!el)return;
-  const all=Array.isArray(pros)?pros:[];
-  renderProfessionalLocationFilters();
-  const q=(document.getElementById('plSearch')?.value||'').trim().toLowerCase();
-  const state=document.getElementById('plState')?.value||'',district=document.getElementById('plDistrict')?.value||'',block=document.getElementById('plBlock')?.value||'',panchayat=document.getElementById('plPanchayat')?.value||'';
-  const list=all.filter(p=>{
-    const name=plVal(p,'name'),mobile=plVal(p,'mobile'),st=plVal(p,'state','Bihar'),di=plVal(p,'district','Muzaffarpur'),bl=plVal(p,'block'),pa=plVal(p,'panchayat'),vi=plVal(p,'village');
-    const text=[name,mobile,st,di,bl,pa,vi].join(' ').toLowerCase();
-    return (!q||text.includes(q))&&(!state||st===state)&&(!district||di===district)&&(!block||bl===block)&&(!panchayat||pa===panchayat||vi===panchayat);
-  });
-  const count=document.getElementById('plCount');if(count)count.textContent=list.length+' Professional'+(list.length===1?'':'s');
-  if(!list.length){el.innerHTML='<tr><td colspan="7" style="text-align:center;color:#68758a;padding:22px">इस चयन के अनुसार कोई Professional नहीं मिला।</td></tr>';return;}
-  el.innerHTML=list.map(p=>{
-    const name=areaEsc(p.name||'—');const mobile=areaEsc(p.mobile||'—');const state=areaEsc(p.state||'Bihar');const district=areaEsc(p.district||'Muzaffarpur');const block=areaEsc(p.block||'—');const pv=areaEsc([p.panchayat,p.village].filter(Boolean).join(' / ')||'—');const status=areaEsc(proStatus(p)||p.status||'—');
-    return `<tr><td><b>${name}</b></td><td>${mobile}</td><td>${state}</td><td>${district}</td><td>${block}</td><td>${pv}</td><td>${status}</td></tr>`;
-  }).join('');
+function plSave(data){try{localStorage.setItem(PL_STORAGE_KEY,JSON.stringify(data));}catch(e){console.warn('Professional location master save failed',e)}}
+function plFindState(data,id){return data.find(x=>x.id===id)}
+function plFindDistrict(data,id){for(const s of data)for(const d of (s.districts||[]))if(d.id===id)return [s,d]}
+function plFindBlock(data,id){for(const s of data)for(const d of (s.districts||[]))for(const b of (d.blocks||[]))if(b.id===id)return [s,d,b]}
+function plFindPanchayat(data,id){for(const s of data)for(const d of (s.districts||[]))for(const b of (d.blocks||[]))for(const p of (b.panchayats||[]))if(p.id===id)return [s,d,b,p]}
+function plToggle(id,type){const data=plLoad();let node=null;if(type==='state')node=plFindState(data,id);if(type==='district'){const r=plFindDistrict(data,id);node=r?.[1]}if(type==='block'){const r=plFindBlock(data,id);node=r?.[2]}if(type==='panchayat'){const r=plFindPanchayat(data,id);node=r?.[3]}if(!node)return;node.active=node.active===false;plSave(data);plRender()}
+async function plDelete(id,type){if(!(await requireAdmin()))return;if(!confirm('क्या आप इस location को delete करना चाहते हैं? यह केवल Professional Location Master से हटेगा।'))return;const data=plLoad();if(type==='state'){const i=data.findIndex(x=>x.id===id);if(i>=0)data.splice(i,1)}else if(type==='district'){for(const s of data)s.districts=(s.districts||[]).filter(d=>d.id!==id)}else if(type==='block'){for(const s of data)for(const d of (s.districts||[]))d.blocks=(d.blocks||[]).filter(b=>b.id!==id)}else if(type==='panchayat'){for(const s of data)for(const d of (s.districts||[]))for(const b of (d.blocks||[]))b.panchayats=(b.panchayats||[]).filter(p=>p.id!==id)}plSave(data);plRender()}
+async function plEdit(id,type){if(!(await requireAdmin()))return;const data=plLoad();let node=null;if(type==='state')node=plFindState(data,id);if(type==='district'){const r=plFindDistrict(data,id);node=r?.[1]}if(type==='block'){const r=plFindBlock(data,id);node=r?.[2]}if(type==='panchayat'){const r=plFindPanchayat(data,id);node=r?.[3]}if(!node)return;const name=(prompt('नाम बदलें:',node.name)||'').trim();if(!name)return;node.name=name;plSave(data);plRender()}
+async function plAddState(){if(!(await requireAdmin()))return;const name=(prompt('State का नाम दर्ज करें:')||'').trim();if(!name)return;const data=plLoad();if(data.some(x=>x.name.toLowerCase()===name.toLowerCase()))return alert('यह State पहले से मौजूद है।');data.push({id:'s'+Date.now(),name,active:true,districts:[]});plSave(data);plRender()}
+async function plAddDistrict(){if(!(await requireAdmin()))return;const data=plLoad();if(!data.length)return alert('पहले State जोड़ें।');const stateName=(prompt('किस State में District जोड़ना है?\n\n'+data.map(x=>x.name).join('\n'))||'').trim();if(!stateName)return;const s=data.find(x=>x.name.toLowerCase()===stateName.toLowerCase());if(!s)return alert('State नहीं मिला।');const name=(prompt(s.name+' के अंदर District का नाम:')||'').trim();if(!name)return;s.districts=s.districts||[];if(s.districts.some(x=>x.name.toLowerCase()===name.toLowerCase()))return alert('यह District पहले से मौजूद है।');s.districts.push({id:'d'+Date.now(),name,active:true,blocks:[]});plSave(data);plRender()}
+async function plAddBlock(){if(!(await requireAdmin()))return;const data=plLoad();const list=[];for(const s of data)for(const d of(s.districts||[]))list.push(s.name+' → '+d.name);if(!list.length)return alert('पहले District जोड़ें।');const key=(prompt('किस District में Block जोड़ना है?\n\n'+list.join('\n'))||'').trim();if(!key)return;let found=null;for(const s of data)for(const d of(s.districts||[]))if((s.name+' → '+d.name).toLowerCase()===key.toLowerCase())found=[s,d];if(!found)return alert('District नहीं मिला।');const [s,d]=found;const name=(prompt(d.name+' के अंदर Block का नाम:')||'').trim();if(!name)return;d.blocks=d.blocks||[];if(d.blocks.some(x=>x.name.toLowerCase()===name.toLowerCase()))return alert('यह Block पहले से मौजूद है।');d.blocks.push({id:'b'+Date.now(),name,active:true,panchayats:[]});plSave(data);plRender()}
+async function plAddPanchayat(){if(!(await requireAdmin()))return;const data=plLoad();const list=[];for(const s of data)for(const d of(s.districts||[]))for(const b of(d.blocks||[]))list.push(s.name+' → '+d.name+' → '+b.name);if(!list.length)return alert('पहले Block जोड़ें।');const key=(prompt('किस Block में Panchayat जोड़ना है?\n\n'+list.join('\n'))||'').trim();if(!key)return;let found=null;for(const s of data)for(const d of(s.districts||[]))for(const b of(d.blocks||[]))if((s.name+' → '+d.name+' → '+b.name).toLowerCase()===key.toLowerCase())found=[s,d,b];if(!found)return alert('Block नहीं मिला।');const [s,d,b]=found;const name=(prompt(b.name+' के अंदर Panchayat का नाम:')||'').trim();if(!name)return;b.panchayats=b.panchayats||[];if(b.panchayats.some(x=>x.name.toLowerCase()===name.toLowerCase()))return alert('यह Panchayat पहले से मौजूद है।');b.panchayats.push({id:'p'+Date.now(),name,active:true});plSave(data);plRender()}
+function plToggleHtml(node,type){return `<button class="pl-toggle ${node.active!==false?'on':''}" type="button" title="${node.active!==false?'ON':'OFF'}" onclick="plToggle('${plEsc(node.id)}','${type}')"><span></span></button>`}
+function plNodeActions(node,type){return `${plToggleHtml(node,type)}<div class="pl-small-actions"><button type="button" onclick="plEdit('${plEsc(node.id)}','${type}')">✏️ Edit</button><button class="danger" type="button" onclick="plDelete('${plEsc(node.id)}','${type}')">🗑 Delete</button></div>`}
+function plRender(){
+  const root=document.getElementById('plMasterTree');
+  if(!root)return;
+  const data=plLoad();
+  if(!data.length){root.innerHTML='<div class="pl-empty">अभी कोई State नहीं है। ＋ Add State से जोड़ें।</div>';return;}
+  const panchayatHtml=(p)=>`<div class="pl-node pl-panchayat"><div class="pl-node-head"><div class="pl-node-main"><div class="pl-node-name">🏡 ${plEsc(p.name)}</div><div class="pl-node-meta">${p.active!==false?'Registration ON':'Registration OFF'}</div></div><span class="pl-level-badge">PANCHAYAT</span><div class="pl-node-actions">${plNodeActions(p,'panchayat')}</div></div></div>`;
+  const blockHtml=(b)=>{const ps=b.panchayats||[];return `<div class="pl-node pl-block"><div class="pl-node-head"><div class="pl-node-main"><div class="pl-node-name">📍 ${plEsc(b.name)}</div><div class="pl-node-meta">${ps.length} Panchayat</div></div><span class="pl-level-badge">BLOCK</span><div class="pl-node-actions">${plNodeActions(b,'block')}</div></div>${ps.length?`<div class="pl-children">${ps.map(panchayatHtml).join('')}</div>`:''}</div>`};
+  const districtHtml=(d)=>{const bs=d.blocks||[];return `<div class="pl-node pl-district"><div class="pl-node-head"><div class="pl-node-main"><div class="pl-node-name">🏛 ${plEsc(d.name)}</div><div class="pl-node-meta">${bs.length} Block</div></div><span class="pl-level-badge">DISTRICT</span><div class="pl-node-actions">${plNodeActions(d,'district')}</div></div>${bs.length?`<div class="pl-children">${bs.map(blockHtml).join('')}</div>`:''}</div>`};
+  const stateHtml=(st)=>{const ds=st.districts||[];return `<div class="pl-node pl-state"><div class="pl-node-head"><div class="pl-node-main"><div class="pl-node-name">🇮🇳 ${plEsc(st.name)}</div><div class="pl-node-meta">${ds.length} District • ${st.active!==false?'Registration ON':'Registration OFF'}</div></div><span class="pl-level-badge">STATE</span><div class="pl-node-actions">${plNodeActions(st,'state')}</div></div>${ds.length?`<div class="pl-children">${ds.map(districtHtml).join('')}</div>`:''}</div>`};
+  root.innerHTML=data.map(stateHtml).join('');
 }
+function renderProfessionalLocations(){plRender()}
+function resetProfessionalLocationFilters(){plRender()}
+function renderProfessionalLocationFilters(){}
 function mobileAdminShow(id,el){syncAdminMobileActive(id);show(id);closeAdminMobileMenu()}
 function show(id,el){
   const target=document.getElementById(id);
