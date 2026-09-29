@@ -957,9 +957,10 @@ function serviceIconFor(rowOrName){
 function renderServiceIconPicker(){
  const box=document.getElementById('serviceIconGrid');if(!box)return;
  const selected=iconPickerTarget==='edit'?editServiceIcon:newServiceIcon;
- box.innerHTML=SERVICE_ICONS.map(([icon,label])=>`<button type="button" class="service-icon-option ${icon===selected?'active':''}" onclick="selectServiceIcon(${JSON.stringify(icon)})"><div>${icon}</div><span>${label}</span></button>`).join('');
+ box.innerHTML=SERVICE_ICONS.map(([icon,label])=>`<button type="button" class="service-icon-option ${icon===selected?'active':''}" data-service-icon="${icon}"><div>${icon}</div><span>${label}</span></button>`).join('');
 }
 function openServiceIconPicker(target){iconPickerTarget=target;renderServiceIconPicker();document.getElementById('serviceIconPicker')?.classList.add('show')}
+document.getElementById('serviceIconGrid')?.addEventListener('click',e=>{const btn=e.target.closest('.service-icon-option');if(!btn)return;selectServiceIcon(btn.dataset.serviceIcon||'🛠️')});
 function closeServiceIconPicker(){document.getElementById('serviceIconPicker')?.classList.remove('show')}
 function selectServiceIcon(icon){if(iconPickerTarget==='edit'){editServiceIcon=icon;const b=document.getElementById('editSvcIconBtn');if(b)b.textContent=icon}else{newServiceIcon=icon;const b=document.getElementById('newSvcIconBtn');if(b)b.textContent=icon+' Icon'}closeServiceIconPicker()}
 document.getElementById('serviceIconPicker')?.addEventListener('click',e=>{if(e.target.id==='serviceIconPicker')closeServiceIconPicker()});
