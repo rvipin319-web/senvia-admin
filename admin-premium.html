@@ -155,6 +155,10 @@ body{background:linear-gradient(135deg,#eef8ff 0%,#eafcff 38%,#f4efff 72%,#eefaf
 @media(max-width:520px){.senvia-v-spinner{width:78px;height:78px}.senvia-v-spinner b{font-size:44px}.senvia-busy-text{margin-top:19px;font-size:12px}}
 </style>
 
+<style id="professional-edit-style">
+.pro-edit-modal{position:fixed;inset:0;background:rgba(5,24,45,.58);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:18px;z-index:100002}
+.pro-edit-modal.show{display:flex}.pro-edit-card{width:min(620px,100%);max-height:92vh;overflow:auto;background:#fff;border-radius:22px;box-shadow:0 24px 70px rgba(5,34,65,.28);border:1px solid #dce8f4}.pro-edit-head{background:linear-gradient(135deg,#073d70,#087c86);color:#fff;padding:18px 20px;display:flex;align-items:center;gap:12px}.pro-edit-head h2{margin:0;font-size:21px}.pro-edit-close{margin-left:auto;border:0;background:rgba(255,255,255,.14);color:#fff;width:38px;height:38px;border-radius:11px;font-size:21px}.pro-edit-body{padding:20px}.pro-edit-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}.pro-edit-field label{display:block;font-size:13px;font-weight:800;color:#5f7186;margin-bottom:7px}.pro-edit-field input,.pro-edit-field select{width:100%;box-sizing:border-box;padding:12px 13px;border:1px solid #d8e3ee;border-radius:12px;font-size:15px;outline:none;background:#fff}.pro-edit-field input:focus,.pro-edit-field select:focus{border-color:#1592a4;box-shadow:0 0 0 3px rgba(21,146,164,.12)}.pro-edit-services{margin-top:18px}.pro-edit-services h3{margin:0 0 10px;color:#153b61}.pro-edit-checks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.pro-edit-checks label{display:flex;gap:8px;align-items:center;padding:10px 11px;border:1px solid #e1e9f0;border-radius:11px;background:#f8fbfd;font-size:14px}.pro-edit-footer{padding:0 20px 20px;display:flex;justify-content:flex-end;gap:9px}.pro-edit-msg{margin:10px 0 0;color:#b42318;font-size:13px}@media(max-width:560px){.pro-edit-grid,.pro-edit-checks{grid-template-columns:1fr}.pro-edit-body{padding:16px}.pro-edit-footer{padding:0 16px 16px}}
+</style>
 <style id="service-edit-style">
 .service-edit-modal{position:fixed;inset:0;background:rgba(5,24,45,.58);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:18px;z-index:100001}
 .service-edit-modal.show{display:flex}
@@ -525,6 +529,25 @@ table tbody tr{border-bottom:1px solid #e3edf3;transition:background .15s ease}t
 <h3>Services</h3><div class="checks" id="checks"></div><p><button class="green" onclick="savePro()">Save Profile</button> <button class="outline" onclick="closePro()">Cancel</button></p></div></div>
 
 
+<div class="pro-edit-modal" id="proEditModal" role="dialog" aria-modal="true" aria-labelledby="proEditTitle">
+  <div class="pro-edit-card">
+    <div class="pro-edit-head"><div><h2 id="proEditTitle">Edit Professional</h2></div><button class="pro-edit-close" type="button" onclick="closeProEdit()">×</button></div>
+    <div class="pro-edit-body">
+      <div class="pro-edit-grid">
+        <div class="pro-edit-field"><label>Full Name</label><input id="editPn" type="text"></div>
+        <div class="pro-edit-field"><label>Mobile Number</label><input id="editPm" type="tel"></div>
+        <div class="pro-edit-field"><label>Block</label><select id="editPb"></select></div>
+        <div class="pro-edit-field"><label>Panchayat</label><input id="editPp" type="text"></div>
+        <div class="pro-edit-field"><label>Village / Area</label><input id="editPv" type="text"></div>
+        <div class="pro-edit-field"><label>Experience</label><input id="editPe" type="text"></div>
+      </div>
+      <div class="pro-edit-services"><h3>Services</h3><div class="pro-edit-checks" id="editChecks"></div></div>
+      <div class="pro-edit-msg" id="proEditMsg"></div>
+    </div>
+    <div class="pro-edit-footer"><button class="outline" type="button" onclick="closeProEdit()">Cancel</button><button class="green" type="button" onclick="saveProEdit()">Save Changes</button></div>
+  </div>
+</div>
+
 <div class="service-edit-modal" id="serviceEditModal" role="dialog" aria-modal="true" aria-labelledby="serviceEditTitle">
   <div class="service-edit-card">
     <div class="service-edit-head">
@@ -726,7 +749,7 @@ function viewPro(i){const p=pros[i];if(!p)return;
 }
 function closeProView(){document.getElementById('proViewModal')?.classList.remove('show')}
 document.getElementById('proViewModal')?.addEventListener('click',e=>{if(e.target.id==='proViewModal')closeProView()});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeProView();closeServiceEdit()}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeProView();closeProEdit();closeServiceEdit()}});
 function restoreProfessionalView(){const sec=document.getElementById('pros');const pref=localStorage.getItem('senvia_prof_view')||'card';const on=pref==='card';sec.classList.toggle('card-view',on);sec.classList.toggle('table-view',!on);const b=document.getElementById('viewToggle');if(b)b.textContent=on?'☷ List View':'▦ Grid View'}
 const SENVIA_TRANSLATIONS={
   "Welcome to Senvia Admin Panel 👋":"Senvia Admin Panel में आपका स्वागत है 👋",
@@ -892,7 +915,7 @@ function renderPremiumDashboard(){
  const rc=document.getElementById('recentCustTable');if(rc)rc.innerHTML=customers.slice(0,5).map(c=>'<tr><td><b>'+(c.Name||c.name||'Customer')+'</b></td><td>'+(c.Phone||c.phone||'—')+'</td><td>'+(c.Block||'—')+'</td></tr>').join('')||'<tr><td colspan="3">No registrations yet.</td></tr>';
  const ov=document.getElementById('platformOverview');if(ov)ov.innerHTML='<div class="overview-item"><small>✅ Verified Professionals</small><b>'+pros.filter(p=>proStatus(p)==='Verified').length+'</b></div><div class="overview-item"><small>⏳ Pending Professionals</small><b>'+pros.filter(p=>proStatus(p)==='Pending').length+'</b></div><div class="overview-item"><small>👤 Active Customers</small><b>'+customers.length+'</b></div><div class="overview-item"><small>🛠 Service Categories</small><b>'+services.length+'</b></div>';
 }
-function renderTable(){let q=(proSearch?.value||'').toLowerCase(),st=statusFilter?.value||'';proTable.innerHTML=pros.filter(p=>(!q||JSON.stringify(p).toLowerCase().includes(q))&&(!st||proStatus(p)===st)).map((p,i)=>`<tr><td><b>${p.name}</b>${p.professional_code?`<br><span class=\"code-pill\">ID: ${p.professional_code}</span>`:''}</td><td>${p.mobile}</td><td>${p.block} → ${p.panchayat}<br>${p.village}</td><td>${p.services.join(', ')||'—'}</td><td><span class="badge ${proStatus(p).toLowerCase()}">${proStatus(p)}</span></td><td>${proStatus(p)==='Pending'?`<button class="green" onclick="approve(${i})">Approve</button> `:''}<button class="outline" onclick="viewPro(${i})">View</button> <button class="danger" onclick="removePro(${i})">Delete</button></td></tr>`).join('')||'<tr><td colspan="6" class="empty">No professionals found.</td></tr>'}
+function renderTable(){let q=(proSearch?.value||'').toLowerCase(),st=statusFilter?.value||'';proTable.innerHTML=pros.filter(p=>(!q||JSON.stringify(p).toLowerCase().includes(q))&&(!st||proStatus(p)===st)).map((p,i)=>`<tr><td><b>${p.name}</b>${p.professional_code?`<br><span class=\"code-pill\">ID: ${p.professional_code}</span>`:''}</td><td>${p.mobile}</td><td>${p.block} → ${p.panchayat}<br>${p.village}</td><td>${p.services.join(', ')||'—'}</td><td><span class="badge ${proStatus(p).toLowerCase()}">${proStatus(p)}</span></td><td>${proStatus(p)==='Pending'?`<button class="green" onclick="approve(${i})">Approve</button> `:''}<button class="outline" onclick="viewPro(${i})">View</button> <button class="service-edit-btn" onclick="openProEdit(${i})">✎ Edit</button> <button class="danger" onclick="removePro(${i})">Delete</button></td></tr>`).join('')||'<tr><td colspan="6" class="empty">No professionals found.</td></tr>'}
 function renderRecent(){const recent=document.getElementById('recentProTable');if(!recent)return;recent.innerHTML=pros.slice(-5).reverse().map(p=>`<tr><td><b>${p.name||'—'}</b></td><td>${(Array.isArray(p.services)?p.services:[]).join(', ')||'—'}</td><td><span class="badge ${proStatus(p).toLowerCase()}">${proStatus(p)}</span></td></tr>`).join('')||'<tr><td colspan="3">No registrations yet.</td></tr>'}
 function renderServices(){
  const grid=localStorage.getItem('senvia_services_view')==='grid';
@@ -1242,20 +1265,40 @@ async function loadAreaHierarchy(showLoader=false){
 
 document.getElementById('areaSearch')?.addEventListener('input',e=>{areaSearchText=e.target.value.trim();renderAreaHierarchy()});
 
-function openPro(){modal.classList.add('show');pb.innerHTML='<option value="">Select Block</option>'+blocks.map(b=>`<option>${b}</option>`).join('');checks.innerHTML=services.map(s=>`<label><input type="checkbox" value="${s}"> ${s}</label>`).join('')}
+function openPro(){modal.classList.add('show');pn.value='';pm.value='';pp.value='';pv.value='';pe.value='';pb.innerHTML='<option value="">Select Block</option>'+blocks.map(b=>`<option>${b}</option>`).join('');checks.innerHTML=services.map(s=>`<label><input type="checkbox" value="${s}"> ${s}</label>`).join('')}
 function closePro(){modal.classList.remove('show')}
-async function savePro(){let ss=[...document.querySelectorAll('#checks input:checked')].map(x=>x.value),name=pn.value.trim(),mobile=pm.value.trim(),block=pb.value,panchayat=pp.value.trim(),village=pv.value.trim(),experience=pe.value.trim();if(!name||!mobile||!block||!panchayat||!village||!ss.length){alert('Please fill all required fields and select at least one service.');return}let p={Name:name,Phone:mobile,Block:block,Panchayat:panchayat,Village_Area:village,Status:'Pending'};if(!dbMode){pros.push({name,mobile,block,panchayat,village,experience,status:'Pending',services:ss});closePro();render();alert('Professional added in demo mode.');return}try{const rows=await api('professionals',{method:'POST',headers:{Prefer:'return=representation'},body:JSON.stringify(p)});
+async function savePro(){let ss=[...document.querySelectorAll('#checks input:checked')].map(x=>x.value),name=pn.value.trim(),mobile=pm.value.trim(),block=pb.value,panchayat=pp.value.trim(),village=pv.value.trim(),experience=pe.value.trim();if(!name||!mobile||!block||!panchayat||!village||!ss.length){alert('Please fill all required fields and select at least one service.');return}let p={Name:name,Phone:mobile,Block:block,Panchayat:panchayat,Village_Area:village,Experience:experience,Status:'Pending'};if(!dbMode){pros.push({name,mobile,block,panchayat,village,experience,status:'Pending',services:ss});closePro();render();alert('Professional added in demo mode.');return}try{const rows=await api('professionals',{method:'POST',headers:{Prefer:'return=representation'},body:JSON.stringify(p)});
 let created=Array.isArray(rows)?rows[0]:rows;
-if(!created?.id){
-  const found=await api('professionals?select=*&Phone=eq.'+encodeURIComponent(mobile)+'&order=created_at.desc&limit=1');
-  created=Array.isArray(found)?found[0]:found;
-}
+if(!created?.id){const found=await api('professionals?select=*&Phone=eq.'+encodeURIComponent(mobile)+'&order=created_at.desc&limit=1');created=Array.isArray(found)?found[0]:found}
 const pid=created?.id;
-if(pid){
-  const ids=serviceRows.filter(s=>ss.includes(svcLabel(s))).map(s=>s.id).filter(Boolean);
-  if(ids.length) await api('professional_services',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify(ids.map(id=>({professional_id:pid,service_id:id}))) });
+if(pid){const ids=serviceRows.filter(s=>ss.includes(svcLabel(s))).map(s=>s.id).filter(Boolean);if(ids.length) await api('professional_services',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify(ids.map(id=>({professional_id:pid,service_id:id})))})}
+closePro();await loadFromSupabase();alert('Professional added as Pending Verification.')}catch(e){console.error('Supabase save failed:',e);alert('Supabase save failed. Please check the table columns/RLS policies.\n\n'+(e.message||e));}}
+let editingProIndex=-1;
+function openProEdit(i){
+ const p=pros[i]; if(!p)return; editingProIndex=i;
+ document.getElementById('editPn').value=p.name||''; document.getElementById('editPm').value=p.mobile||''; document.getElementById('editPp').value=p.panchayat||''; document.getElementById('editPv').value=p.village||''; document.getElementById('editPe').value=p.experience||'';
+ const bs=document.getElementById('editPb'); bs.innerHTML='<option value="">Select Block</option>'+blocks.map(b=>`<option>${b}</option>`).join(''); bs.value=p.block||'';
+ document.getElementById('editChecks').innerHTML=services.map(s=>`<label><input type="checkbox" value="${s}" ${Array.isArray(p.services)&&p.services.includes(s)?'checked':''}> ${s}</label>`).join('');
+ document.getElementById('proEditMsg').textContent=''; document.getElementById('proEditModal').classList.add('show');
 }
-closePro();await loadFromSupabase();alert('Professional added as Pending Verification.')}catch(e){console.error('Supabase save failed:',e);alert('Supabase save failed. Please check the table columns/RLS policies.\n\n'+(e.message||e));} }
+function closeProEdit(){editingProIndex=-1;document.getElementById('proEditModal')?.classList.remove('show')}
+async function saveProEdit(){
+ if(editingProIndex<0)return; const p=pros[editingProIndex];
+ const name=document.getElementById('editPn').value.trim(),mobile=document.getElementById('editPm').value.trim(),block=document.getElementById('editPb').value,panchayat=document.getElementById('editPp').value.trim(),village=document.getElementById('editPv').value.trim(),experience=document.getElementById('editPe').value.trim();
+ const ss=[...document.querySelectorAll('#editChecks input:checked')].map(x=>x.value),msg=document.getElementById('proEditMsg');
+ if(!name||!mobile||!block||!panchayat||!village||!ss.length){msg.textContent='सभी जरूरी जानकारी भरें और कम-से-कम एक service चुनें।';return}
+ if(!dbMode||!p.id){p.name=name;p.mobile=mobile;p.block=block;p.panchayat=panchayat;p.village=village;p.experience=experience;p.services=ss;render();closeProEdit();alert('Professional updated in demo mode.');return}
+ try{
+  showBusy();
+  await api('professionals?id=eq.'+encodeURIComponent(p.id),{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify({Name:name,Phone:mobile,Block:block,Panchayat:panchayat,Village_Area:village,Experience:experience})});
+  await api('professional_services?professional_id=eq.'+encodeURIComponent(p.id),{method:'DELETE'});
+  const ids=serviceRows.filter(s=>ss.includes(svcLabel(s))).map(s=>s.id).filter(Boolean);
+  if(ids.length)await api('professional_services',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify(ids.map(id=>({professional_id:p.id,service_id:id}))) });
+  closeProEdit(); await loadFromSupabase(); alert('Professional updated successfully.');
+ }catch(e){console.error('Professional edit failed:',e);msg.textContent='Save failed: '+(e.message||e)}finally{hideBusy()}
+}
+document.getElementById('proEditModal')?.addEventListener('click',e=>{if(e.target.id==='proEditModal')closeProEdit()});
+
 async function approve(i){const p=pros[i];if(!dbMode||!p.id){p.status='Verified';render();return}try{await api('professionals?id=eq.'+encodeURIComponent(p.id),{method:'PATCH',body:JSON.stringify({Status:'Verified'})});await loadFromSupabase()}catch(e){alert('Approve failed. Check Supabase RLS policy.')}}
 async function removePro(i){if(!confirm('Delete this professional?'))return;const p=pros[i];if(!dbMode||!p.id){pros.splice(i,1);render();return}try{await api('professional_services?professional_id=eq.'+encodeURIComponent(p.id),{method:'DELETE'});await api('professionals?id=eq.'+encodeURIComponent(p.id),{method:'DELETE'});await loadFromSupabase()}catch(e){alert('Delete failed. Check Supabase RLS policy.')}}
 async function addService(){
