@@ -123,4 +123,14 @@ async function resolveRequest(id){
 }
 async function del(id){if(!confirm('Delete this message?'))return;try{const r=await fetch(SUPABASE_URL+'/rest/v1/messages?id=eq.'+encodeURIComponent(id),{method:'DELETE',headers:{...authHeaders(),'Content-Type':'application/json'}});if(!r.ok)throw Error(await r.text());rows=rows.filter(x=>String(x.id)!==String(id));render()}catch(e){alert('Delete failed: '+e.message)}}
 search.oninput=render;type.onchange=render;async function start(){if(await requireAdmin())await loadMessages()}start();
-</script></body></html>
+</script>
+<div id="senvia-back-page" style="display:flex;justify-content:center;margin:24px 12px 18px;">
+  <button type="button" onclick="if(history.length>1){history.back()}else{location.href='index.html'}"
+    style="border:1px solid #0b7f78;background:#ffffff;color:#075f5a;border-radius:10px;
+           padding:10px 22px;font-weight:700;font-size:15px;cursor:pointer;
+           box-shadow:0 2px 8px rgba(0,0,0,.08);">
+    ← पिछला पेज
+  </button>
+</div>
+
+</body></html>
