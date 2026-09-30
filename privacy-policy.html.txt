@@ -1,0 +1,188 @@
+# Privacy Policy – SENVIA
+
+**Last Updated:** 30 September 2026
+
+SENVIA (“हम”, “हमारा”, “हमारी वेबसाइट” या “SENVIA”) पर आपका स्वागत है। यह Privacy Policy बताती है कि जब आप हमारी वेबसाइट **senviaonline.in** का उपयोग करते हैं, तब हम आपकी जानकारी को कैसे एकत्र, उपयोग, सुरक्षित और प्रबंधित करते हैं।
+
+हमारा उद्देश्य Professionals और Customers को एक उपयोगी और विश्वसनीय डिजिटल प्लेटफ़ॉर्म के माध्यम से जोड़ना है। आपकी Privacy हमारे लिए महत्वपूर्ण है और हम आपकी व्यक्तिगत जानकारी का जिम्मेदारी से उपयोग करने का प्रयास करते हैं।
+
+## 1. हम कौन-सी जानकारी एकत्र कर सकते हैं?
+
+जब आप SENVIA का उपयोग करते हैं, तो परिस्थितियों के अनुसार निम्न जानकारी एकत्र की जा सकती है:
+
+### A. Customer Information
+
+Customer द्वारा दी गई जानकारी में शामिल हो सकती है:
+
+* नाम
+* मोबाइल नंबर
+* ई-मेल पता
+* State
+* District
+* Block
+* Panchayat/Area
+* Service से संबंधित जानकारी
+* Customer द्वारा भेजा गया संदेश या समस्या का विवरण
+
+### B. Professional Information
+
+Professional Registration के दौरान निम्न जानकारी मांगी जा सकती है:
+
+* Professional का नाम
+* मोबाइल नंबर
+* ई-मेल पता
+* Profession/Service Category
+* अनुभव या संबंधित जानकारी
+* State
+* District
+* Block
+* Panchayat/Area
+* Profile Photo
+* Service से संबंधित अन्य जानकारी
+
+Professional द्वारा दी गई कुछ जानकारी वेबसाइट पर अन्य Users/Customers को दिखाई जा सकती है, ताकि वे संबंधित Professional से संपर्क कर सकें।
+
+## 2. जानकारी का उपयोग कैसे किया जाता है?
+
+SENVIA आपकी जानकारी का उपयोग निम्न उद्देश्यों के लिए कर सकता है:
+
+* Customer और Professional को एक-दूसरे से जोड़ने के लिए
+* Professional की Profile बनाने और प्रदर्शित करने के लिए
+* आपके द्वारा मांगी गई Service से संबंधित जानकारी उपलब्ध कराने के लिए
+* User Account को बनाने और प्रबंधित करने के लिए
+* वेबसाइट की सुविधाओं को बेहतर बनाने के लिए
+* Customer या Professional से आवश्यक संपर्क करने के लिए
+* सुरक्षा और धोखाधड़ी की रोकथाम के लिए
+* वेबसाइट के तकनीकी संचालन और रखरखाव के लिए
+* लागू कानूनों और कानूनी आवश्यकताओं का पालन करने के लिए
+
+## 3. Professional Profile की जानकारी
+
+SENVIA पर Professional अपनी Services और Profile की जानकारी Customers तक पहुंचाने के लिए Registration कर सकते हैं।
+
+Professional द्वारा सार्वजनिक रूप से उपलब्ध कराई गई जानकारी, जैसे नाम, profession, service area, profile photo या अन्य profile details, वेबसाइट पर अन्य Users को दिखाई दे सकती है।
+
+Professional को सलाह दी जाती है कि वे अपनी Profile में ऐसी संवेदनशील या निजी जानकारी प्रकाशित न करें जिसे वे सार्वजनिक नहीं करना चाहते।
+
+## 4. Location Information
+
+SENVIA Customer और Professional को उनके क्षेत्र के अनुसार Services खोजने में सहायता करने के लिए State, District, Block और Panchayat जैसी Location Information का उपयोग कर सकता है।
+
+हम आपकी Location Information का उपयोग केवल आवश्यक Service और Area-related सुविधाओं के लिए करने का प्रयास करते हैं।
+
+## 5. Mobile Number और Contact Information
+
+यदि आप अपना Mobile Number या अन्य Contact Information SENVIA को प्रदान करते हैं, तो इसका उपयोग Account verification, Service-related communication, Customer support या अन्य आवश्यक संपर्क के लिए किया जा सकता है।
+
+हम आपका Contact Information अनावश्यक रूप से सार्वजनिक करने का प्रयास नहीं करते।
+
+## 6. Cookies और Similar Technologies
+
+SENVIA वेबसाइट को सही तरीके से चलाने, User Experience बेहतर बनाने और वेबसाइट के उपयोग को समझने के लिए Cookies या similar technologies का उपयोग कर सकती है।
+
+Cookies आपके Browser में छोटी जानकारी के रूप में store हो सकती हैं।
+
+आप अपने Browser Settings के माध्यम से Cookies को नियंत्रित या disable कर सकते हैं। हालांकि, Cookies disable करने से वेबसाइट की कुछ सुविधाएं ठीक से काम नहीं कर सकती हैं।
+
+## 7. Third-Party Services
+
+SENVIA वेबसाइट के संचालन के लिए कुछ Third-Party Services या Technology Providers का उपयोग कर सकती है, जैसे:
+
+* Hosting Services
+* Database Services
+* Analytics Services
+* Authentication Services
+* Payment Services, यदि भविष्य में लागू हों
+* Communication या अन्य आवश्यक technical services
+
+ऐसे Third-Party Providers को केवल उनके आवश्यक कार्य के लिए जानकारी तक पहुंच मिल सकती है, और वे अपनी संबंधित Privacy Policies के अधीन हो सकते हैं।
+
+## 8. हम आपकी जानकारी किसके साथ साझा कर सकते हैं?
+
+हम आपकी व्यक्तिगत जानकारी को बिना उचित कारण के बेचने या अनावश्यक रूप से साझा करने का उद्देश्य नहीं रखते।
+
+जानकारी निम्न परिस्थितियों में साझा की जा सकती है:
+
+* Customer और Professional को Service उपलब्ध कराने के लिए
+* आवश्यक Third-Party Service Providers के साथ
+* कानूनी आवश्यकता होने पर
+* सरकारी या कानून प्रवर्तन प्राधिकरण के वैध अनुरोध पर
+* SENVIA, Users या अन्य व्यक्तियों की सुरक्षा के लिए आवश्यक होने पर
+* धोखाधड़ी, दुरुपयोग या सुरक्षा संबंधी समस्या की जांच के लिए
+
+## 9. Data Security
+
+हम आपकी जानकारी को अनधिकृत Access, गलत उपयोग, परिवर्तन या नुकसान से बचाने के लिए उचित तकनीकी और संगठनात्मक उपाय अपनाने का प्रयास करते हैं।
+
+हालांकि, Internet पर कोई भी Data Transmission या Storage System पूरी तरह सुरक्षित होने की गारंटी नहीं दी जा सकती।
+
+इसलिए हम पूर्ण सुरक्षा की गारंटी नहीं देते, लेकिन आपकी जानकारी की सुरक्षा के लिए उचित प्रयास करते हैं।
+
+## 10. User Account Security
+
+यदि SENVIA पर आपका Account है, तो अपने Login Details, Password या अन्य Account Information को सुरक्षित रखना आपकी जिम्मेदारी है।
+
+यदि आपको लगता है कि आपके Account का अनधिकृत उपयोग हुआ है, तो कृपया SENVIA से तुरंत संपर्क करें।
+
+## 11. बच्चों की Privacy
+
+SENVIA की Services का उपयोग करने वाले Users को लागू आयु संबंधी कानूनों और आवश्यकताओं का पालन करना चाहिए।
+
+हम जानबूझकर ऐसे बच्चों से व्यक्तिगत जानकारी एकत्र करने का उद्देश्य नहीं रखते, जो लागू कानून के अनुसार स्वयं Consent देने की आयु से कम हों।
+
+यदि किसी अभिभावक को लगता है कि किसी बच्चे ने हमारी वेबसाइट पर व्यक्तिगत जानकारी प्रदान की है, तो वे हमसे संपर्क कर सकते हैं।
+
+## 12. आपके अधिकार
+
+लागू कानून के अधीन, आपको अपनी व्यक्तिगत जानकारी के संबंध में कुछ अधिकार प्राप्त हो सकते हैं, जिनमें शामिल हो सकते हैं:
+
+* अपनी जानकारी के बारे में जानकारी प्राप्त करना
+* गलत जानकारी को सुधारने का अनुरोध करना
+* उपलब्ध परिस्थितियों में अपनी जानकारी हटाने का अनुरोध करना
+* अपनी जानकारी के उपयोग के संबंध में प्रश्न पूछना
+* Privacy से संबंधित शिकायत दर्ज करना
+
+इन अधिकारों का प्रयोग करने के लिए आप SENVIA से संपर्क कर सकते हैं।
+
+## 13. Data Retention
+
+हम आपकी व्यक्तिगत जानकारी को केवल उतनी अवधि तक रखने का प्रयास करते हैं जितनी आवश्यक हो:
+
+* Service उपलब्ध कराने के लिए
+* Account बनाए रखने के लिए
+* कानूनी या regulatory requirements को पूरा करने के लिए
+* विवादों को हल करने के लिए
+* सुरक्षा और fraud prevention के लिए
+
+आवश्यकता समाप्त होने पर जानकारी को लागू कानून और हमारी internal policies के अनुसार हटाया या सुरक्षित रूप से dispose किया जा सकता है।
+
+## 14. External Links
+
+हमारी वेबसाइट पर अन्य Websites या Third-Party Services के Links हो सकते हैं।
+
+यदि आप किसी External Website पर जाते हैं, तो उस Website की Privacy Policy और Terms लागू हो सकती हैं। SENVIA उन External Websites की Privacy Practices के लिए जिम्मेदार नहीं है।
+
+## 15. Privacy Policy में बदलाव
+
+SENVIA समय-समय पर इस Privacy Policy को Update कर सकता है।
+
+जब Privacy Policy में महत्वपूर्ण बदलाव किए जाएंगे, तो Updated Version को हमारी Website पर प्रकाशित किया जा सकता है।
+
+इस पेज पर दिए गए **Last Updated** Date से आप नवीनतम Update की जानकारी प्राप्त कर सकते हैं।
+
+## 16. Contact Us
+
+यदि आपको इस Privacy Policy, आपकी Personal Information या SENVIA की Privacy Practices के संबंध में कोई प्रश्न, शिकायत या अनुरोध है, तो आप हमसे संपर्क कर सकते हैं।
+
+**Website:** senviaonline.in
+
+**SENVIA**
+हर घर का अपना साथी
+
+---
+
+### Important Notice
+
+SENVIA पर अपनी व्यक्तिगत जानकारी दर्ज करते समय कृपया यह सुनिश्चित करें कि दी गई जानकारी सही और आवश्यक हो। किसी अन्य व्यक्ति की व्यक्तिगत जानकारी उनकी अनुमति के बिना Submit न करें।
+
+यह Privacy Policy SENVIA की वर्तमान वेबसाइट सुविधाओं और सामान्य उपयोग को ध्यान में रखकर तैयार की गई है। यदि भविष्य में SENVIA पर Payment, App, Advertising, Location Tracking, WhatsApp Integration या अन्य नई सुविधाएं जोड़ी जाती हैं, तो Privacy Policy को उन सुविधाओं के अनुसार Update किया जा सकता है।
