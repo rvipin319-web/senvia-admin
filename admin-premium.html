@@ -392,6 +392,7 @@ table tbody tr{border-bottom:1px solid #e3edf3;transition:background .15s ease}t
 #professionalLocations .tablewrap{overflow-x:auto}
 #professionalLocations table{min-width:760px;width:100%}
 #professionalLocations th,#professionalLocations td{padding:11px 12px;white-space:nowrap}
+.pl-add-card{border:1px solid #d8e2ee;border-radius:12px;background:#f8fbff;padding:12px;display:flex;flex-direction:column;gap:8px}.pl-add-title{font-weight:800;color:#123b68;font-size:14px}.pl-add-card select{width:100%;min-height:42px;border:1px solid #cbd8e6;border-radius:8px;padding:8px;background:#fff}.pl-add-card button{min-height:40px}
 @media(max-width:700px){#professionalLocations .panel{padding:12px}#professionalLocations h1{font-size:24px}#professionalLocations .pl-master-toolbar{grid-template-columns:1fr!important}.pl-master-toolbar>div>div{display:flex;}.pl-master-toolbar select{min-width:0}}
 @media(max-width:900px){#professionalLocations div[style*="repeat(5"]{grid-template-columns:1fr 1fr!important}}@media(max-width:520px){#professionalLocations div[style*="repeat(5"]{grid-template-columns:1fr!important}}
 </style>
@@ -571,11 +572,9 @@ table tbody tr{border-bottom:1px solid #e3edf3;transition:background .15s ease}t
       <h2 style="margin:0 0 7px">Professional Location Management</h2>
       <p style="margin:0;line-height:1.6">यहाँ Professional Registration के लिए अलग Location Master रहेगा। मौजूदा 📍 Area Management और उसका data इस section से अलग रहेगा।</p>
     </div>
-    <div class="pl-master-toolbar" style="display:grid;grid-template-columns:repeat(4,minmax(210px,1fr));gap:10px;align-items:end">
-      <div><label style="display:block;font-weight:700;font-size:12px;margin:0 0 5px;color:#47617a">State</label><div style="display:flex;gap:6px"><select id="plAddStateSelect" style="flex:1"><option value="">— State चुनें —</option></select><button class="green" type="button" onclick="plAddState()">＋ State</button></div></div>
-      <div><label style="display:block;font-weight:700;font-size:12px;margin:0 0 5px;color:#47617a">District</label><div style="display:flex;gap:6px"><select id="plAddDistrictSelect" style="flex:1"><option value="">— State चुनें —</option></select><button class="outline" type="button" onclick="plAddDistrict()">＋ District</button></div></div>
-      <div><label style="display:block;font-weight:700;font-size:12px;margin:0 0 5px;color:#47617a">Block</label><div style="display:flex;gap:6px"><select id="plAddBlockSelect" style="flex:1"><option value="">— District चुनें —</option></select><button class="outline" type="button" onclick="plAddBlock()">＋ Block</button></div></div>
-      <div><label style="display:block;font-weight:700;font-size:12px;margin:0 0 5px;color:#47617a">Panchayat</label><div style="display:flex;gap:6px"><select id="plAddPanchayatSelect" style="flex:1"><option value="">— Block चुनें —</option></select><button class="outline" type="button" onclick="plAddPanchayat()">＋ Panchayat</button></div></div>
+    <div class="pl-add-card" style="margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+      <div><div class="pl-add-title">1. State</div><div style="font-size:13px;color:#64748b">पहले State जोड़ें। उसके बाद हर State के अंदर District, District के अंदर Block और Block के अंदर Panchayat सीधे जोड़ें।</div></div>
+      <button class="green" type="button" onclick="plAddState()">＋ Add State</button>
     </div>
     <div style="display:flex;gap:8px;flex-wrap:wrap;margin:0 0 12px">
       <button class="outline" type="button" onclick="plRender()">↻ Refresh</button>
@@ -981,57 +980,34 @@ async function plAddState(){
   if(data.some(x=>x.name.toLowerCase()===name.toLowerCase()))return alert('यह State पहले से मौजूद है।');
   data.push({id:'s'+Date.now(),name,active:true,districts:[]}); plSave(data); plRender();
 }
-async function plAddDistrict(){
+async function plAddDistrict(stateId){
   if(!(await requireAdmin()))return;
-  const data=plLoad(); const sel=document.getElementById('plAddDistrictSelect'); const sid=sel?.value;
-  const s=data.find(x=>x.id===sid); if(!s)return alert('पहले State चुनें।');
+  const data=plLoad(); const s=plFindState(data,stateId);
+  if(!s)return alert('पहले State चुनें।');
   const name=(prompt(s.name+' के अंदर District का नाम:')||'').trim(); if(!name)return;
   s.districts=s.districts||[];
   if(s.districts.some(x=>x.name.toLowerCase()===name.toLowerCase()))return alert('यह District पहले से मौजूद है।');
   s.districts.push({id:'d'+Date.now(),name,active:true,blocks:[]}); plSave(data); plRender();
 }
-async function plAddBlock(){
+async function plAddBlock(districtId){
   if(!(await requireAdmin()))return;
-  const data=plLoad(); const sel=document.getElementById('plAddBlockSelect'); const did=sel?.value;
-  let found=null; for(const s of data)for(const d of(s.districts||[]))if(d.id===did)found=[s,d];
+  const data=plLoad(); let found=null;
+  for(const s of data)for(const d of(s.districts||[]))if(d.id===districtId)found=[s,d];
   if(!found)return alert('पहले District चुनें।');
   const [s,d]=found; const name=(prompt(d.name+' के अंदर Block का नाम:')||'').trim(); if(!name)return;
   d.blocks=d.blocks||[];
   if(d.blocks.some(x=>x.name.toLowerCase()===name.toLowerCase()))return alert('यह Block पहले से मौजूद है।');
   d.blocks.push({id:'b'+Date.now(),name,active:true,panchayats:[]}); plSave(data); plRender();
 }
-async function plAddPanchayat(){
+async function plAddPanchayat(blockId){
   if(!(await requireAdmin()))return;
-  const data=plLoad(); const sel=document.getElementById('plAddPanchayatSelect'); const bid=sel?.value;
-  let found=null; for(const s of data)for(const d of(s.districts||[]))for(const b of(d.blocks||[]))if(b.id===bid)found=[s,d,b];
+  const data=plLoad(); let found=null;
+  for(const s of data)for(const d of(s.districts||[]))for(const b of(d.blocks||[]))if(b.id===blockId)found=[s,d,b];
   if(!found)return alert('पहले Block चुनें।');
   const [s,d,b]=found; const name=(prompt(b.name+' के अंदर Panchayat का नाम:')||'').trim(); if(!name)return;
   b.panchayats=b.panchayats||[];
   if(b.panchayats.some(x=>x.name.toLowerCase()===name.toLowerCase()))return alert('यह Panchayat पहले से मौजूद है।');
   b.panchayats.push({id:'p'+Date.now(),name,active:true}); plSave(data); plRender();
-}
-function plPopulateAddSelectors(data){
-  const stateSel=document.getElementById('plAddStateSelect');
-  const districtSel=document.getElementById('plAddDistrictSelect');
-  const blockSel=document.getElementById('plAddBlockSelect');
-  const pSel=document.getElementById('plAddPanchayatSelect');
-  if(!stateSel||!districtSel||!blockSel||!pSel)return;
-  const prevS=stateSel.value, prevD=districtSel.value, prevB=blockSel.value;
-  stateSel.innerHTML='<option value="">— State चुनें —</option>'+data.map(s=>`<option value="${plEsc(s.id)}">${plEsc(s.name)}</option>`).join('');
-  if(data.some(s=>s.id===prevS))stateSel.value=prevS;
-  districtSel.innerHTML='<option value="">— State चुनें —</option>'+data.map(s=>`<option value="${plEsc(s.id)}">${plEsc(s.name)}</option>`).join('');
-  if(data.some(s=>s.id===prevD))districtSel.value=prevD;
-  const districts=[]; for(const s of data)for(const d of(s.districts||[]))districts.push({id:d.id,label:s.name+' → '+d.name});
-  blockSel.innerHTML='<option value="">— District चुनें —</option>'+districts.map(x=>`<option value="${plEsc(x.id)}">${plEsc(x.label)}</option>`).join('');
-  if(districts.some(x=>x.id===prevB))blockSel.value=prevB;
-  const blocks=[]; for(const s of data)for(const d of(s.districts||[]))for(const b of(d.blocks||[]))blocks.push({id:b.id,label:s.name+' → '+d.name+' → '+b.name});
-  pSel.innerHTML='<option value="">— Block चुनें —</option>'+blocks.map(x=>`<option value="${plEsc(x.id)}">${plEsc(x.label)}</option>`).join('');
-}
-function plBindSelectorFilters(){
-  const s=document.getElementById('plAddDistrictSelect'), d=document.getElementById('plAddBlockSelect'), b=document.getElementById('plAddPanchayatSelect');
-  s?.addEventListener('change',()=>{const data=plLoad();const sid=s.value;const districts=[];for(const st of data)if(st.id===sid)for(const x of(st.districts||[]))districts.push(x);d.innerHTML='<option value="">— District चुनें —</option>'+districts.map(x=>`<option value="${plEsc(x.id)}">${plEsc(x.name)}</option>`).join('');b.innerHTML='<option value="">— Block चुनें —</option>';});
-  d?.addEventListener('change',()=>{const data=plLoad();const did=d.value;const blocks=[];for(const st of data)for(const ds of(st.districts||[]))if(ds.id===did)for(const x of(ds.blocks||[]))blocks.push(x);b.innerHTML='<option value="">— Block चुनें —</option>'+blocks.map(x=>`<option value="${plEsc(x.id)}">${plEsc(x.name)}</option>`).join('');});
-  b?.addEventListener('change',()=>{const data=plLoad();const bid=b.value;const ps=[];for(const st of data)for(const ds of(st.districts||[]))for(const bl of(ds.blocks||[]))if(bl.id===bid)for(const x of(bl.panchayats||[]))ps.push(x);const p=document.getElementById('plAddPanchayatSelect');p.innerHTML='<option value="">— Block चुनें —</option>'+ps.map(x=>`<option value="${plEsc(x.id)}">${plEsc(x.name)}</option>`).join('');});
 }
 function plToggleHtml(node,type){return `<button class="pl-toggle ${node.active!==false?'on':''}" type="button" title="${node.active!==false?'ON':'OFF'}" onclick="plToggle('${plEsc(node.id)}','${type}')"><span></span></button>`}
 function plNodeActions(node,type){return `${plToggleHtml(node,type)}<div class="pl-small-actions"><button type="button" onclick="plEdit('${plEsc(node.id)}','${type}')">✏️ Edit</button><button class="danger" type="button" onclick="plDelete('${plEsc(node.id)}','${type}')">🗑 Delete</button></div>`}
@@ -1039,16 +1015,15 @@ function plRender(){
   const root=document.getElementById('plMasterTree');
   if(!root)return;
   const data=plLoad();
-  plPopulateAddSelectors(data);
   if(!data.length){root.innerHTML='<div class="pl-empty">अभी कोई State नहीं है। ＋ Add State से जोड़ें।</div>';return;}
   const panchayatHtml=(p)=>`<div class="pl-node pl-panchayat"><div class="pl-node-head"><div class="pl-node-main"><div class="pl-node-name">🏡 ${plEsc(p.name)}</div><div class="pl-node-meta">${p.active!==false?'Registration ON':'Registration OFF'}</div></div><span class="pl-level-badge">PANCHAYAT</span><div class="pl-node-actions">${plNodeActions(p,'panchayat')}</div></div></div>`;
-  const blockHtml=(b)=>{const ps=b.panchayats||[];return `<div class="pl-node pl-block"><div class="pl-node-head"><div class="pl-node-main"><div class="pl-node-name">📍 ${plEsc(b.name)}</div><div class="pl-node-meta">${ps.length} Panchayat</div></div><span class="pl-level-badge">BLOCK</span><div class="pl-node-actions">${plNodeActions(b,'block')}</div></div>${ps.length?`<div class="pl-children">${ps.map(panchayatHtml).join('')}</div>`:''}</div>`};
-  const districtHtml=(d)=>{const bs=d.blocks||[];return `<div class="pl-node pl-district"><div class="pl-node-head"><div class="pl-node-main"><div class="pl-node-name">🏛 ${plEsc(d.name)}</div><div class="pl-node-meta">${bs.length} Block</div></div><span class="pl-level-badge">DISTRICT</span><div class="pl-node-actions">${plNodeActions(d,'district')}</div></div>${bs.length?`<div class="pl-children">${bs.map(blockHtml).join('')}</div>`:''}</div>`};
-  const stateHtml=(st)=>{const ds=st.districts||[];return `<div class="pl-node pl-state"><div class="pl-node-head"><div class="pl-node-main"><div class="pl-node-name">🇮🇳 ${plEsc(st.name)}</div><div class="pl-node-meta">${ds.length} District • ${st.active!==false?'Registration ON':'Registration OFF'}</div></div><span class="pl-level-badge">STATE</span><div class="pl-node-actions">${plNodeActions(st,'state')}</div></div>${ds.length?`<div class="pl-children">${ds.map(districtHtml).join('')}</div>`:''}</div>`};
+  const blockHtml=(b)=>{const ps=b.panchayats||[];return `<div class="pl-node pl-block"><div class="pl-node-head"><div class="pl-node-main"><div class="pl-node-name">📍 ${plEsc(b.name)}</div><div class="pl-node-meta">${ps.length} Panchayat</div></div><span class="pl-level-badge">BLOCK</span><div class="pl-node-actions"><button class="outline" type="button" onclick="plAddPanchayat('${plEsc(b.id)}')">＋ Panchayat</button>${plNodeActions(b,'block')}</div></div>${ps.length?`<div class="pl-children">${ps.map(panchayatHtml).join('')}</div>`:''}</div>`};
+  const districtHtml=(d)=>{const bs=d.blocks||[];return `<div class="pl-node pl-district"><div class="pl-node-head"><div class="pl-node-main"><div class="pl-node-name">🏛 ${plEsc(d.name)}</div><div class="pl-node-meta">${bs.length} Block</div></div><span class="pl-level-badge">DISTRICT</span><div class="pl-node-actions"><button class="outline" type="button" onclick="plAddBlock('${plEsc(d.id)}')">＋ Block</button>${plNodeActions(d,'district')}</div></div>${bs.length?`<div class="pl-children">${bs.map(blockHtml).join('')}</div>`:''}</div>`};
+  const stateHtml=(st)=>{const ds=st.districts||[];return `<div class="pl-node pl-state"><div class="pl-node-head"><div class="pl-node-main"><div class="pl-node-name">🇮🇳 ${plEsc(st.name)}</div><div class="pl-node-meta">${ds.length} District • ${st.active!==false?'Registration ON':'Registration OFF'}</div></div><span class="pl-level-badge">STATE</span><div class="pl-node-actions"><button class="outline" type="button" onclick="plAddDistrict('${plEsc(st.id)}')">＋ District</button>${plNodeActions(st,'state')}</div></div>${ds.length?`<div class="pl-children">${ds.map(districtHtml).join('')}</div>`:''}</div>`};
   root.innerHTML=data.map(stateHtml).join('');
 }
 function renderProfessionalLocations(){plRender()}
-setTimeout(plBindSelectorFilters,0)
+
 function resetProfessionalLocationFilters(){plRender()}
 function renderProfessionalLocationFilters(){}
 function mobileAdminShow(id,el){syncAdminMobileActive(id);show(id);closeAdminMobileMenu()}
