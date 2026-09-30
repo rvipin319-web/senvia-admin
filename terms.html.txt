@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Terms & Conditions | SENVIA</title>
+  <meta name="description" content="SENVIA Terms and Conditions - नियम एवं शर्तें">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f5f9fc;
+      color: #26364a;
+      line-height: 1.7;
+    }
+
+    /* HEADER */
+    .site-header {
+      background: #07528f;
+      color: #fff;
+      padding: 14px 5%;
+      box-shadow: 0 2px 8px rgba(0,0,0,.12);
+    }
+
+    .header-inner {
+      max-width: 1200px;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .logo {
+      font-size: 29px;
+      font-weight: 800;
+      text-decoration: none;
+      color: #fff;
+      letter-spacing: .5px;
+    }
+
+    .v-letter {
+      color: #ffd21c;
+      font-weight: 800;
+    }
+
+    .tagline {
+      font-size: 13px;
+      opacity: .9;
+    }
+
+    /* NAVIGATION */
+    .main-nav {
+      background: #063f6d;
+    }
+
+    .nav-inner {
+      max-width: 1200px;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 8px 15px;
+      flex-wrap: wrap;
+    }
+
+    .nav-inner a {
+      color: #fff;
+      text-decoration: none;
+      padding: 8px 13px;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    .nav-inner a:hover,
+    .nav-inner a.active {
+      background: #168b5b;
+    }
+
+    .language-btn {
+      border: 1px solid rgba(255,255,255,.6);
+      background: transparent;
+      color: #fff;
+      padding: 7px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 13px;
+    }
+
+    /* HERO */
+    .page-hero {
+      background: linear-gradient(135deg, #07528f, #168b5b);
+      color: #fff;
+      padding: 38px 20px;
+      text-align: center;
+    }
+
+    .page-hero h1 {
+      font-size: 32px;
+      margin-bottom: 5px;
+    }
+
+    .page-hero p {
+      font-size: 14px;
+      opacity: .95;
+    }
+
+    /* CONTENT */
+    .terms-wrapper {
+      max-width: 1000px;
+      margin: 35px auto;
+      padding: 0 18px;
+    }
+
+    .terms-card {
+      background: #fff;
+      border-radius: 14px;
+      padding: 35px;
+      box-shadow: 0 4px 20px rgba(0,0,0,.08);
+    }
+
+    .updated {
+      display: inline-block;
+      background: #eef7f2;
+      color: #168b5b;
+      border-left: 4px solid #168b5b;
+      padding: 8px 14px;
+      margin-bottom: 25px;
+      font-size: 13px;
+      border-radius: 4px;
+    }
+
+    .terms-card h2 {
+      color: #07528f;
+      font-size: 21px;
+      margin-top: 27px;
+      margin-bottom: 10px;
+    }
+
+    .terms-card h2:first-of-type {
+      margin-top: 0;
+    }
+
+    .terms-card p {
+      font-size: 15px;
+      margin-bottom: 12px;
+      color: #46566a;
+    }
+
+    .terms-card ul {
+      margin: 8px 0 15px 25px;
+    }
+
+    .terms-card li {
+      margin-bottom: 6px;
+      color: #46566a;
+      font-size: 15px;
+    }
+
+    .important-box {
+      background: #fff8df;
+      border-left: 5px solid #ffd21c;
+      border-radius: 8px;
+      padding: 18px;
+      margin: 18px 0;
+    }
+
+    .important-box strong {
+      color: #07528f;
+    }
+
+    .contact-box {
+      background: #f1f7fb;
+      border-left: 5px solid #07528f;
+      border-radius: 8px;
+      padding: 18px;
+      margin-top: 15px;
+    }
+
+    .contact-box strong {
+      color: #07528f;
+    }
+
+    /* FOOTER */
+    footer {
+      margin-top: 40px;
+      background: #063f6d;
+      color: #fff;
+      padding: 28px 20px 18px;
+    }
+
+    .footer-inner {
+      max-width: 1200px;
+      margin: auto;
+      display: flex;
+      justify-content: space-between;
+      gap: 25px;
+      flex-wrap: wrap;
+    }
+
+    .footer-brand {
+      font-size: 23px;
+      font-weight: 800;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a {
+      color: #fff;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .footer-links a:hover {
+      color: #ffd21c;
+    }
+
+    .copyright {
+      max-width: 1200px;
+      margin: 22px auto 0;
+      padding-top: 15px;
+      border-top: 1px solid rgba(255,255,255,.2);
+      text-align: center;
+      font-size: 13px;
+      opacity: .9;
+    }
+
+    /* MOBILE */
+    @media (max-width: 700px) {
+
+      .site-header {
+        padding: 12px 15px;
+      }
+
+      .header-inner {
+        flex-direction: column;
+        gap: 5px;
+        text-align: center;
+      }
+
+      .logo {
+        font-size: 26px;
+      }
+
+      .main-nav {
+        overflow-x: auto;
+      }
+
+      .nav-inner {
+        justify-content: flex-start;
+        flex-wrap: nowrap;
+        width: max-content;
+        min-width: 100%;
+      }
+
+      .nav-inner a {
+        white-space: nowrap;
+        font-size: 13px;
+        padding: 7px 10px;
+      }
+
+      .page-hero {
+        padding: 28px 15px;
+      }
+
+      .page-hero h1 {
+        font-size: 27px;
+      }
+
+      .terms-wrapper {
+        margin: 20px auto;
+        padding: 0 12px;
+      }
+
+      .terms-card {
+        padding: 22px 18px;
+        border-radius: 10px;
+      }
+
+      .terms-card h2 {
+        font-size: 19px;
+      }
+
+      .terms-card p,
+      .terms-card li {
+        font-size: 14px;
+      }
+
+      .footer-inner {
+        flex-direction: column;
+        text-align: center;
+        align-items: center;
+      }
+
+      .footer-links {
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="header-inner">
+
+      <a href="index.html" class="logo">
+        Sen<span class="v-letter">V</span>ia
+      </a>
+
+      <div class="tagline">
+        हर घर का अपना साथी
+      </div>
+
+    </div>
+  </header>
+
+
+  <!-- NAVIGATION -->
+  <nav class="main-nav">
+    <div class="nav-inner">
+
+      <a href="index.html">Home</a>
+      <a href="professional.html">Professionals</a>
+      <a href="services.html">Services</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="privacy-policy.html">Privacy Policy</a>
+      <a href="terms.html" class="active">Terms</a>
+
+      <button class="language-btn" type="button">
+        हिन्दी / English
+      </button>
+
+    </div>
+  </nav>
+
+
+  <!-- PAGE HERO -->
+  <section class="page-hero">
+
+    <h1>
+      Terms &amp; Conditions – Sen<span class="v-letter">V</span>ia
+    </h1>
+
+    <p>
+      SENVIA का उपयोग करने से पहले कृपया इन नियमों एवं शर्तों को पढ़ें।
+    </p>
+
+  </section>
+
+
+  <!-- TERMS CONTENT -->
+  <main class="terms-wrapper">
+
+    <div class="terms-card">
+
+      <div class="updated">
+        Last Updated: 30 September 2026
+      </div>
+
+
+      <h2>1. Introduction</h2>
+
+      <p>
+        SENVIA ("हम", "हमारा", "हमारी वेबसाइट" या "SENVIA")
+        एक digital platform है जिसका उद्देश्य Customers और Professionals
+        को आपस में जोड़ने में सहायता करना है।
+      </p>
+
+      <p>
+        SENVIA Website का उपयोग करके आप इन Terms &amp; Conditions
+        को स्वीकार करते हैं। यदि आप इन शर्तों से सहमत नहीं हैं,
+        तो कृपया Website का उपयोग न करें।
+      </p>
+
+
+      <h2>2. SENVIA की भूमिका</h2>
+
+      <div class="important-box">
+
+        <p>
+          <strong>महत्वपूर्ण:</strong>
+          SENVIA मुख्य रूप से Customers और Professionals को
+          connect करने वाला digital platform है।
+        </p>
+
+        <p>
+          Customer और Professional के बीच होने वाले काम, Service,
+          कीमत, Payment, समय, गुणवत्ता और अन्य समझौते की जिम्मेदारी
+          संबंधित पक्षों की होगी।
+        </p>
+
+      </div>
+
+
+      <h2>3. User Registration</h2>
+
+      <p>
+        Registration करते समय User को सही, वर्तमान और आवश्यक जानकारी
+        प्रदान करनी चाहिए।
+      </p>
+
+      <ul>
+        <li>गलत नाम या गलत जानकारी का उपयोग न करें।</li>
+        <li>किसी दूसरे व्यक्ति की पहचान का उपयोग न करें।</li>
+        <li>अपनी Login Information को सुरक्षित रखें।</li>
+        <li>Account की जानकारी में बदलाव होने पर उसे Update करें।</li>
+      </ul>
+
+
+      <h2>4. Professional Registration</h2>
+
+      <p>
+        SENVIA पर Registration करने वाले Professional को अपनी
+        Profession, Service और Area से संबंधित सही जानकारी प्रदान करनी चाहिए।
+      </p>
+
+      <ul>
+        <li>Professional अपनी वास्तविक Service Category चुनें।</li>
+        <li>अपना सही Service Area दर्ज करें।</li>
+        <li>गलत Qualification या Experience का दावा न करें।</li>
+        <li>किसी अन्य व्यक्ति की Photo या जानकारी बिना अनुमति उपयोग न करें।</li>
+        <li>Customers को गलत या भ्रामक जानकारी न दें।</li>
+      </ul>
+
+
+      <h2>5. Customer की जिम्मेदारी</h2>
+
+      <p>
+        Customer को किसी Professional से Service लेने से पहले
+        उपलब्ध जानकारी को स्वयं verify करना चाहिए।
+      </p>
+
+      <ul>
+        <li>Professional की पहचान और Service details की जांच करें।</li>
+        <li>काम की कीमत और शर्तें पहले स्पष्ट करें।</li>
+        <li>Payment से संबंधित शर्तें पहले तय करें।</li>
+        <li>किसी भी व्यक्तिगत या financial information को सावधानी से साझा करें।</li>
+      </ul>
+
+
+      <h2>6. Professional की जिम्मेदारी</h2>
+
+      <p>
+        Professional अपने द्वारा प्रदान की जाने वाली Service के लिए
+        जिम्मेदार है।
+      </p>
+
+      <ul>
+        <li>Customer को सही Service Information दें।</li>
+        <li>तय की गई कीमत और शर्तों का पालन करें।</li>
+        <li>Customer के साथ उचित और सम्मानजनक व्यवहार करें।</li>
+        <li>किसी भी अवैध गतिविधि के लिए SENVIA का उपयोग न करें।</li>
+      </ul>
+
+
+      <h2>7. Payment और Transaction</h2>
+
+      <p>
+        Customer और Professional के बीच होने वाले Payment या Financial
+        Transaction की शर्तें संबंधित पक्षों द्वारा तय की जाएंगी।
+      </p>
+
+      <p>
+        यदि SENVIA भविष्य में कोई Payment सुविधा उपलब्ध कराता है,
+        तो उसके लिए अलग Terms और Payment Rules लागू किए जा सकते हैं।
+      </p>
+
+
+      <h2>8. Fake Profile और Fraud</h2>
+
+      <p>
+        निम्न गतिविधियां SENVIA पर स्वीकार्य नहीं हैं:
+      </p>
+
+      <ul>
+        <li>Fake Profile बनाना</li>
+        <li>गलत जानकारी देना</li>
+        <li>किसी अन्य व्यक्ति की पहचान का उपयोग करना</li>
+        <li>Fraud या धोखाधड़ी करना</li>
+        <li>Spam या अनावश्यक संदेश भेजना</li>
+        <li>दूसरे Users को नुकसान पहुंचाने का प्रयास करना</li>
+      </ul>
+
+
+      <h2>9. Prohibited Activities</h2>
+
+      <p>
+        User SENVIA का उपयोग किसी गैर-कानूनी या हानिकारक गतिविधि
+        के लिए नहीं कर सकता।
+      </p>
+
+      <ul>
+        <li>कानून के विरुद्ध किसी Service का प्रचार</li>
+        <li>धोखाधड़ी या Scam</li>
+        <li>हिंसक या धमकीपूर्ण गतिविधि</li>
+        <li>Spam या Malware</li>
+        <li>दूसरे Users की Privacy का उल्लंघन</li>
+        <li>Website की Security को नुकसान पहुंचाने का प्रयास</li>
+      </ul>
+
+
+      <h2>10. Profile और Content</h2>
+
+      <p>
+        User द्वारा Upload की गई Photo, Text, Service Information
+        और अन्य Content के लिए User स्वयं जिम्मेदार होगा।
+      </p>
+
+      <p>
+        User को ऐसा Content Upload नहीं करना चाहिए जो किसी अन्य व्यक्ति
+        के Copyright, Trademark, Privacy या अन्य कानूनी अधिकारों का उल्लंघन करता हो।
+      </p>
+
+
+      <h2>11. Account Suspension या Removal</h2>
+
+      <p>
+        यदि कोई User इन Terms का उल्लंघन करता है, गलत जानकारी देता है,
+        Fraud करता है या Website के संचालन को नुकसान पहुंचाने का प्रयास करता है,
+        तो SENVIA आवश्यकतानुसार उसके Account या Profile को Suspend,
+        Restrict या Remove कर सकता है।
+      </p>
+
+
+      <h2>12. Service Quality</h2>
+
+      <p>
+        SENVIA Professionals द्वारा दी जाने वाली प्रत्येक Service की
+        Quality, Availability, Price या परिणाम की स्वतंत्र Guarantee नहीं देता।
+      </p>
+
+      <p>
+        Customer और Professional को Service लेने से पहले आवश्यक जानकारी,
+        कीमत और शर्तों की स्वयं पुष्टि करनी चाहिए।
+      </p>
+
+
+      <h2>13. Third-Party Services और Links</h2>
+
+      <p>
+        SENVIA पर कुछ Third-Party Websites या Services के Links हो सकते हैं।
+        ऐसी Third-Party Services की अपनी Terms और Privacy Policies हो सकती हैं।
+      </p>
+
+      <p>
+        SENVIA उन Third-Party Websites की सामग्री या सेवाओं के लिए
+        जिम्मेदार नहीं है।
+      </p>
+
+
+      <h2>14. Website Availability</h2>
+
+      <p>
+        SENVIA Website को लगातार उपलब्ध रखने का प्रयास किया जाएगा,
+        लेकिन Technical Maintenance, Server Problem, Internet Failure
+        या अन्य कारणों से Website कुछ समय के लिए उपलब्ध नहीं हो सकती।
+      </p>
+
+
+      <h2>15. Intellectual Property</h2>
+
+      <p>
+        SENVIA का Logo, Name, Website Design, Text, Graphics और अन्य
+        original content, जहां लागू हो, SENVIA या उसके संबंधित अधिकारधारकों
+        की संपत्ति हो सकता है।
+      </p>
+
+      <p>
+        बिना अनुमति Website के किसी महत्वपूर्ण हिस्से को Copy,
+        Reproduce या Commercially Use नहीं किया जाना चाहिए।
+      </p>
+
+
+      <h2>16. Privacy Policy</h2>
+
+      <p>
+        SENVIA द्वारा Personal Information के संग्रह और उपयोग के संबंध में
+        हमारी
+        <a href="privacy-policy.html">
+          Privacy Policy
+        </a>
+        लागू होगी।
+      </p>
+
+
+      <h2>17. Terms में बदलाव</h2>
+
+      <p>
+        SENVIA आवश्यकता के अनुसार इन Terms &amp; Conditions को समय-समय
+        पर Update कर सकता है।
+      </p>
+
+      <p>
+        Updated Terms को Website पर प्रकाशित किया जा सकता है।
+        Website का उपयोग जारी रखने का अर्थ Updated Terms को स्वीकार
+        करना हो सकता है, जहां लागू कानून इसकी अनुमति देता है।
+      </p>
+
+
+      <h2>18. कानून और अधिकार क्षेत्र</h2>
+
+      <p>
+        इन Terms से संबंधित मामलों पर भारत में लागू संबंधित कानून
+        लागू होंगे। किसी विवाद के संबंध में लागू कानून के अनुसार
+        सक्षम न्यायालय का अधिकार क्षेत्र निर्धारित होगा।
+      </p>
+
+
+      <h2>19. Contact Us</h2>
+
+      <div class="contact-box">
+
+        <p>
+          Terms &amp; Conditions से संबंधित किसी प्रश्न या शिकायत के लिए
+          SENVIA से संपर्क किया जा सकता है।
+        </p>
+
+        <p>
+          <strong>Website:</strong>
+          senviaonline.in
+        </p>
+
+        <p>
+          <strong>Organization:</strong>
+          Sen<span class="v-letter">V</span>ia
+        </p>
+
+        <p>
+          <strong>Tagline:</strong>
+          हर घर का अपना साथी
+        </p>
+
+      </div>
+
+
+      <h2>20. Acceptance of Terms</h2>
+
+      <p>
+        SENVIA Website का उपयोग करके User यह स्वीकार करता है कि उसने
+        इन Terms &amp; Conditions को पढ़ा और समझा है तथा Website का
+        उपयोग लागू नियमों और कानूनों के अनुसार करेगा।
+      </p>
+
+    </div>
+
+  </main>
+
+
+  <!-- FOOTER -->
+  <footer>
+
+    <div class="footer-inner">
+
+      <div class="footer-brand">
+        Sen<span class="v-letter">V</span>ia
+
+        <div style="font-size:12px;font-weight:normal;margin-top:4px;">
+          हर घर का अपना साथी
+        </div>
+      </div>
+
+      <div class="footer-links">
+
+        <a href="index.html">Home</a>
+
+        <a href="about.html">About</a>
+
+        <a href="contact.html">Contact</a>
+
+        <a href="privacy-policy.html">
+          Privacy Policy
+        </a>
+
+        <a href="terms.html">
+          Terms
+        </a>
+
+      </div>
+
+    </div>
+
+    <div class="copyright">
+      © 2026 Sen<span class="v-letter">V</span>ia — हर घर का अपना साथी
+    </div>
+
+  </footer>
+
+</body>
+</html>
