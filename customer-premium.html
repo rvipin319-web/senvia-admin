@@ -1481,4 +1481,26 @@ document.addEventListener('DOMContentLoaded', function(){
 })();
 </script>
 
+
+<script id="senvia-customer-search-label-final-fix">
+(function(){
+  function fixCustomerSearchLabels(){
+    const set=(id,value)=>{const e=document.getElementById(id); if(e) e.textContent=value;};
+    set('stateLabel','State');
+    set('districtLabel','District');
+    set('blockLabel','Block');
+    set('panchayatLabel','Panchayat');
+    set('pinLabel','Area PIN Code / क्षेत्र पिन कोड');
+    set('serviceLabel','Service');
+  }
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',fixCustomerSearchLabels);
+  }else{
+    fixCustomerSearchLabels();
+  }
+  // Keep the labels tied to their actual fields when the language button is used.
+  window.addEventListener('load',fixCustomerSearchLabels);
+  window.senviaFixCustomerSearchLabels=fixCustomerSearchLabels;
+})();
+</script>
 </body></html>
