@@ -850,7 +850,7 @@ function renderPanchayatPicker(list,placeholder){
   const box=$('panchayatPickerList');
   if(!box)return;
   box.innerHTML=list.length
-    ? list.map(x=>`<button type="button" class="senvia-panchayat-option" data-panchayat="${areaEsc(x)}"><span>${areaEsc(x)}</span><span class="senvia-panchayat-radio">○</span></button>`).join('')
+    ? list.map(x=>{const v=String(x); return `<button type="button" class="senvia-panchayat-option" data-panchayat="${areaEsc(v)}" onclick="choosePanchayat(${JSON.stringify(v)})"><span>${areaEsc(v)}</span><span class="senvia-panchayat-radio">○</span></button>`;}).join('')
     : '<div style="padding:22px;text-align:center;color:#60777b">'+(lang==='hi'?'इस Block में कोई Panchayat उपलब्ध नहीं है।':'No Panchayat is available for this Block.')+'</div>';
 }
 async function openPanchayatPicker(){
@@ -867,10 +867,19 @@ function closePanchayatPicker(){
   document.body.classList.remove('senvia-panchayat-open');
 }
 function choosePanchayat(value){
+  value=String(value??'').trim();
+  if(!value)return;
   const p=$('p');
-  if(p){p.value=String(value);p.dispatchEvent(new Event('change',{bubbles:true}));}
+  if(p){
+    p.value=value;
+    try{p.dispatchEvent(new Event('change',{bubbles:true}));}catch(e){}
+  }
   const btn=$('panchayatPickerBtn');
-  if(btn)btn.textContent=String(value);
+  if(btn){
+    btn.textContent=value;
+    btn.disabled=false;
+    btn.setAttribute('aria-disabled','false');
+  }
   closePanchayatPicker();
 }
 (function installFreshPanchayatTapHandler(){
