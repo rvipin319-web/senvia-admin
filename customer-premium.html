@@ -1592,4 +1592,57 @@ document.addEventListener('DOMContentLoaded', function(){
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',loadServiceImages,{once:true});else loadServiceImages();
 })();
 </script>
+
+<script id="senvia-final-service-image-fix">
+/* FINAL FIX: keep Admin-uploaded service images visible in Public Panel. */
+(function(){
+  const URL='https://hxdrvhiowurbwlgmczju.supabase.co';
+  const KEY='sb_publishable_cvh_b0gklN5SOcH5MsGs8g_4JI9-PxT';
+  const API=URL+'/rest/v1/';
+  const esc=v=>String(v??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+  const txt=v=>String(v??'').trim();
+  const pick=(o,keys)=>{for(const k of keys){if(o&&o[k]!=null&&txt(o[k]))return txt(o[k]);}return '';};
+  const fallbackIcon=n=>{const x=txt(n).toLowerCase();const h=[['tv','📺'],['led','📺'],['mobile','📱'],['computer','💻'],['laptop','💻'],['electric','⚡'],['plumb','🚰'],['ac','❄️'],['fridge','🧊'],['carpenter','🔨'],['painter','🎨'],['raj mistri','🧱'],['bike','🏍️'],['ro','💧']].find(([k])=>x.includes(k));return h?h[1]:'🛠️';};
+  function render(){
+    const cards=document.getElementById('cards'), quick=document.getElementById('quick');
+    if(!cards) return;
+    const hi=(typeof window.lang==='string'&&window.lang==='hi');
+    const names=Array.isArray(window.services)?window.services:[];
+    const imageOf=x=>txt(x?.[2]);
+    cards.innerHTML=names.slice(0,6).map(x=>{
+      const name=txt(x?.[0]), image=imageOf(x), icon=txt(x?.[1])||fallbackIcon(name);
+      const visual=image?`<img src="${esc(image)}" alt="${esc(name)}" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display='inline-block'" style="width:64px;height:64px;object-fit:cover;border-radius:14px;display:inline-block"><span style="display:none;font-size:42px">${esc(icon)}</span>`:`<span style="font-size:42px">${esc(icon)}</span>`;
+      return `<div class="card" onclick="quick('${name.replace(/'/g,"\\'")}')"><div class="icon">${visual}</div><b>${typeof serviceName==='function'?serviceName(name):name}</b><small>${hi?'खोजें':'Search'}</small></div>`;
+    }).join('');
+    if(quick) quick.innerHTML=names.slice(0,7).map(x=>{
+      const name=txt(x?.[0]), image=imageOf(x), icon=txt(x?.[1])||fallbackIcon(name);
+      const visual=image?`<img src="${esc(image)}" alt="" loading="lazy" decoding="async" style="width:30px;height:30px;object-fit:cover;border-radius:8px;vertical-align:middle;margin-right:7px">`:icon;
+      return `<div class="row" onclick="quick('${name.replace(/'/g,"\\'")}')">${visual} ${typeof serviceName==='function'?serviceName(name):name}　›</div>`;
+    }).join('');
+  }
+  async function load(){
+    try{
+      const r=await fetch(API+'services?select=*',{headers:{apikey:KEY,Accept:'application/json'},cache:'no-store'});
+      if(!r.ok) throw new Error('services HTTP '+r.status);
+      const rows=await r.json();
+      if(!Array.isArray(rows)||!rows.length) return;
+      const mapped=rows.map(row=>{
+        const name=pick(row,['Name','name','name_en','service','service_name','service_name_en','title','label','category']);
+        if(!name)return null;
+        const icon=pick(row,['icon','Icon','emoji','Emoji','service_icon','serviceIcon','icon_emoji'])||fallbackIcon(name);
+        const image=pick(row,['image_url','imageUrl','image','Image','service_image','serviceImage','image_path','imagePath']);
+        return [name,icon,image];
+      }).filter(Boolean);
+      if(mapped.length){
+        window.services=mapped;
+        render();
+      }
+    }catch(e){console.warn('Senvia Public service image load failed:',e);}
+  }
+  function start(){load();setTimeout(load,1500);setTimeout(load,4000);}
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});else start();
+  window.addEventListener('pageshow',load);
+  window.senviaReloadServiceImages=load;
+})();
+</script>
 </body></html>
