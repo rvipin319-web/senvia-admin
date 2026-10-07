@@ -174,6 +174,23 @@ body{background:linear-gradient(135deg,#eef8ff 0%,#eafcff 38%,#f4efff 72%,#eefaf
 .icon-picker-wrap{display:flex;align-items:center;gap:10px;margin-top:6px}.selected-service-icon{width:52px;height:52px;border:1px solid #cfe0ee;border-radius:14px;background:#fff;font-size:28px;display:grid;place-items:center;cursor:pointer}.icon-picker-modal{position:fixed;inset:0;background:rgba(5,24,45,.58);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:18px;z-index:100002}.icon-picker-modal.show{display:flex}.icon-picker-card{width:min(560px,100%);max-height:min(720px,92vh);overflow:auto;background:#fff;border:1px solid #dce8f4;border-radius:22px;box-shadow:0 24px 70px rgba(5,34,65,.28)}.icon-picker-head{position:sticky;top:0;z-index:2;background:linear-gradient(135deg,#073d70,#087c86);color:#fff;padding:16px 18px;display:flex;align-items:center}.icon-picker-head h2{margin:0;color:#fff;font-size:20px}.icon-picker-close{margin-left:auto;border:0;background:rgba(255,255,255,.14);color:#fff;width:38px;height:38px;border-radius:11px;font-size:21px}.icon-picker-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:9px;padding:18px}.service-icon-option{border:1px solid #d8e5ef;background:#f8fbfe;border-radius:14px;min-height:66px;display:grid;place-items:center;cursor:pointer;font-size:29px}.service-icon-option:hover{border-color:#1592a4;background:#eefaf9;transform:translateY(-1px)}.service-icon-option.active{border:2px solid #0a9b59;background:#eaf8f0;box-shadow:0 0 0 2px rgba(10,155,89,.10)}.service-icon-option span{font-size:11px;color:#607286;margin-top:-2px}@media(max-width:520px){.icon-picker-grid{grid-template-columns:repeat(5,1fr);padding:13px;gap:7px}.service-icon-option{min-height:60px;font-size:26px}}
 </style>
 
+<style id="service-image-upload-style">
+.service-image-tools{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:8px}
+.service-image-upload-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;background:linear-gradient(135deg,#0879c9,#16a65b)!important;color:#fff!important;border:0!important;border-radius:11px!important;padding:10px 13px!important;font-weight:800!important;cursor:pointer}
+.service-image-preview{width:74px;height:74px;border-radius:16px;border:1px solid #cfe0ee;background:#f7fbff;object-fit:cover;display:none;box-shadow:0 5px 14px rgba(8,36,85,.10)}
+.service-image-preview.show{display:block}
+.service-image-note{font-size:11px;color:#718096;line-height:1.35}
+.service-card-image{width:62px;height:62px;border-radius:15px;object-fit:cover;border:1px solid #d5e4ef;background:#f7fbff;flex:none;box-shadow:0 4px 12px rgba(8,36,85,.08)}
+.service-row-with-image{display:flex;align-items:center;gap:12px;min-width:0}
+.service-row-with-image .service-row-name{min-width:0}
+.service-image-clear{background:#fff!important;color:#c93636!important;border:1px solid #f0c4c4!important;padding:8px 10px!important}
+@media(max-width:520px){
+ .service-image-tools{align-items:flex-start}
+ .service-image-preview{width:64px;height:64px}
+ .service-image-upload-btn{padding:9px 11px!important;font-size:12px}
+}
+</style>
+
 
 <style id="premium-login-restore">
 .login-gate{position:fixed;inset:0;background:linear-gradient(180deg,#eff8ff,#f7fbff 72%,#e8f5ff);z-index:99999;display:flex;align-items:center;justify-content:center;padding:35px 20px;overflow:auto}
@@ -558,7 +575,7 @@ table tbody tr{border-bottom:1px solid #e3edf3;transition:background .15s ease}t
   </div>
 </div>
 
-<section id="services" style="display:none"><h1>Services</h1><div class="panel"><div class="toolbar"><input id="newSvc" placeholder="New service name"><button class="outline" type="button" id="newSvcIconBtn" onclick="openServiceIconPicker('add')">🛠️ Icon चुनें</button><button class="green" onclick="addService()">+ Add Service</button><button class="outline view-toggle" id="svcViewToggle" onclick="toggleCollectionView('services')">▦ Grid View</button></div><div id="serviceList" class="collection-list"></div></div></section>
+<section id="services" style="display:none"><h1>Services</h1><div class="panel"><div class="toolbar"><input id="newSvc" placeholder="New service name"><button class="outline" type="button" id="newSvcIconBtn" onclick="openServiceIconPicker('add')">🛠️ Icon चुनें</button><button class="outline" type="button" id="newSvcImageBtn" onclick="document.getElementById('newSvcImageInput').click()">📷 Image Upload</button><input id="newSvcImageInput" type="file" accept="image/*" hidden onchange="handleServiceImageFile(this,'add')"><button class="green" onclick="addService()">+ Add Service</button><button class="outline view-toggle" id="svcViewToggle" onclick="toggleCollectionView('services')">▦ Grid View</button></div><div id="newSvcImagePreviewWrap" class="service-image-tools" style="display:none;margin:-4px 0 14px"><img id="newSvcImagePreview" class="service-image-preview" alt="New service image preview"><span class="service-image-note">Selected image preview</span><button type="button" class="service-image-clear" onclick="clearServiceImage('add')">✕ हटाएँ</button></div><div id="serviceList" class="collection-list"></div></div></section>
 
 <section id="areas" style="display:none"><h1>📍 क्षेत्र प्रबंधन</h1><div class="panel area-shell">
   <div class="area-hero"><h2>📍 State → District → Block → Panchayat</h2><p>सभी भारतीय States को पहले से तैयार रखें। जरूरत के अनुसार District, Block और Panchayat बाद में जोड़ें, Hide/Show करें या Delete करें।</p></div>
@@ -658,6 +675,14 @@ table tbody tr{border-bottom:1px solid #e3edf3;transition:background .15s ease}t
       <input id="serviceEditInput" type="text" autocomplete="off" placeholder="Enter service name">
       <label style="margin-top:14px">Service Icon</label>
       <div class="icon-picker-wrap"><button type="button" class="selected-service-icon" id="editSvcIconBtn" onclick="openServiceIconPicker('edit')">🛠️</button><span style="font-size:12px;color:#718096">Icon बदलने के लिए यहाँ टैप करें</span></div>
+      <label style="margin-top:14px">Service Image</label>
+      <div class="service-image-tools">
+        <img id="editSvcImagePreview" class="service-image-preview" alt="Service image preview">
+        <button type="button" class="service-image-upload-btn" onclick="document.getElementById('editSvcImageInput').click()">📷 Image Upload</button>
+        <button type="button" class="service-image-clear" onclick="clearServiceImage('edit')">✕ हटाएँ</button>
+        <input id="editSvcImageInput" type="file" accept="image/*" hidden onchange="handleServiceImageFile(this,'edit')">
+      </div>
+      <div class="service-image-note">JPG/PNG/WebP • अधिकतम 2 MB. Image को छोटा करके save किया जाएगा।</div>
       <div id="serviceEditMsg" style="margin-top:9px;font-size:13px;color:#b42318"></div>
     </div>
     <div class="service-edit-footer">
@@ -1128,7 +1153,16 @@ function renderRecent(){const recent=document.getElementById('recentProTable');i
 function renderServices(){
  const grid=localStorage.getItem('senvia_services_view')==='grid';
  const box=document.getElementById('serviceList'); box.className=grid?'collection-grid':'collection-list';
- box.innerHTML=services.map((s,i)=>{const row=serviceRows.find(x=>svcLabel(x)===s);const icon=serviceIconFor(row)||localStorage.getItem('senvia_service_icon_'+s)||'🛠️';return grid?`<div class="collection-card"><h3>${icon} ${s}</h3><p>Service available on Senvia</p><div class="actions"><button class="service-edit-btn" type="button" onclick="openServiceEdit(${i})">✎ Edit</button><button class="danger" type="button" onclick="delService(${i})">Delete</button></div></div>`:`<div class="service-row"><span class="service-row-name">${icon} ${s}</span><div class="service-row-actions"><button class="service-edit-btn" type="button" onclick="openServiceEdit(${i})">✎ Edit</button><button class="danger" type="button" onclick="delService(${i})">Delete</button></div></div>`}).join('')||'<p class="empty">No services found.</p>';
+ box.innerHTML=services.map((s,i)=>{
+   const row=serviceRows.find(x=>svcLabel(x)===s);
+   const icon=serviceIconFor(row)||localStorage.getItem('senvia_service_icon_'+s)||'🛠️';
+   const image=serviceImageFor(row)||localStorage.getItem('senvia_service_image_'+s)||'';
+   const safeImage=serviceImageEscape(image);
+   const imageHtml=image?`<img class="service-card-image" src="${safeImage}" alt="${serviceImageEscape(s)}" onerror="this.style.display='none'">`:'';
+   return grid
+    ?`<div class="collection-card"><div class="service-row-with-image">${imageHtml}<div style="min-width:0;flex:1"><h3 style="margin-bottom:4px">${icon} ${s}</h3><p>Service available on Senvia</p></div></div><div class="actions"><button class="service-edit-btn" type="button" onclick="openServiceEdit(${i})">✎ Edit</button><button class="danger" type="button" onclick="delService(${i})">Delete</button></div></div>`
+    :`<div class="service-row"><div class="service-row-with-image">${imageHtml}<span class="service-row-name">${icon} ${s}</span></div><div class="service-row-actions"><button class="service-edit-btn" type="button" onclick="openServiceEdit(${i})">✎ Edit</button><button class="danger" type="button" onclick="delService(${i})">Delete</button></div></div>`;
+ }).join('')||'<p class="empty">No services found.</p>';
  const b=document.getElementById('svcViewToggle');if(b)b.textContent=grid?'☷ List View':'▦ Grid View';
 }
 function renderCustomers(){
@@ -1231,6 +1265,74 @@ document.getElementById('serviceIconGrid')?.addEventListener('click',e=>{const b
 function closeServiceIconPicker(){document.getElementById('serviceIconPicker')?.classList.remove('show')}
 function selectServiceIcon(icon){if(iconPickerTarget==='edit'){editServiceIcon=icon;const b=document.getElementById('editSvcIconBtn');if(b)b.textContent=icon}else{newServiceIcon=icon;const b=document.getElementById('newSvcIconBtn');if(b)b.textContent=icon+' Icon'}closeServiceIconPicker()}
 document.getElementById('serviceIconPicker')?.addEventListener('click',e=>{if(e.target.id==='serviceIconPicker')closeServiceIconPicker()});
+let newServiceImage='',editServiceImage='';
+function serviceImageKey(row){
+ if(!row||typeof row!=='object')return null;
+ return keyCI(row,['image_url','image','service_image','serviceImage','imageUrl','icon_url','iconUrl','photo_url','photoUrl']);
+}
+function serviceImageFor(rowOrName){
+ if(rowOrName&&typeof rowOrName==='object'){
+   const k=serviceImageKey(rowOrName);
+   if(k&&String(rowOrName[k]??'').trim())return String(rowOrName[k]).trim();
+ }
+ const name=typeof rowOrName==='string'?rowOrName:svcLabel(rowOrName);
+ const local=localStorage.getItem('senvia_service_image_'+String(name||''));
+ return local&&local.trim()?local.trim():'';
+}
+function serviceImageEscape(v){
+ return String(v??'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+function updateServiceImagePreview(target){
+ const isEdit=target==='edit';
+ const src=isEdit?editServiceImage:newServiceImage;
+ const img=document.getElementById(isEdit?'editSvcImagePreview':'newSvcImagePreview');
+ if(img){
+   if(src){img.src=src;img.classList.add('show')}
+   else{img.removeAttribute('src');img.classList.remove('show')}
+ }
+ const wrap=document.getElementById('newSvcImagePreviewWrap');
+ if(!isEdit&&wrap)wrap.style.display=src?'flex':'none';
+}
+function clearServiceImage(target){
+ if(target==='edit')editServiceImage='';
+ else newServiceImage='';
+ const input=document.getElementById(target==='edit'?'editSvcImageInput':'newSvcImageInput');
+ if(input)input.value='';
+ updateServiceImagePreview(target);
+}
+function compressServiceImage(file){
+ return new Promise((resolve,reject)=>{
+   if(!file||!file.type.startsWith('image/')){reject(new Error('कृपया image file चुनें।'));return}
+   if(file.size>2*1024*1024){reject(new Error('Image 2 MB से छोटी रखें।'));return}
+   const reader=new FileReader();
+   reader.onerror=()=>reject(new Error('Image पढ़ी नहीं जा सकी।'));
+   reader.onload=()=>{
+     const img=new Image();
+     img.onload=()=>{
+       const max=900, scale=Math.min(1,max/Math.max(img.width,img.height));
+       const w=Math.max(1,Math.round(img.width*scale)),h=Math.max(1,Math.round(img.height*scale));
+       const c=document.createElement('canvas');c.width=w;c.height=h;
+       const ctx=c.getContext('2d');ctx.drawImage(img,0,0,w,h);
+       resolve(c.toDataURL('image/jpeg',.84));
+     };
+     img.onerror=()=>reject(new Error('Image format पढ़ी नहीं जा सकी।'));
+     img.src=reader.result;
+   };
+   reader.readAsDataURL(file);
+ });
+}
+async function handleServiceImageFile(input,target){
+ const file=input?.files?.[0];if(!file)return;
+ try{
+   const data=await compressServiceImage(file);
+   if(target==='edit')editServiceImage=data;else newServiceImage=data;
+   updateServiceImagePreview(target);
+ }catch(e){
+   alert(e.message||'Image upload failed.');
+   if(input)input.value='';
+ }
+}
+
 let editingServiceIndex=-1;
 function serviceNameKey(row){
  if(!row||typeof row!=='object')return null;
@@ -1244,10 +1346,14 @@ function serviceNameKey(row){
 function openServiceEdit(i){
  const current=services[i]; if(current==null)return; editingServiceIndex=i;
  const input=document.getElementById('serviceEditInput'); const msg=document.getElementById('serviceEditMsg');
- input.value=current; editServiceIcon=serviceIconFor(serviceRows.find(x=>svcLabel(x)===current)); const ib=document.getElementById('editSvcIconBtn'); if(ib)ib.textContent=editServiceIcon; msg.textContent=''; document.getElementById('serviceEditModal').classList.add('show');
+ const row=serviceRows.find(x=>svcLabel(x)===current);
+ input.value=current; editServiceIcon=serviceIconFor(row); editServiceImage=serviceImageFor(row);
+ const ib=document.getElementById('editSvcIconBtn'); if(ib)ib.textContent=editServiceIcon;
+ updateServiceImagePreview('edit');
+ msg.textContent=''; document.getElementById('serviceEditModal').classList.add('show');
  setTimeout(()=>{input.focus();input.select()},50);
 }
-function closeServiceEdit(){editingServiceIndex=-1;document.getElementById('serviceEditModal')?.classList.remove('show')}
+function closeServiceEdit(){editingServiceIndex=-1;editServiceImage='';document.getElementById('serviceEditModal')?.classList.remove('show')}
 async function saveServiceEdit(){
  const input=document.getElementById('serviceEditInput'),msg=document.getElementById('serviceEditMsg');
  const value=input.value.trim(); if(!value){msg.textContent='Service name खाली नहीं हो सकता।';return}
@@ -1255,15 +1361,18 @@ async function saveServiceEdit(){
  const old=services[editingServiceIndex];
  const oldRow=serviceRows.find(x=>svcLabel(x)===old);
  const currentIcon=serviceIconFor(oldRow);
+ const currentImage=serviceImageFor(oldRow);
  const iconChanged=String(editServiceIcon||'').trim()!==String(currentIcon||'').trim();
- if(value===old && !iconChanged){closeServiceEdit();return}
+ const imageChanged=String(editServiceImage||'').trim()!==String(currentImage||'').trim();
+ if(value===old && !iconChanged && !imageChanged){closeServiceEdit();return}
  if(services.some((x,i)=>i!==editingServiceIndex && String(x).trim().toLowerCase()===value.toLowerCase())){msg.textContent='यह service पहले से मौजूद है।';return}
  try{
   showBusy();
   if(!dbMode){
    services[editingServiceIndex]=value;
    localStorage.setItem('senvia_service_icon_'+value,editServiceIcon);
-   if(old!==value)localStorage.removeItem('senvia_service_icon_'+old);
+   if(editServiceImage)localStorage.setItem('senvia_service_image_'+value,editServiceImage);else localStorage.removeItem('senvia_service_image_'+value);
+   if(old!==value){localStorage.removeItem('senvia_service_icon_'+old);localStorage.removeItem('senvia_service_image_'+old)}
    closeServiceEdit();render();return
   }
   const row=oldRow;
@@ -1274,15 +1383,22 @@ async function saveServiceEdit(){
   if(value!==old)payload[key]=value;
   const ikey=serviceIconKey(row);
   if(ikey)payload[ikey]=editServiceIcon;
-  // Always keep a local fallback so an icon is not lost when the table has no icon column.
+  const imgKey=serviceImageKey(row);
+  if(imgKey)payload[imgKey]=editServiceImage||null;
+
   localStorage.setItem('senvia_service_icon_'+value,editServiceIcon);
-  if(old!==value)localStorage.removeItem('senvia_service_icon_'+old);
+  if(editServiceImage)localStorage.setItem('senvia_service_image_'+value,editServiceImage);else localStorage.removeItem('senvia_service_image_'+value);
+  if(old!==value){
+   localStorage.removeItem('senvia_service_icon_'+old);
+   localStorage.removeItem('senvia_service_image_'+old);
+  }
   if(Object.keys(payload).length){
    try{
     await api('services?id=eq.'+encodeURIComponent(row.id),{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify(payload)});
    }catch(dbErr){
-    if(ikey)throw dbErr;
-    console.warn('Service icon column unavailable; using local fallback.',dbErr);
+    if(ikey&&iconChanged)throw dbErr;
+    if(imgKey&&imageChanged)throw dbErr;
+    console.warn('Optional service icon/image column unavailable; using local fallback.',dbErr);
    }
   }
   closeServiceEdit(); await loadFromSupabase();
@@ -1554,40 +1670,59 @@ async function addService(){
    if(!(await requireAdmin())) return;
    if(!dbMode){
      services.push(s);
+     localStorage.setItem('senvia_service_icon_'+s,newServiceIcon);
+     if(newServiceImage)localStorage.setItem('senvia_service_image_'+s,newServiceImage);
      if(input) input.value='';
+     clearServiceImage('add'); newServiceIcon='🛠️';
+     const ib=document.getElementById('newSvcIconBtn'); if(ib)ib.textContent='🛠️ Icon चुनें';
      render();
      alert('Service added successfully.');
      return;
    }
 
-   // Detect the actual service-name column from an existing row.
-   // If the table is empty, use the normal Senvia column name first.
    const sample=serviceRows.find(x=>x&&typeof x==='object')||{};
    const detected=serviceNameKey(sample);
    const keys=[...new Set([
      ...(detected?[detected]:[]),
      'name','name_en','service','service_name','service_name_en','service_name_hi','title','name_hi','label','category'
    ])];
+   const iconColumn=serviceIconKey(sample);
+   const imageColumn=serviceImageKey(sample);
+   let lastError='',saved=false;
 
-   let lastError='';
-   let saved=false;
    for(const key of keys){
+     // First try with image + icon. If the optional columns do not exist, fall back without them.
      try{
        const payload={}; payload[key]=s;
-       const iconColumn=serviceIconKey(sample)||'Icon'; payload[iconColumn]=newServiceIcon;
+       if(iconColumn)payload[iconColumn]=newServiceIcon;
+       if(imageColumn)payload[imageColumn]=newServiceImage||null;
+       else if(newServiceImage)payload['image_url']=newServiceImage;
        await api('services',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify(payload)});
        saved=true; break;
      }catch(e){
        lastError=e.message||String(e);
-       // If the database has no icon column, keep the service add working and save the selected icon locally as a fallback.
-       try{ const payload={}; payload[key]=s; await api('services',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify(payload)}); saved=true; localStorage.setItem('senvia_service_icon_'+s,newServiceIcon); break; }catch(e2){ lastError=e2.message||lastError; }
+       try{
+         const payload={}; payload[key]=s;
+         if(iconColumn)payload[iconColumn]=newServiceIcon;
+         await api('services',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify(payload)});
+         saved=true; break;
+       }catch(e2){
+         lastError=e2.message||lastError;
+         try{
+           const payload={}; payload[key]=s;
+           await api('services',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify(payload)});
+           saved=true; break;
+         }catch(e3){ lastError=e3.message||lastError; }
+       }
      }
    }
-   if(!saved){
-     throw new Error(lastError||'Services table में service name column या INSERT permission नहीं मिली।');
-   }
+   if(!saved)throw new Error(lastError||'Services table में service name column या INSERT permission नहीं मिली।');
 
-   if(input) input.value=''; newServiceIcon='🛠️'; const ib=document.getElementById('newSvcIconBtn'); if(ib)ib.textContent='🛠️ Icon चुनें';
+   // Always retain a local fallback. If the DB has image_url/icon columns, those are also saved above.
+   localStorage.setItem('senvia_service_icon_'+s,newServiceIcon);
+   if(newServiceImage)localStorage.setItem('senvia_service_image_'+s,newServiceImage);
+   if(input) input.value=''; clearServiceImage('add'); newServiceIcon='🛠️';
+   const ib=document.getElementById('newSvcIconBtn'); if(ib)ib.textContent='🛠️ Icon चुनें';
    await loadFromSupabase();
    alert('Service successfully added.');
  }catch(e){
@@ -1597,7 +1732,7 @@ async function addService(){
    if(/42501|row-level security|RLS|permission|not authorized/i.test(msg)){
      help='\n\nयह Supabase RLS/INSERT permission की समस्या लग रही है।';
    }else if(/column|schema|does not exist|PGRST/i.test(msg)){
-     help='\n\nServices table के service-name column की समस्या लग रही है।';
+     help='\n\nServices table के service-name/image column की समस्या लग रही है।';
    }
    alert('Service add failed.\n\n'+msg+help);
  }finally{
