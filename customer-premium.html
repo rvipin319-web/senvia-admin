@@ -566,7 +566,7 @@ body.senvia-panchayat-open{overflow:hidden}
 <footer id="contact"><div class="c fg"><div><h2 style="color:#fff">Senvia</h2>हर घर का अपना साथी</div><div><h3 data-i18n-target="links">Links</h3><a href="#home" data-i18n-target="home">Home</a><a href="#services" data-i18n-target="services">Services</a></div><div><h3 data-i18n-target="help">Help</h3><a data-i18n-target="privacy">Privacy Policy</a><a data-i18n-target="terms">Terms</a></div><div><h3 data-i18n-target="contact">Contact</h3><a href="tel:+919905411421">📞 +91 7992477919</a><a href="mailto:support@senvia.in">✉ senviasupport21@gmail.com</a><a href="https://www.facebook.com/profile.php?id=61594850764717" target="_blank" rel="noopener noreferrer">📘 Facebook Page</a></div></div><div class="senvia-copyright">© 2026 Senvia — हर घर का अपना साथी</div></footer>
 <div class="senvia-success" id="successPopup" onclick="if(event.target===this)closeSuccessPopup()"><div class="senvia-success-card"><div class="senvia-success-icon">✓</div><h3 id="successTitle">Registration Successful</h3><p id="successText">Your registration has been completed successfully.</p><div class="senvia-id-box"><div class="senvia-id-label">Senvia Customer ID</div><div class="senvia-id" id="successId">—</div></div><div class="senvia-success-actions"><button class="btn blue" type="button" onclick="copyCustomerId()">Copy ID</button><button class="btn green" type="button" onclick="closeSuccessPopup()">Done</button></div></div></div>
 <div class="senvia-success" id="professionalSuccessPopup" onclick="if(event.target===this)closeProfessionalSuccess()"><div class="senvia-success-card"><div class="senvia-success-icon">✓</div><h3 id="professionalSuccessTitle">Registration Successful</h3><p id="professionalSuccessText">Your professional registration was successful.</p><div class="senvia-id-box"><div class="senvia-id-label" id="professionalIdLabel">Senvia Professional ID</div><div class="senvia-id" id="professionalSuccessId">—</div></div><div class="senvia-success-actions"><button class="btn blue" type="button" onclick="copyProfessionalId()">Copy ID</button><button class="btn green" type="button" onclick="closeProfessionalSuccess()">Done</button></div></div></div>
-<div class="modal" id="worker"><div class="mb worker-modal"><button onclick="closeM('worker')" style="float:right">×</button><h2 data-i18n-target="proReg">🔧 Professional Registration</h2><p class="reg-note" id="regNote">अपना विवरण भरें। Submit करने के बाद profile <b>Pending Verification</b> में जाएगी।</p><div class="form"><input id="wn" placeholder="नाम / Name" autocomplete="name"><input id="wm" placeholder="Mobile Number / मोबाइल नंबर" inputmode="numeric" maxlength="10" autocomplete="tel"><select id="wrState"><option value="">-- State / राज्य चुनें --</option></select><select id="wrDistrict"><option value="">-- District / जिला चुनें --</option></select><select id="wrBlock"><option value="">-- पहले District चुनें --</option></select><select id="wrPanchayat"><option value="">-- पहले Block चुनें --</option></select><input id="wrPin" placeholder="PIN Code / पिन कोड (6 अंक)" inputmode="numeric" maxlength="6" autocomplete="postal-code"><input id="wrVillage" placeholder="Village / Area / गाँव / क्षेत्र" autocomplete="address-level3"><div><label class="service-label" id="wrServiceLabel">Services — एक से अधिक चुन सकते हैं</label><div id="wrServices" class="service-checks"></div></div><input id="wrExperience" placeholder="Experience / अनुभव (वैकल्पिक)"><button class="btn green" onclick="regW()" data-i18n-target="profile">Profile बनाएं</button></div></div></div><div class="modal" id="customer"><div class="mb"><button onclick="closeM('customer')" style="float:right">×</button><h2 data-i18n-target="custReg">👤 Customer Registration</h2><div class="form"><input id="cn" placeholder="नाम / Name"><input id="cm" placeholder="Mobile Number"><select id="cb"><option>Aurai</option><option>Bochahan</option><option>Gaighat</option><option>Katra</option><option>Minapur</option></select><input id="cv" placeholder="Village / Area"><button class="btn blue" onclick="regC()" data-i18n-target="register">Register</button></div></div></div><div class="toast" id="toast"></div>
+<div class="modal" id="worker"><div class="mb worker-modal"><button onclick="closeM('worker')" style="float:right">×</button><h2 data-i18n-target="proReg">🔧 Professional Registration</h2><p class="reg-note" id="regNote">अपना विवरण भरें। Submit करने के बाद profile <b>Pending Verification</b> में जाएगी।</p><div class="form"><input id="wn" placeholder="नाम / Name" autocomplete="name"><input id="wm" placeholder="Mobile Number / मोबाइल नंबर" inputmode="numeric" maxlength="10" autocomplete="tel"><select id="wrState"><option value="">-- State / राज्य चुनें --</option><option value="Bihar">Bihar / बिहार</option></select><select id="wrDistrict"><option value="">-- District / जिला चुनें --</option><option value="Muzaffarpur">Muzaffarpur / मुजफ्फरपुर</option></select><select id="wrBlock"><option value="">-- Block चुनें --</option><option>Aurai</option><option>Bochahan</option><option>Gaighat</option><option>Katra</option><option>Minapur</option></select><select id="wrPanchayat"><option value="">-- पहले Block चुनें --</option></select><input id="wrPin" placeholder="PIN Code / पिन कोड (6 अंक)" inputmode="numeric" maxlength="6" autocomplete="postal-code"><input id="wrVillage" placeholder="Village / Area / गाँव / क्षेत्र" autocomplete="address-level3"><div><label class="service-label" id="wrServiceLabel">Services — एक से अधिक चुन सकते हैं</label><div id="wrServices" class="service-checks"></div></div><input id="wrExperience" placeholder="Experience / अनुभव (वैकल्पिक)"><button class="btn green" onclick="regW()" data-i18n-target="profile">Profile बनाएं</button></div></div></div><div class="modal" id="customer"><div class="mb"><button onclick="closeM('customer')" style="float:right">×</button><h2 data-i18n-target="custReg">👤 Customer Registration</h2><div class="form"><input id="cn" placeholder="नाम / Name"><input id="cm" placeholder="Mobile Number"><select id="cb"><option>Aurai</option><option>Bochahan</option><option>Gaighat</option><option>Katra</option><option>Minapur</option></select><input id="cv" placeholder="Village / Area"><button class="btn blue" onclick="regC()" data-i18n-target="register">Register</button></div></div></div><div class="toast" id="toast"></div>
 
 <script>
 let senviaBusyCount=0;
@@ -576,7 +576,7 @@ function hideBusy(){senviaBusyCount=Math.max(0,senviaBusyCount-1);if(!senviaBusy
 <script>
 const data={Aurai:['Aurai','Bhalura','Janakpur','Kalyanpur','Ramnagar'],Bochahan:['Adigopalpur','Bochahan','Burhanpur','Kafain','Madhopur'],Gaighat:['Belsand','Dhobauli','Jamalpur Kodai','Kanta Pirauchha','Madhopur'],Katra:['Barari','Berai North','Changel','Dhanaur','Hathaura','Jajuar East','Katra','Khangura Dih','Lakhanpur'],Minapur:['Andama','Bara Bharti','Chandparna','Gausnagar','Minapur','Panapur','Raghai']};
 const vil={Aurai:['Aurai Bazar','Aurai East','Aurai West'],Bochahan:['Bochahan Bazar','Bochahan East'],Gaighat:['Gaighat Bazar','Dhobauli East','Dhobauli West'],Katra:['Katra Bazar','Barari','Katra East'],Minapur:['Minapur Bazar','Minapur East','Minapur West']};
-let services=[['TV / LED Repair','📺',''],['Mobile Repair','📱',''],['Computer / Laptop','💻',''],['Electrician','⚡',''],['Plumber','🚰',''],['AC Repair','❄️',''],['Fridge Repair','🧊',''],['Carpenter','🔨',''],['Painter','🎨',''],['Raj Mistri','🧱',''],['Bike Mechanic','🏍️',''],['RO Repair','💧','']];
+const services=[['TV / LED Repair','📺'],['Mobile Repair','📱'],['Computer / Laptop','💻'],['Electrician','⚡'],['Plumber','🚰'],['AC Repair','❄️'],['Fridge Repair','🧊'],['Carpenter','🔨'],['Painter','🎨'],['Raj Mistri','🧱'],['Bike Mechanic','🏍️'],['RO Repair','💧']];
 const serviceHi={'TV / LED Repair':'टीवी / LED रिपेयर','Mobile Repair':'मोबाइल रिपेयर','Computer / Laptop':'कंप्यूटर / लैपटॉप','Electrician':'इलेक्ट्रीशियन','Plumber':'प्लंबर','AC Repair':'AC रिपेयर','Fridge Repair':'फ्रिज रिपेयर','Carpenter':'बढ़ई','Painter':'पेंटर','Raj Mistri':'राज मिस्त्री','Bike Mechanic':'बाइक मैकेनिक','RO Repair':'RO रिपेयर'};
 let lang='en';
 const $=id=>document.getElementById(id);
@@ -590,12 +590,11 @@ const soonHi={Bandra:'बांद्रा',Kanti:'कांटी',Kurhani:'�
 function blockName(name){return lang==='hi'?(blockHi[name]||name):name}
 function soonName(name){const L=(window.lang||lang||'en'); return L==='hi'?(soonHi[name]||name):name}
 function fill(){
- const escAttr=v=>String(v??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
- $('s').innerHTML='<option value="">'+T[lang].sOpt+'</option>'+services.map(x=>`<option value="${escAttr(x[0])}">${serviceName(x[0])}</option>`).join('');
- $('ws').innerHTML=services.map(x=>`<option value="${escAttr(x[0])}">${serviceName(x[0])}</option>`).join('');
- $('cards').innerHTML=services.slice(0,6).map(x=>`<div class="card" onclick="quick('${x[0].replace(/'/g,"\\'")}')"><div class="icon">${x[2]?`<img src="${escAttr(x[2])}" alt="${escAttr(x[0])}" loading="lazy" style="width:54px;height:54px;object-fit:cover;border-radius:14px">`:x[1]}</div><b>${serviceName(x[0])}</b><small>${lang==='hi'?'खोजें':'Search'}</small></div>`).join('');
+ $('s').innerHTML='<option value="">'+T[lang].sOpt+'</option>'+services.map(x=>`<option value="${x[0]}">${serviceName(x[0])}</option>`).join('');
+ $('ws').innerHTML=services.map(x=>`<option value="${x[0]}">${serviceName(x[0])}</option>`).join('');
+ $('cards').innerHTML=services.slice(0,6).map(x=>`<div class="card" onclick="quick('${x[0].replace(/'/g,"\\'")}')"><div class="icon">${x[1]}</div><b>${serviceName(x[0])}</b><small>${lang==='hi'?'खोजें':'Search'}</small></div>`).join('');
  $('blocks').innerHTML=['Aurai','Bochahan','Gaighat','Katra','Minapur'].map(b=>`<div class="row" onclick="selectB('${b}')">📍 <b>${blockName(b)}</b><small>${data[b].length} ${lang==='hi'?'पंचायत':'Panchayats'}</small></div>`).join('');
- $('quick').innerHTML=services.slice(0,7).map(x=>`<div class="row" onclick="quick('${x[0].replace(/'/g,"\\'")}')">${x[2]?`<img src="${escAttr(x[2])}" alt="" loading="lazy" style="width:28px;height:28px;object-fit:cover;border-radius:8px;vertical-align:middle;margin-right:6px">`:x[1]} ${serviceName(x[0])}　›</div>`).join('');
+ $('quick').innerHTML=services.slice(0,7).map(x=>`<div class="row" onclick="quick('${x[0].replace(/'/g,"\\'")}')">${x[1]} ${serviceName(x[0])}　›</div>`).join('');
  loadP();
 }
 let areaStates=[{id:'fallback-bihar',name:'Bihar',is_visible:true}],areaDistricts=[{id:'fallback-muzaffarpur',name:'Muzaffarpur',state_name:'Bihar',is_visible:true,state_id:'fallback-bihar'}],areaBlocks=[];
@@ -1332,67 +1331,21 @@ $('block').addEventListener('change',()=>loadP());$('p').addEventListener('chang
   const cleanPhone=v=>{let d=String(v??'').replace(/\D/g,''); if(d.length===12&&d.startsWith('91'))d=d.slice(2); return d;};
   async function getJson(url){const r=await fetch(url,{headers:{apikey:KEY}});if(!r.ok)throw new Error('GET '+r.status);return r.json();}
   async function postJson(table,body,prefer='return=representation'){const r=await fetch(API+table,{method:'POST',headers:{...H,Prefer:prefer},body:JSON.stringify(body)});const raw=await r.text();let data=null;try{data=raw?JSON.parse(raw):null}catch{}if(!r.ok)throw new Error(data?.message||data?.hint||data?.details||raw||('HTTP '+r.status));return data;}
-  /* Professional Registration uses the same Professional Locations master as Admin. */
-  const PL_REG_STORAGE_KEY='senvia_prof_location_master_v1';
-  let professionalLocationMaster=[];
-
-  function loadProfessionalLocationMaster(){
-    professionalLocationMaster=[];
-    try{
-      const raw=localStorage.getItem(PL_REG_STORAGE_KEY);
-      const parsed=raw?JSON.parse(raw):null;
-      if(Array.isArray(parsed)) professionalLocationMaster=parsed;
-    }catch(e){ console.warn('Professional location master read failed',e); }
-    if(!professionalLocationMaster.length){
-      const seeds=['Bihar','Jharkhand','Uttar Pradesh','West Bengal','Uttarakhand','Delhi','Madhya Pradesh','Odisha'];
-      professionalLocationMaster=seeds.map((name,i)=>({id:'seed-'+(i+1),name,active:true,districts:[]}));
-    }
-  }
-
-  function fillRegStates(){
-    const el=document.getElementById('wrState'); if(!el)return;
-    const states=professionalLocationMaster.filter(x=>x&&x.active!==false);
-    el.innerHTML='<option value="">-- State / राज्य चुनें --</option>'+states.map(x=>`<option value="${esc(x.name)}">${esc(x.name)}</option>`).join('');
-  }
-  function getRegState(){
-    const name=document.getElementById('wrState')?.value||'';
-    return professionalLocationMaster.find(x=>String(x?.name)===String(name));
-  }
-  function getRegDistrict(){
-    const state=getRegState(), name=document.getElementById('wrDistrict')?.value||'';
-    return (state?.districts||[]).find(x=>String(x?.name)===String(name));
-  }
-  function getRegBlock(){
-    const district=getRegDistrict(), name=document.getElementById('wrBlock')?.value||'';
-    return (district?.blocks||[]).find(x=>String(x?.name)===String(name));
-  }
-  function fillRegDistricts(){
-    const d=document.getElementById('wrDistrict'), b=document.getElementById('wrBlock'), p=document.getElementById('wrPanchayat'); if(!d||!b||!p)return;
-    const list=(getRegState()?.districts||[]).filter(x=>x&&x.active!==false);
-    d.innerHTML='<option value="">-- District / जिला चुनें --</option>'+list.map(x=>`<option value="${esc(x.name)}">${esc(x.name)}</option>`).join('');
-    b.innerHTML='<option value="">-- पहले District चुनें --</option>';
-    p.innerHTML='<option value="">-- पहले Block चुनें --</option>';
-  }
-  function fillRegBlocks(){
-    const b=document.getElementById('wrBlock'), p=document.getElementById('wrPanchayat'); if(!b||!p)return;
-    const list=(getRegDistrict()?.blocks||[]).filter(x=>x&&x.active!==false);
-    b.innerHTML='<option value="">-- Block चुनें --</option>'+list.map(x=>`<option value="${esc(x.name)}">${esc(x.name)}</option>`).join('');
-    p.innerHTML='<option value="">-- पहले Block चुनें --</option>';
-  }
-  function fillRegPanchayats(){
-    const p=document.getElementById('wrPanchayat'); if(!p)return;
-    const list=(getRegBlock()?.panchayats||[]).filter(x=>x&&x.active!==false);
-    p.innerHTML='<option value="">-- Panchayat चुनें --</option>'+list.map(x=>`<option value="${esc(x.name)}">${esc(x.name)}</option>`).join('');
-  }
+  function fillRegPanchayats(){const b=document.getElementById('wrBlock'),p=document.getElementById('wrPanchayat');if(!b||!p)return;const list=regData[b.value]||[];p.innerHTML='<option value="">-- पहले Block चुनें --</option>'+list.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join('');}
   (function setupProfessionalLocationDropdowns(){
-    const s=document.getElementById('wrState'), d=document.getElementById('wrDistrict'), b=document.getElementById('wrBlock');
-    if(!s||!d||!b||s.dataset.locationBound==='1')return;
-    s.dataset.locationBound='1';
-    loadProfessionalLocationMaster(); fillRegStates();
-    s.addEventListener('change',fillRegDistricts);
-    d.addEventListener('change',fillRegBlocks);
-    b.addEventListener('change',fillRegPanchayats);
-    window.refreshProfessionalRegistrationLocations=function(){loadProfessionalLocationMaster();fillRegStates();fillRegDistricts();};
+    const stateEl=document.getElementById('wrState'), districtEl=document.getElementById('wrDistrict'), blockEl=document.getElementById('wrBlock');
+    if(!stateEl||!districtEl||!blockEl||stateEl.dataset.locationBound==='1')return;
+    stateEl.dataset.locationBound='1';
+    const districtsByState={Bihar:['Muzaffarpur']};
+    function loadRegDistricts(){
+      const state=stateEl.value;
+      const list=districtsByState[state]||[];
+      districtEl.innerHTML='<option value="">-- District / जिला चुनें --</option>'+list.map(x=>`<option value="${esc(x)}">${esc(x)} / मुजफ्फरपुर</option>`).join('');
+      blockEl.value=''; fillRegPanchayats();
+    }
+    stateEl.addEventListener('change',loadRegDistricts);
+    districtEl.addEventListener('change',()=>{blockEl.value='';fillRegPanchayats();});
+    blockEl.addEventListener('change',fillRegPanchayats);
   })();
   function renderRegServices(){const box=document.getElementById('wrServices');if(!box)return;box.innerHTML=serviceOptions.map(s=>`<label class="service-check"><input type="checkbox" name="wrService" value="${esc(s)}"><span>${esc(s)}</span></label>`).join('');}
   async function loadServiceRows(){try{serviceRows=await getJson(API+'services?select=id,Name');}catch(e){serviceRows=[];console.warn('Senvia registration services load failed',e);}}
@@ -1564,70 +1517,4 @@ document.addEventListener('DOMContentLoaded', function(){
 })();
 </script>
 
-<script id="senvia-service-images-final">
-/* Senvia Service Images - FINAL
-   Reads the same services table used by Admin Panel.
-   IMPORTANT: keep the existing fill()/navigation untouched.
-*/
-(function(){
-  const SERVICE_DB_URL='https://hxdrvhiowurbwlgmczju.supabase.co';
-  const SERVICE_DB_KEY='sb_publishable_cvh_b0gklN5SOcH5MsGs8g_4JI9-PxT';
-  const API=SERVICE_DB_URL+'/rest/v1/';
-  const text=v=>String(v??'').trim();
-  const pick=(o,keys)=>{for(const k of keys){if(o&&o[k]!=null&&text(o[k]))return text(o[k]);}return '';};
-  const esc=v=>text(v).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
-  const iconFor=name=>{
-    const n=text(name).toLowerCase();
-    const hit=[['tv','📺'],['led','📺'],['mobile','📱'],['computer','💻'],['laptop','💻'],['electric','⚡'],['plumb','🚰'],['ac','❄️'],['fridge','🧊'],['carpenter','🔨'],['painter','🎨'],['raj mistri','🧱'],['bike','🏍️'],['ro','💧']].find(([k])=>n.includes(k));
-    return hit?hit[1]:'🛠️';
-  };
-  async function loadServiceImages(){
-    try{
-      const r=await fetch(API+'services?select=*',{headers:{apikey:SERVICE_DB_KEY,Accept:'application/json'},cache:'no-store'});
-      if(!r.ok) throw new Error('services HTTP '+r.status);
-      const rows=await r.json();
-      if(!Array.isArray(rows)||!rows.length) return;
-      const mapped=rows.map(row=>{
-        const name=pick(row,['Name','name','name_en','service','service_name','service_name_en','title','label','category']);
-        if(!name) return null;
-        const icon=pick(row,['icon','Icon','emoji','Emoji','service_icon','serviceIcon','icon_emoji'])||iconFor(name);
-        const image=pick(row,['image_url','imageUrl','image','Image','service_image','serviceImage','image_path','imagePath']);
-        return [name,icon,image];
-      }).filter(Boolean);
-      if(!mapped.length) return;
-
-      // 'services' is the original page variable (let services=...).
-      // Update that variable so the original fill() renders the DB image.
-      services=mapped;
-      try{ window.services=services; }catch(e){}
-      if(typeof fill==='function') fill();
-
-      // If the storage URL is temporarily unavailable, fall back to the icon.
-      document.querySelectorAll('#cards .icon img, #quick img').forEach(img=>{
-        img.addEventListener('error',function(){
-          const box=this.parentElement;
-          if(!box) return;
-          const fallback=document.createElement('span');
-          fallback.style.fontSize=this.closest('#cards')?'42px':'22px';
-          const card=this.closest('.card');
-          const name=card?.querySelector('b')?.textContent||'';
-          fallback.textContent=iconFor(name);
-          this.replaceWith(fallback);
-        },{once:true});
-      });
-    }catch(e){
-      console.warn('Senvia Public service image load failed; keeping existing service list.',e);
-    }
-  }
-  function start(){
-    loadServiceImages();
-    setTimeout(loadServiceImages,1500);
-    setTimeout(loadServiceImages,4000);
-  }
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',start,{once:true});
-  else start();
-  window.addEventListener('pageshow',loadServiceImages);
-  window.senviaReloadServiceImages=loadServiceImages;
-})();
-</script>
 </body></html>
